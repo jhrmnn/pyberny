@@ -181,7 +181,7 @@ class Bond(InternalCoord):
         return 0.45*rho[self.i, self.j]
 
     def weight(self, rho, coords):
-        self.weight = rho[self.i, self.j]
+        return rho[self.i, self.j]
 
     def eval(self, coords, grad=False):
         v = (coords[self.i]-coords[self.j])/bohr
@@ -208,8 +208,8 @@ class Angle(InternalCoord):
             (f+(1-f)*np.sin(self.eval(coords)))
 
     def eval(self, coords, grad=False):
-        v1 = coords[self.i]-coords[self.j]
-        v2 = coords[self.k]-coords[self.j]
+        v1 = (coords[self.i]-coords[self.j])/bohr
+        v2 = (coords[self.k]-coords[self.j])/bohr
         dot_product = np.dot(v1, v2)/(norm(v1)*norm(v2))
         if dot_product < -1:
             dot_product = -1
@@ -253,9 +253,9 @@ class Dihedral(InternalCoord):
             (f+(1-f)*np.sin(th1))*(f+(1-f)*np.sin(th2))
 
     def eval(self, coords, grad=False):
-        v1 = coords[self.i]-coords[self.j]
-        v2 = coords[self.k]-coords[self.l]
-        w = coords[self.k]-coords[self.j]
+        v1 = (coords[self.i]-coords[self.j])/bohr
+        v2 = (coords[self.k]-coords[self.l])/bohr
+        w = (coords[self.k]-coords[self.j])/bohr
         ew = w/norm(w)
         a1 = v1-dot(v1, ew)*ew
         a2 = v2-dot(v2, ew)*ew
@@ -363,7 +363,7 @@ class InternalCoords:
     def hessian_guess(self, geom):
         geom = geom.supercell()
         rho = geom.rho()
-        return np.array([coord.hessian(rho) for coord in self])
+        return np.diag([coord.hessian(rho) for coord in self])
 
     def weights(self, geom):
         geom = geom.supercell()

@@ -21,7 +21,7 @@ def ginv(A):
         print('Pseudoinverse gap of only: {}'.format(gap), file=sys.stderr)
     D[n+1:] = 0
     D[:n+1] = 1/D[:n+1]
-    return U.dot(np.diag(D)).dot(V.T).dot(A.T)
+    return U.dot(np.diag(D)).dot(V).dot(A.T)
 
 
 def cross(a, b):

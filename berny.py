@@ -29,14 +29,15 @@ class Berny:
         self.weights = self.int_coords.weights(geom)
         print(self.int_coords)
 
-    def step(self, geom, energy, forces):
+    def step(self, geom, energy, gradients):
+        gradients = gradients*bohr
         self.nsteps += 1
         print('Energy: {:.12}'.format(energy))
         B = self.int_coords.B_matrix(geom)
         B_inv = Math.ginv(B)
         current = PESPoint(self.int_coords.eval(geom),
                            energy,
-                           dot(B_inv.T, -forces.reshape(-1)*bohr))
+                           dot(B_inv.T, gradients.reshape(-1)))
         if self.nsteps > 1:
             self.hessian = update_hessian(self.hessian,
                                           current.q-self.best.q,
@@ -55,7 +56,8 @@ class Berny:
         else:
             self.interpolated = current
         proj = dot(B, B_inv)
-        hessian_proj = proj*self.hessian*proj+1000*(eye(self.hessian.shape[0])-proj)
+        hessian_proj = proj.dot(self.hessian).dot(proj) +\
+            1000*(eye(len(self.int_coords))-proj)
         dq, dE, on_sphere = quadratic_step(dot(proj, self.interpolated.g),
                                            hessian_proj,
                                            self.weights,
@@ -68,7 +70,7 @@ class Berny:
         dq = q-current.q
         print('Total actual step: RMS: {:.3}, max: {:.3}'
               .format(Math.rms(dq), max(abs(dq))))
-        if converged(forces, q-current.q, on_sphere, self.params):
+        if converged(gradients, q-current.q, on_sphere, self.params):
             return
         self.previous = current
         if self.nsteps == 1 or current.E < self.best.E:
@@ -151,13 +153,13 @@ def quadratic_step(g, H, w, trust):
 def converged(forces, step, on_sphere, params):
     criteria = [
         ('Gradient RMS', Math.rms(forces), params['gradientrms']),
-        ('Gradient maximum', np.abs(abs(forces)), params['gradientmax'])]
+        ('Gradient maximum', np.max(abs(forces)), params['gradientmax'])]
     if on_sphere:
         criteria.append(('Minimization on sphere', False))
     else:
         criteria.extend([
             ('Step RMS', Math.rms(step), params['steprms']),
-            ('Step maximum', np.abs(abs(step)), params['stepmax'])])
+            ('Step maximum', np.max(abs(step)), params['stepmax'])])
     print('Convergence criteria:')
     all_matched = True
     for crit in criteria:
