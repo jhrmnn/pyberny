@@ -1,9 +1,12 @@
 import numpy as np
-from collections import defaultdict
+from numpy import dot
+from numpy.linalg import norm, inv
+from collections import defaultdict, OrderedDict
 from itertools import chain, product, repeat, combinations
 import os
 import csv
 import io
+import Math
 
 bohr = 0.52917721092
 
@@ -17,12 +20,17 @@ class Molecule:
         counter = defaultdict(int)
         for specie in self.species:
             counter[specie] += 1
-        return ''.join('{}{}'.format(sp, n if n > 1 else '')
-                       for sp, n in sorted(counter.items()))
+        return "<{} '{}'>".format(
+            self.__class__.__name__,
+            ''.join('{}{}'.format(sp, n if n > 1 else '')
+                    for sp, n in sorted(counter.items())))
 
     def __iter__(self):
         for specie, coord in zip(self.species, self.coords):
             yield specie, coord
+
+    def __len__(self):
+        return len(self.species)
 
     def copy(self):
         return Molecule(self.species.copy(), self.coords.copy())
@@ -40,13 +48,13 @@ class Molecule:
         return {'atoms': [{'element': specie, 'location': coord.tolist()}
                           for specie, coord in self],
                 'bonds': [{'atoms': [i, j], 'order': 1}
-                          for i, j in combinations(range(len(self.species)), 2)
+                          for i, j in combinations(range(len(self)), 2)
                           if bond[i, j]]}
 
     def dist(self, geom, ret_diff=False):
         diff = self.coords[:, None, :]-geom.coords[None, :, :]
         dist = np.sqrt(np.sum(diff**2, 2))
-        dist[np.diag_indices(len(self.coords))] = np.inf
+        dist[np.diag_indices(len(self))] = np.inf
         if ret_diff:
             return dist, diff
         else:
@@ -57,82 +65,27 @@ class Molecule:
         radii = np.array([get_property(sp, 'covalent_radius') for sp in self.species])
         return dist < 1.3*(radii[None, :]+radii[:, None])
 
-    def morse(self, cutoff=20.):
+    def rho(self):
+        geom = self.supercell()
+        dist = geom.dist(geom)
+        radii = np.array([get_property(sp, 'covalent_radius') for sp in geom.species])
+        return np.exp(-dist/(radii[None, :]+radii[:, None])+1)
+
+    def morse(self, cutoff=20., r0=None):
         def V(r, r0):
             return (1-np.exp(-(r-r0)))**2-1
 
         def dVdr(r, r0):
             return 2*(1-np.exp(-(r-r0)))*np.exp(-(r-r0))
 
-        supercell = self.supercell(cutoff=cutoff)
-        dist, diff = self.dist(supercell, ret_diff=True)
-        radii = np.array([get_property(sp, 'covalent_radius') for sp in supercell.species])
-        r0 = radii[:len(self.species), None]+radii[None, :]
+        geom = self.supercell(cutoff=cutoff)
+        dist, diff = self.dist(geom, ret_diff=True)
+        if not r0:
+            radii = np.array([get_property(sp, 'covalent_radius') for sp in geom.species])
+            r0 = radii[:len(self), None]+radii[None, :]
         E = np.sum(V(dist, r0))/2
         dEdR = np.sum(dVdr(dist, r0)[:, :, None]*diff/dist[:, :, None], 1)
         return E, dEdR
-
-    def internal_coords(self, allowed=None):
-        supercell = self.supercell([(-1, 1), (-1, 1), (-1, 1)])
-        dist = supercell.dist(supercell)
-        radii = np.array([get_property(sp, 'covalent_radius') for sp in supercell.species])
-        bondmatrix = dist < 1.3*(radii[None, :]+radii[:, None])
-        fragments, C = get_clusters(bondmatrix)
-        radii = np.array([get_property(sp, 'vdw_radius') for sp in supercell.species])
-        shift = 0.
-        C_total = C.copy()
-        while not C_total.all():
-            bondmatrix |= ~C_total & (dist < radii[None, :]+radii[:, None]+shift)
-            C_total = get_clusters(bondmatrix)[1]
-            shift += 1.
-        int_coords = {
-            'fragments': fragments,
-            'bonds': [
-                Bond(i, j, weak=0 if C[i, j] else 1)
-                for i, j in combinations(range(len(self.species)), 2)
-                if bondmatrix[i, j]],
-            'angles': [
-                Angle(j, i, k, weak=(0 if C[j, i] else 1)+(0 if C[i, k] else 1))
-                for i in range(len(self.species))
-                for j, k in combinations(np.flatnonzero(bondmatrix[i, :]), 2)]}
-        int_coords['dihedrals'] = list(chain.from_iterable(
-            self._get_dihedrals([bond.i, bond.j], bondmatrix, C)
-            for bond in int_coords['bonds']))
-        return InternalCoords(**int_coords)
-
-    def _get_dihedrals(self, center, bondmatrix, C):
-        neigh_l = [n for n in np.flatnonzero(bondmatrix[center[0], :]) if n != center[1]]
-        neigh_r = [n for n in np.flatnonzero(bondmatrix[center[-1], :]) if n != center[-2]]
-        angles_l = [Angle(i, center[0], center[1]).eval(self.coords) for i in neigh_l]
-        angles_r = [Angle(center[-2], center[-1], j).eval(self.coords) for j in neigh_r]
-        nonlinear_l = [n for n, ang in zip(neigh_l, angles_l) if ang < np.pi-1e-3]
-        nonlinear_r = [n for n, ang in zip(neigh_r, angles_r) if ang < np.pi-1e-3]
-        linear_l = [n for n, ang in zip(neigh_l, angles_l) if ang > np.pi-1e-3]
-        linear_r = [n for n, ang in zip(neigh_r, angles_r) if ang > np.pi-1e-3]
-        assert len(linear_l) <= 1
-        assert len(linear_r) <= 1
-        if center[0] < center[-1]:
-            nweak = len(list(None for i in range(len(center)-1) if C[center[i], center[i+1]]))
-            dihedrals = [Dihedral(nl, center[0], center[-1], nr,
-                                  weak=nweak +
-                                  (0 if C[nl, center[0]] else 1) +
-                                  (0 if C[center[0], nr] else 1))
-                         for nl, nr in product(nonlinear_l, nonlinear_r)
-                         if nl != nr]
-        if len(center) > 3:
-            pass
-        elif linear_l and not linear_r:
-            dihedrals.extend(self.get_dihedrals(linear_l + center, bondmatrix, C))
-        elif linear_r and not linear_l:
-            dihedrals.extend(self.get_dihedrals(center + linear_r, bondmatrix, C))
-        return dihedrals
-
-    def eval_internal(self, int_coords):
-        supercell = self.supercell([(-1, 1), (-1, 1), (-1, 1)])
-        dist = supercell.dist(supercell)
-        radii = np.array([get_property(sp, 'covalent_radius') for sp in supercell.species])
-        rho = np.exp(-dist/(radii[None, :]+radii[:, None])+1)
-        return int_coords.evaluate(supercell, rho)
 
 
 def load(fp, fmt):
@@ -184,13 +137,13 @@ class Crystal(Molecule):
         return Crystal(self.species.copy(), self.coords.copy(), self.lattice.copy())
 
     def super_circum(self, radius):
-        rec_lattice = 2*np.pi*np.linalg.inv(self.lattice.T)
+        rec_lattice = 2*np.pi*inv(self.lattice.T)
         layer_sep = np.array(
-            [sum(vec*rvec/np.linalg.norm(rvec))
+            [sum(vec*rvec/norm(rvec))
              for vec, rvec in zip(self.lattice, rec_lattice)])
         return np.array([int(n) for n in np.ceil(radius/layer_sep+1/2)])
 
-    def supercell(self, ranges=None, cutoff=None):
+    def supercell(self, ranges=((-1, 1), (-1, 1), (-1, 1)), cutoff=None):
         if cutoff:
             ranges = [(-r, r) for r in self.super_circum(cutoff)]
         else:
@@ -207,16 +160,35 @@ class Crystal(Molecule):
 
 
 class InternalCoord:
-    def __init__(self, weak=0, weight=None):
+    def __init__(self, weak=None):
         self.weak = weak
-        self.weight = weight
+
+    def __repr__(self):
+        args = list(map(str, self.idx))
+        if self.weak is not None:
+            args.append('weak=' + str(self.weak))
+        return '{}({})'.format(self.__class__.__name__, ', '.join(args))
 
 
 class Bond(InternalCoord):
     def __init__(self, i, j, *args, **kwargs):
         self.i = i
         self.j = j
+        self.idx = (i, j)
         super().__init__(*args, **kwargs)
+
+    def hessian(self, rho):
+        return 0.45*rho[self.i, self.j]
+
+    def weight(self, rho, coords):
+        self.weight = rho[self.i, self.j]
+
+    def eval(self, coords, grad=False):
+        v = (coords[self.i]-coords[self.j])/bohr
+        r = norm(v)
+        if not grad:
+            return r
+        return r, [v/r, -v/r]
 
 
 class Angle(InternalCoord):
@@ -224,20 +196,40 @@ class Angle(InternalCoord):
         self.i = i
         self.j = j
         self.k = k
+        self.idx = (i, j, k)
         super().__init__(*args, **kwargs)
 
-    def eval(self, geom, grad=False):
-        do_grad = grad
-        v1 = geom.coords[self.i]-geom.cords[self.j]
-        v2 = geom.coords[self.k]-geom.cords[self.j]
-        sc = np.dot(v1, v2)/(np.linalg.norm(v1)*np.linalg.norm(v2))
-        if sc < -1:
-            sc = -1
-        if sc > 1:
-            sc = 1
-        phi = np.arccos(sc)
-        if not do_grad:
+    def hessian(self, rho):
+        return 0.15*(rho[self.i, self.j]*rho[self.j, self.k])
+
+    def weight(self, rho, coords):
+        f = 0.12
+        return np.sqrt(rho[self.i, self.j]*rho[self.j, self.k]) *\
+            (f+(1-f)*np.sin(self.eval(coords)))
+
+    def eval(self, coords, grad=False):
+        v1 = coords[self.i]-coords[self.j]
+        v2 = coords[self.k]-coords[self.j]
+        dot_product = np.dot(v1, v2)/(norm(v1)*norm(v2))
+        if dot_product < -1:
+            dot_product = -1
+        elif dot_product > 1:
+            dot_product = 1
+        phi = np.arccos(dot_product)
+        if not grad:
             return phi
+        if abs(phi) > np.pi-1e-6:
+            grad = [
+                (np.pi-phi)/(2*norm(v1)**2)*v1,
+                (1/norm(v1)-1/norm(v2))*(np.pi-phi)/(2*norm(v1))*v1,
+                (np.pi-phi)/(2*norm(v2)**2)*v2]
+        else:
+            grad = [
+                1/np.tan(phi)*v1/norm(v1)**2-v2/(norm(v1)*norm(v2)*np.sin(phi)),
+                (v1+v2)/(norm(v1)*norm(v2)*np.sin(phi)) -
+                1/np.tan(phi)*(v1/norm(v1)**2+v2/norm(v2)**2),
+                1/np.tan(phi)*v2/norm(v2)**2-v1/(norm(v1)*norm(v2)*np.sin(phi))]
+        return phi, grad
 
 
 class Dihedral(InternalCoord):
@@ -246,47 +238,177 @@ class Dihedral(InternalCoord):
         self.j = j
         self.k = k
         self.l = l
+        self.idx = (i, j, k, l)
         super().__init__(*args, **kwargs)
+
+    def hessian(self, rho):
+        return 0.005*rho[self.i, self.j]*rho[self.j, self.k] *\
+            rho[self.k, self.l]
+
+    def weight(self, rho, coords):
+        f = 0.12
+        th1 = Angle(self.i, self.j, self.k).eval(coords)
+        th2 = Angle(self.j, self.k, self.l).eval(coords)
+        return (rho[self.i, self.j]*rho[self.j, self.k]*rho[self.k, self.l])**(1./3) *\
+            (f+(1-f)*np.sin(th1))*(f+(1-f)*np.sin(th2))
+
+    def eval(self, coords, grad=False):
+        v1 = coords[self.i]-coords[self.j]
+        v2 = coords[self.k]-coords[self.l]
+        w = coords[self.k]-coords[self.j]
+        ew = w/norm(w)
+        a1 = v1-dot(v1, ew)*ew
+        a2 = v2-dot(v2, ew)*ew
+        sgn = np.sign(np.linalg.det(np.array([v2, v1, w])))
+        sgn = sgn or 1
+        dot_product = dot(a1, a2)/(norm(a1)*norm(a2))
+        if dot_product < -1:
+            dot_product = -1
+        elif dot_product > 1:
+            dot_product = 1
+        phi = np.arccos(dot_product)*sgn
+        if not grad:
+            return phi
+        if abs(phi) > np.pi-1e-6:
+            g = Math.cross(w, a1)
+            g = g/norm(g)
+            A = dot(v1, ew)/norm(w)
+            B = dot(v2, ew)/norm(w)
+            grad = [
+                g/(norm(g)*norm(a1)),
+                -((1-A)/norm(a1)-B/norm(a2))*g,
+                -((1+B)/norm(a2)+A/norm(a1))*g,
+                g/(norm(g)*norm(a2))]
+        elif abs(phi) < 1e-6:
+            g = Math.cross(w, a1)
+            g = g/norm(g)
+            A = dot(v1, ew)/norm(w)
+            B = dot(v2, ew)/norm(w)
+            grad = [
+                g/(norm(g)*norm(a1)),
+                -((1-A)/norm(a1)+B/norm(a2))*g,
+                ((1+B)/norm(a2)-A/norm(a1))*g,
+                -g/(norm(g)*norm(a2))]
+        else:
+            A = dot(v1, ew)/norm(w)
+            B = dot(v2, ew)/norm(w)
+            grad = [
+                1/np.tan(phi)*a1/norm(a1)**2-a2/(norm(a1)*norm(a2)*np.sin(phi)),
+                ((1-A)*a2-B*a1)/(norm(a1)*norm(a2)*np.sin(phi)) -
+                1/np.tan(phi)*((1-A)*a1/norm(a1)**2-B*a2/norm(a2)**2),
+                ((1+B)*a1+A*a2)/(norm(a1)*norm(a2)*np.sin(phi)) -
+                1/np.tan(phi)*((1+B)*a2/norm(a2)**2+A*a1/norm(a1)**2),
+                1/np.tan(phi)*a2/norm(a2)**2-a1/(norm(a1)*norm(a2)*np.sin(phi))]
+        return phi, grad
 
 
 class InternalCoords:
-    def __init__(self, bonds, angles, dihedrals, fragments):
-        self.bonds = bonds
-        self.angles = angles
-        self.dihedrals = dihedrals
-        self.fragments = fragments
+    def __init__(self, geom, allowed=None):
+        geom = geom.supercell()
+        dist = geom.dist(geom)
+        radii = np.array([get_property(sp, 'covalent_radius') for sp in geom.species])
+        bondmatrix = dist < 1.3*(radii[None, :]+radii[:, None])
+        self.fragments, C = get_clusters(bondmatrix)
+        radii = np.array([get_property(sp, 'vdw_radius') for sp in geom.species])
+        shift = 0.
+        C_total = C.copy()
+        while not C_total.all():
+            bondmatrix |= ~C_total & (dist < radii[None, :]+radii[:, None]+shift)
+            C_total = get_clusters(bondmatrix)[1]
+            shift += 1.
+        self.bonds = [
+            Bond(i, j, weak=0 if C[i, j] else 1)
+            for i, j in combinations(range(len(geom)), 2)
+            if bondmatrix[i, j]]
+        angles = [
+            Angle(j, i, k, weak=(0 if C[j, i] else 1)+(0 if C[i, k] else 1))
+            for i in range(len(geom))
+            for j, k in combinations(np.flatnonzero(bondmatrix[i, :]), 2)]
+        self.angles = [a for a in angles if a.eval(geom.coords) > np.pi/4]
+        self.dihedrals = list(chain.from_iterable(
+            get_dihedrals([bond.i, bond.j], geom.coords, bondmatrix, C)
+            for bond in self.bonds))
+        self.dict = OrderedDict([('bonds', self.bonds),
+                                 ('angles', self.angles),
+                                 ('dihedrals', self.dihedrals)])
 
     def __iter__(self):
-        for name in ['bonds', 'angles', 'dihedrals']:
-            yield name, getattr(self, name)
+        for coords in self.dict.values():
+            for coord in coords:
+                yield coord
+
+    def __len__(self):
+        return sum(len(coords) for coords in self.dict.values())
 
     def __repr__(self):
         return "<InternalCoords '{}'>".format(', '.join(
-            '{}: {}'.format(name, len(coords)) for name, coords in self))
+            '{}: {}'.format(name, len(coords)) for name, coords in self.dict.items()))
 
     def __str__(self):
-        ncoords = sum(len(coords) for _, coords in self)
-        s = ''
-        s += 'Internal coordinates:\n'
+        ncoords = sum(len(coords) for coords in self.dict.values())
+        s = 'Internal coordinates:\n'
         s += '* Number of fragments: {}\n'.format(len(self.fragments))
         s += '* Number of internal coordinates: {}\n'.format(ncoords)
-        for name, coords in self:
+        for name, coords in self.dict.items():
             for degree, adjective in [(0, 'strong'), (1, 'weak'), (2, 'superweak')]:
                 n = len([None for c in coords if min(2, c.weak) == degree])
                 if n > 0:
                     s += '* Number of {} {}: {}\n'.format(adjective, name, n)
         return s.rstrip()
 
-    def to_dict(self):
-        return {'bonds': self.bonds,
-                'angles': self.angles,
-                'dihedrals': self.dihedrals,
-                'fragments': self.fragments}
+    def eval(self, geom):
+        geom = geom.supercell()
+        return np.array([coord.eval(geom.coords) for coord in self])
 
-    def evaluate(self, geom, rho):
-        q = []
-        for bond in self.bonds:
-            q.append(bond(*geom.coords[(bond.i, bond.j), :]))
+    def hessian_guess(self, geom):
+        geom = geom.supercell()
+        rho = geom.rho()
+        return np.array([coord.hessian(rho) for coord in self])
+
+    def weights(self, geom):
+        geom = geom.supercell()
+        rho = geom.rho()
+        return np.array([coord.weight(rho, geom.coords) for coord in self])
+
+    def B_matrix(self, geom):
+        geom = geom.supercell()
+        B = np.zeros((len(self), len(geom), 3))
+        for i, coord in enumerate(self):
+            _, grads = coord.eval(geom.coords, grad=True)
+            idx = [i % len(geom) for i in coord.idx]
+            for j, grad in zip(idx, grads):
+                B[i, j] += grad
+        return B.reshape(len(self), 3*len(geom))
+
+
+def get_dihedrals(center, coords, bondmatrix, C):
+    neigh_l = [n for n in np.flatnonzero(bondmatrix[center[0], :]) if n != center[1]]
+    neigh_r = [n for n in np.flatnonzero(bondmatrix[center[-1], :]) if n != center[-2]]
+    angles_l = [Angle(i, center[0], center[1]).eval(coords) for i in neigh_l]
+    angles_r = [Angle(center[-2], center[-1], j).eval(coords) for j in neigh_r]
+    nonlinear_l = [n for n, ang in zip(neigh_l, angles_l) if ang < np.pi-1e-3]
+    nonlinear_r = [n for n, ang in zip(neigh_r, angles_r) if ang < np.pi-1e-3]
+    linear_l = [n for n, ang in zip(neigh_l, angles_l) if ang > np.pi-1e-3]
+    linear_r = [n for n, ang in zip(neigh_r, angles_r) if ang > np.pi-1e-3]
+    assert len(linear_l) <= 1
+    assert len(linear_r) <= 1
+    if center[0] < center[-1]:
+        nweak = len(list(None for i in range(len(center)-1) if not C[center[i], center[i+1]]))
+        dihedrals = [Dihedral(nl, center[0], center[-1], nr,
+                              weak=nweak +
+                              (0 if C[nl, center[0]] else 1) +
+                              (0 if C[center[0], nr] else 1))
+                     for nl, nr in product(nonlinear_l, nonlinear_r)
+                     if nl != nr]
+    else:
+        dihedrals = []
+    if len(center) > 3:
+        pass
+    elif linear_l and not linear_r:
+        dihedrals.extend(get_dihedrals(linear_l + center, coords, bondmatrix, C))
+    elif linear_r and not linear_l:
+        dihedrals.extend(get_dihedrals(center + linear_r, coords, bondmatrix, C))
+    return dihedrals
 
 
 def get_property(idx, name):
