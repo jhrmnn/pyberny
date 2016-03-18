@@ -23,7 +23,7 @@ class Berny:
         self.params = defaults.copy()
         self.params.update(params or {})
         self.nsteps = 0
-        self.trust = self.params['trust']
+        self.trust = np.array([self.params['trust']])
         self.int_coords = InternalCoords(geom)
         self.hessian = self.int_coords.hessian_guess(geom)
         self.weights = self.int_coords.weights(geom)
@@ -35,17 +35,15 @@ class Berny:
         print('Energy: {:.12}'.format(energy))
         B = self.int_coords.B_matrix(geom)
         B_inv = Math.ginv(B)
-        current = PESPoint(self.int_coords.eval(geom),
+        current = PESPoint(self.int_coords.eval_geom(geom),
                            energy,
                            dot(B_inv.T, gradients.reshape(-1)))
         if self.nsteps > 1:
-            self.hessian = update_hessian(self.hessian,
-                                          current.q-self.best.q,
-                                          current.g-self.best.g)
-            self.trust = update_trust(self.trust,
-                                      current.E-self.previous.E,
-                                      self.predicted.E-self.interpolated.E,
-                                      self.predicted.q-self.interpolated.q)
+            update_hessian(self.hessian, current.q-self.best.q, current.g-self.best.g)
+            update_trust(self.trust,
+                         current.E-self.previous.E,
+                         self.predicted.E-self.interpolated.E,
+                         self.predicted.q-self.interpolated.q)
             dq = self.best.q-current.q
             t, E = linear_search(current.E, self.best.E,
                                  dot(current.g, dq),
@@ -61,16 +59,16 @@ class Berny:
         dq, dE, on_sphere = quadratic_step(dot(proj, self.interpolated.g),
                                            hessian_proj,
                                            self.weights,
-                                           self.trust)
+                                           self.trust[0])
         self.predicted = PESPoint(self.interpolated.q+dq, self.interpolated.E+dE, None)
         dq = self.predicted.q-current.q
-        print('Total predicted step: RMS: {:.3}, max: {:.3}'
-              .format(Math.rms(dq), max(abs(dq))))
-        geom, q = self.int_coords.update_geom(geom, current, self.predicted, B_inv)
-        dq = q-current.q
-        print('Total actual step: RMS: {:.3}, max: {:.3}'
-              .format(Math.rms(dq), max(abs(dq))))
-        if converged(gradients, q-current.q, on_sphere, self.params):
+        print('Total step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
+        q = self.int_coords.update_geom(geom,
+                                        current.q,
+                                        self.predicted.q-current.q,
+                                        B_inv)
+        future = PESPoint(q, None, None)
+        if converged(gradients, future.q-current.q, on_sphere, self.params):
             return
         self.previous = current
         if self.nsteps == 1 or current.E < self.best.E:
@@ -82,8 +80,8 @@ def update_hessian(H, dq, dg):
     dH = dg[None, :]*dg[:, None]/dot(dq, dg) - \
         H.dot(dq[None, :]*dq[:, None]).dot(H)/dq.dot(H).dot(dq)  # BFGS update
     print('Hessian update information:')
-    print('* Change: RMS: {}, max: {}'.format(Math.rms(dH), abs(dH).max()))
-    return H+dH
+    print('* Change: RMS: {:.3}, max: {:.3}'.format(Math.rms(dH), abs(dH).max()))
+    H[:, :] = H+dH
 
 
 def update_trust(dE, dE_predicted, dq, trust):
@@ -92,11 +90,13 @@ def update_trust(dE, dE_predicted, dq, trust):
     else:
         r = 1.
     if r < 0.25:
-        trust = norm(dq)/4
+        tr = norm(dq)/4
     elif r > 0.75 and abs(norm(dq)-trust) < 1e-10:
-        trust = 2*trust
+        tr = 2*trust
+    else:
+        tr = trust
     print("Trust update: Fletcher's parameter: {}".format(r))
-    return trust
+    trust[:] = tr
 
 
 def linear_search(E0, E1, g0, g1):
@@ -143,10 +143,10 @@ def quadratic_step(g, H, w, trust):
     dE = dot(g, dq)+0.5*dq.dot(H).dot(dq)  # predicted energy change
     print('* Trust radius: {}'.format(trust))
     print('* Number of negative eigenvalues: {}'.format((ev < 0).sum()))
-    print('* Lowest eigenvalue: {}'.format(ev[0]))
-    print('* lambda: {}'.format(l))
-    print('Quadratic step: RMS: {}, max: {}'.format(Math.rms(dq), max(abs(dq))))
-    print('* Predicted energy change: {}'.format(dE))
+    print('* Lowest eigenvalue: {:.3}'.format(ev[0]))
+    print('* lambda: {:.3}'.format(l))
+    print('Quadratic step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
+    print('* Predicted energy change: {:.3}'.format(dE))
     return dq, dE, on_sphere
 
 
@@ -165,7 +165,7 @@ def converged(forces, step, on_sphere, params):
     for crit in criteria:
         if len(crit) > 2:
             result = crit[1] < crit[2]
-            msg = '{} {} {}'.format(crit[1], '<' if result else '>', crit[2])
+            msg = '{:.3} {} {:.3}'.format(crit[1], '<' if result else '>', crit[2])
         else:
             result = crit[2]
             msg = None
