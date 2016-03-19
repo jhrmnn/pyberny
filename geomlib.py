@@ -6,7 +6,9 @@ from itertools import chain, product, repeat, combinations
 import os
 import csv
 import io
+
 import Math
+from Logging import info
 
 bohr = 0.52917721092
 
@@ -359,7 +361,8 @@ class InternalCoords(list):
                                 ('angles', self.angles),
                                 ('dihedrals', self.dihedrals)])
         else:
-            return super().__getattr__(attr)
+            raise AttributeError("'{}' object has no attribute '{}'"
+                                 .format(self.__class__.__name__, attr))
 
     def print(self):
         for coord in self:
@@ -447,9 +450,9 @@ class InternalCoords(list):
         else:
             msg = 'Transformation did not converge in {} iterations'
             cur = iter_first
-        print(msg.format(i+1))
-        print('* RMS(dcart): {:.3}, RMS(dq): {:.3}'
-              .format(Math.rms(cur.dcart), Math.rms(cur.dq)))
+        info(msg.format(i+1))
+        info('* RMS(dcart): {:.3}, RMS(dq): {:.3}'
+             .format(Math.rms(cur.dcart), Math.rms(cur.dq)))
         geom.coords = cur.cart
         return cur.q
 

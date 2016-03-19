@@ -1,6 +1,7 @@
 import numpy as np
 from numpy import dot
 import sys
+from logging import info
 
 
 def rms(A):
@@ -18,7 +19,7 @@ def ginv(A):
     n = np.argmax(gaps)
     gap = gaps[n]
     if gap < thre2:
-        print('Pseudoinverse gap of only: {}'.format(gap), file=sys.stderr)
+        info('Pseudoinverse gap of only: {}'.format(gap), file=sys.stderr)
     D[n+1:] = 0
     D[:n+1] = 1/D[:n+1]
     return U.dot(np.diag(D)).dot(V).dot(A.T)
@@ -46,7 +47,7 @@ def fit_cubic(y0, y1, g0, g1):
     r = np.roots(np.polyder(p))
     if not np.isreal(r).all():
         return None, None
-    r.sort()
+    r = sorted(x.real for x in r)
     if p[0] > 0:
         maxim, minim = r
     else:
@@ -74,9 +75,9 @@ def fit_quartic(y0, y1, g0, g1):
         r = np.roots(np.polyder(p))
         is_real = np.isreal(r)
         if is_real.sum() == 1:
-            minim = r[is_real]
+            minim = r[is_real][0].real
         else:
-            minim = r[(r == max(-abs(r))) | r == -max(-abs(r))]
+            minim = r[(r == max(-abs(r))) | r == -max(-abs(r))][0].real
         return minim, np.polyval(p, minim)
 
     D = -(g0+g1)**2-2*g0*g1+6*(y1-y0)*(g0+g1)-6*(y1-y0)**2  # discriminant of d^2y/dx^2=0
@@ -93,7 +94,7 @@ def fit_quartic(y0, y1, g0, g1):
         if minval1 < minval2:
             return minim1, minval1
         else:
-            return minim1, minval1
+            return minim2, minval2
 
 
 def findroot(f, lim):
@@ -104,7 +105,6 @@ def findroot(f, lim):
     d = 1.
     for _ in range(1000):
         val = f(lim-d)
-        print(lim-d, val)
         if val > 0:
             break
         d = d/2  # find d so that f(lim-d) > 0

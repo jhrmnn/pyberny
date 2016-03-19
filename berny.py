@@ -1,8 +1,10 @@
-import Math
 from collections import namedtuple
 import numpy as np
 from numpy import dot, eye
 from numpy.linalg import norm
+
+from Logging import info
+import Math
 from geomlib import bohr, InternalCoords
 
 
@@ -27,12 +29,13 @@ class Berny:
         self.int_coords = InternalCoords(geom)
         self.hessian = self.int_coords.hessian_guess(geom)
         self.weights = self.int_coords.weights(geom)
-        print(self.int_coords)
+        info.register(self)
+        info(*str(self.int_coords).split('\n'))
 
     def step(self, geom, energy, gradients):
         gradients = gradients*bohr
         self.nsteps += 1
-        print('Energy: {:.12}'.format(energy))
+        info('Energy: {:.12}'.format(energy))
         B = self.int_coords.B_matrix(geom)
         B_inv = Math.ginv(B)
         current = PESPoint(self.int_coords.eval_geom(geom),
@@ -45,46 +48,38 @@ class Berny:
                          self.predicted.E-self.interpolated.E,
                          self.predicted.q-self.interpolated.q)
             dq = self.best.q-current.q
-            t, E = linear_search(current.E, self.best.E,
-                                 dot(current.g, dq),
-                                 dot(self.best.g, dq))
-            self.interpolated = PESPoint(current.q+t*dq,
-                                         E,
-                                         t*self.best.g+(1-t)*current.g)
+            t, E = linear_search(
+                current.E, self.best.E, dot(current.g, dq), dot(self.best.g, dq))
+            self.interpolated = PESPoint(
+                current.q+t*dq, E, t*self.best.g+(1-t)*current.g)
         else:
             self.interpolated = current
         proj = dot(B, B_inv)
         hessian_proj = proj.dot(self.hessian).dot(proj) +\
             1000*(eye(len(self.int_coords))-proj)
-        dq, dE, on_sphere = quadratic_step(dot(proj, self.interpolated.g),
-                                           hessian_proj,
-                                           self.weights,
-                                           self.trust[0])
+        dq, dE, on_sphere = quadratic_step(
+            dot(proj, self.interpolated.g), hessian_proj, self.weights, self.trust[0])
         self.predicted = PESPoint(self.interpolated.q+dq, self.interpolated.E+dE, None)
         dq = self.predicted.q-current.q
-        print('Total step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
-        q = self.int_coords.update_geom(geom,
-                                        current.q,
-                                        self.predicted.q-current.q,
-                                        B_inv)
+        info('Total step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
+        q = self.int_coords.update_geom(geom, current.q, self.predicted.q-current.q, B_inv)
         future = PESPoint(q, None, None)
         if converged(gradients, future.q-current.q, on_sphere, self.params):
-            return
+            return True
         self.previous = current
         if self.nsteps == 1 or current.E < self.best.E:
             self.best = current
-        return geom
 
 
 def update_hessian(H, dq, dg):
     dH = dg[None, :]*dg[:, None]/dot(dq, dg) - \
         H.dot(dq[None, :]*dq[:, None]).dot(H)/dq.dot(H).dot(dq)  # BFGS update
-    print('Hessian update information:')
-    print('* Change: RMS: {:.3}, max: {:.3}'.format(Math.rms(dH), abs(dH).max()))
+    info('Hessian update information:')
+    info('* Change: RMS: {:.3}, max: {:.3}'.format(Math.rms(dH), abs(dH).max()))
     H[:, :] = H+dH
 
 
-def update_trust(dE, dE_predicted, dq, trust):
+def update_trust(trust, dE, dE_predicted, dq):
     if dE != 0:
         r = dE/dE_predicted  # Fletcher's parameter
     else:
@@ -95,31 +90,31 @@ def update_trust(dE, dE_predicted, dq, trust):
         tr = 2*trust
     else:
         tr = trust
-    print("Trust update: Fletcher's parameter: {}".format(r))
+        info("Trust update: Fletcher's parameter: {:.3}".format(r))
     trust[:] = tr
 
 
 def linear_search(E0, E1, g0, g1):
-    print('Linear interpolation:')
-    print('* Energies: {}, {}'.format(E0, E1))
-    print('* Derivatives: {}, {}'.format(g0, g1))
+    info('Linear interpolation:')
+    info('* Energies: {:.8}, {:.8}'.format(E0, E1))
+    info('* Derivatives: {:.3}, {:.3}'.format(g0, g1))
     t, E = Math.fit_quartic(E0, E1, g0, g1)
     if t is None or t < -1 or t > 2:
         t, E = Math.fit_cubic(E0, E1, g0, g1)
         if t is None or t < 0 or t > 1:
             if E0 <= E1:
-                print('* No fit succeeded, staying in new point')
+                info('* No fit succeeded, staying in new point')
                 return 0, E0
 
             else:
-                print('* No fit succeeded, returning to best point')
+                info('* No fit succeeded, returning to best point')
                 return 1, E1
         else:
             msg = 'Cubic interpolation was performed'
     else:
         msg = 'Quartic interpolation was performed'
-    print('* {}: t = {}'.format(msg, t))
-    print('* Interpolated energy: {}'.format(E))
+    info('* {}: t = {:.3}'.format(msg, t))
+    info('* Interpolated energy: {:.8}'.format(E))
     return t, E
 
 
@@ -131,7 +126,7 @@ def quadratic_step(g, H, w, trust):
     dq = V[:-1, 0]/V[-1, 0]
     l = D[0]
     if norm(dq) <= trust:
-        print('Pure RFO step was performed:')
+        info('Pure RFO step was performed:')
         on_sphere = False
     else:
         def steplength(l):
@@ -139,14 +134,14 @@ def quadratic_step(g, H, w, trust):
         l = Math.findroot(steplength, ev[0])  # minimization on sphere
         dq = np.linalg.solve(l*eye(H.shape[0])-H, g)
         on_sphere = False
-        print('Minimization on sphere was performed:')
+        info('Minimization on sphere was performed:')
     dE = dot(g, dq)+0.5*dq.dot(H).dot(dq)  # predicted energy change
-    print('* Trust radius: {}'.format(trust))
-    print('* Number of negative eigenvalues: {}'.format((ev < 0).sum()))
-    print('* Lowest eigenvalue: {:.3}'.format(ev[0]))
-    print('* lambda: {:.3}'.format(l))
-    print('Quadratic step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
-    print('* Predicted energy change: {:.3}'.format(dE))
+    info('* Trust radius: {}'.format(trust))
+    info('* Number of negative eigenvalues: {}'.format((ev < 0).sum()))
+    info('* Lowest eigenvalue: {:.3}'.format(ev[0]))
+    info('* lambda: {:.3}'.format(l))
+    info('Quadratic step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
+    info('* Predicted energy change: {:.3}'.format(dE))
     return dq, dE, on_sphere
 
 
@@ -160,7 +155,7 @@ def converged(forces, step, on_sphere, params):
         criteria.extend([
             ('Step RMS', Math.rms(step), params['steprms']),
             ('Step maximum', np.max(abs(step)), params['stepmax'])])
-    print('Convergence criteria:')
+    info('Convergence criteria:')
     all_matched = True
     for crit in criteria:
         if len(crit) > 2:
@@ -171,9 +166,9 @@ def converged(forces, step, on_sphere, params):
             msg = None
         msg = '{}: {}'.format(crit[0], msg) if msg else crit[0]
         msg = '* {} => {}'.format(msg, 'OK' if result else 'no')
-        print(msg)
+        info(msg)
         if not result:
             all_matched = False
     if all_matched:
-        print('* All criteria matched')
+        info('* All criteria matched')
     return all_matched
