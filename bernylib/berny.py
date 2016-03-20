@@ -5,7 +5,7 @@ from numpy.linalg import norm
 
 from bernylib.Logging import info, error
 from bernylib import Math
-from bernylib.geomlib import bohr, InternalCoords
+from bernylib.geomlib import InternalCoords
 
 
 defaults = {
@@ -29,10 +29,11 @@ class Berny(object):
         self.hessian = self.int_coords.hessian_guess(self.geom)
         self.weights = self.int_coords.weights(self.geom)
         info.register(self)
-        info(*str(self.int_coords).split('\n'))
+        for line in str(self.int_coords).split('\n'):
+            info(line)
 
     def step(self, energy, gradients):
-        gradients = gradients*bohr
+        gradients = np.array(gradients)
         self.nsteps += 1
         info('Energy: {:.12}'.format(energy))
         B = self.int_coords.B_matrix(self.geom)

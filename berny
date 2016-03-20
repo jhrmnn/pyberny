@@ -7,6 +7,20 @@ import os
 import sys
 import json
 import pickle
+from argparse import ArgumentParser
+
+
+parser = ArgumentParser()
+parser.add_argument('--init',
+                    action='store_true',
+                    help='Initialize Berny optimizer.')
+parser.add_argument('--format', '-f',
+                    choices=['xyz', 'aims'],
+                    default='xyz',
+                    help='Format of geometry')
+parser.add_argument('paramfile',
+                    nargs='?',
+                    help='Optional optimization parameters as JSON')
 
 
 picklefilename = 'berny.pickle'
@@ -22,10 +36,10 @@ def unpack():
                 break
         else:
             raise RuntimeError('No packed lib')
-        version = next(f)[:-1].split(' ', 2)[-1]
+        version = next(f)[:-1].split(None, 2)[-1]
         libpath = '.berny-{}'.format(version)
         if not os.path.exists(libpath):
-            archive = b64decode(next(f)[:-1].split(' ', 2)[-1])
+            archive = b64decode(next(f)[:-1].split(None, 2)[-1])
             with io.BytesIO(archive) as ftar:
                 tar = tarfile.open(mode='r|gz', fileobj=ftar)
                 tar.extractall(libpath)
@@ -37,12 +51,12 @@ if __name__ == '__main__':
         sys.path.append(unpack())
     from bernylib.berny import Berny
     from bernylib import geomlib
-    fmt = sys.argv[1][2:]
-    if not os.path.exists(picklefilename):
-        paramfilename = sys.argv[2] if len(sys.argv) >= 3 else None
-        geom = geomlib.load(sys.stdin, fmt)
-        if paramfilename:
-            with open(paramfilename) as f:
+    from bernylib.Logging import info
+    args = parser.parse_args()
+    if args.init:
+        geom = geomlib.load(sys.stdin, args.format)
+        if args.paramfile:
+            with open(args.paramfile) as f:
                 params = json.load(f)
         else:
             params = None
@@ -50,15 +64,19 @@ if __name__ == '__main__':
         with open(picklefilename, 'wb') as f:
             pickle.dump(berny, f)
     else:
+        if not os.path.exists(picklefilename):
+            sys.stderr.write('No pickled berny, run with --init first?\n')
+            sys.exit(1)
         with open(picklefilename, 'rb') as f:
             berny = pickle.load(f)
+        info.register(berny)
         energy = float(next(sys.stdin))
         gradients = [[float(x) for x in line.split()] for line in sys.stdin if line.strip()]
         geom = berny.step(energy, gradients)
         with open(picklefilename, 'wb') as f:
             pickle.dump(berny, f)
         if geom:
-            geom.dump(sys.stdout, fmt)
+            geom.dump(sys.stdout, args.format)
             sys.exit(2)
         else:
             sys.exit(0)

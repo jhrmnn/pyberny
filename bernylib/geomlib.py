@@ -50,7 +50,9 @@ class Molecule(object):
     dumps = __format__
 
     def dump(self, fp, fmt):
-        if fmt == 'xyz':
+        if fmt == '':
+            fp.write(repr(self))
+        elif fmt == 'xyz':
             fp.write('{}\n'.format(len(self)))
             fp.write('Formula: {}\n'.format(self.formula))
             for specie, coord in self:
@@ -62,7 +64,7 @@ class Molecule(object):
                 fp.write('atom {} {:>2}\n'.format(
                     specie, ' '.join('{:15.8}'.format(x) for x in coord)))
         else:
-            raise ValueError('Unknown format')
+            raise ValueError("Unknown format: '{}'".format(fmt))
 
     def copy(self):
         return Molecule(list(self.species), self.coords.copy())
@@ -137,7 +139,7 @@ def load(fp, fmt):
         lattice = []
         while True:
             l = fp.readline()
-            if not l:
+            if l == '':
                 break
             l = l.strip()
             if not l or l.startswith('#'):
@@ -475,7 +477,7 @@ class InternalCoords(list):
         B = np.zeros((len(self), len(geom), 3))
         for i, coord in enumerate(self):
             _, grads = coord.eval(geom.coords, grad=True)
-            idx = [i % len(geom) for i in coord.idx]
+            idx = [k % len(geom) for k in coord.idx]
             for j, grad in zip(idx, grads):
                 B[i, j] += grad
         return B.reshape(len(self), 3*len(geom))
