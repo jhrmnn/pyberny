@@ -2,6 +2,7 @@ from collections import namedtuple
 import numpy as np
 from numpy import dot, eye
 from numpy.linalg import norm
+import json
 
 from bernylib.Logging import info, error
 from bernylib import Math
@@ -15,7 +16,7 @@ defaults = {
     'steprms': 1.2e-3,
     'maxsteps': 100,
     'trust': 0.3,
-    'debug': False}
+    'debug': None}
 
 
 class Berny(object):
@@ -29,6 +30,7 @@ class Berny(object):
         self.hessian = self.int_coords.hessian_guess(self.geom)
         self.weights = self.int_coords.weights(self.geom)
         info.register(self)
+        self.debug = []
         for line in str(self.int_coords).split('\n'):
             info(line)
 
@@ -62,8 +64,20 @@ class Berny(object):
         self.predicted = PESPoint(self.interpolated.q+dq, self.interpolated.E+dE, None)
         dq = self.predicted.q-current.q
         info('Total step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
+        geom = self.geom.copy()
         q = self.int_coords.update_geom(self.geom, current.q, self.predicted.q-current.q, B_inv)
         future = PESPoint(q, None, None)
+        if self.params['debug']:
+            self.debug.append({'nstep': self.nsteps,
+                               'trust': self.trust[0],
+                               'hessian': self.hessian.copy(),
+                               'gradients': gradients,
+                               'coords': geom.coords,
+                               'energy': energy,
+                               'q': current.q,
+                               'dq': dq})
+            with open(self.params['debug'], 'w') as f:
+                json.dump(self.debug, f, indent=4, cls=ArrayEncoder)
         if converged(gradients, future.q-current.q, on_sphere, self.params):
             return
         self.previous = current
@@ -88,13 +102,13 @@ def update_trust(trust, dE, dE_predicted, dq):
         r = dE/dE_predicted  # Fletcher's parameter
     else:
         r = 1.
+    info("Trust update: Fletcher's parameter: {:.3}".format(r))
     if r < 0.25:
         tr = norm(dq)/4
     elif r > 0.75 and abs(norm(dq)-trust) < 1e-10:
         tr = 2*trust
     else:
         tr = trust
-        info("Trust update: Fletcher's parameter: {:.3}".format(r))
     trust[:] = tr
 
 
@@ -195,3 +209,13 @@ def optimize_morse(geom, r0=None, **params):
         if not geom:
             break
     return debug
+
+
+class ArrayEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if obj is np.nan:
+            return None
+        try:
+            return obj.tolist()
+        except AttributeError:
+            return super().default(obj)

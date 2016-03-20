@@ -62,7 +62,7 @@ class Molecule(object):
             fp.write('# Formula: {}\n'.format(self.formula))
             for specie, coord in self:
                 fp.write('atom {} {:>2}\n'.format(
-                    specie, ' '.join('{:15.8}'.format(x) for x in coord)))
+                    ' '.join('{:15.8}'.format(x) for x in coord), specie))
         else:
             raise ValueError("Unknown format: '{}'".format(fmt))
 
