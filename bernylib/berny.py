@@ -3,12 +3,10 @@ import numpy as np
 from numpy import dot, eye
 from numpy.linalg import norm
 
-from Logging import info
-import Math
-from geomlib import bohr, InternalCoords
+from bernylib.Logging import info, error
+from bernylib import Math
+from bernylib.geomlib import bohr, InternalCoords
 
-
-PESPoint = namedtuple('PESPoint', 'q E g')
 
 defaults = {
     'gradientmax': 0.45e-3,
@@ -20,25 +18,26 @@ defaults = {
     'debug': False}
 
 
-class Berny:
+class Berny(object):
     def __init__(self, geom, params=None):
+        self.geom = geom.copy()
         self.params = defaults.copy()
         self.params.update(params or {})
         self.nsteps = 0
         self.trust = np.array([self.params['trust']])
-        self.int_coords = InternalCoords(geom)
-        self.hessian = self.int_coords.hessian_guess(geom)
-        self.weights = self.int_coords.weights(geom)
+        self.int_coords = InternalCoords(self.geom)
+        self.hessian = self.int_coords.hessian_guess(self.geom)
+        self.weights = self.int_coords.weights(self.geom)
         info.register(self)
         info(*str(self.int_coords).split('\n'))
 
-    def step(self, geom, energy, gradients):
+    def step(self, energy, gradients):
         gradients = gradients*bohr
         self.nsteps += 1
         info('Energy: {:.12}'.format(energy))
-        B = self.int_coords.B_matrix(geom)
+        B = self.int_coords.B_matrix(self.geom)
         B_inv = Math.ginv(B)
-        current = PESPoint(self.int_coords.eval_geom(geom),
+        current = PESPoint(self.int_coords.eval_geom(self.geom),
                            energy,
                            dot(B_inv.T, gradients.reshape(-1)))
         if self.nsteps > 1:
@@ -62,13 +61,17 @@ class Berny:
         self.predicted = PESPoint(self.interpolated.q+dq, self.interpolated.E+dE, None)
         dq = self.predicted.q-current.q
         info('Total step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
-        q = self.int_coords.update_geom(geom, current.q, self.predicted.q-current.q, B_inv)
+        q = self.int_coords.update_geom(self.geom, current.q, self.predicted.q-current.q, B_inv)
         future = PESPoint(q, None, None)
         if converged(gradients, future.q-current.q, on_sphere, self.params):
-            return True
+            return
         self.previous = current
         if self.nsteps == 1 or current.E < self.best.E:
             self.best = current
+        return self.geom.copy()
+
+
+PESPoint = namedtuple('PESPoint', 'q E g')
 
 
 def update_hessian(H, dq, dg):
@@ -136,7 +139,7 @@ def quadratic_step(g, H, w, trust):
         on_sphere = False
         info('Minimization on sphere was performed:')
     dE = dot(g, dq)+0.5*dq.dot(H).dot(dq)  # predicted energy change
-    info('* Trust radius: {}'.format(trust))
+    info('* Trust radius: {:.2}'.format(trust))
     info('* Number of negative eigenvalues: {}'.format((ev < 0).sum()))
     info('* Lowest eigenvalue: {:.3}'.format(ev[0]))
     info('* lambda: {:.3}'.format(l))
@@ -172,3 +175,22 @@ def converged(forces, step, on_sphere, params):
     if all_matched:
         info('* All criteria matched')
     return all_matched
+
+
+def optimize_morse(geom, r0=None, **params):
+    geom = geom.copy()
+    berny = Berny(geom)
+    debug = []
+    while True:
+        energy, gradients = geom.morse(r0=r0)
+        debug.append({'energy': energy,
+                      'gradients': gradients,
+                      'geom': geom.copy()})
+        try:
+            geom = berny.step(energy, gradients)
+        except Math.FindrootException:
+            error('Could not find root of RFO, bad Hessian, quitting')
+            break
+        if not geom:
+            break
+    return debug

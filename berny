@@ -1,0 +1,64 @@
+#!/usr/bin/env python
+"""
+Usage:
+    driver.py [--xyz | --aims] [PARAMFILE]
+"""
+import os
+import sys
+import json
+import pickle
+
+
+picklefilename = 'berny.pickle'
+
+
+def unpack():
+    from base64 import b64decode
+    import tarfile
+    import io
+    with open(__file__) as f:
+        for line in f:
+            if line == '# ==>\n':
+                break
+        else:
+            raise RuntimeError('No packed lib')
+        version = next(f)[:-1].split(' ', 2)[-1]
+        libpath = '.berny-{}'.format(version)
+        if not os.path.exists(libpath):
+            archive = b64decode(next(f)[:-1].split(' ', 2)[-1])
+            with io.BytesIO(archive) as ftar:
+                tar = tarfile.open(mode='r|gz', fileobj=ftar)
+                tar.extractall(libpath)
+    return libpath
+
+
+if __name__ == '__main__':
+    if not os.path.exists('bernylib'):
+        sys.path.append(unpack())
+    from bernylib.berny import Berny
+    from bernylib import geomlib
+    fmt = sys.argv[1][2:]
+    if not os.path.exists(picklefilename):
+        paramfilename = sys.argv[2] if len(sys.argv) >= 3 else None
+        geom = geomlib.load(sys.stdin, fmt)
+        if paramfilename:
+            with open(paramfilename) as f:
+                params = json.load(f)
+        else:
+            params = None
+        berny = Berny(geom, params=params)
+        with open(picklefilename, 'wb') as f:
+            pickle.dump(berny, f)
+    else:
+        with open(picklefilename, 'rb') as f:
+            berny = pickle.load(f)
+        energy = float(next(sys.stdin))
+        gradients = [[float(x) for x in line.split()] for line in sys.stdin if line.strip()]
+        geom = berny.step(energy, gradients)
+        with open(picklefilename, 'wb') as f:
+            pickle.dump(berny, f)
+        if geom:
+            geom.dump(sys.stdout, fmt)
+            sys.exit(2)
+        else:
+            sys.exit(0)

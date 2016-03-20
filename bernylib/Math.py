@@ -1,7 +1,7 @@
 import numpy as np
 from numpy import dot
 import sys
-from logging import info
+from bernylib.Logging import info
 
 
 def rms(A):
@@ -97,6 +97,10 @@ def fit_quartic(y0, y1, g0, g1):
             return minim2, minval2
 
 
+class FindrootException(Exception):
+    pass
+
+
 def findroot(f, lim):
     """Find root of increasing function on (-inf,lim).
 
@@ -124,4 +128,4 @@ def findroot(f, lim):
             return x
         err = err_new
     else:
-        raise RuntimeError('Cannot find root of f')
+        raise FindrootException()

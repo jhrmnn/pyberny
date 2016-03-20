@@ -5,27 +5,35 @@ from collections import defaultdict, OrderedDict
 from itertools import chain, product, repeat, combinations
 import os
 import csv
-import io
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 
-import Math
-from Logging import info
+from bernylib import Math
+from bernylib.Logging import info
 
 bohr = 0.52917721092
 
 
-class Molecule:
+class Molecule(object):
     def __init__(self, species, coords):
         self.species = species
         self.coords = np.array(coords)
 
     def __repr__(self):
-        counter = defaultdict(int)
-        for specie in self.species:
-            counter[specie] += 1
-        return "<{} '{}'>".format(
-            self.__class__.__name__,
-            ''.join('{}{}'.format(sp, n if n > 1 else '')
-                    for sp, n in sorted(counter.items())))
+        return "<{} '{}'>".format(self.__class__.__name__, self.formula)
+
+    def __getattr__(self, attr):
+        if attr == 'formula':
+            counter = defaultdict(int)
+            for specie in self.species:
+                counter[specie] += 1
+            return ''.join('{}{}'.format(sp, n if n > 1 else '')
+                           for sp, n in sorted(counter.items()))
+        else:
+            raise AttributeError("'{}' object has no attribute '{}'"
+                                 .format(self.__class__.__name__, attr))
 
     def __iter__(self):
         for specie, coord in zip(self.species, self.coords):
@@ -34,8 +42,30 @@ class Molecule:
     def __len__(self):
         return len(self.species)
 
+    def __format__(self, fmt):
+        fp = StringIO()
+        self.dump(fp, fmt)
+        return fp.getvalue()
+
+    dumps = __format__
+
+    def dump(self, fp, fmt):
+        if fmt == 'xyz':
+            fp.write('{}\n'.format(len(self)))
+            fp.write('Formula: {}\n'.format(self.formula))
+            for specie, coord in self:
+                fp.write('{:>2} {}\n'.format(
+                    specie, ' '.join('{:15.8}'.format(x) for x in coord)))
+        elif fmt == 'aims':
+            fp.write('# Formula: {}\n'.format(self.formula))
+            for specie, coord in self:
+                fp.write('atom {} {:>2}\n'.format(
+                    specie, ' '.join('{:15.8}'.format(x) for x in coord)))
+        else:
+            raise ValueError('Unknown format')
+
     def copy(self):
-        return Molecule(self.species.copy(), self.coords.copy())
+        return Molecule(list(self.species), self.coords.copy())
 
     def supercell(self, *args, **kwargs):
         return self.copy()
@@ -101,6 +131,29 @@ def load(fp, fmt):
             species.append(l[0])
             coords.append([float(x) for x in l[1:4]])
         return Molecule(species, coords)
+    if fmt == 'aims':
+        species = []
+        coords = []
+        lattice = []
+        while True:
+            l = fp.readline()
+            if not l:
+                break
+            l = l.strip()
+            if not l or l.startswith('#'):
+                continue
+            l = l.split()
+            what = l[0]
+            if what == 'atom':
+                species.append(l[4])
+                coords.append([float(x) for x in l[1:4]])
+            elif what == 'lattice_vector':
+                lattice.append([float(x) for x in l[1:4]])
+        if lattice:
+            assert len(lattice) == 3
+            return Crystal(species, coords, lattice)
+        else:
+            return Molecule(species, coords)
 
 
 def readfile(path, fmt=None):
@@ -108,6 +161,8 @@ def readfile(path, fmt=None):
         ext = os.path.splitext(path)[1]
         if ext == '.xyz':
             fmt = 'xyz'
+        if ext == '.aims' or os.path.basename(path) == 'geometry.in':
+            fmt = 'aims'
     with open(path) as f:
         return load(f, fmt)
 
@@ -133,10 +188,10 @@ def get_clusters(C):
 class Crystal(Molecule):
     def __init__(self, species, coords, lattice):
         self.lattice = np.array(lattice)
-        super().__init__(species, coords)
+        super(Crystal, self).__init__(species, coords)
 
     def copy(self):
-        return Crystal(self.species.copy(), self.coords.copy(), self.lattice.copy())
+        return Crystal(list(self.species), self.coords.copy(), self.lattice.copy())
 
     def super_circum(self, radius):
         rec_lattice = 2*pi*inv(self.lattice.T)
@@ -161,13 +216,11 @@ class Crystal(Molecule):
         return Crystal(species, coords, lattice)
 
 
-class InternalCoord:
+class InternalCoord(object):
     def __init__(self, C=None):
         if C is not None:
             self.weak = sum(not C[self.idx[i], self.idx[i+1]]
                             for i in range(len(self.idx)-1))
-        else:
-            self.weak = None
 
     def __eq__(self, other):
         self.idx == other.idx
@@ -189,7 +242,7 @@ class Bond(InternalCoord):
         self.i = i
         self.j = j
         self.idx = (i, j)
-        super().__init__(*args, **kwargs)
+        super(Bond, self).__init__(*args, **kwargs)
 
     def hessian(self, rho):
         return 0.45*rho[self.i, self.j]
@@ -213,7 +266,7 @@ class Angle(InternalCoord):
         self.j = j
         self.k = k
         self.idx = (i, j, k)
-        super().__init__(*args, **kwargs)
+        super(Angle, self).__init__(*args, **kwargs)
 
     def hessian(self, rho):
         return 0.15*(rho[self.i, self.j]*rho[self.j, self.k])
@@ -249,7 +302,7 @@ class Angle(InternalCoord):
 
 
 class Dihedral(InternalCoord):
-    def __init__(self, i, j, k, l, *args, weak=None, angles=None, C=None, **kwargs):
+    def __init__(self, i, j, k, l, weak=None, angles=None, C=None, **kwargs):
         if j > k:
             i, j, k, l = l, k, j, i
         self.i = i
@@ -259,7 +312,7 @@ class Dihedral(InternalCoord):
         self.idx = (i, j, k, l)
         self.weak = weak
         self.angles = angles
-        super().__init__(*args, **kwargs)
+        super(Dihedral, self).__init__(**kwargs)
 
     def hessian(self, rho):
         return 0.005*rho[self.i, self.j]*rho[self.j, self.k] *\
@@ -324,7 +377,7 @@ class Dihedral(InternalCoord):
 
 class InternalCoords(list):
     def __init__(self, geom, allowed=None):
-        super().__init__()
+        super(InternalCoords, self).__init__()
         geom = geom.supercell()
         dist = geom.dist(geom)
         radii = np.array([get_property(sp, 'covalent_radius') for sp in geom.species])
@@ -363,10 +416,6 @@ class InternalCoords(list):
         else:
             raise AttributeError("'{}' object has no attribute '{}'"
                                  .format(self.__class__.__name__, attr))
-
-    def print(self):
-        for coord in self:
-            print(coord)
 
     def __repr__(self):
         return "<InternalCoords '{}'>".format(', '.join(
@@ -457,7 +506,7 @@ class InternalCoords(list):
         return cur.q
 
 
-class CartIter:
+class CartIter(object):
     def __init__(self, cart=None, q=None, dq=None, dcart=None):
         self.cart = cart
         self.q = q
@@ -513,7 +562,7 @@ def get_property(idx, name):
             pass
     return value
 
-species_data = [row for row in csv.DictReader(io.StringIO("""\
+species_data = [row for row in csv.DictReader(StringIO("""\
 number,symbol,name,vdw_radius,covalent_radius,mass,ionization_energy
 1,H,hydrogen,1.2,0.38,1.0079,13.5984
 2,He,helium,1.4,0.32,4.0026,24.5874
