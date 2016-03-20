@@ -14,7 +14,7 @@ parser = ArgumentParser()
 parser.add_argument('--init',
                     action='store_true',
                     help='Initialize Berny optimizer.')
-parser.add_argument('--format', '-f',
+parser.add_argument('-f', '--format',
                     choices=['xyz', 'aims'],
                     default='xyz',
                     help='Format of geometry')

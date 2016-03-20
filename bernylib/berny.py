@@ -37,6 +37,8 @@ class Berny(object):
     def step(self, energy, gradients):
         gradients = np.array(gradients)
         self.nsteps += 1
+        if self.nsteps > self.params['maxsteps']:
+            return
         info('Energy: {:.12}'.format(energy))
         B = self.int_coords.B_matrix(self.geom)
         B_inv = Math.ginv(B)
