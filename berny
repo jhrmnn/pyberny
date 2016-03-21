@@ -8,6 +8,7 @@ import sys
 import json
 import pickle
 from argparse import ArgumentParser
+from socket import socket, AF_INET, SOCK_STREAM
 
 
 parser = ArgumentParser()
@@ -18,6 +19,10 @@ parser.add_argument('-f', '--format',
                     choices=['xyz', 'aims'],
                     default='xyz',
                     help='Format of geometry')
+parser.add_argument('-s', '--socket',
+                    nargs=2,
+                    metavar=('host', 'port'),
+                    help='Listen on given address')
 parser.add_argument('paramfile',
                     nargs='?',
                     help='Optional optimization parameters as JSON')
@@ -46,6 +51,12 @@ def unpack():
     return libpath
 
 
+def fo_handler(berny, fo):
+    energy = float(next(fo))
+    gradients = [[float(x) for x in line.split()] for line in fo if line.strip()]
+    return berny.step(energy, gradients)
+
+
 if __name__ == '__main__':
     if not os.path.exists('bernylib'):
         sys.path.append(unpack())
@@ -53,7 +64,7 @@ if __name__ == '__main__':
     from bernylib import geomlib
     from bernylib.Logging import info
     args = parser.parse_args()
-    if args.init:
+    if args.init or args.socket:
         geom = geomlib.load(sys.stdin, args.format)
         if args.paramfile:
             with open(args.paramfile) as f:
@@ -61,8 +72,27 @@ if __name__ == '__main__':
         else:
             params = None
         berny = Berny(geom, params=params)
-        with open(picklefilename, 'wb') as f:
-            pickle.dump(berny, f)
+        if args.init:
+            with open(picklefilename, 'wb') as f:
+                pickle.dump(berny, f)
+        elif args.socket:
+            host, port = args.socket
+            server = socket(AF_INET, SOCK_STREAM)
+            server.bind((host, int(port)))
+            server.listen(0)
+            while True:
+                client, addr = server.accept()
+                fo = client.makefile('r+')
+                geom_next = fo_handler(berny, fo)
+                if not geom_next:
+                    fo.close()
+                    client.close()
+                    break
+                geom = geom_next
+                fo.write(geom.dumps(args.format))
+                fo.flush()
+                fo.close()
+                client.close()
     else:
         if not os.path.exists(picklefilename):
             sys.stderr.write('No pickled berny, run with --init first?\n')
@@ -70,9 +100,7 @@ if __name__ == '__main__':
         with open(picklefilename, 'rb') as f:
             berny = pickle.load(f)
         info.register(berny)
-        energy = float(next(sys.stdin))
-        gradients = [[float(x) for x in line.split()] for line in sys.stdin if line.strip()]
-        geom = berny.step(energy, gradients)
+        geom = fo_handler(berny, sys.stdin)
         with open(picklefilename, 'wb') as f:
             pickle.dump(berny, f)
         if geom:
