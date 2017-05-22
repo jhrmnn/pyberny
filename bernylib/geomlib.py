@@ -77,6 +77,17 @@ class Molecule(object):
     def copy(self):
         return Molecule(list(self.species), self.coords.copy())
 
+    def write(self, filename):
+        ext = os.path.splitext(filename)[1]
+        if ext == 'xyz':
+            fmt = 'xyz'
+        elif ext == 'aims' or os.path.basename(filename) == 'geometry.in':
+            fmt = 'aims'
+        elif ext == 'mopac':
+            fmt = 'mopac'
+        with open(filename, 'w') as f:
+            self.dump(f, fmt)
+
     def supercell(self, *args, **kwargs):
         return self.copy()
 
