@@ -66,6 +66,11 @@ class Molecule(object):
             for specie, coord in self:
                 fp.write('atom {} {:>2}\n'.format(
                     ' '.join('{:15.8}'.format(x) for x in coord), specie))
+        elif fmt == 'mopac':
+            fp.write('* Formula: {}\n'.format(self.formula))
+            for specie, coord in self:
+                fp.write('{:>2} {}\n'.format(
+                    specie, ' '.join('{:15.8} 1'.format(x) for x in coord)))
         else:
             raise ValueError("Unknown format: '{}'".format(fmt))
 
