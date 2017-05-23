@@ -40,5 +40,25 @@ def pack():
         f.write('# <==\n')
 
 
+def unpack():
+    from base64 import b64decode
+    import tarfile
+    import io
+    with open(__file__) as f:
+        for line in f:
+            if line == '# ==>\n':
+                break
+        else:
+            raise RuntimeError('No packed lib')
+        version = next(f)[:-1].split(None, 2)[-1]
+        libpath = '.berny-{}'.format(version)
+        if not os.path.exists(libpath):
+            archive = b64decode(next(f)[:-1].split(None, 2)[-1])
+            with io.BytesIO(archive) as ftar:
+                tar = tarfile.open(mode='r|gz', fileobj=ftar)
+                tar.extractall(libpath)
+    return libpath
+
+
 if __name__ == '__main__':
     pack()

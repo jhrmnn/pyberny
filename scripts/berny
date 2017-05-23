@@ -6,108 +6,103 @@
 Usage:
     driver.py [--xyz | --aims] [PARAMFILE]
 """
-import os
 import sys
 import json
 import pickle
 from argparse import ArgumentParser
 from socket import socket, AF_INET, SOCK_STREAM
+from contextlib import contextmanager
+
+from bernylib.berny import Berny
+from bernylib import geomlib
+from bernylib.Logging import info
 
 
-parser = ArgumentParser()
-parser.add_argument('--init',
-                    action='store_true',
-                    help='Initialize Berny optimizer.')
-parser.add_argument('-f', '--format',
-                    choices=['xyz', 'aims'],
-                    default='xyz',
-                    help='Format of geometry')
-parser.add_argument('-s', '--socket',
-                    nargs=2,
-                    metavar=('host', 'port'),
-                    help='Listen on given address')
-parser.add_argument('paramfile',
-                    nargs='?',
-                    help='Optional optimization parameters as JSON')
+@contextmanager
+def berny_unpickled(berny=None):
+    picklefile = 'berny.pickle'
+    if not berny:
+        with open(picklefile, 'rb') as f:
+            berny = pickle.load(f)
+    try:
+        yield berny
+    except:
+        raise
+    with open(picklefile, 'wb') as f:
+        pickle.dump(berny, f)
 
 
-picklefilename = 'berny.pickle'
-
-
-def unpack():
-    from base64 import b64decode
-    import tarfile
-    import io
-    with open(__file__) as f:
-        for line in f:
-            if line == '# ==>\n':
-                break
-        else:
-            raise RuntimeError('No packed lib')
-        version = next(f)[:-1].split(None, 2)[-1]
-        libpath = '.berny-{}'.format(version)
-        if not os.path.exists(libpath):
-            archive = b64decode(next(f)[:-1].split(None, 2)[-1])
-            with io.BytesIO(archive) as ftar:
-                tar = tarfile.open(mode='r|gz', fileobj=ftar)
-                tar.extractall(libpath)
-    return libpath
-
-
-def fo_handler(berny, fo):
-    energy = float(next(fo))
-    gradients = [[float(x) for x in line.split()] for line in fo if line.strip()]
+def handler(berny, f):
+    energy = float(next(f))
+    gradients = [[float(x) for x in l.split()] for l in f if l.strip()]
     return berny.step(energy, gradients)
 
 
-if __name__ == '__main__':
-    if not os.path.exists('bernylib'):
-        sys.path.append(unpack())
-    from bernylib.berny import Berny
-    from bernylib import geomlib
-    from bernylib.Logging import info
-    args = parser.parse_args()
-    if args.init or args.socket:
-        geom = geomlib.load(sys.stdin, args.format)
-        if args.paramfile:
-            with open(args.paramfile) as f:
-                params = json.load(f)
-        else:
-            params = None
-        berny = Berny(geom, params=params)
-        if args.init:
-            with open(picklefilename, 'wb') as f:
-                pickle.dump(berny, f)
-        elif args.socket:
-            host, port = args.socket
-            server = socket(AF_INET, SOCK_STREAM)
-            server.bind((host, int(port)))
-            server.listen(0)
-            while True:
-                client, addr = server.accept()
-                fo = client.makefile('r+')
-                geom_next = fo_handler(berny, fo)
-                if not geom_next:
-                    fo.close()
-                    client.close()
-                    break
-                geom = geom_next
-                fo.write(geom.dumps(args.format))
-                fo.flush()
-                fo.close()
-                client.close()
+def get_berny(args):
+    geom = geomlib.load(sys.stdin, args.format)
+    if args.paramfile:
+        with open(args.paramfile) as f:
+            params = json.load(f)
     else:
-        if not os.path.exists(picklefilename):
-            sys.stderr.write('No pickled berny, run with --init first?\n')
-            sys.exit(1)
-        with open(picklefilename, 'rb') as f:
-            berny = pickle.load(f)
-        info.register(berny)
-        geom = fo_handler(berny, sys.stdin)
-        with open(picklefilename, 'wb') as f:
-            pickle.dump(berny, f)
+        params = None
+    return Berny(geom, params=params)
+
+
+def init(args):
+    berny = get_berny(args)
+    berny.geom_format = args.format
+    with berny_unpickled(berny) as berny:
+        pass
+
+
+def server(args):
+    berny = get_berny(args)
+    host, port = args.socket
+    server = socket(AF_INET, SOCK_STREAM)
+    server.bind((host, int(port)))
+    server.listen(0)
+    while True:
+        sock, addr = server.accept()
+        f = sock.makefile('r+')
+        geom = handler(berny, f)
         if geom:
-            geom.dump(sys.stdout, args.format)
-            sys.exit(2)
-        else:
-            sys.exit(0)
+            f.write(geom.dumps(args.format))
+            f.flush()
+        f.close()
+        sock.close()
+        if not geom:
+            break
+
+
+def driver():
+    try:
+        with berny_unpickled() as berny:
+            info.register(berny)
+            geom = handler(berny, sys.stdin)
+    except FileNotFoundError:
+        sys.stderr.write('error: No pickled berny, run with --init first?\n')
+        sys.exit(1)
+    if not geom:
+        sys.exit(0)
+    geom.dump(sys.stdout, berny.geom_format)
+    sys.exit(10)
+
+
+def main():
+    parser = ArgumentParser()
+    arg = parser.add_argument
+    arg('--init', action='store_true', help='Initialize Berny optimizer.')
+    arg('-f', '--format', choices=['xyz', 'aims'], default='xyz', help='Format of geometry')
+    arg('-s', '--socket', nargs=2, metavar=('host', 'port'), help='Listen on given address')
+    arg('paramfile', nargs='?', help='Optional optimization parameters as JSON')
+    args = parser.parse_args()
+    if args.init:
+        init(args)
+    elif args.socket:
+        server(args)
+    else:
+        driver()
+
+
+if __name__ == '__main__':
+    main()
