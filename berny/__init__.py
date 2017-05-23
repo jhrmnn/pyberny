@@ -1,2 +1,2 @@
-from .berny import Berny
+from .berny import Berny, Logger
 from .geomlib import Molecule

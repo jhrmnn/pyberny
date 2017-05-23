@@ -1,7 +1,6 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-from __future__ import print_function
 from numpy import dot, pi
 from collections import OrderedDict
 import numpy as np
@@ -11,12 +10,7 @@ from itertools import combinations, product
 from . import Math
 from .species_data import get_property
 
-
 bohr = 0.52917721092
-
-
-def info(*args, **kwargs):
-    print(*args, **kwargs)
 
 
 class InternalCoord(object):
@@ -312,7 +306,8 @@ class InternalCoords(list):
                 B[i, j] += grad
         return B.reshape(len(self), 3*len(geom))
 
-    def update_geom(self, geom, q, dq, B_inv):
+    def update_geom(self, geom, q, dq, B_inv, log=None):
+        geom = geom.copy()
         thre = 1e-6
         target = CartIter(q=q+dq)
         prev = CartIter(geom.coords, q, dq)
@@ -331,11 +326,14 @@ class InternalCoords(list):
         else:
             msg = 'Transformation did not converge in {} iterations'
             cur = iter_first
-        info(msg.format(i+1))
-        info('* RMS(dcart): {:.3}, RMS(dq): {:.3}'
-             .format(Math.rms(cur.dcart), Math.rms(cur.dq)))
+        if log:
+            log(msg.format(i+1))
+            log('* RMS(dcart): {:.3}, RMS(dq): {:.3}'.format(
+                Math.rms(cur.dcart),
+                Math.rms(cur.dq)
+            ))
         geom.coords = cur.cart
-        return cur.q
+        return cur.q, geom
 
 
 class CartIter(object):

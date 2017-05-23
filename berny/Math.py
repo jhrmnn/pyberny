@@ -1,14 +1,8 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-from __future__ import print_function
 import numpy as np
 from numpy import dot
-import sys
-
-
-def info(*args, **kwargs):
-    print(*args, **kwargs)
 
 
 def rms(A):
@@ -17,7 +11,7 @@ def rms(A):
     return np.sqrt(np.sum(A**2)/A.size)
 
 
-def ginv(A):
+def ginv(A, log=None):
     U, D, V = np.linalg.svd(dot(A.T, A))
     thre1 = 1e-16
     thre2 = 1e8
@@ -25,8 +19,8 @@ def ginv(A):
     gaps = D/np.hstack((D[1:], thre1))
     n = np.argmax(gaps)
     gap = gaps[n]
-    if gap < thre2:
-        info('Pseudoinverse gap of only: {}'.format(gap), file=sys.stderr)
+    if log and gap < thre2:
+        log('Pseudoinverse gap of only: {}'.format(gap))
     D[n+1:] = 0
     D[:n+1] = 1/D[:n+1]
     return U.dot(np.diag(D)).dot(V).dot(A.T)
