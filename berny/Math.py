@@ -4,7 +4,9 @@
 import numpy as np
 from numpy import dot
 import sys
-from berny.Logging import info
+
+
+info = print
 
 
 def rms(A):

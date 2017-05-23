@@ -3,13 +3,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from collections import namedtuple
 import numpy as np
+from itertools import chain
 from numpy import dot, eye
 from numpy.linalg import norm
 import json
 
-from berny.Logging import info, error
-from berny import Math
-from berny.geomlib import InternalCoords
+from . import Math
+from .geomlib import InternalCoords
 
 
 defaults = {
@@ -19,76 +19,84 @@ defaults = {
     'steprms': 1.2e-3,
     'maxsteps': 100,
     'trust': 0.3,
-    'debug': None}
+    'debug': None
+}
 
 
-class Berny(object):
-    def __init__(self, geom, params=None):
-        self.geom = geom.copy()
-        self.params = defaults.copy()
-        self.params.update(params or {})
-        self.nsteps = 0
-        self.trust = np.array([self.params['trust']])
-        self.int_coords = InternalCoords(self.geom)
-        self.hessian = self.int_coords.hessian_guess(self.geom)
-        self.weights = self.int_coords.weights(self.geom)
-        info.register(self)
-        self.debug = []
-        for line in str(self.int_coords).split('\n'):
-            info(line)
+info = print
 
-    def step(self, energy, gradients):
+
+def Berny(geom, params=None, log=print):
+    params = dict(chain(defaults.items(), (params or {}).items()))
+    nsteps = 0
+    trust = params['trust']
+    coords = InternalCoords(geom)
+    hessian = coords.hessian_guess(geom)
+    weights = coords.weights(geom)
+    debug = []
+    for line in str(coords).split('\n'):
+        log(line)
+    best, previous, predicted, interpolated = None, None, None, None
+    while True:
+        energy, gradients = yield geom
+        yield
         gradients = np.array(gradients)
-        self.nsteps += 1
-        if self.nsteps > self.params['maxsteps']:
-            return
-        info('Energy: {:.12}'.format(energy))
-        B = self.int_coords.B_matrix(self.geom)
+        nsteps += 1
+        if nsteps > params['maxsteps']:
+            break
+        log('Energy: {:.12}'.format(energy))
+        B = coords.B_matrix(geom)
         B_inv = Math.ginv(B)
-        current = PESPoint(self.int_coords.eval_geom(self.geom),
-                           energy,
-                           dot(B_inv.T, gradients.reshape(-1)))
-        if self.nsteps > 1:
-            update_hessian(self.hessian, current.q-self.best.q, current.g-self.best.g)
-            update_trust(self.trust,
-                         current.E-self.previous.E,
-                         self.predicted.E-self.interpolated.E,
-                         self.predicted.q-self.interpolated.q)
-            dq = self.best.q-current.q
+        current = PESPoint(
+            coords.eval_geom(geom),
+            energy,
+            dot(B_inv.T, gradients.reshape(-1))
+        )
+        if nsteps > 1:
+            update_hessian(hessian, current.q-best.q, current.g-best.g)
+            trust = update_trust(
+                trust,
+                current.E-previous.E,
+                predicted.E-interpolated.E,
+                predicted.q-interpolated.q
+            )
+            dq = best.q-current.q
             t, E = linear_search(
-                current.E, self.best.E, dot(current.g, dq), dot(self.best.g, dq))
-            self.interpolated = PESPoint(
-                current.q+t*dq, E, t*self.best.g+(1-t)*current.g)
+                current.E, best.E, dot(current.g, dq), dot(best.g, dq)
+            )
+            interpolated = PESPoint(current.q+t*dq, E, t*best.g+(1-t)*current.g)
         else:
-            self.interpolated = current
+            interpolated = current
         proj = dot(B, B_inv)
-        hessian_proj = proj.dot(self.hessian).dot(proj) +\
-            1000*(eye(len(self.int_coords))-proj)
+        hessian_proj = \
+            proj.dot(hessian).dot(proj) + 1000*(eye(len(coords))-proj)
         dq, dE, on_sphere = quadratic_step(
-            dot(proj, self.interpolated.g), hessian_proj, self.weights, self.trust[0])
-        self.predicted = PESPoint(self.interpolated.q+dq, self.interpolated.E+dE, None)
-        dq = self.predicted.q-current.q
-        info('Total step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
-        geom = self.geom.copy()
-        q = self.int_coords.update_geom(self.geom, current.q, self.predicted.q-current.q, B_inv)
+            dot(proj, interpolated.g), hessian_proj, weights, trust
+        )
+        predicted = PESPoint(interpolated.q+dq, interpolated.E+dE, None)
+        dq = predicted.q-current.q
+        log('Total step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
+        geom = geom.copy()
+        q = coords.update_geom(geom, current.q, predicted.q-current.q, B_inv)
         future = PESPoint(q, None, None)
-        if self.params['debug']:
-            self.debug.append({'nstep': self.nsteps,
-                               'trust': self.trust[0],
-                               'hessian': self.hessian.copy(),
-                               'gradients': gradients,
-                               'coords': geom.coords,
-                               'energy': energy,
-                               'q': current.q,
-                               'dq': dq})
-            with open(self.params['debug'], 'w') as f:
-                json.dump(self.debug, f, indent=4, cls=ArrayEncoder)
-        if converged(gradients, future.q-current.q, on_sphere, self.params):
-            return
-        self.previous = current
-        if self.nsteps == 1 or current.E < self.best.E:
-            self.best = current
-        return self.geom.copy()
+        if params['debug']:
+            debug.append({
+                'nstep': nsteps,
+                'trust': trust,
+                'hessian': hessian.copy(),
+                'gradients': gradients,
+                'coords': geom.coords,
+                'energy': energy,
+                'q': current.q,
+                'dq': dq
+            })
+            with open(params['debug'], 'w') as f:
+                json.dump(debug, f, indent=4, cls=ArrayEncoder)
+        if converged(gradients, future.q-current.q, on_sphere, params):
+            break
+        previous = current
+        if nsteps == 1 or current.E < best.E:
+            best = current
 
 
 PESPoint = namedtuple('PESPoint', 'q E g')
@@ -109,12 +117,11 @@ def update_trust(trust, dE, dE_predicted, dq):
         r = 1.
     info("Trust update: Fletcher's parameter: {:.3}".format(r))
     if r < 0.25:
-        tr = norm(dq)/4
+        return norm(dq)/4
     elif r > 0.75 and abs(norm(dq)-trust) < 1e-10:
-        tr = 2*trust
+        return 2*trust
     else:
-        tr = trust
-    trust[:] = tr
+        return trust
 
 
 def linear_search(E0, E1, g0, g1):
@@ -195,25 +202,6 @@ def converged(forces, step, on_sphere, params):
     if all_matched:
         info('* All criteria matched')
     return all_matched
-
-
-def optimize_morse(geom, r0=None, **params):
-    geom = geom.copy()
-    berny = Berny(geom)
-    debug = []
-    while True:
-        energy, gradients = geom.morse(r0=r0)
-        debug.append({'energy': energy,
-                      'gradients': gradients,
-                      'geom': geom.copy()})
-        try:
-            geom = berny.step(energy, gradients)
-        except Math.FindrootException:
-            error('Could not find root of RFO, bad Hessian, quitting')
-            break
-        if not geom:
-            break
-    return debug
 
 
 class ArrayEncoder(json.JSONEncoder):

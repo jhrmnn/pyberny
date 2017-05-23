@@ -13,10 +13,12 @@ try:
 except ImportError:
     from io import StringIO
 
-from berny import Math
-from berny.Logging import info
+from . import Math
 
 bohr = 0.52917721092
+
+
+info = print
 
 
 class Molecule(object):
