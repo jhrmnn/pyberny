@@ -44,7 +44,7 @@ def Berny(geom, debug=False, log=None, **params):
     log = log or Logger()
     trust = params['trust']
     coords = InternalCoords(geom)
-    hessian = coords.hessian_guess(geom)
+    H = coords.hessian_guess(geom)
     weights = coords.weights(geom)
     for line in str(coords).split('\n'):
         log(line)
@@ -69,7 +69,7 @@ def Berny(geom, debug=False, log=None, **params):
             dot(B_inv.T, gradients.reshape(-1))
         )
         if nsteps > 1:
-            hessian = update_hessian(hessian, current.q-best.q, current.g-best.g, log)
+            H = update_hessian(H, current.q-best.q, current.g-best.g, log)
             trust = update_trust(
                 trust,
                 current.E-previous.E,
@@ -85,10 +85,9 @@ def Berny(geom, debug=False, log=None, **params):
         else:
             interpolated = current
         proj = dot(B, B_inv)
-        hessian_proj = \
-            proj.dot(hessian).dot(proj) + 1000*(eye(len(coords))-proj)
+        H_proj = proj.dot(H).dot(proj) + 1000*(eye(len(coords))-proj)
         dq, dE, on_sphere = quadratic_step(
-            dot(proj, interpolated.g), hessian_proj, weights, trust, log
+            dot(proj, interpolated.g), H_proj, weights, trust, log
         )
         predicted = PESPoint(interpolated.q+dq, interpolated.E+dE, None)
         dq = predicted.q-current.q
