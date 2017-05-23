@@ -13,8 +13,8 @@ try:
 except ImportError:
     from io import StringIO
 
-from bernylib import Math
-from bernylib.Logging import info
+from berny import Math
+from berny.Logging import info
 
 bohr = 0.52917721092
 

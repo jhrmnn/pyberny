@@ -7,9 +7,9 @@ from numpy import dot, eye
 from numpy.linalg import norm
 import json
 
-from bernylib.Logging import info, error
-from bernylib import Math
-from bernylib.geomlib import InternalCoords
+from berny.Logging import info, error
+from berny import Math
+from berny.geomlib import InternalCoords
 
 
 defaults = {

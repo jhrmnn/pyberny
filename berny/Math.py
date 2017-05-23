@@ -4,7 +4,7 @@
 import numpy as np
 from numpy import dot
 import sys
-from bernylib.Logging import info
+from berny.Logging import info
 
 
 def rms(A):
