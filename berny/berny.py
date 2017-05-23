@@ -28,6 +28,9 @@ def info(*args, **kwargs):
     print(*args, **kwargs)
 
 
+PESPoint = namedtuple('PESPoint', 'q E g')
+
+
 def Berny(geom, params=None, log=print):
     params = dict(chain(defaults.items(), (params or {}).items()))
     nsteps = 0
@@ -99,9 +102,6 @@ def Berny(geom, params=None, log=print):
         previous = current
         if nsteps == 1 or current.E < best.E:
             best = current
-
-
-PESPoint = namedtuple('PESPoint', 'q E g')
 
 
 def update_hessian(H, dq, dg):
@@ -180,13 +180,15 @@ def quadratic_step(g, H, w, trust):
 def converged(forces, step, on_sphere, params):
     criteria = [
         ('Gradient RMS', Math.rms(forces), params['gradientrms']),
-        ('Gradient maximum', np.max(abs(forces)), params['gradientmax'])]
+        ('Gradient maximum', np.max(abs(forces)), params['gradientmax'])
+    ]
     if on_sphere:
         criteria.append(('Minimization on sphere', False))
     else:
         criteria.extend([
             ('Step RMS', Math.rms(step), params['steprms']),
-            ('Step maximum', np.max(abs(step)), params['stepmax'])])
+            ('Step maximum', np.max(abs(step)), params['stepmax'])
+        ])
     info('Convergence criteria:')
     all_matched = True
     for crit in criteria:
@@ -213,4 +215,4 @@ class ArrayEncoder(json.JSONEncoder):
         try:
             return obj.tolist()
         except AttributeError:
-            return super().default(obj)
+            return json.JSONDecoder.default(self, obj)

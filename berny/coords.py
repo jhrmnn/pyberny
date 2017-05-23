@@ -40,13 +40,13 @@ class InternalCoord(object):
 
 
 class Bond(InternalCoord):
-    def __init__(self, i, j, *args, **kwargs):
+    def __init__(self, i, j, **kwargs):
         if i > j:
             i, j = j, i
         self.i = i
         self.j = j
         self.idx = i, j
-        super(Bond, self).__init__(*args, **kwargs)
+        InternalCoord.__init__(self, **kwargs)
 
     def hessian(self, rho):
         return 0.45*rho[self.i, self.j]
@@ -63,14 +63,14 @@ class Bond(InternalCoord):
 
 
 class Angle(InternalCoord):
-    def __init__(self, i, j, k, *args, **kwargs):
+    def __init__(self, i, j, k, **kwargs):
         if i > k:
             i, j, k = k, j, i
         self.i = i
         self.j = j
         self.k = k
         self.idx = i, j, k
-        super(Angle, self).__init__(*args, **kwargs)
+        InternalCoord.__init__(self, **kwargs)
 
     def hessian(self, rho):
         return 0.15*(rho[self.i, self.j]*rho[self.j, self.k])
@@ -118,7 +118,7 @@ class Dihedral(InternalCoord):
         self.idx = (i, j, k, l)
         self.weak = weak
         self.angles = angles
-        super(Dihedral, self).__init__(**kwargs)
+        InternalCoord.__init__(self, **kwargs)
 
     def hessian(self, rho):
         return 0.005*rho[self.i, self.j]*rho[self.j, self.k]*rho[self.k, self.l]
@@ -203,7 +203,7 @@ def get_clusters(C):
 
 class InternalCoords(list):
     def __init__(self, geom, allowed=None):
-        super(InternalCoords, self).__init__()
+        list.__init__(self)
         geom = geom.supercell()
         dist = geom.dist(geom)
         radii = np.array([get_property(sp, 'covalent_radius') for sp in geom.species])

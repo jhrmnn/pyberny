@@ -33,9 +33,11 @@ def ginv(A):
 
 
 def cross(a, b):
-    return np.array([a[1]*b[2]-a[2]*b[1],
-                     a[2]*b[0]-a[0]*b[2],
-                     a[0]*b[1]-a[1]*b[0]])
+    return np.array([
+        a[1]*b[2]-a[2]*b[1],
+        a[2]*b[0]-a[0]*b[2],
+        a[0]*b[1]-a[1]*b[0]
+    ])
 
 
 def fit_cubic(y0, y1, g0, g1):

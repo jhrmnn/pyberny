@@ -183,7 +183,7 @@ def readfile(path, fmt=None):
 class Crystal(Molecule):
     def __init__(self, species, coords, lattice):
         self.lattice = np.array(lattice)
-        super(self.__class__, self).__init__(species, coords)
+        Molecule.__init__(self, species, coords)
 
     def copy(self):
         return Crystal(list(self.species), self.coords.copy(), self.lattice.copy())
