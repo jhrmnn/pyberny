@@ -10,7 +10,7 @@ from numpy.linalg import norm
 import json
 
 from . import Math
-from .geomlib import InternalCoords
+from .coords import InternalCoords
 
 
 defaults = {
