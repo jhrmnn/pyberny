@@ -8,7 +8,6 @@ import numpy as np
 from itertools import chain
 from numpy import dot, eye
 from numpy.linalg import norm
-import json
 
 from . import Math
 from .coords import InternalCoords
@@ -33,28 +32,29 @@ defaults = {
     'steprms': 1.2e-3,
     'maxsteps': 100,
     'trust': 0.3,
-    'debug': None
 }
 
 
 PESPoint = namedtuple('PESPoint', 'q E g')
 
 
-def Berny(geom, params=None, log=None):
-    params = dict(chain(defaults.items(), (params or {}).items()))
+def Berny(geom, debug=False, log=None, **params):
+    params = dict(chain(defaults.items(), params.items()))
     nsteps = 0
     log = log or Logger()
     trust = params['trust']
     coords = InternalCoords(geom)
     hessian = coords.hessian_guess(geom)
     weights = coords.weights(geom)
-    debug = []
     for line in str(coords).split('\n'):
         log(line)
     best, previous, predicted, interpolated = None, None, None, None
     while True:
         energy, gradients = yield geom
-        yield
+        if debug:
+            yield locals().copy()
+        else:
+            yield
         gradients = np.array(gradients)
         nsteps += 1
         log.n += 1
@@ -95,19 +95,6 @@ def Berny(geom, params=None, log=None):
         log('Total step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
         q, geom = coords.update_geom(geom, current.q, predicted.q-current.q, B_inv)
         future = PESPoint(q, None, None)
-        if params['debug']:
-            debug.append({
-                'nstep': nsteps,
-                'trust': trust,
-                'hessian': hessian.copy(),
-                'gradients': gradients,
-                'coords': geom.coords,
-                'energy': energy,
-                'q': current.q,
-                'dq': dq
-            })
-            with open(params['debug'], 'w') as f:
-                json.dump(debug, f, indent=4, cls=ArrayEncoder)
         if converged(gradients, future.q-current.q, on_sphere, params, log):
             break
         previous = current
@@ -221,13 +208,3 @@ def converged(forces, step, on_sphere, params, log=no_log):
     if all_matched:
         log('* All criteria matched')
     return all_matched
-
-
-class ArrayEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if obj is np.nan:
-            return None
-        try:
-            return obj.tolist()
-        except AttributeError:
-            return json.JSONDecoder.default(self, obj)
