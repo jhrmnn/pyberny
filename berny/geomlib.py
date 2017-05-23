@@ -1,6 +1,7 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+from __future__ import print_function
 import numpy as np
 from numpy import dot, pi
 from numpy.linalg import norm, inv
@@ -18,7 +19,8 @@ from . import Math
 bohr = 0.52917721092
 
 
-info = print
+def info(*args, **kwargs):
+    print(*args, **kwargs)
 
 
 class Molecule(object):
@@ -584,6 +586,7 @@ def get_property(idx, name):
         except ValueError:
             pass
     return value
+
 
 species_data = [row for row in csv.DictReader(StringIO("""\
 number,symbol,name,vdw_radius,covalent_radius,mass,ionization_energy
