@@ -19,10 +19,11 @@ class Logger(object):
         self.out = out
         self.n = 0
 
-    def __call__(self, msg, level=0):
+    def __call__(self, *lines, level=0):
         if level < -self.verbosity:
             return
-        self.out.write('{} {}\n'.format(self.n, msg))
+        for line in lines:
+            self.out.write('{} {}\n'.format(self.n, line.rstrip()))
 
 
 defaults = {
@@ -46,8 +47,7 @@ def Berny(geom, debug=False, log=None, **params):
     coords = InternalCoords(geom)
     H = coords.hessian_guess(geom)
     weights = coords.weights(geom)
-    for line in str(coords).split('\n'):
-        log(line)
+    log(*str(coords).split('\n'))
     best, previous, predicted, interpolated = None, None, None, None
     while True:
         energy, gradients = yield geom
