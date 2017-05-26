@@ -92,7 +92,7 @@ def Berny(geom, debug=False, log=None, **params):
         predicted = PESPoint(interpolated.q+dq, interpolated.E+dE, None)
         dq = predicted.q-current.q
         log('Total step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
-        q, geom = coords.update_geom(geom, current.q, predicted.q-current.q, B_inv)
+        q, geom = coords.update_geom(geom, current.q, predicted.q-current.q, B_inv, log)
         future = PESPoint(q, None, None)
         if converged(gradients, future.q-current.q, on_sphere, params, log):
             break
