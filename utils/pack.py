@@ -2,42 +2,47 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+from argparse import ArgumentParser
+from base64 import b64encode
+from glob import glob
+from itertools import takewhile, chain
 import hashlib
 import io
-from glob import glob
-from itertools import takewhile
+import os
 import tarfile
-from base64 import b64encode
+
+header = '# PACKEDLIB ==>\n'
 
 
-filename = 'berny'
-
-
-def strip():
+def strip(filename):
     with open(filename) as f:
-        lines = takewhile(lambda l: l != '# ==>\n', f.readlines())
+        lines = takewhile(lambda l: l != header, f.readlines())
     with open(filename, 'w') as f:
         for line in lines:
             f.write(line)
 
 
-def pack():
-    strip()
+def pack(script, patterns):
+    strip(script)
     h = hashlib.new('md5')
     with io.BytesIO() as ftar:
         archive = tarfile.open(mode='w|gz', fileobj=ftar)
-        for path in sorted(glob('bernylib/*.py')):
+        for path in sorted(chain.from_iterable(glob(p) for p in patterns)):
             archive.add(path)
             with open(path, 'rb') as f:
                 h.update(f.read())
         archive.close()
         archive = ftar.getvalue()
     version = h.hexdigest()
-    with open(filename, 'a') as f:
-        f.write('# ==>\n')
+    with open(script, 'a') as f:
+        f.write(header)
         f.write('# version: {}\n'.format(version))
         f.write('# archive: {}\n'.format(b64encode(archive).decode()))
         f.write('# <==\n')
+
+
+def run():
+    pass
 
 
 def unpack():
@@ -60,5 +65,17 @@ def unpack():
     return libpath
 
 
+def main():
+    parser = ArgumentParser()
+    arg = parser.add_argument
+    arg('-p', '--pack', action='store_true')
+    arg('ARGS', nargs='*')
+    args = parser.parse_args()
+    if args.pack:
+        pack(args.ARGS[0], args.ARGS[1:])
+    else:
+        run(args.ARGS)
+
+
 if __name__ == '__main__':
-    pack()
+    main()
