@@ -164,6 +164,11 @@ def load(fp, fmt):
             return Molecule(species, coords)
 
 
+def loads(s, fmt):
+    fp = StringIO(s)
+    return load(fp, fmt)
+
+
 def readfile(path, fmt=None):
     if not fmt:
         ext = os.path.splitext(path)[1]
