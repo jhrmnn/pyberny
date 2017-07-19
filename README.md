@@ -12,19 +12,18 @@ The algorithm is an amalgam of several techniques, comprising redundant internal
 
 ## Usage
 
-The Python API is defined in the files in directory `bernylib`. The simplest usage could look like the following:
+The Python API is the generator `berny.Berny`. The simplest usage could look like the following:
 
 ```python
-from bernylib import berny, geomlib
+from berny import Berny, geomlib
+
 geom = geomlib.readfile('start.xyz')
-optimizer = berny.Berny(geom, params={'debug': 'debug.json'})
-while True:
-    # calculate energy and gradients of geom
-    geom_next = optimizer.step(energy, gradients)
-    if not geom_next:  # minimum reached
-        geom.write('final.xyz')
-        break
-    geom = geom_next
+optimizer = berny.Berny(geom, debug=True)
+debug = []
+for geom in optimizer:
+    energy, gradients = ...  # calculate energy and gradients of geom
+    info = optimizer.send((energy, gradients))
+    debug.append(info)
 ```
 
 A different option is to use the package via a command-line or socket interface defined in `berny`:
@@ -78,7 +77,7 @@ done
 
 ## Parameters
 
-All parameters have default values given in `bernylib.berny.defaults`.
+All parameters have default values given in `berny.berny.defaults`.
 
 -   `gradientmax = 0.45e-3`, `gradientrms = 0.3e-3`, `stepmax = 1.8e-3`, `steprms = 1.2e-3`. Convergence criteria in atomic units (`step` refers to the step in internal coordinates, assuming radian units for angles).
 
