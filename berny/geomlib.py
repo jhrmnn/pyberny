@@ -4,8 +4,7 @@
 import numpy as np
 from numpy import pi
 from numpy.linalg import norm, inv
-from collections import defaultdict
-from itertools import chain, product, repeat, combinations
+from itertools import chain, product, repeat, groupby
 import os
 try:
     from cStringIO import StringIO
@@ -21,16 +20,16 @@ class Molecule(object):
         self.coords = np.array(coords)
 
     def __repr__(self):
-        return "<{} '{}'>".format(self.__class__.__name__, self.formula)
+        return '<{} {!r}>'.format(self.__class__.__name__, self.formula)
 
     @property
     def formula(self):
-        counter = defaultdict(int)
-        for specie in self.species:
-            counter[specie] += 1
+        composition = sorted(
+            (sp, len(list(g)))
+            for sp, g in groupby(sorted(self.species))
+        )
         return ''.join(
-            '{}{}'.format(sp, n if n > 1 else '')
-            for sp, n in sorted(counter.items())
+            '{}{}'.format(sp, n if n > 1 else '') for sp, n in composition
         )
 
     def __iter__(self):
@@ -88,24 +87,6 @@ class Molecule(object):
 
     def supercell(self, *args, **kwargs):
         return self.copy()
-
-    def draw(self, method='imolecule', **kwargs):
-        if method == 'imolecule':
-            import imolecule
-            imolecule.draw(self.to_json(), 'json', **kwargs)
-
-    def to_json(self):
-        bond = self.bondmatrix()
-        return {
-            'atoms': [
-                {'element': specie, 'location': coord.tolist()}
-                for specie, coord in self
-            ],
-            'bonds': [
-                {'atoms': [i, j], 'order': 1}
-                for i, j in combinations(range(len(self)), 2) if bond[i, j]
-            ]
-        }
 
     def dist_diff(self, geom):
         diff = self.coords[:, None, :]-geom.coords[None, :, :]
@@ -182,8 +163,8 @@ def readfile(path, fmt=None):
 
 class Crystal(Molecule):
     def __init__(self, species, coords, lattice):
-        self.lattice = np.array(lattice)
         Molecule.__init__(self, species, coords)
+        self.lattice = np.array(lattice)
 
     def copy(self):
         return Crystal(list(self.species), self.coords.copy(), self.lattice.copy())
