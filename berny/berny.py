@@ -19,7 +19,8 @@ class Logger(object):
         self.out = out
         self.n = 0
 
-    def __call__(self, *lines, level=0):
+    def __call__(self, *lines, **kwargs):
+        level = kwargs.get('level', 0)
         if level < -self.verbosity:
             return
         for line in lines:
