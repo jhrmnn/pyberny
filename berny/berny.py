@@ -65,7 +65,7 @@ def Berny(geom, debug=False, log=None, **params):
         B = coords.B_matrix(geom)
         B_inv = Math.ginv(B, log)
         current = PESPoint(
-            coords.eval_geom(geom),
+            coords.eval_geom(geom, template=previous.q if previous else None),
             energy,
             dot(B_inv.T, gradients.reshape(-1))
         )
