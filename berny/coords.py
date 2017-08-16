@@ -195,9 +195,9 @@ def get_clusters(C):
     return clusters, C
 
 
-class InternalCoords(list):
+class InternalCoords(object):
     def __init__(self, geom, allowed=None):
-        list.__init__(self)
+        self._coords = []
         geom = geom.supercell()
         dist = geom.dist(geom)
         radii = np.array([get_property(sp, 'covalent_radius') for sp in geom.species])
@@ -221,6 +221,18 @@ class InternalCoords(list):
                     self.append(ang)
         for bond in self.bonds:
             self.extend(get_dihedrals([bond.i, bond.j], geom.coords, bondmatrix, C))
+
+    def append(self, coord):
+        self._coords.append(coord)
+
+    def extend(self, coords):
+        self._coords.extend(coords)
+
+    def __iter__(self):
+        return self._coords.__iter__()
+
+    def __len__(self):
+        return len(self._coords)
 
     @property
     def bonds(self):
