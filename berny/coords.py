@@ -306,7 +306,7 @@ class InternalCoords(list):
                 B[i, j] += grad
         return B.reshape(len(self), 3*len(geom))
 
-    def update_geom(self, geom, q, dq, B_inv, log=None):
+    def update_geom(self, geom, q, dq, B_inv, log=lambda _: None):
         geom = geom.copy()
         thre = 1e-6
         target = CartIter(q=q+dq)
@@ -326,12 +326,11 @@ class InternalCoords(list):
         else:
             msg = 'Transformation did not converge in {} iterations'
             cur = iter_first
-        if log:
-            log(msg.format(i+1))
-            log('* RMS(dcart): {:.3}, RMS(dq): {:.3}'.format(
-                Math.rms(cur.dcart),
-                Math.rms(cur.dq)
-            ))
+        log(msg.format(i+1))
+        log('* RMS(dcart): {:.3}, RMS(dq): {:.3}'.format(
+            Math.rms(cur.dcart),
+            Math.rms(cur.dq)
+        ))
         geom.coords = cur.cart
         return cur.q, geom
 

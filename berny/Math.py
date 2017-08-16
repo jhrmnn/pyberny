@@ -11,7 +11,7 @@ def rms(A):
     return np.sqrt(np.sum(A**2)/A.size)
 
 
-def ginv(A, log=None):
+def ginv(A, log=lambda _: None):
     U, D, V = np.linalg.svd(dot(A.T, A))
     thre1 = 1e-16
     thre2 = 1e8
@@ -19,7 +19,7 @@ def ginv(A, log=None):
     gaps = D/np.hstack((D[1:], thre1))
     n = np.argmax(gaps)
     gap = gaps[n]
-    if log and gap < thre2:
+    if gap < thre2:
         log('Pseudoinverse gap of only: {}'.format(gap))
     D[n+1:] = 0
     D[:n+1] = 1/D[:n+1]

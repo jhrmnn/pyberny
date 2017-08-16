@@ -1,30 +1,15 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-from __future__ import print_function
 from collections import namedtuple
-import sys
 import numpy as np
 from itertools import chain
 from numpy import dot, eye
 from numpy.linalg import norm
 
 from . import Math
+from .Logger import Logger
 from .coords import InternalCoords
-
-
-class Logger(object):
-    def __init__(self, verbosity=0, out=sys.stdout):
-        self.verbosity = verbosity
-        self.out = out
-        self.n = 0
-
-    def __call__(self, *lines, **kwargs):
-        level = kwargs.get('level', 0)
-        if level < -self.verbosity:
-            return
-        for line in lines:
-            self.out.write('{} {}\n'.format(self.n, line.rstrip()))
 
 
 defaults = {
@@ -48,7 +33,7 @@ def Berny(geom, debug=False, log=None, **params):
     coords = InternalCoords(geom)
     H = coords.hessian_guess(geom)
     weights = coords.weights(geom)
-    log(*str(coords).split('\n'))
+    list(map(log, str(coords).split('\n')))
     best, previous, predicted, interpolated = None, None, None, None
     while True:
         energy, gradients = yield geom
@@ -70,17 +55,17 @@ def Berny(geom, debug=False, log=None, **params):
             dot(B_inv.T, gradients.reshape(-1))
         )
         if nsteps > 1:
-            H = update_hessian(H, current.q-best.q, current.g-best.g, log)
+            H = update_hessian(H, current.q-best.q, current.g-best.g, log=log)
             trust = update_trust(
                 trust,
                 current.E-previous.E,
                 predicted.E-interpolated.E,
                 predicted.q-interpolated.q,
-                log
+                log=log
             )
             dq = best.q-current.q
             t, E = linear_search(
-                current.E, best.E, dot(current.g, dq), dot(best.g, dq), log
+                current.E, best.E, dot(current.g, dq), dot(best.g, dq), log=log
             )
             interpolated = PESPoint(current.q+t*dq, E, t*best.g+(1-t)*current.g)
         else:
@@ -88,21 +73,21 @@ def Berny(geom, debug=False, log=None, **params):
         proj = dot(B, B_inv)
         H_proj = proj.dot(H).dot(proj) + 1000*(eye(len(coords))-proj)
         dq, dE, on_sphere = quadratic_step(
-            dot(proj, interpolated.g), H_proj, weights, trust, log
+            dot(proj, interpolated.g), H_proj, weights, trust, log=log
         )
         predicted = PESPoint(interpolated.q+dq, interpolated.E+dE, None)
         dq = predicted.q-current.q
         log('Total step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
-        q, geom = coords.update_geom(geom, current.q, predicted.q-current.q, B_inv, log)
+        q, geom = coords.update_geom(geom, current.q, predicted.q-current.q, B_inv, log=log)
         future = PESPoint(q, None, None)
-        if converged(gradients, future.q-current.q, on_sphere, params, log):
+        if converged(gradients, future.q-current.q, on_sphere, params, log=log):
             break
         previous = current
         if nsteps == 1 or current.E < best.E:
             best = current
 
 
-def no_log(msg, level):
+def no_log(_, **__):
     pass
 
 
