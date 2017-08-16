@@ -10,7 +10,7 @@ The algorithm is an amalgam of several techniques, comprising redundant internal
 
 ## Dependencies
 
--   Python 2.7 or 3.5 with Numpy
+-   Python 2.7 or >=3.5 with Numpy
 
 ## Usage
 
@@ -19,8 +19,7 @@ The Python API is the generator `berny.Berny`. The simplest usage could look lik
 ```python
 from berny import Berny, geomlib
 
-geom = geomlib.readfile('start.xyz')
-optimizer = berny.Berny(geom, debug=True)
+optimizer = Berny(geomlib.readfile('start.xyz'), debug=True)
 debug = []
 for geom in optimizer:
     energy, gradients = ...  # calculate energy and gradients of geom
