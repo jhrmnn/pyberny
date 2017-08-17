@@ -2,7 +2,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 import numpy as np
-from numpy import dot
 
 
 def rms(A):
@@ -12,15 +11,14 @@ def rms(A):
 
 
 def ginv(A, log=lambda _: None):
-    U, D, V = np.linalg.svd(dot(A.T, A))
-    thre1 = 1e-16
-    thre2 = 1e8
-    D[D < thre1] = thre1
-    gaps = D/np.hstack((D[1:], thre1))
-    n = np.argmax(gaps)
+    U, D, V = np.linalg.svd(np.dot(A.T, A))
+    thre = 1e3
+    thre_log = 1e8
+    gaps = D[:-1]/D[1:]
+    n = np.flatnonzero(gaps > thre)[0]
     gap = gaps[n]
-    if gap < thre2:
-        log('Pseudoinverse gap of only: {}'.format(gap))
+    if gap < thre_log:
+        log('Pseudoinverse gap of only: {:.1e}'.format(gap))
     D[n+1:] = 0
     D[:n+1] = 1/D[:n+1]
     return U.dot(np.diag(D)).dot(V).dot(A.T)
