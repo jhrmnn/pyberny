@@ -35,6 +35,7 @@ def Berny(geom, debug=False, log=None, **params):
     weights = coords.weights(geom)
     list(map(log, str(coords).split('\n')))
     best, previous, predicted, interpolated = None, None, None, None
+    future = PESPoint(coords.eval_geom(geom), None, None)
     while True:
         energy, gradients = yield geom
         if debug:
@@ -49,11 +50,7 @@ def Berny(geom, debug=False, log=None, **params):
         log('Energy: {:.12}'.format(energy))
         B = coords.B_matrix(geom)
         B_inv = Math.ginv(B, log)
-        current = PESPoint(
-            coords.eval_geom(geom, template=previous.q if previous else None),
-            energy,
-            dot(B_inv.T, gradients.reshape(-1))
-        )
+        current = PESPoint(future.q, energy, dot(B_inv.T, gradients.reshape(-1)))
         if nsteps > 1:
             H = update_hessian(H, current.q-best.q, current.g-best.g, log=log)
             trust = update_trust(
