@@ -37,16 +37,16 @@ def Berny(geom, debug=False, log=None, **params):
     best, previous, predicted, interpolated = None, None, None, None
     future = PESPoint(coords.eval_geom(geom), None, None)
     while True:
+        nsteps += 1
+        log.n += 1
+        if nsteps > params['maxsteps']:
+            break
         energy, gradients = yield geom
         if debug:
             yield locals().copy()
         else:
             yield
         gradients = np.array(gradients)
-        nsteps += 1
-        log.n += 1
-        if nsteps > params['maxsteps']:
-            break
         log('Energy: {:.12}'.format(energy))
         B = coords.B_matrix(geom)
         B_inv = Math.ginv(B, log)
