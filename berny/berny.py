@@ -84,6 +84,15 @@ def Berny(geom, debug=False, log=None, **params):
             best = current
 
 
+def optimize(solver, geom, conv=list, **kwargs):
+    next(solver)
+    optimizer = Berny(geom, **kwargs)
+    for geom in optimizer:
+        energy, gradients = solver.send(conv(geom))
+        optimizer.send((energy, gradients))
+    return geom
+
+
 def no_log(_, **__):
     pass
 
