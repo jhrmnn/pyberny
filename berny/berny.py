@@ -48,7 +48,6 @@ class BernyAlgo(object):
     def __init__(self, geom, params):
         self.geom = geom
         self.params = dict(chain(defaults.items(), params.items()))
-        self.nsteps = 0
 
     def init(s, log=no_log):
         s.trust = s.params['trust']
@@ -58,15 +57,15 @@ class BernyAlgo(object):
         for line in str(s.coords).split('\n'):
             log(line)
         s.future = PESPoint(s.coords.eval_geom(s.geom), None, None)
+        s.first = True
 
     def step(s, energy, gradients, log=no_log):
         gradients = np.array(gradients)
-        s.nsteps += 1
         log('Energy: {:.12}'.format(energy))
         B = s.coords.B_matrix(s.geom)
         B_inv = Math.ginv(B, log)
         current = PESPoint(s.future.q, energy, dot(B_inv.T, gradients.reshape(-1)))
-        if s.nsteps > 1:
+        if not s.first:
             s.H = update_hessian(
                 s.H, current.q-s.best.q, current.g-s.best.g, log=log
             )
@@ -101,8 +100,9 @@ class BernyAlgo(object):
             gradients, s.future.q-current.q, on_sphere, s.params, log=log
         )
         s.previous = current
-        if s.nsteps == 1 or current.E < s.best.E:
+        if s.first or current.E < s.best.E:
             s.best = current
+        s.first = False
         return converged
 
 
