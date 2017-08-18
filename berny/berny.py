@@ -22,10 +22,13 @@ defaults = {
 PESPoint = namedtuple('PESPoint', 'q E g')
 
 
-def Berny(geom, log=None, debug=False, maxsteps=100, **params):
+def Berny(geom, log=None, debug=False, restart=None, maxsteps=100, **params):
     log = log or Logger()
     algo = BernyAlgo(geom, params)
-    algo.init(log=log)
+    if restart:
+        algo.__dict__.update(restart)
+    else:
+        algo.init(log=log)
     for _ in range(maxsteps):
         log.n += 1
         energy, gradients = yield algo.geom
