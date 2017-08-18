@@ -11,77 +11,99 @@ from . import Math
 from .Logger import Logger
 from .coords import InternalCoords
 
-
 defaults = {
     'gradientmax': 0.45e-3,
     'gradientrms': 0.3e-3,
     'stepmax': 1.8e-3,
     'steprms': 1.2e-3,
-    'maxsteps': 100,
     'trust': 0.3,
 }
-
 
 PESPoint = namedtuple('PESPoint', 'q E g')
 
 
-def Berny(geom, debug=False, log=None, **params):
-    params = dict(chain(defaults.items(), params.items()))
-    nsteps = 0
+def Berny(geom, log=None, debug=False, maxsteps=100, **params):
     log = log or Logger()
-    trust = params['trust']
-    coords = InternalCoords(geom)
-    H = coords.hessian_guess(geom)
-    weights = coords.weights(geom)
-    list(map(log, str(coords).split('\n')))
-    best, previous, predicted, interpolated = None, None, None, None
-    future = PESPoint(coords.eval_geom(geom), None, None)
-    while True:
-        nsteps += 1
+    algo = BernyAlgo(geom, params)
+    algo.init(log=log)
+    for _ in range(maxsteps):
         log.n += 1
-        if nsteps > params['maxsteps']:
-            break
-        energy, gradients = yield geom
+        energy, gradients = yield algo.geom
+        converged = algo.step(energy, gradients, log=log)
         if debug:
-            yield locals().copy()
+            yield vars(algo).copy()
         else:
             yield
+        if converged:
+            break
+    else:
+        log('Maximum number of steps reached')
+
+
+def no_log(_, **__):
+    pass
+
+
+class BernyAlgo(object):
+    def __init__(self, geom, params):
+        self.geom = geom
+        self.params = dict(chain(defaults.items(), params.items()))
+        self.nsteps = 0
+
+    def init(s, log=no_log):
+        s.trust = s.params['trust']
+        s.coords = InternalCoords(s.geom)
+        s.H = s.coords.hessian_guess(s.geom)
+        s.weights = s.coords.weights(s.geom)
+        for line in str(s.coords).split('\n'):
+            log(line)
+        s.future = PESPoint(s.coords.eval_geom(s.geom), None, None)
+
+    def step(s, energy, gradients, log=no_log):
         gradients = np.array(gradients)
+        s.nsteps += 1
         log('Energy: {:.12}'.format(energy))
-        B = coords.B_matrix(geom)
+        B = s.coords.B_matrix(s.geom)
         B_inv = Math.ginv(B, log)
-        current = PESPoint(future.q, energy, dot(B_inv.T, gradients.reshape(-1)))
-        if nsteps > 1:
-            H = update_hessian(H, current.q-best.q, current.g-best.g, log=log)
-            trust = update_trust(
-                trust,
-                current.E-previous.E,
-                predicted.E-interpolated.E,
-                predicted.q-interpolated.q,
+        current = PESPoint(s.future.q, energy, dot(B_inv.T, gradients.reshape(-1)))
+        if s.nsteps > 1:
+            s.H = update_hessian(
+                s.H, current.q-s.best.q, current.g-s.best.g, log=log
+            )
+            s.trust = update_trust(
+                s.trust,
+                current.E-s.previous.E,
+                s.predicted.E-s.interpolated.E,
+                s.predicted.q-s.interpolated.q,
                 log=log
             )
-            dq = best.q-current.q
+            dq = s.best.q-current.q
             t, E = linear_search(
-                current.E, best.E, dot(current.g, dq), dot(best.g, dq), log=log
+                current.E, s.best.E, dot(current.g, dq), dot(s.best.g, dq),
+                log=log
             )
-            interpolated = PESPoint(current.q+t*dq, E, t*best.g+(1-t)*current.g)
+            s.interpolated = PESPoint(current.q+t*dq, E, t*s.best.g+(1-t)*current.g)
         else:
-            interpolated = current
+            s.interpolated = current
         proj = dot(B, B_inv)
-        H_proj = proj.dot(H).dot(proj) + 1000*(eye(len(coords))-proj)
+        H_proj = proj.dot(s.H).dot(proj) + 1000*(eye(len(s.coords))-proj)
         dq, dE, on_sphere = quadratic_step(
-            dot(proj, interpolated.g), H_proj, weights, trust, log=log
+            dot(proj, s.interpolated.g), H_proj, s.weights, s.trust, log=log
         )
-        predicted = PESPoint(interpolated.q+dq, interpolated.E+dE, None)
-        dq = predicted.q-current.q
+        s.predicted = PESPoint(s.interpolated.q+dq, s.interpolated.E+dE, None)
+        dq = s.predicted.q-current.q
         log('Total step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
-        q, geom = coords.update_geom(geom, current.q, predicted.q-current.q, B_inv, log=log)
-        future = PESPoint(q, None, None)
-        if converged(gradients, future.q-current.q, on_sphere, params, log=log):
-            break
-        previous = current
-        if nsteps == 1 or current.E < best.E:
-            best = current
+        q, s.geom = s.coords.update_geom(
+            s.geom, current.q, s.predicted.q-current.q, B_inv, log=log
+        )
+        s.future = PESPoint(q, None, None)
+        converged = is_converged(
+            gradients, s.future.q-current.q, on_sphere, s.params, log=log
+        )
+        s.previous = current
+        if s.nsteps == 1 or current.E < s.best.E:
+            s.best = current
+        return converged
 
 
 def optimize(solver, geom, conv=list, **kwargs):
@@ -91,10 +113,6 @@ def optimize(solver, geom, conv=list, **kwargs):
         energy, gradients = solver.send(conv(geom))
         optimizer.send((energy, gradients))
     return geom
-
-
-def no_log(_, **__):
-    pass
 
 
 def update_hessian(H, dq, dg, log=no_log):
@@ -170,7 +188,7 @@ def quadratic_step(g, H, w, trust, log=no_log):
     return dq, dE, on_sphere
 
 
-def converged(forces, step, on_sphere, params, log=no_log):
+def is_converged(forces, step, on_sphere, params, log=no_log):
     criteria = [
         ('Gradient RMS', Math.rms(forces), params['gradientrms']),
         ('Gradient maximum', np.max(abs(forces)), params['gradientmax'])
