@@ -321,38 +321,26 @@ class InternalCoords(object):
     def update_geom(self, geom, q, dq, B_inv, log=lambda _: None):
         geom = geom.copy()
         thre = 1e-6
-        target = CartIter(q=q+dq)
-        prev = CartIter(geom.coords, q, dq)
+        # target = CartIter(q=q+dq)
+        # prev = CartIter(geom.coords, q, dq)
         for i in range(20):
-            cur = CartIter(prev.cart+B_inv.dot(prev.dq).reshape(-1, 3)*bohr)
-            cur.dcart = cur.cart-prev.cart
-            geom.coords = cur.cart
-            cur.q = self.eval_geom(geom, template=prev.q)
-            cur.dq = target.q-cur.q
-            if Math.rms(cur.dcart) < thre:
+            coords_new = geom.coords+B_inv.dot(dq).reshape(-1, 3)*bohr
+            dcart_rms = Math.rms(coords_new-geom.coords)
+            geom.coords = coords_new
+            q_new = self.eval_geom(geom, template=q)
+            dq_rms = Math.rms(q_new-q)
+            q, dq = q_new, dq-(q_new-q)
+            if dcart_rms < thre:
                 msg = 'Perfect transformation to cartesians in {} iterations'
                 break
             if i == 0:
-                iter_first = cur
-            prev = cur
+                keep_first = geom.copy(), q, dcart_rms, dq_rms
         else:
             msg = 'Transformation did not converge in {} iterations'
-            cur = iter_first
+            geom, q, dcart_rms, dq_rms = keep_first
         log(msg.format(i+1))
-        log('* RMS(dcart): {:.3}, RMS(dq): {:.3}'.format(
-            Math.rms(cur.dcart),
-            Math.rms(cur.dq)
-        ))
-        geom.coords = cur.cart
-        return cur.q, geom
-
-
-class CartIter(object):
-    def __init__(self, cart=None, q=None, dq=None, dcart=None):
-        self.cart = cart
-        self.q = q
-        self.dcart = dcart
-        self.dq = dq
+        log('* RMS(dcart): {:.3}, RMS(dq): {:.3}'.format(dcart_rms, dq_rms))
+        return q, geom
 
 
 def get_dihedrals(center, coords, bondmatrix, C):
