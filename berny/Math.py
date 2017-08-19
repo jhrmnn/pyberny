@@ -10,8 +10,8 @@ def rms(A):
     return np.sqrt(np.sum(A**2)/A.size)
 
 
-def ginv(A, log=lambda _: None):
-    U, D, V = np.linalg.svd(np.dot(A.T, A))
+def pinv(A, log=lambda _: None):
+    U, D, V = np.linalg.svd(A)
     thre = 1e3
     thre_log = 1e8
     gaps = D[:-1]/D[1:]
@@ -21,7 +21,7 @@ def ginv(A, log=lambda _: None):
         log('Pseudoinverse gap of only: {:.1e}'.format(gap))
     D[n+1:] = 0
     D[:n+1] = 1/D[:n+1]
-    return U.dot(np.diag(D)).dot(V).dot(A.T)
+    return U.dot(np.diag(D)).dot(V)
 
 
 def cross(a, b):
