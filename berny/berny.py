@@ -109,11 +109,11 @@ class BernyAlgo(object):
         return converged
 
 
-def optimize(solver, geom, conv=list, **kwargs):
+def optimize(solver, geom, **kwargs):
     next(solver)
     optimizer = Berny(geom, **kwargs)
     for geom in optimizer:
-        energy, gradients = solver.send(conv(geom))
+        energy, gradients = solver.send(list(geom))
         optimizer.send((energy, gradients))
     return geom
 
