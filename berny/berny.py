@@ -65,7 +65,7 @@ class BernyAlgo(object):
 
     def step(s, energy, gradients, log=no_log):
         gradients = np.array(gradients)
-        log('Energy: {:.12}'.format(energy))
+        log('Energy: {:.12}'.format(energy), level=1)
         B = s.coords.B_matrix(s.geom)
         B_inv = B.T.dot(Math.pinv(np.dot(B, B.T), log=log))
         current = PESPoint(s.future.q, energy, dot(B_inv.T, gradients.reshape(-1)))
@@ -112,8 +112,9 @@ class BernyAlgo(object):
 
 def optimize(solver, geom, **kwargs):
     """Optimize a geometry with respect to a solver."""
+    logger = Logger(verbosity=kwargs.pop('verbosity', -1))
     next(solver)
-    optimizer = Berny(geom, **kwargs)
+    optimizer = Berny(geom, log=logger, **kwargs)
     for geom in optimizer:
         energy, gradients = solver.send(list(geom))
         optimizer.send((energy, gradients))
@@ -220,5 +221,5 @@ def is_converged(forces, step, on_sphere, params, log=no_log):
         if not result:
             all_matched = False
     if all_matched:
-        log('* All criteria matched')
+        log('* All criteria matched', level=1)
     return all_matched
