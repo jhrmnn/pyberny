@@ -1,6 +1,7 @@
 from pytest import approx
 import numpy as np
 from berny import optimize, geomlib
+from berny.solvers import MopacSolver
 
 ethanol = geomlib.loads("""\
 9
@@ -15,39 +16,6 @@ H	1.1184	-1.0093	-0.8869
 H	-0.0227	1.1812	0.8852
 H	-0.0227	1.1812	-0.8852
 """, 'xyz')
-
-
-def MopacSolver(cmd='mopac', method='PM7'):
-    import os
-    import tempfile
-    import subprocess
-    import shutil
-
-    tmpdir = tempfile.mkdtemp()
-    kcal, ev, angstrom = 627.503, 27.2107, 0.52917721092
-    try:
-        atoms = yield
-        while True:
-            mopac_input = '{} 1SCF GRADIENTS\n\n\n'.format(method) + '\n'.join(
-                '{} {} 1 {} 1 {} 1'.format(el, *coord) for el, coord in atoms
-            )
-            input_file = os.path.join(tmpdir, 'job.mop')
-            with open(input_file, 'w') as f:
-                f.write(mopac_input)
-            subprocess.check_output([cmd, input_file])
-            with open(os.path.join(tmpdir, 'job.out')) as f:
-                energy = float(next(l for l in f if 'TOTAL ENERGY' in l).split()[3])/ev
-                next(l for l in f if 'FINAL  POINT  AND  DERIVATIVES' in l)
-                next(f)
-                next(f)
-                gradients = [
-                    [float(next(f).split()[6])/kcal*angstrom for _ in range(3)]
-                    for _ in range(len(atoms))
-                ]
-
-            atoms = yield energy, gradients
-    finally:
-        shutil.rmtree(tmpdir)
 
 
 def test_basic():
