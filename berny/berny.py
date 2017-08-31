@@ -66,7 +66,7 @@ class BernyAlgo(object):
         gradients = np.array(gradients)
         log('Energy: {:.12}'.format(energy))
         B = s.coords.B_matrix(s.geom)
-        B_inv = B.T.dot(Math.pinv(np.dot(B, B.T), log))
+        B_inv = B.T.dot(Math.pinv(np.dot(B, B.T), log=log))
         current = PESPoint(s.future.q, energy, dot(B_inv.T, gradients.reshape(-1)))
         if not s.first:
             s.H = update_hessian(
