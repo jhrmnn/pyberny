@@ -19,3 +19,12 @@ pygments_style = 'sphinx'
 todo_include_todos = True
 html_theme = 'alabaster'
 htmlhelp_basename = f'{project}doc'
+
+
+def skip_namedtuples(app, what, name, obj, skip, options):
+    if hasattr(obj, '_source'):
+        return True
+
+
+def setup(app):
+    app.connect('autodoc-skip-member', skip_namedtuples)

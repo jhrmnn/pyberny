@@ -23,6 +23,7 @@ PESPoint = namedtuple('PESPoint', 'q E g')
 
 
 def Berny(geom, log=None, debug=False, restart=None, maxsteps=100, **params):
+    """Create a coroutine that receives energy and gradients and yields the next geometry."""
     log = log or Logger()
     algo = BernyAlgo(geom, params)
     if restart:
@@ -110,6 +111,7 @@ class BernyAlgo(object):
 
 
 def optimize(solver, geom, **kwargs):
+    """Optimize a geometry with respect to a solver."""
     next(solver)
     optimizer = Berny(geom, **kwargs)
     for geom in optimizer:
