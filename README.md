@@ -8,6 +8,8 @@ In each step, it takes energy and Cartesian gradients as an input, and returns a
 
 The algorithm is an amalgam of several techniques, comprising redundant internal coordinates, iterative Hessian estimate, trust region, line search, and coordinate weighing, mostly inspired by the optimizer in the [Gaussian](http://gaussian.com) program.
 
+For examples, see a [Jupyter notebook](https://github.com/azag0/pyberny/blob/master/examples/examples.ipynb).
+
 ## Dependencies
 
 -   Python 2.7 or >=3.5 with Numpy
