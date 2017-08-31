@@ -108,6 +108,22 @@ class Molecule(object):
         radii = np.array([get_property(sp, 'covalent_radius') for sp in geom.species])
         return np.exp(-dist/(radii[None, :]+radii[:, None])+1)
 
+    @property
+    def masses(self):
+        return np.array([get_property(sp, 'mass') for sp in self.species])
+
+    @property
+    def cms(self):
+        masses = self.masses
+        return np.sum(masses[:, None]*self.coords, 0)/masses.sum()
+
+    @property
+    def inertia(self):
+        coords_w = np.sqrt(self.masses)[:, None]*(self.coords-self.cms)
+        A = np.array([np.diag(np.full(3, r)) for r in np.sum(coords_w**2, 1)])
+        B = coords_w[:, :, None]*coords_w[:, None, :]
+        return np.sum(A-B, 0)
+
 
 def load(fp, fmt):
     if fmt == 'xyz':
