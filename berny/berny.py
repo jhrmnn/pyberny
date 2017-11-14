@@ -112,9 +112,9 @@ class BernyAlgo(object):
 
 def optimize(solver, geom, **kwargs):
     """Optimize a geometry with respect to a solver."""
-    logger = Logger(verbosity=kwargs.pop('verbosity', -1))
+    kwargs.setdefault('log', Logger(verbosity=kwargs.pop('verbosity', -1)))
     next(solver)
-    optimizer = Berny(geom, log=logger, **kwargs)
+    optimizer = Berny(geom, **kwargs)
     for geom in optimizer:
         energy, gradients = solver.send(list(geom))
         optimizer.send((energy, gradients))
