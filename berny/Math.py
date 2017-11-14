@@ -15,10 +15,14 @@ def pinv(A, log=lambda _: None):
     thre = 1e3
     thre_log = 1e8
     gaps = D[:-1]/D[1:]
-    n = np.flatnonzero(gaps > thre)[0]
-    gap = gaps[n]
-    if gap < thre_log:
-        log('Pseudoinverse gap of only: {:.1e}'.format(gap))
+    try:
+        n = np.flatnonzero(gaps > thre)[0]
+    except IndexError:
+        n = len(gaps)
+    else:
+        gap = gaps[n]
+        if gap < thre_log:
+            log('Pseudoinverse gap of only: {:.1e}'.format(gap))
     D[n+1:] = 0
     D[:n+1] = 1/D[:n+1]
     return U.dot(np.diag(D)).dot(V)
