@@ -6,7 +6,7 @@ setup(
     version='0.1',
     description='Molecular/crystal structure optimizer',
     author='Jan Hermann',
-    author_email='dev@hermann.in',
+    author_email='dev@janhermann.cz',
     url='https://github.com/azag0/pyberny',
     packages=['berny'],
     classifiers=[
