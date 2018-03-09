@@ -23,4 +23,7 @@ setup(
     ],
     license='Mozilla Public License 2.0',
     install_requires=['numpy'],
+    entry_points={
+        'console_scripts': ['berny = berny.cli:main']
+    },
 )
