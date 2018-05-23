@@ -88,6 +88,8 @@ class BernyAlgo(object):
             s.interpolated = PESPoint(current.q+t*dq, E, t*s.best.g+(1-t)*current.g)
         else:
             s.interpolated = current
+        if s.trust < 1e-6:
+            raise RuntimeError('The trust radius got too small, check forces?')
         proj = dot(B, B_inv)
         H_proj = proj.dot(s.H).dot(proj) + 1000*(eye(len(s.coords))-proj)
         dq, dE, on_sphere = quadratic_step(
