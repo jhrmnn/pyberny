@@ -1,3 +1,4 @@
 *.pyc
 *.egg-info
 /doc/build
+/.pytest_cache/
