@@ -22,4 +22,4 @@ def test_basic():
     solver = MopacSolver()
     final = optimize(solver, ethanol, steprms=0.01, stepmax=0.05)
     inertia_princpl = np.linalg.eigvalsh(final.inertia)
-    assert inertia_princpl == approx([14.94631992, 52.57923507, 61.10485588], rel=1e-8)
+    assert inertia_princpl == approx([14.94631992, 52.57923507, 61.10485588], rel=1e-3)

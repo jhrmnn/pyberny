@@ -126,7 +126,7 @@ class Dihedral(InternalCoord):
 
     def eval(self, coords, grad=False):
         v1 = (coords[self.i]-coords[self.j])/bohr
-        v2 = (coords[self.k]-coords[self.l])/bohr
+        v2 = (coords[self.l]-coords[self.k])/bohr
         w = (coords[self.k]-coords[self.j])/bohr
         ew = w/norm(w)
         a1 = v1-dot(v1, ew)*ew
