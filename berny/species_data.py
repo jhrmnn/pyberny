@@ -7,7 +7,10 @@ def get_property(idx, name):
         select, value = 'number', str(idx)
     else:
         select, value = 'symbol', idx
-    return next(row for row in species_data if row[select] == value)[name]
+    try:
+        return next(row for row in species_data if row[select] == value)[name]
+    except StopIteration:
+        raise ValueError('Unknown species: {}'.format(value))
 
 
 null = None  # make the lines below a valid JSON
