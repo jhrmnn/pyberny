@@ -1,7 +1,13 @@
+import pytest
 from pytest import approx
 import numpy as np
 from berny import optimize, geomlib
 from berny.solvers import MopacSolver
+
+longrun = pytest.mark.skipif(
+    not pytest.config.option.long,
+    reason='needs --long option to run'
+)
 
 ethanol = geomlib.loads("""\
 9
@@ -50,3 +56,16 @@ def test_aniline():
     final = optimize(solver, aniline, steprms=0.01, stepmax=0.05)
     inertia_princpl = np.linalg.eigvalsh(final.inertia)
     assert inertia_princpl == approx([90.94, 193.1, 283.9], rel=1e-3)
+
+
+@longrun
+def test_pyscf():
+    from pyscf import gto, dft
+    from pyscf.geomopt.berny_solver import as_berny_solver
+
+    mf = dft.RKS(gto.M(atom=list(ethanol), basis='3-21g', verbose=0))
+    mf.xc = 'pbe'
+    solver = as_berny_solver(mf)
+    final = optimize(solver, ethanol)
+    inertia_princpl = np.linalg.eigvalsh(final.inertia)
+    assert inertia_princpl == approx([15.39, 54.38, 63.30], rel=1e-3)
