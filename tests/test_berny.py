@@ -49,4 +49,4 @@ def test_aniline():
     solver = MopacSolver()
     final = optimize(solver, aniline, steprms=0.01, stepmax=0.05)
     inertia_princpl = np.linalg.eigvalsh(final.inertia)
-    assert inertia_princpl == approx([90.94, 193.1 , 283.9], rel=1e-3)
+    assert inertia_princpl == approx([90.94, 193.1, 283.9], rel=1e-3)
