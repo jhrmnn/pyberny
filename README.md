@@ -8,7 +8,7 @@ In each step, it takes energy and Cartesian gradients as an input, and returns a
 
 The algorithm is an amalgam of several techniques, comprising redundant internal coordinates, iterative Hessian estimate, trust region, line search, and coordinate weighing, mostly inspired by the optimizer in the [Gaussian](http://gaussian.com) program.
 
-For examples, see a [Jupyter notebook](https://github.com/azag0/pyberny/blob/master/examples/examples.ipynb).
+For examples, see the [tests](https://github.com/azag0/pyberny/blob/master/tests/test_berny.py).
 
 ## Dependencies
 
