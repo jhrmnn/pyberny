@@ -23,7 +23,15 @@ PESPoint = namedtuple('PESPoint', 'q E g')
 
 
 def Berny(geom, log=None, debug=False, restart=None, maxsteps=100, **params):
-    """Create a coroutine that receives energy and gradients and yields the next geometry."""
+    """
+    Create a coroutine that receives energy and gradients and yields the next geometry.
+
+    :param Molecule geom: geometry of a molecule
+    :param bool debug: geometry of a molecule
+    :param dict restart: start from a state saved from previous run
+    :param int maxsteps: abort after maximum number of steps
+    :param params: additional parameters
+    """
     log = log or Logger()
     algo = BernyAlgo(geom, params)
     if restart:
