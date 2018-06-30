@@ -19,6 +19,12 @@ class Molecule(object):
         self.species = species
         self.coords = np.array(coords)
 
+    @classmethod
+    def from_atoms(cls, atoms, unit=1.):
+        species = [sp for sp, _ in atoms]
+        coords = [np.array(coord)*unit for _, coord in atoms]
+        return cls(species, coords)
+
     def __repr__(self):
         return '<{} {!r}>'.format(self.__class__.__name__, self.formula)
 
