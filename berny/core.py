@@ -22,7 +22,8 @@ defaults = {
 PESPoint = namedtuple('PESPoint', 'q E g')
 
 
-def Berny(geom, log=None, debug=False, restart=None, maxsteps=100, **params):
+def Berny(geom, log=None, debug=False, restart=None, maxsteps=100,
+          verbosity=None, **params):
     """
     Create a coroutine that receives energy and gradients and yields the next geometry.
 
@@ -32,7 +33,7 @@ def Berny(geom, log=None, debug=False, restart=None, maxsteps=100, **params):
     :param int maxsteps: abort after maximum number of steps
     :param params: additional parameters
     """
-    log = log or Logger()
+    log = log or Logger(verbosity=verbosity or 0)
     algo = BernyAlgo(geom, params)
     if restart:
         algo.__dict__.update(restart)
