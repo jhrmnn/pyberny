@@ -1,11 +1,14 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-from numpy import dot, pi
+from __future__ import division
+
 from collections import OrderedDict
-import numpy as np
-from numpy.linalg import norm
 from itertools import combinations, product
+
+import numpy as np
+from numpy import dot, pi
+from numpy.linalg import norm
 
 from . import Math
 from .species_data import get_property
@@ -121,7 +124,7 @@ class Dihedral(InternalCoord):
         f = 0.12
         th1 = Angle(self.i, self.j, self.k).eval(coords)
         th2 = Angle(self.j, self.k, self.l).eval(coords)
-        return (rho[self.i, self.j]*rho[self.j, self.k]*rho[self.k, self.l])**(1./3) * \
+        return (rho[self.i, self.j]*rho[self.j, self.k]*rho[self.k, self.l])**(1/3) * \
             (f+(1-f)*np.sin(th1))*(f+(1-f)*np.sin(th2))
 
     def eval(self, coords, grad=False):

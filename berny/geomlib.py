@@ -1,17 +1,19 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+import os
+from itertools import chain, groupby, product, repeat
+
 import numpy as np
 from numpy import pi
-from numpy.linalg import norm, inv
-from itertools import chain, product, repeat, groupby
-import os
+from numpy.linalg import inv, norm
+
+from .species_data import get_property
+
 try:
     from cStringIO import StringIO
 except ImportError:
     from io import StringIO
-
-from .species_data import get_property
 
 
 class Molecule(object):

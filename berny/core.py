@@ -2,14 +2,15 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from collections import namedtuple
-import numpy as np
 from itertools import chain
+
+import numpy as np
 from numpy import dot, eye
 from numpy.linalg import norm
 
 from . import Math
-from .Logger import Logger
 from .coords import InternalCoords
+from .Logger import Logger
 
 defaults = {
     'gradientmax': 0.45e-3,
