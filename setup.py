@@ -3,9 +3,10 @@ from setuptools import setup
 
 setup(
     name='pyberny',
-    version='0.2',
+    version='0.3',
     description='Molecular/crystal structure optimizer',
-    long_description=open('README.rst').read(),
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     author='Jan Hermann',
     author_email='dev@janhermann.cz',
     url='https://github.com/azag0/pyberny',
