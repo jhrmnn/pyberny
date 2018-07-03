@@ -9,6 +9,7 @@ setup(
     author_email='dev@janhermann.cz',
     url='https://github.com/azag0/pyberny',
     packages=['berny'],
+    package_data={'berny': ['species-data.csv']},
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
