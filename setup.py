@@ -3,15 +3,16 @@ from setuptools import setup
 
 setup(
     name='pyberny',
-    version='0.1',
+    version='0.2',
     description='Molecular/crystal structure optimizer',
+    long_description=open('README.rst').read(),
     author='Jan Hermann',
     author_email='dev@janhermann.cz',
     url='https://github.com/azag0/pyberny',
     packages=['berny'],
     package_data={'berny': ['species-data.csv']},
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)',
