@@ -6,14 +6,27 @@ import re
 
 
 class Logger(object):
+    """
+    Manages logging of information.
+
+    :param int verbosity: verbosity level
+    :param file out: argument passed to ``print(..., file)``
+    :param str regex: log only messages that match regex
+    """
+
     def __init__(self, verbosity=0, out=None, regex=None):
         self.verbosity = verbosity
         self.out = out
         self.n = 0
         self.regex = regex
 
-    def __call__(self, msg, **kwargs):
-        level = kwargs.get('level', 0)
+    def __call__(self, msg, level=0):
+        """
+        Log a message.
+
+        :param str msg: the message
+        :param int level: this is compared against the verbosity level
+        """
         if level < -self.verbosity:
             return
         if self.regex is not None and not re.search(self.regex, msg):

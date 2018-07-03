@@ -19,6 +19,15 @@ defaults = {
     'steprms': 1.2e-3,
     'trust': 0.3,
 }
+"""
+- gradientmax, gradientrms, stepmax, steprms:
+    Convergence criteria in atomic units ("step" refers to the step in
+    internal coordinates, assuming radian units for angles).
+
+- trust:
+    Initial trust radius in atomic units. It is the maximum RMS of the
+    quadratic step (see below).
+"""
 
 PESPoint = namedtuple('PESPoint', 'q E g')
 
@@ -26,13 +35,24 @@ PESPoint = namedtuple('PESPoint', 'q E g')
 def Berny(geom, log=None, debug=False, restart=None, maxsteps=100,
           verbosity=None, **params):
     """
-    Create a coroutine that receives energy and gradients and yields the next geometry.
+    Coroutine that receives energy and gradients and yields the next geometry.
 
     :param Molecule geom: geometry of a molecule
-    :param bool debug: geometry of a molecule
-    :param dict restart: start from a state saved from previous run
+    :param bool debug: if True, the generator yields debug info on receiving
+        the energy and gradients, otherwise it yields None
+    :param dict restart: start from a state saved from previous run using ``debug=True``
     :param int maxsteps: abort after maximum number of steps
-    :param params: additional parameters
+    :param int verbosity: if present and log is None, specifies the verbosity of
+        the default :py:class:`~berny.Logger`
+    :param params: parameters that override the defaults in
+        :py:data:`~berny.core.defaults`
+
+    The coroutine is to be used as follows::
+
+        optimizer = Berny(geom)
+        for geom in optimizer:
+            # calculate energy and gradients (as N-by-3 matrix)
+            debug = optimizer.send((energy, gradients))
     """
     log = log or Logger(verbosity=verbosity or 0)
     algo = BernyAlgo(geom, params)
@@ -123,7 +143,24 @@ class BernyAlgo(object):
 
 
 def optimize(solver, geom, **kwargs):
-    """Optimize a geometry with respect to a solver."""
+    """
+    Optimize a geometry with respect to a solver.
+
+    :param generator solver: unprimed generator that receives geometry as a list
+        of 2-tuples of the atom symbol and coordinate (as a 3-tuple), and yields
+        the energy and gradients (as a *N*-by-3 matrix)
+    :param Molecule geom: geometry of a molecule
+    :param kwargs: these are handed over to :py:func:`Berny`
+
+    Returns the optimized geometry.
+
+    Inside the function, the solver is used as follows::
+
+        next(solver)
+        energy, gradients = solver.send(list(geom))
+        energy, gradients = solver.send(list(geom))
+        ...
+    """
     kwargs.setdefault('log', Logger(verbosity=kwargs.pop('verbosity', -1)))
     next(solver)
     optimizer = Berny(geom, **kwargs)

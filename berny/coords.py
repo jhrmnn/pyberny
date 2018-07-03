@@ -13,7 +13,7 @@ from numpy.linalg import norm
 from . import Math
 from .species_data import get_property
 
-bohr = 0.52917721092
+bohr = 0.52917721092  #:
 
 
 class InternalCoord(object):
