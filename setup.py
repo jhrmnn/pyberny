@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(
-    name='berny',
+    name='pyberny',
     version='0.1',
     description='Molecular/crystal structure optimizer',
     author='Jan Hermann',
