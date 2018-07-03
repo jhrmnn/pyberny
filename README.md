@@ -8,7 +8,7 @@ The algorithm is an amalgam of several techniques, comprising redundant internal
 
 ## Installing
 
-Install and upate using [pip](https://pip.pypa.io/en/stable/quickstart/):
+Install and update using [pip](https://pip.pypa.io/en/stable/quickstart/):
 
 ```
 pip install -U pyberny
@@ -27,4 +27,4 @@ for geom in optimizer:
 
 ## Links
 
--   Documentation: <https://pyberny.readthedocs.io/en/latest/index.html>
+-   Documentation: <https://pyberny.readthedocs.io/en/latest/>
