@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import datetime
+import pkg_resources
 
 extensions = [
     'sphinx.ext.autodoc',
@@ -12,7 +13,7 @@ master_doc = 'index'
 project = 'pyberny'
 author = 'Jan Hermann'
 copyright = f'2017-{datetime.date.today().year}, {author}'
-version = '0.1'
+version = pkg_resources.require(project)[0].version
 release = version
 language = None
 exclude_patterns = ['build', '.DS_Store']
