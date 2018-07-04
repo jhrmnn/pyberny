@@ -44,8 +44,7 @@ def Berny(geom, log=None, debug=False, restart=None, maxsteps=100,
     :param int maxsteps: abort after maximum number of steps
     :param int verbosity: if present and log is None, specifies the verbosity of
         the default :py:class:`~berny.Logger`
-    :param params: parameters that override the defaults in
-        :py:data:`~berny.core.defaults`
+    :param params: parameters that override the :py:data:`~berny.core.defaults`
 
     The coroutine is to be used as follows::
 
