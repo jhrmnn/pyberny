@@ -1,7 +1,13 @@
+# Any copyright is dedicated to the Public Domain.
+# http://creativecommons.org/publicdomain/zero/1.0/
+from __future__ import division
+
 import os
 import tempfile
 import subprocess
 import shutil
+
+import numpy as np
 
 
 def MopacSolver(cmd='mopac', method='PM7'):
@@ -36,3 +42,29 @@ def MopacSolver(cmd='mopac', method='PM7'):
             atoms = yield energy, gradients
     finally:
         shutil.rmtree(tmpdir)
+
+
+def GenericSolver(f, *args, **kwargs):
+    delta = kwargs.pop('delta', 1e-3)
+    atoms = yield
+    while True:
+        energy = f(atoms, *args, **kwargs)
+        coords = np.array([coord for _, coord in atoms])
+        gradients = np.zeros(coords.shape)
+        for i_atom in range(coords.shape[0]):
+            for i_xyz in range(3):
+                ene = {}
+                for step in [-2, -1, 1, 2]:
+                    coords_diff = coords.copy()
+                    coords_diff[i_atom, i_xyz] += step*delta
+                    atoms_diff = list(zip(
+                        [sp for sp, _, in atoms],
+                        coords_diff
+                    ))
+                    ene[step] = f(atoms_diff, *args, **kwargs)
+                gradients[i_atom, i_xyz] = _diff5(ene, delta)
+        atoms = yield energy, gradients
+
+
+def _diff5(x, delta):
+    return (1/12*x[-2]-2/3*x[-1]+2/3*x[1]-1/12*x[2])/delta
