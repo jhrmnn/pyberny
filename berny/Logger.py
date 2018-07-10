@@ -14,8 +14,8 @@ class Logger(object):
     :param str regex: log only messages that match regex
     """
 
-    def __init__(self, verbosity=0, out=None, regex=None):
-        self.verbosity = verbosity
+    def __init__(self, verbosity=None, out=None, regex=None):
+        self.verbosity = verbosity or 0
         self.out = out
         self.n = 0
         self.regex = regex
