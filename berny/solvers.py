@@ -10,15 +10,16 @@ import shutil
 import numpy as np
 
 
-def MopacSolver(cmd='mopac', method='PM7'):
+def MopacSolver(cmd='mopac', method='PM7', workdir=None):
     """
-    Wraps `MOPAC <http://openmopac.net>`_, which needs to be installed on the system.
+    Wraps `MOPAC <http://openmopac.net>`_, which needs to be installed on the
+    system.
 
     :param str cmd: MOPAC executable
     :param str method: model to calculate energy
     """
     kcal, ev, angstrom = 627.503, 27.2107, 0.52917721092
-    tmpdir = tempfile.mkdtemp()
+    tmpdir = workdir or tempfile.mkdtemp()
     try:
         atoms = yield
         while True:
@@ -41,7 +42,8 @@ def MopacSolver(cmd='mopac', method='PM7'):
 
             atoms = yield energy, gradients
     finally:
-        shutil.rmtree(tmpdir)
+        if tmpdir != workdir:
+            shutil.rmtree(tmpdir)
 
 
 def GenericSolver(f, *args, **kwargs):
