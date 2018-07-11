@@ -73,7 +73,7 @@ def Berny(geom, log=None, debug=False, restart=None, maxsteps=100,
         log('Maximum number of steps reached')
 
 
-def no_log(_, **__):
+def no_log(msg, **kwargs):
     pass
 
 
