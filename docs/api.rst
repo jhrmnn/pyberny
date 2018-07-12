@@ -21,13 +21,10 @@ This covers all supported public API.
 Geometry operations
 -------------------
 
-.. autoclass:: Molecule
+.. autoclass:: Geometry
    :members:
 
 .. module:: berny.geomlib
-
-.. autoclass:: Crystal
-   :members:
 
 .. autofunction:: load
 

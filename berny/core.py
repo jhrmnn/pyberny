@@ -37,7 +37,7 @@ def Berny(geom, log=None, debug=False, restart=None, maxsteps=100,
     """
     Coroutine that receives energy and gradients and yields the next geometry.
 
-    :param Molecule geom: geometry of a molecule
+    :param Gometry geom: geometry to start with
     :param bool debug: if True, the generator yields debug info on receiving
         the energy and gradients, otherwise it yields None
     :param dict restart: start from a state saved from previous run using ``debug=True``
@@ -148,7 +148,7 @@ def optimize(solver, geom, **kwargs):
     :param generator solver: unprimed generator that receives geometry as a list
         of 2-tuples of the atom symbol and coordinate (as a 3-tuple), and yields
         the energy and gradients (as a *N*-by-3 matrix)
-    :param Molecule geom: geometry of a molecule
+    :param Geometry geom: geometry to optimize
     :param kwargs: these are handed over to :py:func:`Berny`
 
     Returns the optimized geometry.

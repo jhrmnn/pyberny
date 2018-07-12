@@ -16,36 +16,42 @@ except ImportError:
     from io import StringIO
 
 
-class Molecule(object):
+class Geometry(object):
     """
-    Represents a single molecule.
+    Represents a single molecule or a crystal.
 
     :param list species: list of element symbols
     :param list coords: list of atomic coordinates in angstroms (as 3-tuples)
+    :param list lattice: list of lattice vectors (None for a moleucle)
 
-    Iterating over a molecule yields 2-tuples of symbols and coordinates.
-    ``len(geom)`` returns the number of atoms in a molecule. The class supports
-    :py:func:`format` with the same formats as :py:meth:`dump`.
+    Iterating over a geometry yields 2-tuples of symbols and coordinates.
+    ``len(geom)`` returns the number of atoms in a geometry. The class supports
+    :py:func:`format` with the same available formats as :py:meth:`dump`.
     """
 
-    def __init__(self, species, coords):
+    def __init__(self, species, coords, lattice=None):
         self.species = species
         self.coords = np.array(coords)
+        self.lattice = np.array(lattice) if lattice is not None else None
 
     @classmethod
-    def from_atoms(cls, atoms, unit=1.):
+    def from_atoms(cls, atoms, lattice=None, unit=1.):
         """Alternative contructor.
 
         :param list atoms: list of 2-tuples with an elemnt symbol and
             a coordinate
         :param float unit: value to multiple atomic coordiantes with
+        :param list lattice: list of lattice vectors (None for a moleucle)
         """
         species = [sp for sp, _ in atoms]
         coords = [np.array(coord)*unit for _, coord in atoms]
-        return cls(species, coords)
+        return cls(species, coords, lattice)
 
     def __repr__(self):
-        return '<{} {!r}>'.format(self.__class__.__name__, self.formula)
+        s = repr(self.formula)
+        if self.lattice is not None:
+            s += ' in a lattice'
+        return '<{} {}>'.format(self.__class__.__name__, s)
 
     def __iter__(self):
         for specie, coord in zip(self.species, self.coords):
@@ -56,7 +62,7 @@ class Molecule(object):
 
     @property
     def formula(self):
-        """Chemical formula of the molecule."""
+        """Chemical formula of the molecule or a unit cell."""
         composition = sorted(
             (sp, len(list(g)))
             for sp, g in groupby(sorted(self.species))
@@ -104,8 +110,12 @@ class Molecule(object):
             raise ValueError("Unknown format: '{}'".format(fmt))
 
     def copy(self):
-        """Returns a copy of the object."""
-        return Molecule(list(self.species), self.coords.copy())
+        """Returns a copy of the geometry."""
+        return Geometry(
+            list(self.species),
+            self.coords.copy(),
+            self.lattice.copy() if self.lattice is not None else None
+        )
 
     def write(self, filename):
         """
@@ -123,21 +133,54 @@ class Molecule(object):
         with open(filename, 'w') as f:
             self.dump(f, fmt)
 
-    def supercell(self, *args, **kwargs):
+    def super_circum(self, radius):
         """
-        Returns a copy of itself.
+        Supercell dimensions such that the supercell circumsribes a sphere.
 
-        This method should be overwritten by derived classes that represent
-        periodc structures.
+        :param float radius: circumscribed radius in angstroms
+
+        Returns None when geometry is not a crystal.
         """
-        return self.copy()
+        if self.lattice is None:
+            return
+        rec_lattice = 2*pi*inv(self.lattice.T)
+        layer_sep = np.array(
+            [sum(vec*rvec/norm(rvec)) for vec, rvec in zip(self.lattice, rec_lattice)]
+        )
+        return np.array(np.ceil(radius/layer_sep+0.5), dtype=int)
+
+    def supercell(self, ranges=((-1, 1), (-1, 1), (-1, 1)), cutoff=None):
+        """
+        Creates a crystal supercell.
+
+        :param list ranges: list of 2-tuples specifying the range of multiples
+            of the unit-cell vectors
+        :param float cutoff: if given, the ranges are determined such that
+            the supercell contains a sphere with the radius qual to the cutoff
+
+        Returns a copy of itself when geometry is not a crystal.
+        """
+        if self.lattice is None:
+            return self.copy()
+        if cutoff:
+            ranges = [(-r, r) for r in self.super_circum(cutoff)]
+        latt_vectors = np.array([(0, 0, 0)] + [
+            sum(k*vec for k, vec in zip(shift, self.lattice))
+            for shift
+            in product(*[range(a, b+1) for a, b in ranges])
+            if shift != (0, 0, 0)
+        ])
+        species = list(chain.from_iterable(repeat(self.species, len(latt_vectors))))
+        coords = (self.coords[None, :, :]+latt_vectors[:, None, :]).reshape((-1, 3))
+        lattice = self.lattice*np.array([b-a for a, b in ranges])[:, None]
+        return Geometry(species, coords, lattice)
 
     def dist_diff(self, other=None):
         r"""
         Calculate distances and vectors between atoms.
 
-        :param Molecule other: calculate distances two molecules if given or
-            within a molecule if not
+        :param Geometry other: calculate distances between two geometries if
+            given or within a geometry if not
 
         Returns :math:`R_{ij}:=|\mathbf R_i-\mathbf R_j|` and
         :math:`R_{ij\alpha}:=(\mathbf R_i)_\alpha-(\mathbf R_j)_\alpha`.
@@ -204,7 +247,7 @@ def load(fp, fmt):
     :param file fp: file object
     :param str fmt: the format of the geometry file, can be one of 'xyz', 'aims'
 
-    Returns :py:class:`berny.Molecule`.
+    Returns :py:class:`berny.Geometry`.
     """
     if fmt == 'xyz':
         n = int(fp.readline())
@@ -215,7 +258,7 @@ def load(fp, fmt):
             l = fp.readline().split()
             species.append(l[0])
             coords.append([float(x) for x in l[1:4]])
-        return Molecule(species, coords)
+        return Geometry(species, coords)
     if fmt == 'aims':
         species = []
         coords = []
@@ -236,9 +279,9 @@ def load(fp, fmt):
                 lattice.append([float(x) for x in l[1:4]])
         if lattice:
             assert len(lattice) == 3
-            return Crystal(species, coords, lattice)
+            return Geometry(species, coords, lattice)
         else:
-            return Molecule(species, coords)
+            return Geometry(species, coords)
 
 
 def loads(s, fmt):
@@ -266,54 +309,3 @@ def readfile(path, fmt=None):
             fmt = 'aims'
     with open(path) as f:
         return load(f, fmt)
-
-
-class Crystal(Molecule):
-    """
-    Represents a crystal geometry. This class inherits from :py:class:`Molecule`.
-
-    :param list species: list of element symbols in a unit cell
-    :param list coords: list of atomic coordinates in angstroms (as 3-tuples)
-    :param list lattice: list of unit-cell vectors (as 3-tuples)
-    """
-    def __init__(self, species, coords, lattice):
-        Molecule.__init__(self, species, coords)
-        self.lattice = np.array(lattice)
-
-    def copy(self):
-        return Crystal(list(self.species), self.coords.copy(), self.lattice.copy())
-
-    def super_circum(self, radius):
-        """
-        Calculates the supercell dimensions such that the supercell contains
-        a sphere with a given radius.
-
-        :param float radius: circumscribed radius in angstroms
-        """
-        rec_lattice = 2*pi*inv(self.lattice.T)
-        layer_sep = np.array(
-            [sum(vec*rvec/norm(rvec)) for vec, rvec in zip(self.lattice, rec_lattice)]
-        )
-        return np.array(np.ceil(radius/layer_sep+0.5), dtype=int)
-
-    def supercell(self, ranges=((-1, 1), (-1, 1), (-1, 1)), cutoff=None):
-        """
-        Creates a crystal supercell.
-
-        :param list ranges: list of 2-tuples specifying the range of multiples
-            of the unit-cell vectors
-        :param float cutoff: if given, the ranges are determined such that
-            the supercell contains a sphere with the radius qual to the cutoff
-        """
-        if cutoff:
-            ranges = [(-r, r) for r in self.super_circum(cutoff)]
-        latt_vectors = np.array([(0, 0, 0)] + [
-            sum(k*vec for k, vec in zip(shift, self.lattice))
-            for shift
-            in product(*[range(a, b+1) for a, b in ranges])
-            if shift != (0, 0, 0)
-        ])
-        species = list(chain.from_iterable(repeat(self.species, len(latt_vectors))))
-        coords = (self.coords[None, :, :]+latt_vectors[:, None, :]).reshape((-1, 3))
-        lattice = self.lattice*np.array([b-a for a, b in ranges])[:, None]
-        return Crystal(species, coords, lattice)
