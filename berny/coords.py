@@ -13,7 +13,7 @@ from numpy.linalg import norm
 from . import Math
 from .species_data import get_property
 
-bohr = 0.52917721092  #:
+angstrom = 1/0.52917721092  #:
 
 
 class InternalCoord(object):
@@ -52,7 +52,7 @@ class Bond(InternalCoord):
         return rho[self.i, self.j]
 
     def eval(self, coords, grad=False):
-        v = (coords[self.i]-coords[self.j])/bohr
+        v = (coords[self.i]-coords[self.j])*angstrom
         r = norm(v)
         if not grad:
             return r
@@ -78,8 +78,8 @@ class Angle(InternalCoord):
             (f+(1-f)*np.sin(self.eval(coords)))
 
     def eval(self, coords, grad=False):
-        v1 = (coords[self.i]-coords[self.j])/bohr
-        v2 = (coords[self.k]-coords[self.j])/bohr
+        v1 = (coords[self.i]-coords[self.j])*angstrom
+        v2 = (coords[self.k]-coords[self.j])*angstrom
         dot_product = np.dot(v1, v2)/(norm(v1)*norm(v2))
         if dot_product < -1:
             dot_product = -1
@@ -128,9 +128,9 @@ class Dihedral(InternalCoord):
             (f+(1-f)*np.sin(th1))*(f+(1-f)*np.sin(th2))
 
     def eval(self, coords, grad=False):
-        v1 = (coords[self.i]-coords[self.j])/bohr
-        v2 = (coords[self.l]-coords[self.k])/bohr
-        w = (coords[self.k]-coords[self.j])/bohr
+        v1 = (coords[self.i]-coords[self.j])*angstrom
+        v2 = (coords[self.l]-coords[self.k])*angstrom
+        w = (coords[self.k]-coords[self.j])*angstrom
         ew = w/norm(w)
         a1 = v1-dot(v1, ew)*ew
         a2 = v2-dot(v2, ew)*ew
@@ -327,7 +327,7 @@ class InternalCoords(object):
         # target = CartIter(q=q+dq)
         # prev = CartIter(geom.coords, q, dq)
         for i in range(20):
-            coords_new = geom.coords+B_inv.dot(dq).reshape(-1, 3)*bohr
+            coords_new = geom.coords+B_inv.dot(dq).reshape(-1, 3)/angstrom
             dcart_rms = Math.rms(coords_new-geom.coords)
             geom.coords = coords_new
             q_new = self.eval_geom(geom, template=q)

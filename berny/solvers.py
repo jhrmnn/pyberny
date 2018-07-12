@@ -18,7 +18,7 @@ def MopacSolver(cmd='mopac', method='PM7', workdir=None):
     :param str cmd: MOPAC executable
     :param str method: model to calculate energy
     """
-    kcal, ev, angstrom = 627.503, 27.2107, 0.52917721092
+    kcal, ev = 1/627.503, 1/27.2107
     tmpdir = workdir or tempfile.mkdtemp()
     try:
         atoms = yield
@@ -31,13 +31,13 @@ def MopacSolver(cmd='mopac', method='PM7', workdir=None):
                 f.write(mopac_input)
             subprocess.check_output([cmd, input_file])
             with open(os.path.join(tmpdir, 'job.out')) as f:
-                energy = float(next(l for l in f if 'TOTAL ENERGY' in l).split()[3])/ev
+                energy = float(next(l for l in f if 'TOTAL ENERGY' in l).split()[3])*ev
                 next(l for l in f if 'FINAL  POINT  AND  DERIVATIVES' in l)
                 next(f)
                 next(f)
                 gradients = [
-                    [float(next(f).split()[6])/kcal*angstrom for _ in range(3)]
                     for _ in range(len(atoms))
+                    [float(next(f).split()[6])*kcal/angstrom for _ in range(3)]
                 ]
 
             atoms = yield energy, gradients

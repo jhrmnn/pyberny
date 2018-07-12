@@ -10,7 +10,7 @@ Usage
 -----
 
 The Python API consists of coroutine :py:func:`~berny.Berny` and function
-:py:func:`~berny.optimize`,::
+:py:func:`~berny.optimize`::
 
    from berny import Berny, geomlib
    from berny.solvers import MopacSolver

@@ -9,9 +9,9 @@ This covers all supported public API.
 
 .. autodata:: berny.core.defaults
 
-.. autodata:: berny.coords.bohr
+.. autodata:: berny.coords.angstrom
 
-    Can be imported directly as :py:data:`berny.bohr`.
+    Can be imported directly as :py:data:`berny.angstrom`.
 
 .. autofunction:: optimize
 
