@@ -26,7 +26,7 @@ H	-0.0227	1.1812	-0.8852
 
 def test_ethanol():
     solver = MopacSolver()
-    final = optimize(solver, ethanol, steprms=0.01, stepmax=0.05)
+    final = optimize(solver, ethanol, steprms=0.01, stepmax=0.05, maxsteps=5)
     inertia_princpl = np.linalg.eigvalsh(final.inertia)
     assert inertia_princpl == approx([14.95, 52.58, 61.10], rel=1e-3)
 
@@ -53,7 +53,7 @@ Aniline
 
 def test_aniline():
     solver = MopacSolver()
-    final = optimize(solver, aniline, steprms=0.01, stepmax=0.05)
+    final = optimize(solver, aniline, steprms=0.01, stepmax=0.05, maxsteps=8)
     inertia_princpl = np.linalg.eigvalsh(final.inertia)
     assert inertia_princpl == approx([90.94, 193.1, 283.9], rel=1e-3)
 
