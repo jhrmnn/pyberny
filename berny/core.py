@@ -145,9 +145,11 @@ def optimize(solver, geom, **kwargs):
     """
     Optimize a geometry with respect to a solver.
 
-    :param generator solver: unprimed generator that receives geometry as a list
-        of 2-tuples of the atom symbol and coordinate (as a 3-tuple), and yields
-        the energy and gradients (as a *N*-by-3 matrix)
+    :param generator solver: unprimed generator that receives geometry as a
+        2-tuple of a list of 2-tuples of the atom symbol and coordinate (as a
+        3-tuple), and of a list of lattice vectors (or None if molecule), and
+        yields the energy and gradients (as a *N*-by-3 matrix or (*N*+3)-by-3
+        matrix in case of a crystal geometry)
     :param Geometry geom: geometry to optimize
     :param kwargs: these are handed over to :py:func:`Berny`
 
@@ -156,15 +158,15 @@ def optimize(solver, geom, **kwargs):
     Inside the function, the solver is used as follows::
 
         next(solver)
-        energy, gradients = solver.send(list(geom))
-        energy, gradients = solver.send(list(geom))
+        energy, gradients = solver.send((list(geom), geom.lattce))
+        energy, gradients = solver.send((list(geom), geom.lattce))
         ...
     """
     kwargs.setdefault('log', Logger(verbosity=kwargs.pop('verbosity', -1)))
     next(solver)
     optimizer = Berny(geom, **kwargs)
     for geom in optimizer:
-        energy, gradients = solver.send(list(geom))
+        energy, gradients = solver.send((list(geom), geom.lattice))
         optimizer.send((energy, gradients))
     return geom
 
