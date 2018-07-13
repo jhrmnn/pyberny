@@ -18,6 +18,7 @@ defaults = {
     'stepmax': 1.8e-3,
     'steprms': 1.2e-3,
     'trust': 0.3,
+    'superweakdih': False,
 }
 """
 - gradientmax, gradientrms, stepmax, steprms:
@@ -27,6 +28,9 @@ defaults = {
 - trust:
     Initial trust radius in atomic units. It is the maximum RMS of the
     quadratic step (see below).
+
+- superweakdih:
+    Form dihedral angles containing two or more noncovalent bonds.
 """
 
 PESPoint = namedtuple('PESPoint', 'q E g')
@@ -38,6 +42,7 @@ def Berny(geom, log=None, debug=False, restart=None, maxsteps=100,
     Coroutine that receives energy and gradients and yields the next geometry.
 
     :param Gometry geom: geometry to start with
+    :param Logger log: used for logging if given
     :param bool debug: if True, the generator yields debug info on receiving
         the energy and gradients, otherwise it yields None
     :param dict restart: start from a state saved from previous run using ``debug=True``
@@ -84,7 +89,7 @@ class BernyAlgo(object):
 
     def init(s, log=no_log):
         s.trust = s.params['trust']
-        s.coords = InternalCoords(s.geom)
+        s.coords = InternalCoords(s.geom, superweakdih=s.params['superweakdih'])
         s.H = s.coords.hessian_guess(s.geom)
         s.weights = s.coords.weights(s.geom)
         for line in str(s.coords).split('\n'):

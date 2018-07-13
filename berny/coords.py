@@ -199,7 +199,7 @@ def get_clusters(C):
 
 
 class InternalCoords(object):
-    def __init__(self, geom, allowed=None):
+    def __init__(self, geom, allowed=None, superweakdih=False):
         self._coords = []
         geom = geom.supercell()
         dist = geom.dist(geom)
@@ -223,7 +223,13 @@ class InternalCoords(object):
                 if ang.eval(geom.coords) > pi/4:
                     self.append(ang)
         for bond in self.bonds:
-            self.extend(get_dihedrals([bond.i, bond.j], geom.coords, bondmatrix, C))
+            self.extend(get_dihedrals(
+                [bond.i, bond.j],
+                geom.coords,
+                bondmatrix,
+                C,
+                superweak=superweakdih,
+            ))
 
     def append(self, coord):
         self._coords.append(coord)
@@ -346,7 +352,7 @@ class InternalCoords(object):
         return q, geom
 
 
-def get_dihedrals(center, coords, bondmatrix, C):
+def get_dihedrals(center, coords, bondmatrix, C, superweak=False):
     neigh_l = [n for n in np.flatnonzero(bondmatrix[center[0], :]) if n != center[1]]
     neigh_r = [n for n in np.flatnonzero(bondmatrix[center[-1], :]) if n != center[-2]]
     angles_l = [Angle(i, center[0], center[1]).eval(coords) for i in neigh_l]
@@ -362,17 +368,26 @@ def get_dihedrals(center, coords, bondmatrix, C):
             None for i in range(len(center)-1)
             if not C[center[i], center[i+1]]
         ))
-        dihedrals = [Dihedral(
-            nl,
-            center[0],
-            center[-1],
-            nr,
-            weak=nweak + (0 if C[nl, center[0]] else 1) + (0 if C[center[0], nr] else 1),
-            angles=(
-                Angle(nl, center[0], center[1], C=C),
-                Angle(nl, center[-2], center[-1], C=C)
-            )
-        ) for nl, nr in product(nonlinear_l, nonlinear_r) if nl != nr]
+        dihedrals = []
+        for nl, nr in product(nonlinear_l, nonlinear_r):
+            if nl == nr:
+                continue
+            weak = nweak + \
+                (0 if C[nl, center[0]] else 1) + \
+                (0 if C[center[0], nr] else 1)
+            if not superweak and weak > 1:
+                continue
+            dihedrals.append(Dihedral(
+                nl,
+                center[0],
+                center[-1],
+                nr,
+                weak=weak,
+                angles=(
+                    Angle(nl, center[0], center[1], C=C),
+                    Angle(nl, center[-2], center[-1], C=C)
+                )
+            ))
     else:
         dihedrals = []
     if len(center) > 3:
