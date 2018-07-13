@@ -51,6 +51,9 @@ class Bond(InternalCoord):
     def weight(self, rho, coords):
         return rho[self.i, self.j]
 
+    def center(self, ijk):
+        return np.round(ijk[[self.i, self.j]].sum(0))
+
     def eval(self, coords, grad=False):
         v = (coords[self.i]-coords[self.j])*angstrom
         r = norm(v)
@@ -76,6 +79,9 @@ class Angle(InternalCoord):
         f = 0.12
         return np.sqrt(rho[self.i, self.j]*rho[self.j, self.k]) *\
             (f+(1-f)*np.sin(self.eval(coords)))
+
+    def center(self, ijk):
+        return np.round(2*ijk[self.j])
 
     def eval(self, coords, grad=False):
         v1 = (coords[self.i]-coords[self.j])*angstrom
@@ -126,6 +132,9 @@ class Dihedral(InternalCoord):
         th2 = Angle(self.j, self.k, self.l).eval(coords)
         return (rho[self.i, self.j]*rho[self.j, self.k]*rho[self.k, self.l])**(1/3) * \
             (f+(1-f)*np.sin(th1))*(f+(1-f)*np.sin(th2))
+
+    def center(self, ijk):
+        return np.round(ijk[[self.j, self.k]].sum(0))
 
     def eval(self, coords, grad=False):
         v1 = (coords[self.i]-coords[self.j])*angstrom
@@ -201,6 +210,7 @@ def get_clusters(C):
 class InternalCoords(object):
     def __init__(self, geom, allowed=None, superweakdih=False):
         self._coords = []
+        n = len(geom)
         geom = geom.supercell()
         dist = geom.dist(geom)
         radii = np.array([get_property(sp, 'covalent_radius') for sp in geom.species])
@@ -230,6 +240,8 @@ class InternalCoords(object):
                 C,
                 superweak=superweakdih,
             ))
+        if geom.lattice is not None:
+            self._reduce(n)
 
     def append(self, coord):
         self._coords.append(coord)
@@ -306,6 +318,19 @@ class InternalCoords(object):
                    for dih in self.dihedrals if ang in dih.angles):
                 q[i] = 2*pi-q[i]
         return q
+
+    def _reduce(self, n):
+        idxs = np.int64(np.floor(np.array(range(3**3*n))/n))
+        idxs, i = np.divmod(idxs, 3)
+        idxs, j = np.divmod(idxs, 3)
+        k = idxs % 3
+        ijk = np.vstack((i, j, k)).T-1
+        self._coords = [
+            coord for coord in self._coords
+            if np.all(np.isin(coord.center(ijk), [0, -1]))
+        ]
+        idxs = set(i for coord in self._coords for i in coord.idx)
+        self.fragments = [frag for frag in self.fragments if set(frag) & idxs]
 
     def hessian_guess(self, geom):
         geom = geom.supercell()
