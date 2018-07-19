@@ -208,7 +208,7 @@ def get_clusters(C):
 
 
 class InternalCoords(object):
-    def __init__(self, geom, allowed=None, superweakdih=False):
+    def __init__(self, geom, allowed=None, dihedral=True, superweakdih=False):
         self._coords = []
         n = len(geom)
         geom = geom.supercell()
@@ -232,14 +232,15 @@ class InternalCoords(object):
                 ang = Angle(i, j, k, C=C)
                 if ang.eval(geom.coords) > pi/4:
                     self.append(ang)
-        for bond in self.bonds:
-            self.extend(get_dihedrals(
-                [bond.i, bond.j],
-                geom.coords,
-                bondmatrix,
-                C,
-                superweak=superweakdih,
-            ))
+        if dihedral:
+            for bond in self.bonds:
+                self.extend(get_dihedrals(
+                    [bond.i, bond.j],
+                    geom.coords,
+                    bondmatrix,
+                    C,
+                    superweak=superweakdih,
+                ))
         if geom.lattice is not None:
             self._reduce(n)
 

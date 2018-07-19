@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='pyberny',
-    version='0.3.2',
+    version='0.3.3',
     description='Molecular/crystal structure optimizer',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',

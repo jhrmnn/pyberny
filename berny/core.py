@@ -18,6 +18,7 @@ defaults = {
     'stepmax': 1.8e-3,
     'steprms': 1.2e-3,
     'trust': 0.3,
+    'dihedral': True,
     'superweakdih': False,
 }
 """
@@ -28,6 +29,9 @@ defaults = {
 - trust:
     Initial trust radius in atomic units. It is the maximum RMS of the
     quadratic step (see below).
+
+- dihedral:
+    Form dihedral angles.
 
 - superweakdih:
     Form dihedral angles containing two or more noncovalent bonds.
@@ -89,7 +93,11 @@ class BernyAlgo(object):
 
     def init(s, log=no_log):
         s.trust = s.params['trust']
-        s.coords = InternalCoords(s.geom, superweakdih=s.params['superweakdih'])
+        s.coords = InternalCoords(
+            s.geom,
+            dihedral=s.params['dihedral'],
+            superweakdih=s.params['superweakdih'],
+        )
         s.H = s.coords.hessian_guess(s.geom)
         s.weights = s.coords.weights(s.geom)
         for line in str(s.coords).split('\n'):
