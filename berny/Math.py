@@ -82,7 +82,7 @@ def fit_quartic(y0, y1, g0, g1):
         if is_real.sum() == 1:
             minim = r[is_real][0].real
         else:
-            minim = r[(r == max(-abs(r))) | r == -max(-abs(r))][0].real
+            minim = r[(r == max(-abs(r))) | (r == -max(-abs(r)))][0].real
         return minim, np.polyval(p, minim)
 
     D = -(g0+g1)**2-2*g0*g1+6*(y1-y0)*(g0+g1)-6*(y1-y0)**2  # discriminant of d^2y/dx^2=0
