@@ -35,7 +35,7 @@ def MopacSolver(cmd='mopac', method='PM7', workdir=None):
             input_file = os.path.join(tmpdir, 'job.mop')
             with open(input_file, 'w') as f:
                 f.write(mopac_input)
-            subprocess.check_output([cmd, input_file])
+            subprocess.check_call([cmd, input_file])
             with open(os.path.join(tmpdir, 'job.out')) as f:
                 energy = float(next(l for l in f if 'TOTAL ENERGY' in l).split()[3])*ev
                 next(l for l in f if 'FINAL  POINT  AND  DERIVATIVES' in l)

@@ -1,0 +1,37 @@
+language: python
+matrix:
+  include:
+    - python: 2.7
+      env: TOXENV=py27-coverage-codecov
+    - python: 3.4
+      env: TOXENV=py34
+    - python: 3.5
+      env: TOXENV=py35
+    - python: 3.6
+      env: TOXENV=py36
+    - python: 3.7
+      env: TOXENV=py37-coverage-codecov
+      dist: xenial
+      sudo: required
+    - python: 3.6
+      stage: deploy
+      env: TOXENV=docs
+before_install:
+  - pip install tox tox-venv
+  - |
+    if [[ $TOXENV != docs ]]; then
+      pip --upgrade pip"<=18.0"
+      curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+      source .travis/install-mopac.sh
+    fi
+install: true
+script: tox
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  local-dir: docs/build
+  on:
+    branch: master
+    condition: $TOXENV = docs

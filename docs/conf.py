@@ -1,6 +1,26 @@
-#!/usr/bin/env python3
+import os
+import sys
 import datetime
-import pkg_resources
+from unittest.mock import MagicMock
+
+import toml
+
+sys.path.insert(0, os.path.abspath('..'))
+
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+        return MagicMock()
+
+MOCK_MODULES = ['numpy', 'numpy.linalg']
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+
+metadata = toml.load(open('../pyproject.toml'))['tool']['poetry']
+
+project = 'pyberny'
+version = metadata['version']
+author = ' '.join(metadata['authors'][0].split()[:-1])
+description = metadata['description']
 
 extensions = [
     'sphinx.ext.autodoc',
@@ -10,10 +30,7 @@ extensions = [
 ]
 source_suffix = '.rst'
 master_doc = 'index'
-project = 'pyberny'
-author = 'Jan Hermann'
 copyright = f'2017-{datetime.date.today().year}, {author}'
-version = pkg_resources.require(project)[0].version
 release = version
 language = None
 exclude_patterns = ['build', '.DS_Store']
@@ -21,10 +38,13 @@ pygments_style = 'sphinx'
 todo_include_todos = True
 html_theme = 'alabaster'
 html_theme_options = {
-    'description': 'Molecular geometry optimizer',
+    'description': description,
     'github_button': True,
     'github_user': 'azag0',
     'github_repo': 'pyberny',
+    'badge_branch': 'master',
+    'codecov_button': True,
+    'travis_button': True,
 }
 html_sidebars = {
     '**': [

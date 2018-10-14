@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "pyberny"
+version = "0.3.4"
+description = "Molecular/crystal structure optimizer"
+readme = "README.md"
+authors = ["Jan Hermann <dev@janhermann.cz>"]
+repository = "https://github.com/azag0/pyberny"
+documentation = "https://janhermann.cz/pyberny"
+license = "MPL-2.0"
+packages = [
+    { include = "berny" },
+]
+classifiers = [
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "Operating System :: POSIX",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+
+[tool.poetry.dependencies]
+python = "~2.7 || ^3.4"
+numpy = "^1.15"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.6"
+sphinx = "^1.7"
+flake8 = "^3.5"
+toml = "^0.10.0"
+coverage = "^4.5"
+
+[tool.poetry.scripts]
+berny = "berny.cli:main"
