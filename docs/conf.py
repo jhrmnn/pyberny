@@ -7,17 +7,19 @@ import toml
 
 sys.path.insert(0, os.path.abspath('..'))
 
+
 class Mock(MagicMock):
     @classmethod
     def __getattr__(cls, name):
         return MagicMock()
+
 
 MOCK_MODULES = ['numpy', 'numpy.linalg']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 metadata = toml.load(open('../pyproject.toml'))['tool']['poetry']
 
-project = 'pyberny'
+project = 'berny'
 version = metadata['version']
 author = ' '.join(metadata['authors'][0].split()[:-1])
 description = metadata['description']
