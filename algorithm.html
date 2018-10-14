@@ -1,0 +1,171 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Algorithm &#8212; pyberny 0.3.4 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Getting started" href="getting-started.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="algorithm">
+<h1>Algorithm<a class="headerlink" href="#algorithm" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="redundant-internal-coordinates">
+<h2>Redundant internal coordinates<a class="headerlink" href="#redundant-internal-coordinates" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>All bonds shorter than 1.3 times the sum of covalent radii are
+created.</li>
+<li>If there are unconnected fragments, all bonds between unconnected
+fragments shorter than the sum of van der Waals radii plus <em>d</em> are
+created, with <em>d</em> starting at 0 and increasing by 1 angstrom, until
+all fragments are connected.</li>
+<li>All angles greater than 45° are created.</li>
+<li>All dihedrals with 1–2–3, 2–3–4 angles both greater than 45° are
+created. If one of the angles is zero, so that three atoms lie on a
+line, they are used as a new base for a dihedral. This process is
+recursively repeated.</li>
+<li>In the case of a crystal, just the internal coordinate closest to the
+original unit cell is retained from all periodic images.</li>
+</ol>
+</div>
+<div class="section" id="generalized-inverse">
+<h2>Generalized inverse<a class="headerlink" href="#generalized-inverse" title="Permalink to this headline">¶</a></h2>
+<p>The Wilson matrix <span class="math notranslate nohighlight">\(\mathbf B\)</span>, which relates differences in the internal
+redundant coordinates to differences in the Cartesian coordinates, is in
+general non-square and non-invertible. A generalized inverse of a matrix
+is obtained by taking its singular value decomposition and inverting
+only the nonzero singular values. For invertible matrices, this is
+equivalent to an ordinary inverse. In practice, the zero values are in
+fact nonzero but several orders of magnitude smaller than the true
+nonzero values.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">pyberny</a></h1>
+
+
+
+<p class="blurb">Molecular/crystal structure optimizer</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=azag0&repo=pyberny&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a class="badge" href="https://travis-ci.org/azag0/pyberny">
+    <img
+        alt="https://secure.travis-ci.org/azag0/pyberny.svg?branch=master"
+        src="https://secure.travis-ci.org/azag0/pyberny.svg?branch=master"
+    />
+</a>
+</p>
+
+
+
+
+    
+
+<p>
+<a class="badge" href="https://codecov.io/github/azag0/pyberny">
+    <img
+    alt="https://codecov.io/github/azag0/pyberny/coverage.svg?branch=master"
+    src="https://codecov.io/github/azag0/pyberny/coverage.svg?branch=master"
+    />
+</a>
+</p>
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Algorithm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#redundant-internal-coordinates">Redundant internal coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generalized-inverse">Generalized inverse</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="getting-started.html" title="previous chapter">Getting started</a></li>
+      <li>Next: <a href="api.html" title="next chapter">API</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017-2018, Jan Hermann.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/algorithm.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
