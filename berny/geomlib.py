@@ -187,6 +187,8 @@ class Geometry(object):
         Returns :math:`R_{ij}:=|\mathbf R_i-\mathbf R_j|` and
         :math:`R_{ij\alpha}:=(\mathbf R_i)_\alpha-(\mathbf R_j)_\alpha`.
         """
+        if other is None:
+            other = self
         diff = self.coords[:, None, :]-other.coords[None, :, :]
         dist = np.sqrt(np.sum(diff**2, 2))
         dist[np.diag_indices(len(self))] = np.inf
