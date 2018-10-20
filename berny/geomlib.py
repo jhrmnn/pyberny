@@ -124,12 +124,14 @@ class Geometry(object):
         :param str filename: path that will be overwritten
         """
         ext = os.path.splitext(filename)[1]
-        if ext == 'xyz':
+        if ext == '.xyz':
             fmt = 'xyz'
-        elif ext == 'aims' or os.path.basename(filename) == 'geometry.in':
+        elif ext == '.aims' or os.path.basename(filename) == 'geometry.in':
             fmt = 'aims'
-        elif ext == 'mopac':
+        elif ext == '.mopac':
             fmt = 'mopac'
+        else:
+            raise ValueError('Unknown file extension')
         with open(filename, 'w') as f:
             self.dump(f, fmt)
 
