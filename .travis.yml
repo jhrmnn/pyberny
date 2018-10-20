@@ -20,8 +20,7 @@ before_install:
   - pip install tox tox-venv
   - |
     if [[ $TOXENV != docs ]]; then
-      pip install --upgrade pip"<=18.0"
-      curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+      pip install poetry
       source .travis/install-mopac.sh
     fi
 install: true
