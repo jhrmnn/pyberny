@@ -44,7 +44,7 @@ class Geometry(object):
         :param list lattice: list of lattice vectors (None for a moleucle)
         """
         species = [sp for sp, _ in atoms]
-        coords = [np.array(coord)*unit for _, coord in atoms]
+        coords = [np.array(coord, dtype=float)*unit for _, coord in atoms]
         return cls(species, coords, lattice)
 
     def __repr__(self):
