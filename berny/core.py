@@ -12,7 +12,7 @@ from . import Math
 from .coords import InternalCoords
 from .Logger import Logger
 
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 defaults = {
     'gradientmax': 0.45e-3,
@@ -156,30 +156,28 @@ class BernyAlgo(object):
         return converged
 
 
-def optimize(solver, geom, **kwargs):
+def optimize(optimizer, solver):
     """
     Optimize a geometry with respect to a solver.
 
+    :param optimizer: Optimizer object with the same generator-like interface
+        as :py:func:`Berny`
     :param generator solver: unprimed generator that receives geometry as a
         2-tuple of a list of 2-tuples of the atom symbol and coordinate (as a
         3-tuple), and of a list of lattice vectors (or None if molecule), and
-        yields the energy and gradients (as a *N*-by-3 matrix or (*N*+3)-by-3
+        yields the energy and gradients (as a N-by-3 matrix or (N+3)-by-3
         matrix in case of a crystal geometry)
-    :param Geometry geom: geometry to optimize
-    :param kwargs: these are handed over to :py:func:`Berny`
 
     Returns the optimized geometry.
 
-    Inside the function, the solver is used as follows::
+    The function is equivalent to::
 
         next(solver)
-        energy, gradients = solver.send((list(geom), geom.lattce))
-        energy, gradients = solver.send((list(geom), geom.lattce))
-        ...
+        for geom in optimizer:
+            energy, gradients = solver.send((list(geom), geom.lattice))
+            optimizer.send((energy, gradients))
     """
-    kwargs.setdefault('log', Logger(verbosity=kwargs.pop('verbosity', -1)))
     next(solver)
-    optimizer = Berny(geom, **kwargs)
     for geom in optimizer:
         energy, gradients = solver.send((list(geom), geom.lattice))
         optimizer.send((energy, gradients))
