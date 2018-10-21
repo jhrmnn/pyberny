@@ -21,13 +21,18 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "~2.7 || ^3.4"
 numpy = "^1.15"
+pytest = { version = "^3.6", optional = true }
+sphinx = { version = "^1.7", optional = true }
+coverage = { version = "^4.5", optional = true }
+toml = { version = "^0.10.0", optional = true }
+
+[tool.poetry.extras]
+test = ["pytest"]
+cov = ["coverage"]
+doc = ["sphinx", "toml"]
 
 [tool.poetry.dev-dependencies]
-pytest = "^3.6"
-sphinx = "^1.7"
 flake8 = "^3.5"
-toml = "^0.10.0"
-coverage = "^4.5"
 
 [tool.poetry.scripts]
 berny = "berny.cli:main"
