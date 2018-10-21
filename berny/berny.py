@@ -1,6 +1,7 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+import sys
 from collections import namedtuple
 from itertools import chain
 
@@ -12,7 +13,12 @@ from . import Math
 from .coords import InternalCoords
 from .Logger import Logger
 
-__version__ = '0.2.0'
+if sys.version_info[:2] >= (3, 5):
+    from collections.abc import Generator
+else:
+    from ._py2 import Generator  # noqa
+
+__version__ = '0.2.1'
 
 defaults = {
     'gradientmax': 0.45e-3,
@@ -42,10 +48,9 @@ defaults = {
 PESPoint = namedtuple('PESPoint', 'q E g')
 
 
-def Berny(geom, log=None, debug=False, restart=None, maxsteps=100,
-          verbosity=None, **params):
+class Berny(Generator):
     """
-    Coroutine that receives energy and gradients and yields the next geometry.
+    Generator that receives energy and gradients and yields the next geometry.
 
     :param Gometry geom: geometry to start with
     :param Logger log: used for logging if given
@@ -57,43 +62,30 @@ def Berny(geom, log=None, debug=False, restart=None, maxsteps=100,
         the default :py:class:`~berny.Logger`
     :param params: parameters that override the :py:data:`~berny.berny.defaults`
 
-    The coroutine is to be used as follows::
+    The Berny object is to be used as follows::
 
         optimizer = Berny(geom)
         for geom in optimizer:
             # calculate energy and gradients (as N-by-3 matrix)
             debug = optimizer.send((energy, gradients))
     """
-    log = log or Logger(verbosity=verbosity or 0)
-    algo = BernyAlgo(geom, params)
-    if restart:
-        algo.__dict__.update(restart)
-    else:
-        algo.init(log=log)
-    for _ in range(maxsteps):
-        log.n += 1
-        energy, gradients = yield algo.geom
-        converged = algo.step(energy, gradients, log=log)
-        if debug:
-            yield vars(algo).copy()
-        else:
-            yield
-        if converged:
-            break
-    else:
-        log('Maximum number of steps reached')
 
+    class State(object):
+        pass
 
-def no_log(msg, **kwargs):
-    pass
-
-
-class BernyAlgo(object):
-    def __init__(self, geom, params):
-        self.geom = geom
-        self.params = dict(chain(defaults.items(), params.items()))
-
-    def init(s, log=no_log):
+    def __init__(self, geom, log=None, debug=False, restart=None, maxsteps=100,
+                 verbosity=None, **params):
+        self._log = log or Logger(verbosity=verbosity or 0)
+        self._debug = debug
+        self._maxsteps = maxsteps
+        self._converged = False
+        self._n = 0
+        s = self._state = Berny.State()
+        if restart:
+            vars(s).update(restart)
+            return
+        s.geom = geom
+        s.params = dict(chain(defaults.items(), params.items()))
         s.trust = s.params['trust']
         s.coords = InternalCoords(
             s.geom,
@@ -103,11 +95,22 @@ class BernyAlgo(object):
         s.H = s.coords.hessian_guess(s.geom)
         s.weights = s.coords.weights(s.geom)
         for line in str(s.coords).split('\n'):
-            log(line)
+            self._log(line)
         s.future = PESPoint(s.coords.eval_geom(s.geom), None, None)
         s.first = True
 
-    def step(s, energy, gradients, log=no_log):
+    def __next__(self):
+        assert self._n <= self._maxsteps
+        if self._n == self._maxsteps or self._converged:
+            raise StopIteration
+        self._n += 1
+        return self._state.geom
+
+    def send(self, energy_gradients):
+        log = self._log
+        log.n = self._n
+        s = self._state
+        energy, gradients = energy_gradients
         gradients = np.array(gradients)
         log('Energy: {:.12}'.format(energy), level=1)
         B = s.coords.B_matrix(s.geom)
@@ -146,14 +149,24 @@ class BernyAlgo(object):
             s.geom, current.q, s.predicted.q-current.q, B_inv, log=log
         )
         s.future = PESPoint(q, None, None)
-        converged = is_converged(
+        self._converged = is_converged(
             gradients, s.future.q-current.q, on_sphere, s.params, log=log
         )
         s.previous = current
         if s.first or current.E < s.best.E:
             s.best = current
         s.first = False
-        return converged
+        if self._n == self._maxsteps:
+            log('Maximum number of steps reached')
+        if self._debug:
+            return vars(s).copy()
+
+    def throw(self, *args, **kwargs):
+        return Generator.close(self, *args, **kwargs)
+
+
+def no_log(msg, **kwargs):
+    pass
 
 
 def update_hessian(H, dq, dg, log=no_log):
