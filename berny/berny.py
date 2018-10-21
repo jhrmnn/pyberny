@@ -45,8 +45,6 @@ defaults = {
     Form dihedral angles containing two or more noncovalent bonds.
 """
 
-PESPoint = namedtuple('PESPoint', 'q E g')
-
 
 class Berny(Generator):
     """
@@ -56,7 +54,8 @@ class Berny(Generator):
     :param Logger log: used for logging if given
     :param bool debug: if True, the generator yields debug info on receiving
         the energy and gradients, otherwise it yields None
-    :param dict restart: start from a state saved from previous run using ``debug=True``
+    :param dict restart: start from a state saved from previous run
+        using ``debug=True``
     :param int maxsteps: abort after maximum number of steps
     :param int verbosity: if present and log is None, specifies the verbosity of
         the default :py:class:`~berny.Logger`
@@ -72,6 +71,8 @@ class Berny(Generator):
 
     class State(object):
         pass
+
+    Point = namedtuple('Point', 'q E g')
 
     def __init__(self, geom, log=None, debug=False, restart=None, maxsteps=100,
                  verbosity=None, **params):
@@ -96,7 +97,7 @@ class Berny(Generator):
         s.weights = s.coords.weights(s.geom)
         for line in str(s.coords).split('\n'):
             self._log(line)
-        s.future = PESPoint(s.coords.eval_geom(s.geom), None, None)
+        s.future = Berny.Point(s.coords.eval_geom(s.geom), None, None)
         s.first = True
 
     def __next__(self):
@@ -115,7 +116,9 @@ class Berny(Generator):
         log('Energy: {:.12}'.format(energy), level=1)
         B = s.coords.B_matrix(s.geom)
         B_inv = B.T.dot(Math.pinv(np.dot(B, B.T), log=log))
-        current = PESPoint(s.future.q, energy, dot(B_inv.T, gradients.reshape(-1)))
+        current = Berny.Point(
+            s.future.q, energy, dot(B_inv.T, gradients.reshape(-1))
+        )
         if not s.first:
             s.H = update_hessian(
                 s.H, current.q-s.best.q, current.g-s.best.g, log=log
@@ -132,7 +135,9 @@ class Berny(Generator):
                 current.E, s.best.E, dot(current.g, dq), dot(s.best.g, dq),
                 log=log
             )
-            s.interpolated = PESPoint(current.q+t*dq, E, t*s.best.g+(1-t)*current.g)
+            s.interpolated = Berny.Point(
+                current.q+t*dq, E, t*s.best.g+(1-t)*current.g
+            )
         else:
             s.interpolated = current
         if s.trust < 1e-6:
@@ -142,20 +147,22 @@ class Berny(Generator):
         dq, dE, on_sphere = quadratic_step(
             dot(proj, s.interpolated.g), H_proj, s.weights, s.trust, log=log
         )
-        s.predicted = PESPoint(s.interpolated.q+dq, s.interpolated.E+dE, None)
+        s.predicted = Berny.Point(s.interpolated.q+dq, s.interpolated.E+dE, None)
         dq = s.predicted.q-current.q
-        log('Total step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
+        log('Total step: RMS: {:.3}, max: {:.3}'.format(
+            Math.rms(dq), max(abs(dq))
+        ))
         q, s.geom = s.coords.update_geom(
             s.geom, current.q, s.predicted.q-current.q, B_inv, log=log
         )
-        s.future = PESPoint(q, None, None)
-        self._converged = is_converged(
-            gradients, s.future.q-current.q, on_sphere, s.params, log=log
-        )
+        s.future = Berny.Point(q, None, None)
         s.previous = current
         if s.first or current.E < s.best.E:
             s.best = current
         s.first = False
+        self._converged = is_converged(
+            gradients, s.future.q-current.q, on_sphere, s.params, log=log
+        )
         if self._n == self._maxsteps:
             log('Maximum number of steps reached')
         if self._debug:
