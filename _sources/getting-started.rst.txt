@@ -20,13 +20,14 @@ The Python API consists of coroutine :py:func:`~berny.Berny` and function
    for geom in optimizer:
        energy, gradients = solver(geom)
        optimizer.send((energy, gradients))
+    relaxed = geom
 
-or::
+or equivalently::
 
-   from berny import optimize, geomlib
+   from berny import Berny, geomlib, optimize
    from berny.solvers import MopacSolver
 
-   relaxed = optimize(MopacSolver(), geomlib.readfile('start.xyz'))
+   relaxed = optimize(Berny(geomlib.readfile('start.xyz')), MopacSolver())
 
 A different option is to use the package via a command-line or socket
 interface defined in ``berny``::

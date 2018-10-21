@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>API &#8212; berny 0.3.5 documentation</title>
+    <title>API &#8212; berny 0.4.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -38,8 +38,8 @@
 <p>This covers all supported public API.</p>
 <span class="target" id="module-berny"></span><dl class="function">
 <dt id="berny.Berny">
-<code class="descclassname">berny.</code><code class="descname">Berny</code><span class="sig-paren">(</span><em>geom</em>, <em>log=None</em>, <em>debug=False</em>, <em>restart=None</em>, <em>maxsteps=100</em>, <em>verbosity=None</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/core.html#Berny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Berny" title="Permalink to this definition">¶</a></dt>
-<dd><p>Coroutine that receives energy and gradients and yields the next geometry.</p>
+<code class="descclassname">berny.</code><code class="descname">Berny</code><span class="sig-paren">(</span><em>geom</em>, <em>log=None</em>, <em>debug=False</em>, <em>restart=None</em>, <em>maxsteps=100</em>, <em>verbosity=None</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/berny.html#Berny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Berny" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator that receives energy and gradients and yields the next geometry.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -49,17 +49,18 @@
 <li><strong>log</strong> (<a class="reference internal" href="#berny.Logger" title="berny.Logger"><em>Logger</em></a>) – used for logging if given</li>
 <li><strong>debug</strong> (<em>bool</em>) – if True, the generator yields debug info on receiving
 the energy and gradients, otherwise it yields None</li>
-<li><strong>restart</strong> (<em>dict</em>) – start from a state saved from previous run using <code class="docutils literal notranslate"><span class="pre">debug=True</span></code></li>
+<li><strong>restart</strong> (<em>dict</em>) – start from a state saved from previous run
+using <code class="docutils literal notranslate"><span class="pre">debug=True</span></code></li>
 <li><strong>maxsteps</strong> (<em>int</em>) – abort after maximum number of steps</li>
 <li><strong>verbosity</strong> (<em>int</em>) – if present and log is None, specifies the verbosity of
 the default <a class="reference internal" href="#berny.Logger" title="berny.Logger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Logger</span></code></a></li>
-<li><strong>params</strong> – parameters that override the <a class="reference internal" href="#berny.core.defaults" title="berny.core.defaults"><code class="xref py py-data docutils literal notranslate"><span class="pre">defaults</span></code></a></li>
+<li><strong>params</strong> – parameters that override the <a class="reference internal" href="#berny.berny.defaults" title="berny.berny.defaults"><code class="xref py py-data docutils literal notranslate"><span class="pre">defaults</span></code></a></li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The coroutine is to be used as follows:</p>
+<p>The Berny object is to be used as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">Berny</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">geom</span> <span class="ow">in</span> <span class="n">optimizer</span><span class="p">:</span>
     <span class="c1"># calculate energy and gradients (as N-by-3 matrix)</span>
@@ -69,8 +70,8 @@ the default <a class="reference internal" href="#berny.Logger" title="berny.Logg
 </dd></dl>
 
 <dl class="data">
-<dt id="berny.core.defaults">
-<code class="descclassname">berny.core.</code><code class="descname">defaults</code><em class="property"> = {'dihedral': True, 'gradientmax': 0.00045, 'gradientrms': 0.0003, 'stepmax': 0.0018, 'steprms': 0.0012, 'superweakdih': False, 'trust': 0.3}</em><a class="headerlink" href="#berny.core.defaults" title="Permalink to this definition">¶</a></dt>
+<dt id="berny.berny.defaults">
+<code class="descclassname">berny.berny.</code><code class="descname">defaults</code><em class="property"> = {'dihedral': True, 'gradientmax': 0.00045, 'gradientrms': 0.0003, 'stepmax': 0.0018, 'steprms': 0.0012, 'superweakdih': False, 'trust': 0.3}</em><a class="headerlink" href="#berny.berny.defaults" title="Permalink to this definition">¶</a></dt>
 <dd><ul class="simple">
 <li><dl class="first docutils">
 <dt>gradientmax, gradientrms, stepmax, steprms:</dt>
@@ -105,31 +106,31 @@ quadratic step (see below).</dd>
 
 <dl class="function">
 <dt id="berny.optimize">
-<code class="descclassname">berny.</code><code class="descname">optimize</code><span class="sig-paren">(</span><em>solver</em>, <em>geom</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/core.html#optimize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.optimize" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">berny.</code><code class="descname">optimize</code><span class="sig-paren">(</span><em>optimizer</em>, <em>solver</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/optimizers.html#optimize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.optimize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optimize a geometry with respect to a solver.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>optimizer</strong> (<em>generator</em>) – Optimizer object with the same generator interface
+as <a class="reference internal" href="#berny.Berny" title="berny.Berny"><code class="xref py py-func docutils literal notranslate"><span class="pre">berny.Berny()</span></code></a></li>
 <li><strong>solver</strong> (<em>generator</em>) – unprimed generator that receives geometry as a
 2-tuple of a list of 2-tuples of the atom symbol and coordinate (as a
 3-tuple), and of a list of lattice vectors (or None if molecule), and
-yields the energy and gradients (as a <em>N</em>-by-3 matrix or (<a href="#id1"><span class="problematic" id="id2">*</span></a>N*+3)-by-3
+yields the energy and gradients (as a N-by-3 matrix or (N+3)-by-3
 matrix in case of a crystal geometry)</li>
-<li><strong>geom</strong> (<a class="reference internal" href="#berny.Geometry" title="berny.Geometry"><em>Geometry</em></a>) – geometry to optimize</li>
-<li><strong>kwargs</strong> – these are handed over to <a class="reference internal" href="#berny.Berny" title="berny.Berny"><code class="xref py py-func docutils literal notranslate"><span class="pre">Berny()</span></code></a></li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
 <p>Returns the optimized geometry.</p>
-<p>Inside the function, the solver is used as follows:</p>
+<p>The function is equivalent to:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">next</span><span class="p">(</span><span class="n">solver</span><span class="p">)</span>
-<span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="nb">list</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span> <span class="n">geom</span><span class="o">.</span><span class="n">lattce</span><span class="p">))</span>
-<span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="nb">list</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span> <span class="n">geom</span><span class="o">.</span><span class="n">lattce</span><span class="p">))</span>
-<span class="o">...</span>
+<span class="k">for</span> <span class="n">geom</span> <span class="ow">in</span> <span class="n">optimizer</span><span class="p">:</span>
+    <span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="nb">list</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span> <span class="n">geom</span><span class="o">.</span><span class="n">lattice</span><span class="p">))</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>

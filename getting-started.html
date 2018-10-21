@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Getting started &#8212; berny 0.3.5 documentation</title>
+    <title>Getting started &#8212; berny 0.4.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -52,13 +52,14 @@
 <span class="k">for</span> <span class="n">geom</span> <span class="ow">in</span> <span class="n">optimizer</span><span class="p">:</span>
     <span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span> <span class="o">=</span> <span class="n">solver</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span><span class="p">))</span>
+ <span class="n">relaxed</span> <span class="o">=</span> <span class="n">geom</span>
 </pre></div>
 </div>
-<p>or:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">berny</span> <span class="k">import</span> <span class="n">optimize</span><span class="p">,</span> <span class="n">geomlib</span>
+<p>or equivalently:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">berny</span> <span class="k">import</span> <span class="n">Berny</span><span class="p">,</span> <span class="n">geomlib</span><span class="p">,</span> <span class="n">optimize</span>
 <span class="kn">from</span> <span class="nn">berny.solvers</span> <span class="k">import</span> <span class="n">MopacSolver</span>
 
-<span class="n">relaxed</span> <span class="o">=</span> <span class="n">optimize</span><span class="p">(</span><span class="n">MopacSolver</span><span class="p">(),</span> <span class="n">geomlib</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="s1">&#39;start.xyz&#39;</span><span class="p">))</span>
+<span class="n">relaxed</span> <span class="o">=</span> <span class="n">optimize</span><span class="p">(</span><span class="n">Berny</span><span class="p">(</span><span class="n">geomlib</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="s1">&#39;start.xyz&#39;</span><span class="p">)),</span> <span class="n">MopacSolver</span><span class="p">())</span>
 </pre></div>
 </div>
 <p>A different option is to use the package via a command-line or socket

@@ -7,7 +7,7 @@ This covers all supported public API.
 
 .. autofunction:: Berny
 
-.. autodata:: berny.core.defaults
+.. autodata:: berny.berny.defaults
 
 .. autodata:: berny.coords.angstrom
 
