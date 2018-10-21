@@ -55,7 +55,7 @@ def Berny(geom, log=None, debug=False, restart=None, maxsteps=100,
     :param int maxsteps: abort after maximum number of steps
     :param int verbosity: if present and log is None, specifies the verbosity of
         the default :py:class:`~berny.Logger`
-    :param params: parameters that override the :py:data:`~berny.core.defaults`
+    :param params: parameters that override the :py:data:`~berny.berny.defaults`
 
     The coroutine is to be used as follows::
 
@@ -154,34 +154,6 @@ class BernyAlgo(object):
             s.best = current
         s.first = False
         return converged
-
-
-def optimize(optimizer, solver):
-    """
-    Optimize a geometry with respect to a solver.
-
-    :param optimizer: Optimizer object with the same generator-like interface
-        as :py:func:`Berny`
-    :param generator solver: unprimed generator that receives geometry as a
-        2-tuple of a list of 2-tuples of the atom symbol and coordinate (as a
-        3-tuple), and of a list of lattice vectors (or None if molecule), and
-        yields the energy and gradients (as a N-by-3 matrix or (N+3)-by-3
-        matrix in case of a crystal geometry)
-
-    Returns the optimized geometry.
-
-    The function is equivalent to::
-
-        next(solver)
-        for geom in optimizer:
-            energy, gradients = solver.send((list(geom), geom.lattice))
-            optimizer.send((energy, gradients))
-    """
-    next(solver)
-    for geom in optimizer:
-        energy, gradients = solver.send((list(geom), geom.lattice))
-        optimizer.send((energy, gradients))
-    return geom
 
 
 def update_hessian(H, dq, dg, log=no_log):
