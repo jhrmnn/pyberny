@@ -12,6 +12,8 @@ from . import Math
 from .coords import InternalCoords
 from .Logger import Logger
 
+__version__ = '0.1.0'
+
 defaults = {
     'gradientmax': 0.45e-3,
     'gradientrms': 0.3e-3,

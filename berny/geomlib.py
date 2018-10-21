@@ -11,6 +11,8 @@ from numpy.linalg import inv, norm
 
 from .species_data import get_property
 
+__version__ = '0.1.0'
+
 
 class Geometry(object):
     """
