@@ -237,7 +237,7 @@ def quadratic_step(g, H, w, trust, log=no_log):
             return norm(np.linalg.solve(l*eye(H.shape[0])-H, g))-trust
         l = Math.findroot(steplength, ev[0])  # minimization on sphere
         dq = np.linalg.solve(l*eye(H.shape[0])-H, g)
-        on_sphere = False
+        on_sphere = True
         log('Minimization on sphere was performed:')
     dE = dot(g, dq)+0.5*dq.dot(H).dot(dq)  # predicted energy change
     log('* Trust radius: {:.2}'.format(trust))
@@ -268,8 +268,7 @@ def is_converged(forces, step, on_sphere, params, log=no_log):
             result = crit[1] < crit[2]
             msg = '{:.3} {} {:.3}'.format(crit[1], '<' if result else '>', crit[2])
         else:
-            result = crit[2]
-            msg = None
+            msg, result = crit
         msg = '{}: {}'.format(crit[0], msg) if msg else crit[0]
         msg = '* {} => {}'.format(msg, 'OK' if result else 'no')
         log(msg)
