@@ -19,7 +19,7 @@ def berny_unpickled(berny=None):
             berny = pickle.load(f)
     try:
         yield berny
-    except:
+    except Exception:
         raise
     with open(picklefile, 'wb') as f:
         pickle.dump(berny, f)
@@ -87,8 +87,10 @@ def main():
     parser = ArgumentParser()
     arg = parser.add_argument
     arg('--init', action='store_true', help='Initialize Berny optimizer.')
-    arg('-f', '--format', choices=['xyz', 'aims'], default='xyz', help='Format of geometry')
-    arg('-s', '--socket', nargs=2, metavar=('host', 'port'), help='Listen on given address')
+    arg('-f', '--format', choices=['xyz', 'aims'], default='xyz',
+        help='Format of geometry')
+    arg('-s', '--socket', nargs=2, metavar=('host', 'port'),
+        help='Listen on given address')
     arg('paramfile', nargs='?', help='Optional optimization parameters as JSON')
     args = parser.parse_args()
     if args.init:

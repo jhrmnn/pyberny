@@ -21,4 +21,4 @@ class Generator(object):
         except (GeneratorExit, StopIteration):
             pass
         else:
-            raise RuntimeError("generator ignored GeneratorExit")
+            raise RuntimeError('generator ignored GeneratorExit')

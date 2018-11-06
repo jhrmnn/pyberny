@@ -33,6 +33,9 @@ doc = ["sphinx", "toml"]
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.5"
+flake8-bugbear = { version = "^18.8", python = "^3.5" }
+flake8-comprehensions = "^1.4"
+flake8-quotes = "^1.0"
 
 [tool.poetry.scripts]
 berny = "berny.cli:main"

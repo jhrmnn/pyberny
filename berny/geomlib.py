@@ -213,7 +213,8 @@ class Geometry(object):
         r"""
         Calculates a measure of covalentness.
 
-        Returns :math:`\rho_{ij}:=\exp\big(-R_{ij}/(R_i^\text{cov}+R_j^\text{cov})\big)`.
+        Returns
+        :math:`\rho_{ij}:=\exp\big(-R_{ij}/(R_i^\text{cov}+R_j^\text{cov})\big)`.
         """
         geom = self.supercell()
         dist = geom.dist(geom)
@@ -234,8 +235,9 @@ class Geometry(object):
     @property
     def inertia(self):
         r"""Calculates the moment of inertia, :math:`I_{\alpha\beta}:=
-        \sum_im_i\big(r_i^2\delta_{\alpha\beta}-(\mathbf r_i)_\alpha(\mathbf r_i)_\beta\big)`
-        where :math:`\mathbf r_i=\mathbf R_i-\mathbf R_\text{CMS}`."""
+        \sum_im_i\big(r_i^2\delta_{\alpha\beta}-(\mathbf r_i)_\alpha(\mathbf
+        r_i)_\beta\big)` where :math:`\mathbf r_i=\mathbf R_i-\mathbf
+        R_\text{CMS}`."""
         coords_w = np.sqrt(self.masses)[:, None]*(self.coords-self.cms)
         A = np.array([np.diag(np.full(3, r)) for r in np.sum(coords_w**2, 1)])
         B = coords_w[:, :, None]*coords_w[:, None, :]

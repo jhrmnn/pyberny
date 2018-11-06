@@ -193,7 +193,7 @@ def get_clusters(C):
     nonassigned = list(range(len(C)))
     clusters = []
     while nonassigned:
-        queue = set([nonassigned[0]])
+        queue = {nonassigned[0]}
         clusters.append([])
         while queue:
             node = queue.pop()
@@ -330,7 +330,7 @@ class InternalCoords(object):
             coord for coord in self._coords
             if np.all(np.isin(coord.center(ijk), [0, -1]))
         ]
-        idxs = set(i for coord in self._coords for i in coord.idx)
+        idxs = {i for coord in self._coords for i in coord.idx}
         self.fragments = [frag for frag in self.fragments if set(frag) & idxs]
 
     def hessian_guess(self, geom):
@@ -383,17 +383,20 @@ def get_dihedrals(center, coords, bondmatrix, C, superweak=False):
     neigh_r = [n for n in np.flatnonzero(bondmatrix[center[-1], :]) if n not in center]
     angles_l = [Angle(i, center[0], center[1]).eval(coords) for i in neigh_l]
     angles_r = [Angle(center[-2], center[-1], j).eval(coords) for j in neigh_r]
-    nonlinear_l = [n for n, ang in zip(neigh_l, angles_l) if ang < pi-1e-3 and ang >= 1e-3]
-    nonlinear_r = [n for n, ang in zip(neigh_r, angles_r) if ang < pi-1e-3 and ang >= 1e-3]
+    nonlinear_l = [
+        n for n, ang in zip(neigh_l, angles_l) if ang < pi-1e-3 and ang >= 1e-3
+    ]
+    nonlinear_r = [
+        n for n, ang in zip(neigh_r, angles_r) if ang < pi-1e-3 and ang >= 1e-3
+    ]
     linear_l = [n for n, ang in zip(neigh_l, angles_l) if ang >= pi-1e-3 or ang < 1e-3]
     linear_r = [n for n, ang in zip(neigh_r, angles_r) if ang >= pi-1e-3 or ang < 1e-3]
     assert len(linear_l) <= 1
     assert len(linear_r) <= 1
     if center[0] < center[-1]:
-        nweak = len(list(
-            None for i in range(len(center)-1)
-            if not C[center[i], center[i+1]]
-        ))
+        nweak = len(
+            [None for i in range(len(center)-1) if not C[center[i], center[i+1]]]
+        )
         dihedrals = []
         for nl, nr in product(nonlinear_l, nonlinear_r):
             if nl == nr:
