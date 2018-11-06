@@ -7,5 +7,5 @@
 /.cache/
 /.tox/
 /htmlcov/
-/pyproject.lock
+/poetry.lock
 /setup.py
