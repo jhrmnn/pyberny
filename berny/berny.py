@@ -95,10 +95,10 @@ class Berny(Generator):
         )
         s.H = s.coords.hessian_guess(s.geom)
         s.weights = s.coords.weights(s.geom)
-        for line in str(s.coords).split('\n'):
-            self._log(line)
         s.future = Berny.Point(s.coords.eval_geom(s.geom), None, None)
         s.first = True
+        for line in str(s.coords).split('\n'):
+            self._log(line)
 
     def __next__(self):
         assert self._n <= self._maxsteps

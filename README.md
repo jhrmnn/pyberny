@@ -1,4 +1,4 @@
-# `berny` — Molecular optimizer
+# Berny
 
 [![build](https://img.shields.io/travis/azag0/pyberny/master.svg)](https://travis-ci.org/azag0/pyberny)
 [![coverage](https://img.shields.io/codecov/c/github/azag0/pyberny.svg)](https://codecov.io/gh/azag0/pyberny)
@@ -8,9 +8,9 @@
 [![last commit](https://img.shields.io/github/last-commit/azag0/pyberny.svg)](https://github.com/azag0/pyberny/commits/master)
 [![license](https://img.shields.io/github/license/azag0/pyberny.svg)](https://github.com/azag0/pyberny/blob/master/LICENSE)
 
-This Python 2/3 package can optimize molecular and crystal structures with respect to total energy, using nuclear gradient information.
+Berny is an optimizer of molecular and crystal geometries with respect to the total energy, using nuclear gradient information.
 
-In each step, it takes energy and Cartesian gradients as an input, and returns a new structure estimate.
+In each step, it takes energy and Cartesian gradients as an input, and returns a new equilibrium structure estimate.
 
 The algorithm is an amalgam of several techniques, comprising redundant internal coordinates, iterative Hessian estimate, trust region, line search, and coordinate weighing, mostly inspired by the optimizer in the [Gaussian](http://gaussian.com) program.
 
