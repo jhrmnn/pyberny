@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyberny"
-version = "0.4.1"
+version = "0.4.2"
 description = "Molecular/crystal structure optimizer"
 readme = "README.md"
 authors = ["Jan Hermann <dev@janhermann.cz>"]

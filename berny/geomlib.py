@@ -207,7 +207,7 @@ class Geometry(object):
         """
         dist = self.dist(self)
         radii = np.array([get_property(sp, 'covalent_radius') for sp in self.species])
-        return dist < 1.3*(radii[None, :]+radii[:, None])
+        return dist < scale*(radii[None, :]+radii[:, None])
 
     def rho(self):
         r"""
