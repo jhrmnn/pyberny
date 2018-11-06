@@ -169,7 +169,7 @@ class Berny(Generator):
             return vars(s).copy()
 
     def throw(self, *args, **kwargs):
-        return Generator.close(self, *args, **kwargs)
+        return Generator.throw(self, *args, **kwargs)
 
 
 def no_log(msg, **kwargs):
