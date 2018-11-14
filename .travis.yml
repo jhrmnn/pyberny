@@ -1,4 +1,5 @@
 language: python
+dist: xenial
 matrix:
   include:
     - python: 2.7
@@ -11,8 +12,6 @@ matrix:
       env: TOXENV=py36
     - python: 3.7
       env: TOXENV=py37-coverage-codecov
-      dist: xenial
-      sudo: required
     - python: 3.6
       stage: deploy
       env: TOXENV=docs
