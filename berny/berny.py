@@ -22,7 +22,7 @@ __version__ = '0.2.1'
 
 defaults = {
     'gradientmax': 0.45e-3,
-    'gradientrms': 0.3e-3,
+    'gradientrms': 0.15e-3,
     'stepmax': 1.8e-3,
     'steprms': 1.2e-3,
     'trust': 0.3,
