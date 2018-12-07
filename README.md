@@ -8,11 +8,13 @@
 [![last commit](https://img.shields.io/github/last-commit/azag0/pyberny.svg)](https://github.com/azag0/pyberny/commits/master)
 [![license](https://img.shields.io/github/license/azag0/pyberny.svg)](https://github.com/azag0/pyberny/blob/master/LICENSE)
 
-Berny is an optimizer of molecular and crystal geometries with respect to the total energy, using nuclear gradient information.
+Berny is an optimizer of molecular geometries with respect to the total energy, using nuclear gradient information.
 
 In each step, it takes energy and Cartesian gradients as an input, and returns a new equilibrium structure estimate.
 
-The algorithm is an amalgam of several techniques, comprising redundant internal coordinates, iterative Hessian estimate, trust region, line search, and coordinate weighing, mostly inspired by the optimizer in the [Gaussian](http://gaussian.com) program.
+The package implements a single optimization algorithm, which is an amalgam of several techniques, comprising the quasi-Newton method, redundant internal coordinates, an iterative Hessian approximation, a trust region scheme, and linear search. The algorithm is described in more detailed in the [documentation](https://azag0.github.io/pyberny/algorithm.html).
+
+Several desirable features are missing at the moment but planned, some of them being actively worked on (help is always welcome): [crystal geometries](https://github.com/azag0/pyberny/issues/5), [coordinate constraints](https://github.com/azag0/pyberny/issues/14), [coordinate weighting](https://github.com/azag0/pyberny/issues/32), [transition state search](https://github.com/azag0/pyberny/issues/4).
 
 ## Installing
 
