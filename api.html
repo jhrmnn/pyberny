@@ -71,7 +71,7 @@ the default <a class="reference internal" href="#berny.Logger" title="berny.Logg
 
 <dl class="data">
 <dt id="berny.berny.defaults">
-<code class="descclassname">berny.berny.</code><code class="descname">defaults</code><em class="property"> = {'dihedral': True, 'gradientmax': 0.00045, 'gradientrms': 0.0003, 'stepmax': 0.0018, 'steprms': 0.0012, 'superweakdih': False, 'trust': 0.3}</em><a class="headerlink" href="#berny.berny.defaults" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">berny.berny.</code><code class="descname">defaults</code><em class="property"> = {'dihedral': True, 'gradientmax': 0.00045, 'gradientrms': 0.00015, 'stepmax': 0.0018, 'steprms': 0.0012, 'superweakdih': False, 'trust': 0.3}</em><a class="headerlink" href="#berny.berny.defaults" title="Permalink to this definition">¶</a></dt>
 <dd><ul class="simple">
 <li><dl class="first docutils">
 <dt>gradientmax, gradientrms, stepmax, steprms:</dt>
@@ -106,7 +106,7 @@ quadratic step (see below).</dd>
 
 <dl class="function">
 <dt id="berny.optimize">
-<code class="descclassname">berny.</code><code class="descname">optimize</code><span class="sig-paren">(</span><em>optimizer</em>, <em>solver</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/optimizers.html#optimize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.optimize" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">berny.</code><code class="descname">optimize</code><span class="sig-paren">(</span><em>optimizer</em>, <em>solver</em>, <em>trajectory=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/optimizers.html#optimize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.optimize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optimize a geometry with respect to a solver.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -120,6 +120,7 @@ as <a class="reference internal" href="#berny.Berny" title="berny.Berny"><code c
 3-tuple), and of a list of lattice vectors (or None if molecule), and
 yields the energy and gradients (as a N-by-3 matrix or (N+3)-by-3
 matrix in case of a crystal geometry)</li>
+<li><strong>trajectory</strong> (<em>str</em>) – filename for the XYZ trajectory</li>
 </ul>
 </td>
 </tr>
