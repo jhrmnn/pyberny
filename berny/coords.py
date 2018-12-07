@@ -379,18 +379,23 @@ class InternalCoords(object):
 
 
 def get_dihedrals(center, coords, bondmatrix, C, superweak=False):
+    lin_thre = 5*pi/180
     neigh_l = [n for n in np.flatnonzero(bondmatrix[center[0], :]) if n not in center]
     neigh_r = [n for n in np.flatnonzero(bondmatrix[center[-1], :]) if n not in center]
     angles_l = [Angle(i, center[0], center[1]).eval(coords) for i in neigh_l]
     angles_r = [Angle(center[-2], center[-1], j).eval(coords) for j in neigh_r]
     nonlinear_l = [
-        n for n, ang in zip(neigh_l, angles_l) if ang < pi-1e-3 and ang >= 1e-3
+        n for n, ang in zip(neigh_l, angles_l) if ang < pi-lin_thre and ang >= lin_thre
     ]
     nonlinear_r = [
-        n for n, ang in zip(neigh_r, angles_r) if ang < pi-1e-3 and ang >= 1e-3
+        n for n, ang in zip(neigh_r, angles_r) if ang < pi-lin_thre and ang >= lin_thre
     ]
-    linear_l = [n for n, ang in zip(neigh_l, angles_l) if ang >= pi-1e-3 or ang < 1e-3]
-    linear_r = [n for n, ang in zip(neigh_r, angles_r) if ang >= pi-1e-3 or ang < 1e-3]
+    linear_l = [
+        n for n, ang in zip(neigh_l, angles_l) if ang >= pi-lin_thre or ang < lin_thre
+    ]
+    linear_r = [
+        n for n, ang in zip(neigh_r, angles_r) if ang >= pi-lin_thre or ang < lin_thre
+    ]
     assert len(linear_l) <= 1
     assert len(linear_r) <= 1
     if center[0] < center[-1]:

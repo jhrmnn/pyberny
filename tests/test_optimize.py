@@ -23,6 +23,11 @@ def aniline():
     return geomlib.readfile(resource_filename('tests', 'aniline.xyz'))
 
 
+@pytest.fixture
+def cyanogen():
+    return geomlib.readfile(resource_filename('tests', 'cyanogen.xyz'))
+
+
 def test_ethanol(mopac, ethanol):
     berny = Berny(ethanol, steprms=0.01, stepmax=0.05, maxsteps=5)
     final = optimize(berny, mopac)
@@ -35,3 +40,10 @@ def test_aniline(mopac, aniline):
     final = optimize(berny, mopac)
     inertia_princpl = np.linalg.eigvalsh(final.inertia)
     assert inertia_princpl == approx([90.94, 193.1, 283.9], rel=1e-3)
+
+
+def test_cyanogen(mopac, cyanogen):
+    berny = Berny(cyanogen, steprms=0.01, stepmax=0.05, maxsteps=4)
+    final = optimize(berny, mopac)
+    inertia_princpl = np.linalg.eigvalsh(final.inertia)
+    assert inertia_princpl == approx([0, 107.5, 107.5], rel=1e-3, abs=1e-3)
