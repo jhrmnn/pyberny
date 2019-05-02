@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Algorithm &#8212; berny 0.4.2 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,7 +11,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API" href="api.html" />
@@ -37,50 +36,50 @@
   <div class="section" id="algorithm">
 <h1>Algorithm<a class="headerlink" href="#algorithm" title="Permalink to this headline">¶</a></h1>
 <p>The optimization algorithm implemented in Berny loosely follows the
-“standard method” (SM) described in the appendix of <a class="reference internal" href="#birkholztca16" id="id1">[BirkholzTCA16]</a>. What
+“standard method” (SM) described in the appendix of <a class="reference internal" href="#birkholztca16" id="id1"><span>[BirkholzTCA16]</span></a>. What
 follows is a summary of that method, more detailed specification when
 necessary, and description of any deviations.</p>
 <div class="admonition-todo admonition" id="index-0">
-<p class="first admonition-title">Todo</p>
-<p class="last">Make the algorithm <a class="reference external" href="https://github.com/azag0/pyberny/issues/29">fully conform</a> to the SM.</p>
+<p class="admonition-title">Todo</p>
+<p>Make the algorithm <a class="reference external" href="https://github.com/azag0/pyberny/issues/29">fully conform</a> to the SM.</p>
 </div>
 <div class="section" id="sketch-of-the-algorithm">
 <h2>Sketch of the algorithm<a class="headerlink" href="#sketch-of-the-algorithm" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Form <a class="reference internal" href="#redundant-internal-coordinates">redundant internal coordinates</a>.</li>
-<li>Form a diagonal Hessian guess <a class="reference internal" href="#swartijqc06" id="id2">[SwartIJQC06]</a>.</li>
-<li>Obtain energy and Cartesian gradients for the current geometry.</li>
-<li>Form the Wilson <strong>B</strong> matrix and its <a class="reference internal" href="#generalized-inverse">generalized inverse</a>.</li>
-<li>Update the Hessian using the BFGS scheme.</li>
-<li>Update trust region (Eq. 5.1.6 of <a class="reference internal" href="#fletcher00" id="id3">[Fletcher00]</a>).</li>
-<li>Perform linear search (Gaussian <a class="reference external" href="http://gaussian.com/opt/">website</a>,
-section Examples, “If a minimum is sought…”). (Not in the SM.)</li>
-<li>Project to a nonredundant subspace <a class="reference internal" href="#pengjcc96" id="id4">[PengJCC96]</a>.</li>
-<li>Perform a quadratic RFO step <a class="reference internal" href="#banerjeejpc85" id="id5">[BanerjeeJPC85]</a>.</li>
-<li>Transform back to Cartesian coordinates <a class="reference internal" href="#pengjcc96" id="id6">[PengJCC96]</a>.</li>
-<li>If convergence is not reached (criteria from the SM), go to 3.</li>
+<li><p>Form <a class="reference internal" href="#redundant-internal-coordinates">redundant internal coordinates</a>.</p></li>
+<li><p>Form a diagonal Hessian guess <a class="reference internal" href="#swartijqc06" id="id2"><span>[SwartIJQC06]</span></a>.</p></li>
+<li><p>Obtain energy and Cartesian gradients for the current geometry.</p></li>
+<li><p>Form the Wilson <strong>B</strong> matrix and its <a class="reference internal" href="#generalized-inverse">generalized inverse</a>.</p></li>
+<li><p>Update the Hessian using the BFGS scheme.</p></li>
+<li><p>Update trust region (Eq. 5.1.6 of <a class="reference internal" href="#fletcher00" id="id3"><span>[Fletcher00]</span></a>).</p></li>
+<li><p>Perform linear search (Gaussian <a class="reference external" href="http://gaussian.com/opt/">website</a>,
+section Examples, “If a minimum is sought…”). (Not in the SM.)</p></li>
+<li><p>Project to a nonredundant subspace <a class="reference internal" href="#pengjcc96" id="id4"><span>[PengJCC96]</span></a>.</p></li>
+<li><p>Perform a quadratic RFO step <a class="reference internal" href="#banerjeejpc85" id="id5"><span>[BanerjeeJPC85]</span></a>.</p></li>
+<li><p>Transform back to Cartesian coordinates <a class="reference internal" href="#pengjcc96" id="id6"><span>[PengJCC96]</span></a>.</p></li>
+<li><p>If convergence is not reached (criteria from the SM), go to 3.</p></li>
 </ol>
 </div>
 <div class="section" id="redundant-internal-coordinates">
 <h2>Redundant internal coordinates<a class="headerlink" href="#redundant-internal-coordinates" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>All bonds shorter than 1.3 times the sum of covalent radii are created
-<a class="reference internal" href="#pengjcc96" id="id7">[PengJCC96]</a>.</li>
-<li>If there are unconnected fragments, all bonds between unconnected fragments
+<li><p>All bonds shorter than 1.3 times the sum of covalent radii are created
+<a class="reference internal" href="#pengjcc96" id="id7"><span>[PengJCC96]</span></a>.</p></li>
+<li><p>If there are unconnected fragments, all bonds between unconnected fragments
 shorter than the sum of van der Waals radii plus <em>d</em> are created, with <em>d</em>
 starting at 0 and increasing by 1 angstrom, until all fragments are
-connected (custom scheme by JH).</li>
-<li>All angles greater than 45° are created.</li>
-<li>All dihedrals with 1–2–3, 2–3–4 angles both greater than 45° are created. If
+connected (custom scheme by JH).</p></li>
+<li><p>All angles greater than 45° are created.</p></li>
+<li><p>All dihedrals with 1–2–3, 2–3–4 angles both greater than 45° are created. If
 one of the angles is zero, so that three atoms lie on a line, they are used
 as a new base for a dihedral. This process is recursively repeated
-<a class="reference internal" href="#pengjcc96" id="id8">[PengJCC96]</a>.</li>
-<li>In the case of a crystal, just the internal coordinate closest to the
-original unit cell is retained from all its periodic images.</li>
+<a class="reference internal" href="#pengjcc96" id="id8"><span>[PengJCC96]</span></a>.</p></li>
+<li><p>In the case of a crystal, just the internal coordinate closest to the
+original unit cell is retained from all its periodic images.</p></li>
 </ol>
 <div class="admonition-todo admonition" id="index-1">
-<p class="first admonition-title">Todo</p>
-<p class="last">Implement <a class="reference external" href="https://github.com/azag0/pyberny/issues/30">linear bends</a>.</p>
+<p class="admonition-title">Todo</p>
+<p>Implement <a class="reference external" href="https://github.com/azag0/pyberny/issues/30">linear bends</a>.</p>
 </div>
 </div>
 <div class="section" id="generalized-inverse">
@@ -96,47 +95,34 @@ several orders of magnitude smaller than the true nonzero values.</p>
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
-<table class="docutils citation" frame="void" id="birkholztca16" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[BirkholzTCA16]</a></td><td>Birkholz, A. B. &amp; Schlegel, H. B. Exploration of some
+<dl class="citation">
+<dt class="label" id="birkholztca16"><span class="brackets"><a class="fn-backref" href="#id1">BirkholzTCA16</a></span></dt>
+<dd><p>Birkholz, A. B. &amp; Schlegel, H. B. Exploration of some
 refinements to geometry optimization methods. Theor. Chem. Acc. 135, (2016).
-DOI: <a class="reference external" href="http://dx.doi.org/10.1007/s00214-016-1847-3">10.1007/s00214-016-1847-3</a></td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="pengjcc96" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label">[PengJCC96]</td><td><em>(<a class="fn-backref" href="#id4">1</a>, <a class="fn-backref" href="#id6">2</a>, <a class="fn-backref" href="#id7">3</a>, <a class="fn-backref" href="#id8">4</a>)</em> Peng, C., Ayala, P. Y., Schlegel, H. B. &amp; Frisch, M. J. Using
+DOI: <a class="reference external" href="http://dx.doi.org/10.1007/s00214-016-1847-3">10.1007/s00214-016-1847-3</a></p>
+</dd>
+<dt class="label" id="pengjcc96"><span class="brackets">PengJCC96</span><span class="fn-backref">(<a href="#id4">1</a>,<a href="#id6">2</a>,<a href="#id7">3</a>,<a href="#id8">4</a>)</span></dt>
+<dd><p>Peng, C., Ayala, P. Y., Schlegel, H. B. &amp; Frisch, M. J. Using
 redundant internal coordinates to optimize equilibrium geometries and
 transition states. J. Comput. Chem. 17, 49–56 (1996). DOI:
-<a class="reference external" href="https://doi.org/10.1002/(SICI)1096-987X(19960115)17:1&lt;49::AID-JCC5&gt;3.0.CO;2-0">10.1002/(SICI)1096-987X(19960115)17:1&lt;49::AID-JCC5&gt;3.0.CO;2-0</a></td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="swartijqc06" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[SwartIJQC06]</a></td><td>Swart, M. &amp; Bickelhaupt, F. M. Optimization of Strong and Weak
+<a class="reference external" href="https://doi.org/10.1002/(SICI)1096-987X(19960115)17:1&lt;49::AID-JCC5&gt;3.0.CO;2-0">10.1002/(SICI)1096-987X(19960115)17:1&lt;49::AID-JCC5&gt;3.0.CO;2-0</a></p>
+</dd>
+<dt class="label" id="swartijqc06"><span class="brackets"><a class="fn-backref" href="#id2">SwartIJQC06</a></span></dt>
+<dd><p>Swart, M. &amp; Bickelhaupt, F. M. Optimization of Strong and Weak
 Coordinates. Int. J. Quantum Chem. 106, 2536–2544 (2006). DOI:
-<a class="reference external" href="https://doi.org/10.1002/qua.21049">10.1002/qua.21049</a></td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="fletcher00" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[Fletcher00]</a></td><td>Fletcher, R. Practical Methods of Optimization. (Wiley, 2000).
+<a class="reference external" href="https://doi.org/10.1002/qua.21049">10.1002/qua.21049</a></p>
+</dd>
+<dt class="label" id="fletcher00"><span class="brackets"><a class="fn-backref" href="#id3">Fletcher00</a></span></dt>
+<dd><p>Fletcher, R. Practical Methods of Optimization. (Wiley, 2000).
 URL:
-<a class="reference external" href="https://www.wiley.com/en-us/Practical+Methods+of+Optimization%2C+2nd+Edition-p-9780471494638">https://www.wiley.com/en-us/Practical+Methods+of+Optimization%2C+2nd+Edition-p-9780471494638</a></td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="banerjeejpc85" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5">[BanerjeeJPC85]</a></td><td>Banerjee, A., Adams, N. &amp; Simons, J. Search for Stationary
+<a class="reference external" href="https://www.wiley.com/en-us/Practical+Methods+of+Optimization%2C+2nd+Edition-p-9780471494638">https://www.wiley.com/en-us/Practical+Methods+of+Optimization%2C+2nd+Edition-p-9780471494638</a></p>
+</dd>
+<dt class="label" id="banerjeejpc85"><span class="brackets"><a class="fn-backref" href="#id5">BanerjeeJPC85</a></span></dt>
+<dd><p>Banerjee, A., Adams, N. &amp; Simons, J. Search for Stationary
 Points on Surfaces. J. Phys. Chem. 57, 52–57 (1985). DOI:
-<a class="reference external" href="https://doi.org/10.1021/j100247a015">10.1021/j100247a015</a></td></tr>
-</tbody>
-</table>
+<a class="reference external" href="https://doi.org/10.1021/j100247a015">10.1021/j100247a015</a></p>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -217,8 +203,6 @@ Points on Surfaces. J. Phys. Chem. 57, 52–57 (1985). DOI:
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -228,10 +212,10 @@ Points on Surfaces. J. Phys. Chem. 57, 52–57 (1985). DOI:
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2017-2018, Jan Hermann.
+      &copy;2017-2019, Jan Hermann.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

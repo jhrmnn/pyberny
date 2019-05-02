@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>API &#8212; berny 0.4.2 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,7 +11,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Algorithm" href="algorithm.html" />
@@ -40,26 +39,22 @@
 <dt id="berny.Berny">
 <code class="descclassname">berny.</code><code class="descname">Berny</code><span class="sig-paren">(</span><em>geom</em>, <em>log=None</em>, <em>debug=False</em>, <em>restart=None</em>, <em>maxsteps=100</em>, <em>verbosity=None</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/berny.html#Berny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Berny" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generator that receives energy and gradients and yields the next geometry.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>geom</strong> (<em>Gometry</em>) – geometry to start with</li>
-<li><strong>log</strong> (<a class="reference internal" href="#berny.Logger" title="berny.Logger"><em>Logger</em></a>) – used for logging if given</li>
-<li><strong>debug</strong> (<em>bool</em>) – if True, the generator yields debug info on receiving
-the energy and gradients, otherwise it yields None</li>
-<li><strong>restart</strong> (<em>dict</em>) – start from a state saved from previous run
-using <code class="docutils literal notranslate"><span class="pre">debug=True</span></code></li>
-<li><strong>maxsteps</strong> (<em>int</em>) – abort after maximum number of steps</li>
-<li><strong>verbosity</strong> (<em>int</em>) – if present and log is None, specifies the verbosity of
-the default <a class="reference internal" href="#berny.Logger" title="berny.Logger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Logger</span></code></a></li>
-<li><strong>params</strong> – parameters that override the <a class="reference internal" href="#berny.berny.defaults" title="berny.berny.defaults"><code class="xref py py-data docutils literal notranslate"><span class="pre">defaults</span></code></a></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geom</strong> (<em>Gometry</em>) – geometry to start with</p></li>
+<li><p><strong>log</strong> (<a class="reference internal" href="#berny.Logger" title="berny.Logger"><em>Logger</em></a>) – used for logging if given</p></li>
+<li><p><strong>debug</strong> (<em>bool</em>) – if True, the generator yields debug info on receiving
+the energy and gradients, otherwise it yields None</p></li>
+<li><p><strong>restart</strong> (<em>dict</em>) – start from a state saved from previous run
+using <code class="docutils literal notranslate"><span class="pre">debug=True</span></code></p></li>
+<li><p><strong>maxsteps</strong> (<em>int</em>) – abort after maximum number of steps</p></li>
+<li><p><strong>verbosity</strong> (<em>int</em>) – if present and log is None, specifies the verbosity of
+the default <a class="reference internal" href="#berny.Logger" title="berny.Logger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Logger</span></code></a></p></li>
+<li><p><strong>params</strong> – parameters that override the <a class="reference internal" href="#berny.berny.defaults" title="berny.berny.defaults"><code class="xref py py-data docutils literal notranslate"><span class="pre">defaults</span></code></a></p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>The Berny object is to be used as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">Berny</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">geom</span> <span class="ow">in</span> <span class="n">optimizer</span><span class="p">:</span>
@@ -73,26 +68,26 @@ the default <a class="reference internal" href="#berny.Logger" title="berny.Logg
 <dt id="berny.berny.defaults">
 <code class="descclassname">berny.berny.</code><code class="descname">defaults</code><em class="property"> = {'dihedral': True, 'gradientmax': 0.00045, 'gradientrms': 0.00015, 'stepmax': 0.0018, 'steprms': 0.0012, 'superweakdih': False, 'trust': 0.3}</em><a class="headerlink" href="#berny.berny.defaults" title="Permalink to this definition">¶</a></dt>
 <dd><ul class="simple">
-<li><dl class="first docutils">
-<dt>gradientmax, gradientrms, stepmax, steprms:</dt>
-<dd>Convergence criteria in atomic units (“step” refers to the step in
-internal coordinates, assuming radian units for angles).</dd>
+<li><dl class="simple">
+<dt>gradientmax, gradientrms, stepmax, steprms:</dt><dd><p>Convergence criteria in atomic units (“step” refers to the step in
+internal coordinates, assuming radian units for angles).</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>trust:</dt>
-<dd>Initial trust radius in atomic units. It is the maximum RMS of the
-quadratic step (see below).</dd>
+<li><dl class="simple">
+<dt>trust:</dt><dd><p>Initial trust radius in atomic units. It is the maximum RMS of the
+quadratic step (see below).</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>dihedral:</dt>
-<dd>Form dihedral angles.</dd>
+<li><dl class="simple">
+<dt>dihedral:</dt><dd><p>Form dihedral angles.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>superweakdih:</dt>
-<dd>Form dihedral angles containing two or more noncovalent bonds.</dd>
+<li><dl class="simple">
+<dt>superweakdih:</dt><dd><p>Form dihedral angles containing two or more noncovalent bonds.</p>
+</dd>
 </dl>
 </li>
 </ul>
@@ -108,24 +103,20 @@ quadratic step (see below).</dd>
 <dt id="berny.optimize">
 <code class="descclassname">berny.</code><code class="descname">optimize</code><span class="sig-paren">(</span><em>optimizer</em>, <em>solver</em>, <em>trajectory=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/optimizers.html#optimize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.optimize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optimize a geometry with respect to a solver.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>optimizer</strong> (<em>generator</em>) – Optimizer object with the same generator interface
-as <a class="reference internal" href="#berny.Berny" title="berny.Berny"><code class="xref py py-func docutils literal notranslate"><span class="pre">berny.Berny()</span></code></a></li>
-<li><strong>solver</strong> (<em>generator</em>) – unprimed generator that receives geometry as a
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>optimizer</strong> (<em>generator</em>) – Optimizer object with the same generator interface
+as <a class="reference internal" href="#berny.Berny" title="berny.Berny"><code class="xref py py-func docutils literal notranslate"><span class="pre">berny.Berny()</span></code></a></p></li>
+<li><p><strong>solver</strong> (<em>generator</em>) – unprimed generator that receives geometry as a
 2-tuple of a list of 2-tuples of the atom symbol and coordinate (as a
 3-tuple), and of a list of lattice vectors (or None if molecule), and
 yields the energy and gradients (as a N-by-3 matrix or (N+3)-by-3
-matrix in case of a crystal geometry)</li>
-<li><strong>trajectory</strong> (<em>str</em>) – filename for the XYZ trajectory</li>
+matrix in case of a crystal geometry)</p></li>
+<li><p><strong>trajectory</strong> (<em>str</em>) – filename for the XYZ trajectory</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>Returns the optimized geometry.</p>
 <p>The function is equivalent to:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">next</span><span class="p">(</span><span class="n">solver</span><span class="p">)</span>
@@ -140,35 +131,27 @@ matrix in case of a crystal geometry)</li>
 <dt id="berny.Logger">
 <em class="property">class </em><code class="descclassname">berny.</code><code class="descname">Logger</code><span class="sig-paren">(</span><em>verbosity=None</em>, <em>out=None</em>, <em>regex=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/Logger.html#Logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Logger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Manages logging of information.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>verbosity</strong> (<em>int</em>) – verbosity level</li>
-<li><strong>out</strong> (<em>file</em>) – argument passed to <code class="docutils literal notranslate"><span class="pre">print(...,</span> <span class="pre">file)</span></code></li>
-<li><strong>regex</strong> (<em>str</em>) – log only messages that match regex</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>verbosity</strong> (<em>int</em>) – verbosity level</p></li>
+<li><p><strong>out</strong> (<em>file</em>) – argument passed to <code class="docutils literal notranslate"><span class="pre">print(...,</span> <span class="pre">file)</span></code></p></li>
+<li><p><strong>regex</strong> (<em>str</em>) – log only messages that match regex</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="method">
 <dt id="berny.Logger.__call__">
 <code class="descname">__call__</code><span class="sig-paren">(</span><em>msg</em>, <em>level=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/Logger.html#Logger.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Logger.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Log a message.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>msg</strong> (<em>str</em>) – the message</li>
-<li><strong>level</strong> (<em>int</em>) – this is compared against the verbosity level</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – the message</p></li>
+<li><p><strong>level</strong> (<em>int</em>) – this is compared against the verbosity level</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -179,19 +162,15 @@ matrix in case of a crystal geometry)</li>
 <dt id="berny.Geometry">
 <em class="property">class </em><code class="descclassname">berny.</code><code class="descname">Geometry</code><span class="sig-paren">(</span><em>species</em>, <em>coords</em>, <em>lattice=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a single molecule or a crystal.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>species</strong> (<em>list</em>) – list of element symbols</li>
-<li><strong>coords</strong> (<em>list</em>) – list of atomic coordinates in angstroms (as 3-tuples)</li>
-<li><strong>lattice</strong> (<em>list</em>) – list of lattice vectors (None for a moleucle)</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>species</strong> (<em>list</em>) – list of element symbols</p></li>
+<li><p><strong>coords</strong> (<em>list</em>) – list of atomic coordinates in angstroms (as 3-tuples)</p></li>
+<li><p><strong>lattice</strong> (<em>list</em>) – list of lattice vectors (None for a moleucle)</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>Iterating over a geometry yields 2-tuples of symbols and coordinates.
 <code class="docutils literal notranslate"><span class="pre">len(geom)</span></code> returns the number of atoms in a geometry. The class supports
 <code class="xref py py-func docutils literal notranslate"><span class="pre">format()</span></code> with the same available formats as <a class="reference internal" href="#berny.Geometry.dump" title="berny.Geometry.dump"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dump()</span></code></a>.</p>
@@ -199,14 +178,11 @@ matrix in case of a crystal geometry)</li>
 <dt id="berny.Geometry.bondmatrix">
 <code class="descname">bondmatrix</code><span class="sig-paren">(</span><em>scale=1.3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.bondmatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.bondmatrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the covalent connectedness matrix.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>scale</strong> (<em>float</em>) – threshold for accepting a distance as a covalent bond</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scale</strong> (<em>float</em>) – threshold for accepting a distance as a covalent bond</p>
+</dd>
+</dl>
 <p>Returns <span class="math notranslate nohighlight">\(b_{ij}:=R_{ij}&lt;\text{scale}\times
 (R_i^\text{cov}+R_j^\text{cov})\)</span>.</p>
 </dd></dl>
@@ -233,15 +209,12 @@ matrix in case of a crystal geometry)</li>
 <dt id="berny.Geometry.dist_diff">
 <code class="descname">dist_diff</code><span class="sig-paren">(</span><em>other=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.dist_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.dist_diff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate distances and vectors between atoms.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="#berny.Geometry" title="berny.Geometry"><em>Geometry</em></a>) – calculate distances between two geometries if
-given or within a geometry if not</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#berny.Geometry" title="berny.Geometry"><em>Geometry</em></a>) – calculate distances between two geometries if
+given or within a geometry if not</p>
+</dd>
+</dl>
 <p>Returns <span class="math notranslate nohighlight">\(R_{ij}:=|\mathbf R_i-\mathbf R_j|\)</span> and
 <span class="math notranslate nohighlight">\(R_{ij\alpha}:=(\mathbf R_i)_\alpha-(\mathbf R_j)_\alpha\)</span>.</p>
 </dd></dl>
@@ -250,18 +223,14 @@ given or within a geometry if not</td>
 <dt id="berny.Geometry.dump">
 <code class="descname">dump</code><span class="sig-paren">(</span><em>f</em>, <em>fmt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.dump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the geometry into a file.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>f</strong> (<em>file</em>) – file object</li>
-<li><strong>fmt</strong> (<em>str</em>) – geometry format, one of ‘’, ‘xyz’, ‘aims’, ‘mopac’.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>file</em>) – file object</p></li>
+<li><p><strong>fmt</strong> (<em>str</em>) – geometry format, one of ‘’, ‘xyz’, ‘aims’, ‘mopac’.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -280,20 +249,16 @@ given or within a geometry if not</td>
 <dt id="berny.Geometry.from_atoms">
 <em class="property">classmethod </em><code class="descname">from_atoms</code><span class="sig-paren">(</span><em>atoms</em>, <em>lattice=None</em>, <em>unit=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.from_atoms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.from_atoms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alternative contructor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>atoms</strong> (<em>list</em>) – list of 2-tuples with an elemnt symbol and
-a coordinate</li>
-<li><strong>unit</strong> (<em>float</em>) – value to multiple atomic coordiantes with</li>
-<li><strong>lattice</strong> (<em>list</em>) – list of lattice vectors (None for a moleucle)</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atoms</strong> (<em>list</em>) – list of 2-tuples with an elemnt symbol and
+a coordinate</p></li>
+<li><p><strong>unit</strong> (<em>float</em>) – value to multiple atomic coordiantes with</p></li>
+<li><p><strong>lattice</strong> (<em>list</em>) – list of lattice vectors (None for a moleucle)</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -323,14 +288,11 @@ R_\text{CMS}\)</span>.</p>
 <dt id="berny.Geometry.super_circum">
 <code class="descname">super_circum</code><span class="sig-paren">(</span><em>radius</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.super_circum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.super_circum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Supercell dimensions such that the supercell circumsribes a sphere.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>radius</strong> (<em>float</em>) – circumscribed radius in angstroms</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>radius</strong> (<em>float</em>) – circumscribed radius in angstroms</p>
+</dd>
+</dl>
 <p>Returns None when geometry is not a crystal.</p>
 </dd></dl>
 
@@ -338,20 +300,16 @@ R_\text{CMS}\)</span>.</p>
 <dt id="berny.Geometry.supercell">
 <code class="descname">supercell</code><span class="sig-paren">(</span><em>ranges=((-1</em>, <em>1)</em>, <em>(-1</em>, <em>1)</em>, <em>(-1</em>, <em>1))</em>, <em>cutoff=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.supercell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.supercell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a crystal supercell.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ranges</strong> (<em>list</em>) – list of 2-tuples specifying the range of multiples
-of the unit-cell vectors</li>
-<li><strong>cutoff</strong> (<em>float</em>) – if given, the ranges are determined such that
-the supercell contains a sphere with the radius qual to the cutoff</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ranges</strong> (<em>list</em>) – list of 2-tuples specifying the range of multiples
+of the unit-cell vectors</p></li>
+<li><p><strong>cutoff</strong> (<em>float</em>) – if given, the ranges are determined such that
+the supercell contains a sphere with the radius qual to the cutoff</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>Returns a copy of itself when geometry is not a crystal.</p>
 </dd></dl>
 
@@ -359,14 +317,11 @@ the supercell contains a sphere with the radius qual to the cutoff</li>
 <dt id="berny.Geometry.write">
 <code class="descname">write</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes the geometry into a file, delegates to <a class="reference internal" href="#berny.Geometry.dump" title="berny.Geometry.dump"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dump()</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>str</em>) – path that will be overwritten</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – path that will be overwritten</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -375,18 +330,14 @@ the supercell contains a sphere with the radius qual to the cutoff</li>
 <dt id="berny.geomlib.load">
 <code class="descclassname">berny.geomlib.</code><code class="descname">load</code><span class="sig-paren">(</span><em>fp</em>, <em>fmt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.geomlib.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a geometry from a file object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>fp</strong> (<em>file</em>) – file object</li>
-<li><strong>fmt</strong> (<em>str</em>) – the format of the geometry file, can be one of ‘xyz’, ‘aims’</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fp</strong> (<em>file</em>) – file object</p></li>
+<li><p><strong>fmt</strong> (<em>str</em>) – the format of the geometry file, can be one of ‘xyz’, ‘aims’</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>Returns <a class="reference internal" href="#berny.Geometry" title="berny.Geometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">berny.Geometry</span></code></a>.</p>
 </dd></dl>
 
@@ -394,32 +345,25 @@ the supercell contains a sphere with the radius qual to the cutoff</li>
 <dt id="berny.geomlib.loads">
 <code class="descclassname">berny.geomlib.</code><code class="descname">loads</code><span class="sig-paren">(</span><em>s</em>, <em>fmt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#loads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.geomlib.loads" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a geometry from a string, delegates to <a class="reference internal" href="#berny.geomlib.load" title="berny.geomlib.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">load()</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s</strong> (<em>str</em>) – string with geometry</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>str</em>) – string with geometry</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="berny.geomlib.readfile">
 <code class="descclassname">berny.geomlib.</code><code class="descname">readfile</code><span class="sig-paren">(</span><em>path</em>, <em>fmt=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#readfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.geomlib.readfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a geometry from a file path, delegates to <a class="reference internal" href="#berny.geomlib.load" title="berny.geomlib.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">load()</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> (<em>str</em>) – path to a geometry file</li>
-<li><strong>fmt</strong> (<em>str</em>) – if not given, the format is given from the file extension</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – path to a geometry file</p></li>
+<li><p><strong>fmt</strong> (<em>str</em>) – if not given, the format is given from the file extension</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -432,18 +376,14 @@ expected by <a class="reference internal" href="#berny.optimize" title="berny.op
 <code class="descclassname">berny.solvers.</code><code class="descname">MopacSolver</code><span class="sig-paren">(</span><em>cmd='mopac'</em>, <em>method='PM7'</em>, <em>workdir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/solvers.html#MopacSolver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.solvers.MopacSolver" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wraps <a class="reference external" href="http://openmopac.net">MOPAC</a>, which needs to be installed on the
 system.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>cmd</strong> (<em>str</em>) – MOPAC executable</li>
-<li><strong>method</strong> (<em>str</em>) – model to calculate energy</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cmd</strong> (<em>str</em>) – MOPAC executable</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – model to calculate energy</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -523,8 +463,6 @@ system.</p>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -534,10 +472,10 @@ system.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2017-2018, Jan Hermann.
+      &copy;2017-2019, Jan Hermann.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

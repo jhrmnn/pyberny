@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Getting started &#8212; berny 0.4.2 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,7 +11,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Algorithm" href="algorithm.html" />
@@ -86,17 +85,17 @@ object, read energy and gradients from the standard input (first line is
 energy, subsequent lines correspond to Cartesian gradients of individual
 atoms, all in atomic units) and write the new structure estimate to
 standard output. An example usage could look like this:</p>
-<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 ./berny --init params.json &lt;start.xyz
 cat start.xyz &gt;current.xyz
-while true; do
-    # calculate energy and gradients of current.xyz
-    cat energy_gradients.txt | ./berny &gt;next.xyz
-    if [[ $? == 0 ]]; then  # minimum reached
-        break
-    fi
+<span class="k">while</span> true<span class="p">;</span> <span class="k">do</span>
+    <span class="c1"># calculate energy and gradients of current.xyz</span>
+    cat energy_gradients.txt <span class="p">|</span> ./berny &gt;next.xyz
+    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$?</span> <span class="o">==</span> <span class="m">0</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>  <span class="c1"># minimum reached</span>
+        <span class="nb">break</span>
+    <span class="k">fi</span>
     mv next.xyz current.xyz
-done
+<span class="k">done</span>
 </pre></div>
 </div>
 <p>Alternatively, one can start an optimizer server with the <code class="docutils literal notranslate"><span class="pre">--socket</span></code>
@@ -104,17 +103,17 @@ option on a given address and port. This initiates the <code class="docutils lit
 and waits for connections, in which it expects to receive energy and
 gradients as a request (in the same format as above) and responds with a
 new structure estimate in a given format. Example usage would be</p>
-<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
-./berny -s localhost 25000 -f xyz &lt;start.xyz &amp;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+./berny -s localhost <span class="m">25000</span> -f xyz &lt;start.xyz <span class="p">&amp;</span>
 cat start.xyz &gt;current.xyz
-while true; do
-    # calculate energy and gradients of current.xyz
-    cat energy_gradients.txt | nc localhost 25000 &gt;next.xyz
-    if [[ ! -s next.xyz ]]; then  # minimum reached
-        break
-    fi
+<span class="k">while</span> true<span class="p">;</span> <span class="k">do</span>
+    <span class="c1"># calculate energy and gradients of current.xyz</span>
+    cat energy_gradients.txt <span class="p">|</span> nc localhost <span class="m">25000</span> &gt;next.xyz
+    <span class="k">if</span> <span class="o">[[</span> ! -s next.xyz <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>  <span class="c1"># minimum reached</span>
+        <span class="nb">break</span>
+    <span class="k">fi</span>
     mv next.xyz current.xyz
-done
+<span class="k">done</span>
 </pre></div>
 </div>
 </div>
@@ -195,8 +194,6 @@ done
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -206,10 +203,10 @@ done
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2017-2018, Jan Hermann.
+      &copy;2017-2019, Jan Hermann.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
