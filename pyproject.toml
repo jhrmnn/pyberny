@@ -4,7 +4,7 @@ skip-string-normalization = true
 
 [tool.poetry]
 name = "pyberny"
-version = "0.4.2"
+version = "0.4.3"
 description = "Molecular/crystal structure optimizer"
 readme = "README.md"
 authors = ["Jan Hermann <dev@jan.hermann.name>"]

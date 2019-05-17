@@ -18,7 +18,7 @@ if sys.version_info[:2] >= (3, 5):
 else:
     from ._py2 import Generator  # noqa
 
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 __all__ = ['Berny']
 
 defaults = {
@@ -113,6 +113,11 @@ class Berny(Generator):
             raise StopIteration
         self._n += 1
         return self._state.geom
+
+    @property
+    def trust(self):
+        """Current trust radius."""
+        return self._state.trust
 
     def send(self, energy_gradients):  # noqa: D102
         log = self._log
