@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>berny.Logger &#8212; berny 0.4.2 documentation</title>
+    <title>berny.Logger &#8212; berny 0.4.3 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,6 +36,8 @@
 <span class="c1"># License, v. 2.0. If a copy of the MPL was not distributed with this</span>
 <span class="c1"># file, You can obtain one at http://mozilla.org/MPL/2.0/.</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">re</span>
 
 
@@ -50,7 +52,7 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="n">verbosity</span> <span class="ow">or</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="n">out</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="n">out</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">regex</span> <span class="o">=</span> <span class="n">regex</span>
 
@@ -65,7 +67,7 @@
             <span class="k">return</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">regex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regex</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
             <span class="k">return</span>
-        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span></div></div>
 </pre></div>
 
           </div>
@@ -84,7 +86,7 @@
 
 
 <p>
-<iframe src="https://ghbtns.com/github-btn.html?user=azag0&repo=pyberny&type=watch&count=true&size=large&v=2"
+<iframe src="https://ghbtns.com/github-btn.html?user=jhrmnn&repo=pyberny&type=watch&count=true&size=large&v=2"
   allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
 </p>
 
@@ -95,10 +97,10 @@
     
 
 <p>
-<a class="badge" href="https://travis-ci.org/azag0/pyberny">
+<a class="badge" href="https://travis-ci.org/jhrmnn/pyberny">
     <img
-        alt="https://secure.travis-ci.org/azag0/pyberny.svg?branch=master"
-        src="https://secure.travis-ci.org/azag0/pyberny.svg?branch=master"
+        alt="https://secure.travis-ci.org/jhrmnn/pyberny.svg?branch=master"
+        src="https://secure.travis-ci.org/jhrmnn/pyberny.svg?branch=master"
     />
 </a>
 </p>
@@ -109,10 +111,10 @@
     
 
 <p>
-<a class="badge" href="https://codecov.io/github/azag0/pyberny">
+<a class="badge" href="https://codecov.io/github/jhrmnn/pyberny">
     <img
-    alt="https://codecov.io/github/azag0/pyberny/coverage.svg?branch=master"
-    src="https://codecov.io/github/azag0/pyberny/coverage.svg?branch=master"
+    alt="https://codecov.io/github/jhrmnn/pyberny/coverage.svg?branch=master"
+    src="https://codecov.io/github/jhrmnn/pyberny/coverage.svg?branch=master"
     />
 </a>
 </p>

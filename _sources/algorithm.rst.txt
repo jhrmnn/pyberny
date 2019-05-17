@@ -6,7 +6,7 @@ The optimization algorithm implemented in Berny loosely follows the
 follows is a summary of that method, more detailed specification when
 necessary, and description of any deviations.
 
-.. todo:: Make the algorithm `fully conform <https://github.com/azag0/pyberny/issues/29>`_ to the SM.
+.. todo:: Make the algorithm `fully conform <https://github.com/jhrmnn/pyberny/issues/29>`_ to the SM.
 
 Sketch of the algorithm
 -----------------------
@@ -41,7 +41,7 @@ Redundant internal coordinates
 5. In the case of a crystal, just the internal coordinate closest to the
    original unit cell is retained from all its periodic images.
 
-.. todo:: Implement `linear bends <https://github.com/azag0/pyberny/issues/30>`_.
+.. todo:: Implement `linear bends <https://github.com/jhrmnn/pyberny/issues/30>`_.
 
 Generalized inverse
 -------------------

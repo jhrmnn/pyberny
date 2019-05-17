@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>API &#8212; berny 0.4.2 documentation</title>
+    <title>API &#8212; berny 0.4.3 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -177,7 +177,7 @@ matrix in case of a crystal geometry)</p></li>
 <dl class="method">
 <dt id="berny.Geometry.bondmatrix">
 <code class="descname">bondmatrix</code><span class="sig-paren">(</span><em>scale=1.3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.bondmatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.bondmatrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the covalent connectedness matrix.</p>
+<dd><p>Calculate the covalent connectedness matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>scale</strong> (<em>float</em>) – threshold for accepting a distance as a covalent bond</p>
@@ -190,19 +190,19 @@ matrix in case of a crystal geometry)</p></li>
 <dl class="attribute">
 <dt id="berny.Geometry.cms">
 <code class="descname">cms</code><a class="headerlink" href="#berny.Geometry.cms" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the center of mass, <span class="math notranslate nohighlight">\(\mathbf R_\text{CMS}\)</span>.</p>
+<dd><p>Calculate the center of mass, <span class="math notranslate nohighlight">\(\mathbf R_\text{CMS}\)</span>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="berny.Geometry.copy">
 <code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.copy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a copy of the geometry.</p>
+<dd><p>Make a copy of the geometry.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="berny.Geometry.dist">
 <code class="descname">dist</code><span class="sig-paren">(</span><em>other=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.dist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the first element of <a class="reference internal" href="#berny.Geometry.dist_diff" title="berny.Geometry.dist_diff"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dist_diff()</span></code></a>.</p>
+<dd><p>Alias for the first element of <a class="reference internal" href="#berny.Geometry.dist_diff" title="berny.Geometry.dist_diff"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dist_diff()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -222,7 +222,7 @@ given or within a geometry if not</p>
 <dl class="method">
 <dt id="berny.Geometry.dump">
 <code class="descname">dump</code><span class="sig-paren">(</span><em>f</em>, <em>fmt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.dump" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the geometry into a file.</p>
+<dd><p>Save the geometry into a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -264,24 +264,24 @@ a coordinate</p></li>
 <dl class="attribute">
 <dt id="berny.Geometry.inertia">
 <code class="descname">inertia</code><a class="headerlink" href="#berny.Geometry.inertia" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the moment of inertia, <span class="math notranslate nohighlight">\(I_{\alpha\beta}:=
+<dd><p>Calculate the moment of inertia.</p>
+<p><span class="math notranslate nohighlight">\(I_{\alpha\beta}:=
 \sum_im_i\big(r_i^2\delta_{\alpha\beta}-(\mathbf r_i)_\alpha(\mathbf
 r_i)_\beta\big)\)</span> where <span class="math notranslate nohighlight">\(\mathbf r_i=\mathbf R_i-\mathbf
-R_\text{CMS}\)</span>.</p>
+R_\text{CMS}\)</span></p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="berny.Geometry.masses">
 <code class="descname">masses</code><a class="headerlink" href="#berny.Geometry.masses" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an array of atomic masses.</p>
+<dd><p>Return an array of atomic masses.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="berny.Geometry.rho">
 <code class="descname">rho</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.rho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.rho" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates a measure of covalentness.</p>
-<p>Returns
-<span class="math notranslate nohighlight">\(\rho_{ij}:=\exp\big(-R_{ij}/(R_i^\text{cov}+R_j^\text{cov})\big)\)</span>.</p>
+<dd><p>Calculate a measure of covalentness.</p>
+<p>Returns <span class="math notranslate nohighlight">\(\rho_{ij}:=\exp\big(-R_{ij}/(R_i^\text{cov}+R_j^\text{cov})\big)\)</span>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -299,7 +299,7 @@ R_\text{CMS}\)</span>.</p>
 <dl class="method">
 <dt id="berny.Geometry.supercell">
 <code class="descname">supercell</code><span class="sig-paren">(</span><em>ranges=((-1</em>, <em>1)</em>, <em>(-1</em>, <em>1)</em>, <em>(-1</em>, <em>1))</em>, <em>cutoff=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.supercell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.supercell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a crystal supercell.</p>
+<dd><p>Create a crystal supercell.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -316,7 +316,7 @@ the supercell contains a sphere with the radius qual to the cutoff</p></li>
 <dl class="method">
 <dt id="berny.Geometry.write">
 <code class="descname">write</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes the geometry into a file, delegates to <a class="reference internal" href="#berny.Geometry.dump" title="berny.Geometry.dump"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dump()</span></code></a>.</p>
+<dd><p>Write the geometry into a file, delegates to <a class="reference internal" href="#berny.Geometry.dump" title="berny.Geometry.dump"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dump()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – path that will be overwritten</p>
@@ -374,8 +374,8 @@ expected by <a class="reference internal" href="#berny.optimize" title="berny.op
 <span class="target" id="module-berny.solvers"></span><dl class="function">
 <dt id="berny.solvers.MopacSolver">
 <code class="descclassname">berny.solvers.</code><code class="descname">MopacSolver</code><span class="sig-paren">(</span><em>cmd='mopac'</em>, <em>method='PM7'</em>, <em>workdir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/solvers.html#MopacSolver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.solvers.MopacSolver" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wraps <a class="reference external" href="http://openmopac.net">MOPAC</a>, which needs to be installed on the
-system.</p>
+<dd><p>Crate a solver that wraps <a class="reference external" href="http://openmopac.net">MOPAC</a>.</p>
+<p>Mopac needs to be installed on the system.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -406,7 +406,7 @@ system.</p>
 
 
 <p>
-<iframe src="https://ghbtns.com/github-btn.html?user=azag0&repo=pyberny&type=watch&count=true&size=large&v=2"
+<iframe src="https://ghbtns.com/github-btn.html?user=jhrmnn&repo=pyberny&type=watch&count=true&size=large&v=2"
   allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
 </p>
 
@@ -417,10 +417,10 @@ system.</p>
     
 
 <p>
-<a class="badge" href="https://travis-ci.org/azag0/pyberny">
+<a class="badge" href="https://travis-ci.org/jhrmnn/pyberny">
     <img
-        alt="https://secure.travis-ci.org/azag0/pyberny.svg?branch=master"
-        src="https://secure.travis-ci.org/azag0/pyberny.svg?branch=master"
+        alt="https://secure.travis-ci.org/jhrmnn/pyberny.svg?branch=master"
+        src="https://secure.travis-ci.org/jhrmnn/pyberny.svg?branch=master"
     />
 </a>
 </p>
@@ -431,10 +431,10 @@ system.</p>
     
 
 <p>
-<a class="badge" href="https://codecov.io/github/azag0/pyberny">
+<a class="badge" href="https://codecov.io/github/jhrmnn/pyberny">
     <img
-    alt="https://codecov.io/github/azag0/pyberny/coverage.svg?branch=master"
-    src="https://codecov.io/github/azag0/pyberny/coverage.svg?branch=master"
+    alt="https://codecov.io/github/jhrmnn/pyberny/coverage.svg?branch=master"
+    src="https://codecov.io/github/jhrmnn/pyberny/coverage.svg?branch=master"
     />
 </a>
 </p>

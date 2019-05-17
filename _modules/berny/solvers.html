@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>berny.solvers &#8212; berny 0.4.2 documentation</title>
+    <title>berny.solvers &#8212; berny 0.4.3 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -37,24 +37,27 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">.coords</span> <span class="k">import</span> <span class="n">angstrom</span>
 
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MopacSolver&#39;</span><span class="p">]</span>
+
 
 <div class="viewcode-block" id="MopacSolver"><a class="viewcode-back" href="../../api.html#berny.solvers.MopacSolver">[docs]</a><span class="k">def</span> <span class="nf">MopacSolver</span><span class="p">(</span><span class="n">cmd</span><span class="o">=</span><span class="s1">&#39;mopac&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;PM7&#39;</span><span class="p">,</span> <span class="n">workdir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Wraps `MOPAC &lt;http://openmopac.net&gt;`_, which needs to be installed on the</span>
-<span class="sd">    system.</span>
+<span class="sd">    Crate a solver that wraps `MOPAC &lt;http://openmopac.net&gt;`_.</span>
+
+<span class="sd">    Mopac needs to be installed on the system.</span>
 
 <span class="sd">    :param str cmd: MOPAC executable</span>
 <span class="sd">    :param str method: model to calculate energy</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">kcal</span><span class="p">,</span> <span class="n">ev</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mf">627.503</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">27.2107</span>
+    <span class="n">kcal</span><span class="p">,</span> <span class="n">ev</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">627.503</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">27.2107</span>
     <span class="n">tmpdir</span> <span class="o">=</span> <span class="n">workdir</span> <span class="ow">or</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">atoms</span><span class="p">,</span> <span class="n">lattice</span> <span class="o">=</span> <span class="k">yield</span>
@@ -71,16 +74,18 @@
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mopac_input</span><span class="p">)</span>
             <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">([</span><span class="n">cmd</span><span class="p">,</span> <span class="n">input_file</span><span class="p">])</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s1">&#39;job.out&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                <span class="n">energy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span>
-                    <span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">f</span> <span class="k">if</span> <span class="s1">&#39;TOTAL ENERGY&#39;</span> <span class="ow">in</span> <span class="n">l</span>
-                <span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">])</span><span class="o">*</span><span class="n">ev</span>
+                <span class="n">energy</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="nb">float</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">f</span> <span class="k">if</span> <span class="s1">&#39;TOTAL ENERGY&#39;</span> <span class="ow">in</span> <span class="n">l</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">])</span> <span class="o">*</span> <span class="n">ev</span>
+                <span class="p">)</span>
                 <span class="nb">next</span><span class="p">(</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">f</span> <span class="k">if</span> <span class="s1">&#39;FINAL  POINT  AND  DERIVATIVES&#39;</span> <span class="ow">in</span> <span class="n">l</span><span class="p">)</span>
                 <span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
                 <span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-                <span class="n">gradients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-                    <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">6</span><span class="p">])</span><span class="o">*</span><span class="n">kcal</span><span class="o">/</span><span class="n">angstrom</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
-                    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">lattice</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">3</span><span class="p">))</span>
-                <span class="p">])</span>
+                <span class="n">gradients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">6</span><span class="p">])</span> <span class="o">*</span> <span class="n">kcal</span> <span class="o">/</span> <span class="n">angstrom</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+                        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">lattice</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">3</span><span class="p">))</span>
+                    <span class="p">]</span>
+                <span class="p">)</span>
             <span class="n">atoms</span><span class="p">,</span> <span class="n">lattice</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span>
     <span class="k">finally</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">tmpdir</span> <span class="o">!=</span> <span class="n">workdir</span><span class="p">:</span>
@@ -99,7 +104,7 @@
                 <span class="n">ene</span> <span class="o">=</span> <span class="p">{}</span>
                 <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]:</span>
                     <span class="n">coords_diff</span> <span class="o">=</span> <span class="n">coords</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-                    <span class="n">coords_diff</span><span class="p">[</span><span class="n">i_atom</span><span class="p">,</span> <span class="n">i_xyz</span><span class="p">]</span> <span class="o">+=</span> <span class="n">step</span><span class="o">*</span><span class="n">delta</span>
+                    <span class="n">coords_diff</span><span class="p">[</span><span class="n">i_atom</span><span class="p">,</span> <span class="n">i_xyz</span><span class="p">]</span> <span class="o">+=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">delta</span>
                     <span class="n">atoms_diff</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span><span class="n">sp</span> <span class="k">for</span> <span class="n">sp</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="ow">in</span> <span class="n">atoms</span><span class="p">],</span> <span class="n">coords_diff</span><span class="p">))</span>
                     <span class="n">ene</span><span class="p">[</span><span class="n">step</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">atoms_diff</span><span class="p">,</span> <span class="n">lattice</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
                 <span class="n">gradients</span><span class="p">[</span><span class="n">i_atom</span><span class="p">,</span> <span class="n">i_xyz</span><span class="p">]</span> <span class="o">=</span> <span class="n">_diff5</span><span class="p">(</span><span class="n">ene</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
@@ -110,15 +115,15 @@
                     <span class="n">ene</span> <span class="o">=</span> <span class="p">{}</span>
                     <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]:</span>
                         <span class="n">lattice_diff</span> <span class="o">=</span> <span class="n">lattice</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-                        <span class="n">lattice_diff</span><span class="p">[</span><span class="n">i_vec</span><span class="p">,</span> <span class="n">i_xyz</span><span class="p">]</span> <span class="o">+=</span> <span class="n">step</span><span class="o">*</span><span class="n">delta</span>
+                        <span class="n">lattice_diff</span><span class="p">[</span><span class="n">i_vec</span><span class="p">,</span> <span class="n">i_xyz</span><span class="p">]</span> <span class="o">+=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">delta</span>
                         <span class="n">ene</span><span class="p">[</span><span class="n">step</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">lattice_diff</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
                     <span class="n">lattice_grads</span><span class="p">[</span><span class="n">i_vec</span><span class="p">,</span> <span class="n">i_xyz</span><span class="p">]</span> <span class="o">=</span> <span class="n">_diff5</span><span class="p">(</span><span class="n">ene</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
             <span class="n">gradients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">gradients</span><span class="p">,</span> <span class="n">lattice_grads</span><span class="p">))</span>
-        <span class="n">atoms</span><span class="p">,</span> <span class="n">lattice</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span><span class="o">/</span><span class="n">angstrom</span>
+        <span class="n">atoms</span><span class="p">,</span> <span class="n">lattice</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span> <span class="o">/</span> <span class="n">angstrom</span>
 
 
 <span class="k">def</span> <span class="nf">_diff5</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">delta</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">12</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">12</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="n">delta</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">12</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">12</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="n">delta</span>
 </pre></div>
 
           </div>
@@ -137,7 +142,7 @@
 
 
 <p>
-<iframe src="https://ghbtns.com/github-btn.html?user=azag0&repo=pyberny&type=watch&count=true&size=large&v=2"
+<iframe src="https://ghbtns.com/github-btn.html?user=jhrmnn&repo=pyberny&type=watch&count=true&size=large&v=2"
   allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
 </p>
 
@@ -148,10 +153,10 @@
     
 
 <p>
-<a class="badge" href="https://travis-ci.org/azag0/pyberny">
+<a class="badge" href="https://travis-ci.org/jhrmnn/pyberny">
     <img
-        alt="https://secure.travis-ci.org/azag0/pyberny.svg?branch=master"
-        src="https://secure.travis-ci.org/azag0/pyberny.svg?branch=master"
+        alt="https://secure.travis-ci.org/jhrmnn/pyberny.svg?branch=master"
+        src="https://secure.travis-ci.org/jhrmnn/pyberny.svg?branch=master"
     />
 </a>
 </p>
@@ -162,10 +167,10 @@
     
 
 <p>
-<a class="badge" href="https://codecov.io/github/azag0/pyberny">
+<a class="badge" href="https://codecov.io/github/jhrmnn/pyberny">
     <img
-    alt="https://codecov.io/github/azag0/pyberny/coverage.svg?branch=master"
-    src="https://codecov.io/github/azag0/pyberny/coverage.svg?branch=master"
+    alt="https://codecov.io/github/jhrmnn/pyberny/coverage.svg?branch=master"
+    src="https://codecov.io/github/jhrmnn/pyberny/coverage.svg?branch=master"
     />
 </a>
 </p>
