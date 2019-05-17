@@ -5,7 +5,9 @@ This covers all supported public API.
 
 .. module:: berny
 
-.. autofunction:: Berny
+.. autoclass:: Berny
+   :members:
+   :exclude-members: Point, send, throw
 
 .. autodata:: berny.berny.defaults
 
@@ -16,7 +18,7 @@ This covers all supported public API.
 .. autofunction:: optimize
 
 .. autoclass:: Logger
-   :members: __call__
+   :members:
 
 Geometry operations
 -------------------
