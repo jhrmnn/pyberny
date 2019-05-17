@@ -1,8 +1,8 @@
-from .optimizers import optimize
-from .berny import Berny
-from .Logger import Logger
 from . import geomlib
-from .geomlib import Geometry
+from .berny import Berny
 from .coords import angstrom
+from .geomlib import Geometry
+from .Logger import Logger
+from .optimizers import optimize
 
 __all__ = ['optimize', 'Berny', 'Logger', 'geomlib', 'Geometry', 'angstrom']

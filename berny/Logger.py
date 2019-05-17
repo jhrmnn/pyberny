@@ -2,6 +2,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from __future__ import print_function
+
+import sys
 import re
 
 
@@ -16,7 +18,7 @@ class Logger(object):
 
     def __init__(self, verbosity=None, out=None, regex=None):
         self.verbosity = verbosity or 0
-        self.out = out
+        self.out = out or sys.stdout
         self.n = 0
         self.regex = regex
 
@@ -31,4 +33,4 @@ class Logger(object):
             return
         if self.regex is not None and not re.search(self.regex, msg):
             return
-        print(self.n, msg, file=self.out)
+        self.out.write('{} {}\n'.format(self.n, msg))

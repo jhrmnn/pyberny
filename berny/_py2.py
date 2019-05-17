@@ -1,3 +1,6 @@
+__all__ = ()
+
+
 # taken from Python 3 stdlib
 class Generator(object):
     def __iter__(self):

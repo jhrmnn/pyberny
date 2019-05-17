@@ -3,24 +3,27 @@
 from __future__ import division
 
 import os
-import tempfile
-import subprocess
 import shutil
+import subprocess
+import tempfile
 
 import numpy as np
 
 from .coords import angstrom
 
+__all__ = ['MopacSolver']
+
 
 def MopacSolver(cmd='mopac', method='PM7', workdir=None):
     """
-    Wraps `MOPAC <http://openmopac.net>`_, which needs to be installed on the
-    system.
+    Crate a solver that wraps `MOPAC <http://openmopac.net>`_.
+
+    Mopac needs to be installed on the system.
 
     :param str cmd: MOPAC executable
     :param str method: model to calculate energy
     """
-    kcal, ev = 1/627.503, 1/27.2107
+    kcal, ev = 1 / 627.503, 1 / 27.2107
     tmpdir = workdir or tempfile.mkdtemp()
     try:
         atoms, lattice = yield
@@ -37,16 +40,18 @@ def MopacSolver(cmd='mopac', method='PM7', workdir=None):
                 f.write(mopac_input)
             subprocess.check_call([cmd, input_file])
             with open(os.path.join(tmpdir, 'job.out')) as f:
-                energy = float(next(
-                    l for l in f if 'TOTAL ENERGY' in l
-                ).split()[3])*ev
+                energy = (
+                    float(next(l for l in f if 'TOTAL ENERGY' in l).split()[3]) * ev
+                )
                 next(l for l in f if 'FINAL  POINT  AND  DERIVATIVES' in l)
                 next(f)
                 next(f)
-                gradients = np.array([
-                    [float(next(f).split()[6])*kcal/angstrom for _ in range(3)]
-                    for _ in range(len(atoms)+(0 if lattice is None else 3))
-                ])
+                gradients = np.array(
+                    [
+                        [float(next(f).split()[6]) * kcal / angstrom for _ in range(3)]
+                        for _ in range(len(atoms) + (0 if lattice is None else 3))
+                    ]
+                )
             atoms, lattice = yield energy, gradients
     finally:
         if tmpdir != workdir:
@@ -65,7 +70,7 @@ def GenericSolver(f, *args, **kwargs):
                 ene = {}
                 for step in [-2, -1, 1, 2]:
                     coords_diff = coords.copy()
-                    coords_diff[i_atom, i_xyz] += step*delta
+                    coords_diff[i_atom, i_xyz] += step * delta
                     atoms_diff = list(zip([sp for sp, _, in atoms], coords_diff))
                     ene[step] = f(atoms_diff, lattice, *args, **kwargs)
                 gradients[i_atom, i_xyz] = _diff5(ene, delta)
@@ -76,12 +81,12 @@ def GenericSolver(f, *args, **kwargs):
                     ene = {}
                     for step in [-2, -1, 1, 2]:
                         lattice_diff = lattice.copy()
-                        lattice_diff[i_vec, i_xyz] += step*delta
+                        lattice_diff[i_vec, i_xyz] += step * delta
                         ene[step] = f(atoms, lattice_diff, *args, **kwargs)
                     lattice_grads[i_vec, i_xyz] = _diff5(ene, delta)
             gradients = np.vstack((gradients, lattice_grads))
-        atoms, lattice = yield energy, gradients/angstrom
+        atoms, lattice = yield energy, gradients / angstrom
 
 
 def _diff5(x, delta):
-    return (1/12*x[-2]-2/3*x[-1]+2/3*x[1]-1/12*x[2])/delta
+    return (1 / 12 * x[-2] - 2 / 3 * x[-1] + 2 / 3 * x[1] - 1 / 12 * x[2]) / delta

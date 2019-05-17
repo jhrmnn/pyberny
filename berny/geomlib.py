@@ -12,6 +12,7 @@ from numpy.linalg import inv, norm
 from .species_data import get_property
 
 __version__ = '0.1.0'
+__all__ = ['Geometry', 'loads', 'readfile']
 
 
 class Geometry(object):
@@ -33,7 +34,7 @@ class Geometry(object):
         self.lattice = np.array(lattice) if lattice is not None else None
 
     @classmethod
-    def from_atoms(cls, atoms, lattice=None, unit=1.):
+    def from_atoms(cls, atoms, lattice=None, unit=1.0):
         """Alternative contructor.
 
         :param list atoms: list of 2-tuples with an elemnt symbol and
@@ -42,7 +43,7 @@ class Geometry(object):
         :param list lattice: list of lattice vectors (None for a moleucle)
         """
         species = [sp for sp, _ in atoms]
-        coords = [np.array(coord, dtype=float)*unit for _, coord in atoms]
+        coords = [np.array(coord, dtype=float) * unit for _, coord in atoms]
         return cls(species, coords, lattice)
 
     def __repr__(self):
@@ -62,12 +63,9 @@ class Geometry(object):
     def formula(self):
         """Chemical formula of the molecule or a unit cell."""
         composition = sorted(
-            (sp, len(list(g)))
-            for sp, g in groupby(sorted(self.species))
+            (sp, len(list(g))) for sp, g in groupby(sorted(self.species))
         )
-        return ''.join(
-            '{}{}'.format(sp, n if n > 1 else '') for sp, n in composition
-        )
+        return ''.join('{}{}'.format(sp, n if n > 1 else '') for sp, n in composition)
 
     def __format__(self, fmt):
         """Return the geometry represented as a string, delegates to :py:meth:`dump`."""
@@ -78,7 +76,7 @@ class Geometry(object):
     dumps = __format__
 
     def dump(self, f, fmt):
-        """Saves the geometry into a file.
+        """Save the geometry into a file.
 
         :param file f: file object
         :param str fmt: geometry format, one of '', 'xyz', 'aims', 'mopac'.
@@ -89,35 +87,41 @@ class Geometry(object):
             f.write('{}\n'.format(len(self)))
             f.write('Formula: {}\n'.format(self.formula))
             for specie, coord in self:
-                f.write('{:>2} {}\n'.format(
-                    specie, ' '.join('{:15.8}'.format(x) for x in coord)
-                ))
+                f.write(
+                    '{:>2} {}\n'.format(
+                        specie, ' '.join('{:15.8}'.format(x) for x in coord)
+                    )
+                )
         elif fmt == 'aims':
             f.write('# Formula: {}\n'.format(self.formula))
             for specie, coord in self:
-                f.write('atom {} {:>2}\n'.format(
-                    ' '.join('{:15.8}'.format(x) for x in coord), specie
-                ))
+                f.write(
+                    'atom {} {:>2}\n'.format(
+                        ' '.join('{:15.8}'.format(x) for x in coord), specie
+                    )
+                )
         elif fmt == 'mopac':
             f.write('* Formula: {}\n'.format(self.formula))
             for specie, coord in self:
-                f.write('{:>2} {}\n'.format(
-                    specie, ' '.join('{:15.8} 1'.format(x) for x in coord)
-                ))
+                f.write(
+                    '{:>2} {}\n'.format(
+                        specie, ' '.join('{:15.8} 1'.format(x) for x in coord)
+                    )
+                )
         else:
-            raise ValueError("Unknown format: '{}'".format(fmt))
+            raise ValueError('Unknown format: "{}"'.format(fmt))
 
     def copy(self):
-        """Returns a copy of the geometry."""
+        """Make a copy of the geometry."""
         return Geometry(
             list(self.species),
             self.coords.copy(),
-            self.lattice.copy() if self.lattice is not None else None
+            self.lattice.copy() if self.lattice is not None else None,
         )
 
     def write(self, filename):
         """
-        Writes the geometry into a file, delegates to :py:meth:`dump`.
+        Write the geometry into a file, delegates to :py:meth:`dump`.
 
         :param str filename: path that will be overwritten
         """
@@ -143,15 +147,18 @@ class Geometry(object):
         """
         if self.lattice is None:
             return
-        rec_lattice = 2*pi*inv(self.lattice.T)
+        rec_lattice = 2 * pi * inv(self.lattice.T)
         layer_sep = np.array(
-            [sum(vec*rvec/norm(rvec)) for vec, rvec in zip(self.lattice, rec_lattice)]
+            [
+                sum(vec * rvec / norm(rvec))
+                for vec, rvec in zip(self.lattice, rec_lattice)
+            ]
         )
-        return np.array(np.ceil(radius/layer_sep+0.5), dtype=int)
+        return np.array(np.ceil(radius / layer_sep + 0.5), dtype=int)
 
     def supercell(self, ranges=((-1, 1), (-1, 1), (-1, 1)), cutoff=None):
         """
-        Creates a crystal supercell.
+        Create a crystal supercell.
 
         :param list ranges: list of 2-tuples specifying the range of multiples
             of the unit-cell vectors
@@ -164,15 +171,17 @@ class Geometry(object):
             return self.copy()
         if cutoff:
             ranges = [(-r, r) for r in self.super_circum(cutoff)]
-        latt_vectors = np.array([(0, 0, 0)] + [
-            sum(k*vec for k, vec in zip(shift, self.lattice))
-            for shift
-            in product(*[range(a, b+1) for a, b in ranges])
-            if shift != (0, 0, 0)
-        ])
+        latt_vectors = np.array(
+            [(0, 0, 0)]
+            + [
+                sum(k * vec for k, vec in zip(shift, self.lattice))
+                for shift in product(*[range(a, b + 1) for a, b in ranges])
+                if shift != (0, 0, 0)
+            ]
+        )
         species = list(chain.from_iterable(repeat(self.species, len(latt_vectors))))
-        coords = (self.coords[None, :, :]+latt_vectors[:, None, :]).reshape((-1, 3))
-        lattice = self.lattice*np.array([b-a for a, b in ranges])[:, None]
+        coords = (self.coords[None, :, :] + latt_vectors[:, None, :]).reshape((-1, 3))
+        lattice = self.lattice * np.array([b - a for a, b in ranges])[:, None]
         return Geometry(species, coords, lattice)
 
     def dist_diff(self, other=None):
@@ -187,18 +196,18 @@ class Geometry(object):
         """
         if other is None:
             other = self
-        diff = self.coords[:, None, :]-other.coords[None, :, :]
-        dist = np.sqrt(np.sum(diff**2, 2))
+        diff = self.coords[:, None, :] - other.coords[None, :, :]
+        dist = np.sqrt(np.sum(diff ** 2, 2))
         dist[np.diag_indices(len(self))] = np.inf
         return dist, diff
 
     def dist(self, other=None):
-        """Returns the first element of :py:meth:`dist_diff`."""
+        """Alias for the first element of :py:meth:`dist_diff`."""
         return self.dist_diff(other)[0]
 
     def bondmatrix(self, scale=1.3):
         r"""
-        Calculates the covalent connectedness matrix.
+        Calculate the covalent connectedness matrix.
 
         :param float scale: threshold for accepting a distance as a covalent bond
 
@@ -207,41 +216,43 @@ class Geometry(object):
         """
         dist = self.dist(self)
         radii = np.array([get_property(sp, 'covalent_radius') for sp in self.species])
-        return dist < scale*(radii[None, :]+radii[:, None])
+        return dist < scale * (radii[None, :] + radii[:, None])
 
     def rho(self):
         r"""
-        Calculates a measure of covalentness.
+        Calculate a measure of covalentness.
 
-        Returns
-        :math:`\rho_{ij}:=\exp\big(-R_{ij}/(R_i^\text{cov}+R_j^\text{cov})\big)`.
+        Returns :math:`\rho_{ij}:=\exp\big(-R_{ij}/(R_i^\text{cov}+R_j^\text{cov})\big)`.
         """
         geom = self.supercell()
         dist = geom.dist(geom)
         radii = np.array([get_property(sp, 'covalent_radius') for sp in geom.species])
-        return np.exp(-dist/(radii[None, :]+radii[:, None])+1)
+        return np.exp(-dist / (radii[None, :] + radii[:, None]) + 1)
 
     @property
     def masses(self):
-        """Returns an array of atomic masses."""
+        """Return an array of atomic masses."""
         return np.array([get_property(sp, 'mass') for sp in self.species])
 
     @property
     def cms(self):
-        r"""Calculates the center of mass, :math:`\mathbf R_\text{CMS}`."""
+        r"""Calculate the center of mass, :math:`\mathbf R_\text{CMS}`."""
         masses = self.masses
-        return np.sum(masses[:, None]*self.coords, 0)/masses.sum()
+        return np.sum(masses[:, None] * self.coords, 0) / masses.sum()
 
     @property
     def inertia(self):
-        r"""Calculates the moment of inertia, :math:`I_{\alpha\beta}:=
+        r"""Calculate the moment of inertia.
+
+        :math:`I_{\alpha\beta}:=
         \sum_im_i\big(r_i^2\delta_{\alpha\beta}-(\mathbf r_i)_\alpha(\mathbf
         r_i)_\beta\big)` where :math:`\mathbf r_i=\mathbf R_i-\mathbf
-        R_\text{CMS}`."""
-        coords_w = np.sqrt(self.masses)[:, None]*(self.coords-self.cms)
-        A = np.array([np.diag(np.full(3, r)) for r in np.sum(coords_w**2, 1)])
-        B = coords_w[:, :, None]*coords_w[:, None, :]
-        return np.sum(A-B, 0)
+        R_\text{CMS}`
+        """
+        coords_w = np.sqrt(self.masses)[:, None] * (self.coords - self.cms)
+        A = np.array([np.diag(np.full(3, r)) for r in np.sum(coords_w ** 2, 1)])
+        B = coords_w[:, :, None] * coords_w[:, None, :]
+        return np.sum(A - B, 0)
 
 
 def load(fp, fmt):

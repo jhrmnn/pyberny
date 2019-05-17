@@ -1,9 +1,11 @@
 # Any copyright is dedicated to the Public Domain.
 # http://creativecommons.org/publicdomain/zero/1.0/
-import sys
 import csv
+import sys
 
 from pkg_resources import resource_string
+
+__all__ = ()
 
 
 def get_property(idx, name):

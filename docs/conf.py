@@ -1,6 +1,6 @@
+import datetime
 import os
 import sys
-import datetime
 from unittest.mock import MagicMock
 
 import toml
@@ -28,7 +28,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.todo',
     'sphinx.ext.mathjax',
-    'sphinx.ext.viewcode'
+    'sphinx.ext.viewcode',
 ]
 source_suffix = '.rst'
 master_doc = 'index'
@@ -49,12 +49,7 @@ html_theme_options = {
     'travis_button': True,
 }
 html_sidebars = {
-    '**': [
-        'about.html',
-        'navigation.html',
-        'relations.html',
-        'searchbox.html',
-    ]
+    '**': ['about.html', 'navigation.html', 'relations.html', 'searchbox.html']
 }
 htmlhelp_basename = f'{project}doc'
 

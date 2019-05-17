@@ -1,14 +1,16 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-import sys
 import json
 import pickle
+import sys
 from argparse import ArgumentParser
-from socket import socket, AF_INET, SOCK_STREAM
 from contextlib import contextmanager
+from socket import AF_INET, SOCK_STREAM, socket
 
 from berny import Berny, geomlib
+
+__all__ = ()
 
 
 @contextmanager
@@ -87,10 +89,20 @@ def main():
     parser = ArgumentParser()
     arg = parser.add_argument
     arg('--init', action='store_true', help='Initialize Berny optimizer.')
-    arg('-f', '--format', choices=['xyz', 'aims'], default='xyz',
-        help='Format of geometry')
-    arg('-s', '--socket', nargs=2, metavar=('host', 'port'),
-        help='Listen on given address')
+    arg(
+        '-f',
+        '--format',
+        choices=['xyz', 'aims'],
+        default='xyz',
+        help='Format of geometry',
+    )
+    arg(
+        '-s',
+        '--socket',
+        nargs=2,
+        metavar=('host', 'port'),
+        help='Listen on given address',
+    )
     arg('paramfile', nargs='?', help='Optional optimization parameters as JSON')
     args = parser.parse_args()
     if args.init:

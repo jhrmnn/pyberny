@@ -1,10 +1,9 @@
 import numpy as np
-from pkg_resources import resource_filename
-
 import pytest
+from pkg_resources import resource_filename
 from pytest import approx
 
-from berny import Berny, optimize, geomlib
+from berny import Berny, geomlib, optimize
 from berny.solvers import MopacSolver
 
 

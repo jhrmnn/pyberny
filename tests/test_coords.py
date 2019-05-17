@@ -1,9 +1,14 @@
-from berny.geomlib import Geometry
 from berny.coords import InternalCoords, angstrom
+from berny.geomlib import Geometry
 
 
 def test_cycle_dihedrals():
-    geom = Geometry.from_atoms([(ws[1], ws[2:5]) for ws in (l.split() for l in """\
+    geom = Geometry.from_atoms(
+        [
+            (ws[1], ws[2:5])
+            for ws in (
+                l.split()
+                for l in """\
     1 H -0.000000000000 0.000000000000 -1.142569988888
     2 O 1.784105551801 1.364934064507 -1.021376180623
     3 H 2.248320553963 2.318104360291 -2.500037742933
@@ -17,6 +22,12 @@ def test_cycle_dihedrals():
     11 O -5.839754502205 0.500682935191 1.037064691242
     12 H -7.440059622286 1.597667062287 0.565115038647
     13 H -6.475526400773 -0.638572472561 2.500357106648
-    """.strip().split('\n'))], unit=1/angstrom)
+    """.strip().split(
+                    '\n'
+                )
+            )
+        ],
+        unit=1 / angstrom,
+    )
     coords = InternalCoords(geom)
     assert not [dih for dih in coords.dihedrals if len(set(dih.idx)) < 4]
