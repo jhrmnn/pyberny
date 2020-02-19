@@ -1,7 +1,7 @@
 ``berny`` — Molecular optimizer
 ===============================
 
-This Python 2/3 package can optimize molecular and crystal structures
+This Python package can optimize molecular and crystal structures
 with respect to total energy, using nuclear gradient information.
 
 In each step, it takes energy and Cartesian gradients as an input, and
