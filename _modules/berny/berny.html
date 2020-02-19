@@ -137,18 +137,18 @@
     <span class="s1">&#39;superweakdih&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">- gradientmax, gradientrms, stepmax, steprms:</span>
+<span class="sd">``gradientmax``, ``gradientrms``, ``stepmax``, ``steprms``</span>
 <span class="sd">    Convergence criteria in atomic units (&quot;step&quot; refers to the step in</span>
 <span class="sd">    internal coordinates, assuming radian units for angles).</span>
 
-<span class="sd">- trust:</span>
+<span class="sd">``trust``</span>
 <span class="sd">    Initial trust radius in atomic units. It is the maximum RMS of the</span>
 <span class="sd">    quadratic step (see below).</span>
 
-<span class="sd">- dihedral:</span>
+<span class="sd">``dihedral``</span>
 <span class="sd">    Form dihedral angles.</span>
 
-<span class="sd">- superweakdih:</span>
+<span class="sd">``superweakdih``</span>
 <span class="sd">    Form dihedral angles containing two or more noncovalent bonds.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -159,16 +159,16 @@
 
 
 <div class="viewcode-block" id="Berny"><a class="viewcode-back" href="../../api.html#berny.Berny">[docs]</a><span class="k">class</span> <span class="nc">Berny</span><span class="p">(</span><span class="n">Generator</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Generator that receives energy and gradients and yields the next geometry.</span>
+    <span class="sd">&quot;&quot;&quot;Generator that receives energy and gradients and yields the next geometry.</span>
 
-<span class="sd">    :param Gometry geom: geometry to start with</span>
-<span class="sd">    :param bool debug: if True, the generator yields debug info on receiving</span>
-<span class="sd">        the energy and gradients, otherwise it yields None</span>
-<span class="sd">    :param dict restart: start from a state saved from previous run</span>
-<span class="sd">        using ``debug=True``</span>
-<span class="sd">    :param int maxsteps: abort after maximum number of steps</span>
-<span class="sd">    :param params: parameters that override the :py:data:`~berny.berny.defaults`</span>
+<span class="sd">    Args:</span>
+<span class="sd">        geom (:class:`~berny.Geometry`): geometry to start with</span>
+<span class="sd">        debug (bool): if :data:`True`, the generator yields debug info on receiving</span>
+<span class="sd">            the energy and gradients, otherwise it yields :data:`None`</span>
+<span class="sd">        restart (dict): start from a state saved from previous run</span>
+<span class="sd">            using ``debug=True``</span>
+<span class="sd">        maxsteps (int): abort after maximum number of steps</span>
+<span class="sd">        params: parameters that override the :data:`~berny.berny.defaults`</span>
 
 <span class="sd">    The Berny object is to be used as follows::</span>
 

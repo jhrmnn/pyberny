@@ -114,19 +114,23 @@
 
 
 <div class="viewcode-block" id="optimize"><a class="viewcode-back" href="../../api.html#berny.optimize">[docs]</a><span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Optimize a geometry with respect to a solver.</span>
+    <span class="sd">&quot;&quot;&quot;Optimize a geometry with respect to a solver.</span>
 
-<span class="sd">    :param generator optimizer: Optimizer object with the same generator interface</span>
-<span class="sd">        as :py:func:`berny.Berny`</span>
-<span class="sd">    :param generator solver: unprimed generator that receives geometry as a</span>
-<span class="sd">        2-tuple of a list of 2-tuples of the atom symbol and coordinate (as a</span>
-<span class="sd">        3-tuple), and of a list of lattice vectors (or None if molecule), and</span>
-<span class="sd">        yields the energy and gradients (as a N-by-3 matrix or (N+3)-by-3</span>
-<span class="sd">        matrix in case of a crystal geometry)</span>
-<span class="sd">    :param str trajectory: filename for the XYZ trajectory</span>
+<span class="sd">    Args:</span>
+<span class="sd">        optimizer (:class:`~collections.abc.Generator`): Optimizer object with</span>
+<span class="sd">            the same generator interface as :class:`~berny.Berny`</span>
+<span class="sd">        solver (:class:`~collections.abc.Generator`): unprimed generator that</span>
+<span class="sd">            receives geometry as a 2-tuple of a list of 2-tuples of the atom</span>
+<span class="sd">            symbol and coordinate (as a 3-tuple), and of a list of lattice</span>
+<span class="sd">            vectors (or :data:`None` if molecule), and yields the energy and</span>
+<span class="sd">            gradients (as a :math:`N`-by-3 matrix or :math:`(N+3)`-by-3 matrix</span>
+<span class="sd">            in case of a crystal geometry).</span>
 
-<span class="sd">    Returns the optimized geometry.</span>
+<span class="sd">            See :class:`~berny.solvers.MopacSolver` for an example.</span>
+<span class="sd">        trajectory (str): filename for the XYZ trajectory</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The optimized geometry.</span>
 
 <span class="sd">    The function is equivalent to::</span>
 

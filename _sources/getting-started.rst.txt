@@ -9,8 +9,8 @@ Python >=3.5 with Numpy.
 Usage
 -----
 
-The Python API consists of coroutine :py:func:`~berny.Berny` and function
-:py:func:`~berny.optimize`::
+The Python API consists of coroutine :func:`~berny.Berny` and function
+:func:`~berny.optimize`::
 
    from berny import Berny, geomlib
    from berny.solvers import MopacSolver
