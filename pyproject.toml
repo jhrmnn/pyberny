@@ -4,7 +4,7 @@ skip-string-normalization = true
 
 [tool.poetry]
 name = "pyberny"
-version = "0.4.3"
+version = "0.5.0"
 description = "Molecular/crystal structure optimizer"
 readme = "README.md"
 authors = ["Jan Hermann <dev@jan.hermann.name>"]
@@ -42,7 +42,7 @@ flake8-comprehensions = "^1.4"
 flake8-quotes = "^1.0"
 isort = "^4.3"
 pydocstyle = "^3.0"
-black = { version = "^19-beta.0", allows-prereleases = true, python = "^3.6" }
+black = { version = "^19-beta.0", allow-prereleases = true, python = "^3.6" }
 
 [tool.poetry.scripts]
 berny = "berny.cli:main"

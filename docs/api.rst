@@ -17,9 +17,6 @@ This covers all supported public API.
 
 .. autofunction:: optimize
 
-.. autoclass:: Logger
-   :members:
-
 Geometry operations
 -------------------
 

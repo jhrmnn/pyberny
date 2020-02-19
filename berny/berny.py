@@ -1,6 +1,7 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+import logging
 import sys
 from collections import namedtuple
 from itertools import chain
@@ -11,15 +12,16 @@ from numpy.linalg import norm
 
 from . import Math
 from .coords import InternalCoords
-from .Logger import Logger
 
 if sys.version_info[:2] >= (3, 5):
     from collections.abc import Generator
 else:
     from ._py2 import Generator  # noqa
 
-__version__ = '0.2.2'
+__version__ = '0.3.0'
 __all__ = ['Berny']
+
+log = logging.getLogger(__name__)
 
 defaults = {
     'gradientmax': 0.45e-3,
@@ -47,19 +49,21 @@ defaults = {
 """
 
 
+class BernyAdapter(logging.LoggerAdapter):
+    def process(self, msg, kwargs):
+        return '{} {}'.format(self.extra['step'], msg), kwargs
+
+
 class Berny(Generator):
     """
     Generator that receives energy and gradients and yields the next geometry.
 
     :param Gometry geom: geometry to start with
-    :param Logger log: used for logging if given
     :param bool debug: if True, the generator yields debug info on receiving
         the energy and gradients, otherwise it yields None
     :param dict restart: start from a state saved from previous run
         using ``debug=True``
     :param int maxsteps: abort after maximum number of steps
-    :param int verbosity: if present and log is None, specifies the verbosity of
-        the default :py:class:`~berny.Logger`
     :param params: parameters that override the :py:data:`~berny.berny.defaults`
 
     The Berny object is to be used as follows::
@@ -78,18 +82,17 @@ class Berny(Generator):
     def __init__(
         self,
         geom,
-        log=None,
         debug=False,
         restart=None,
         maxsteps=100,
-        verbosity=None,
         **params
     ):
-        self._log = log or Logger(verbosity=verbosity or 0)
         self._debug = debug
         self._maxsteps = maxsteps
         self._converged = False
         self._n = 0
+        self._log_extra = {'step': self._n}
+        self._log = BernyAdapter(log, self._log_extra)
         s = self._state = Berny.State()
         if restart:
             vars(s).update(restart)
@@ -105,7 +108,7 @@ class Berny(Generator):
         s.future = Berny.Point(s.coords.eval_geom(s.geom), None, None)
         s.first = True
         for line in str(s.coords).split('\n'):
-            self._log(line)
+            self._log.info(line)
 
     def __next__(self):
         assert self._n <= self._maxsteps
@@ -120,12 +123,12 @@ class Berny(Generator):
         return self._state.trust
 
     def send(self, energy_gradients):  # noqa: D102
-        log = self._log
-        log.n = self._n
+        log = self._log.info
+        self._log_extra['step'] = self._n
         s = self._state
         energy, gradients = energy_gradients
         gradients = np.array(gradients)
-        log('Energy: {:.12}'.format(energy), level=1)
+        log('Energy: {:.12}'.format(energy))
         B = s.coords.B_matrix(s.geom)
         B_inv = B.T.dot(Math.pinv(np.dot(B, B.T), log=log))
         current = Berny.Point(s.future.q, energy, dot(B_inv.T, gradients.reshape(-1)))
@@ -286,5 +289,5 @@ def is_converged(forces, step, on_sphere, params, log=no_log):
         if not result:
             all_matched = False
     if all_matched:
-        log('* All criteria matched', level=1)
+        log('* All criteria matched')
     return all_matched
