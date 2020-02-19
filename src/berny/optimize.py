@@ -5,19 +5,23 @@ __version__ = '0.2.0'
 
 
 def optimize(optimizer, solver, trajectory=None):
-    """
-    Optimize a geometry with respect to a solver.
+    """Optimize a geometry with respect to a solver.
 
-    :param generator optimizer: Optimizer object with the same generator interface
-        as :py:func:`berny.Berny`
-    :param generator solver: unprimed generator that receives geometry as a
-        2-tuple of a list of 2-tuples of the atom symbol and coordinate (as a
-        3-tuple), and of a list of lattice vectors (or None if molecule), and
-        yields the energy and gradients (as a N-by-3 matrix or (N+3)-by-3
-        matrix in case of a crystal geometry)
-    :param str trajectory: filename for the XYZ trajectory
+    Args:
+        optimizer (:class:`~collections.abc.Generator`): Optimizer object with
+            the same generator interface as :class:`~berny.Berny`
+        solver (:class:`~collections.abc.Generator`): unprimed generator that
+            receives geometry as a 2-tuple of a list of 2-tuples of the atom
+            symbol and coordinate (as a 3-tuple), and of a list of lattice
+            vectors (or :data:`None` if molecule), and yields the energy and
+            gradients (as a :math:`N`-by-3 matrix or :math:`(N+3)`-by-3 matrix
+            in case of a crystal geometry).
 
-    Returns the optimized geometry.
+            See :class:`~berny.solvers.MopacSolver` for an example.
+        trajectory (str): filename for the XYZ trajectory
+
+    Returns:
+        The optimized geometry.
 
     The function is equivalent to::
 

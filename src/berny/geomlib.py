@@ -21,11 +21,11 @@ class Geometry(object):
 
     :param list species: list of element symbols
     :param list coords: list of atomic coordinates in angstroms (as 3-tuples)
-    :param list lattice: list of lattice vectors (None for a moleucle)
+    :param list lattice: list of lattice vectors (:data:`None` for a moleucle)
 
     Iterating over a geometry yields 2-tuples of symbols and coordinates.
-    ``len(geom)`` returns the number of atoms in a geometry. The class supports
-    :py:func:`format` with the same available formats as :py:meth:`dump`.
+    :func:`len` returns the number of atoms in a geometry. The class supports
+    :func:`format` with the same available formats as :meth:`dump`.
     """
 
     def __init__(self, species, coords, lattice=None):
@@ -40,7 +40,7 @@ class Geometry(object):
         :param list atoms: list of 2-tuples with an elemnt symbol and
             a coordinate
         :param float unit: value to multiple atomic coordiantes with
-        :param list lattice: list of lattice vectors (None for a moleucle)
+        :param list lattice: list of lattice vectors (:data:`None` for a moleucle)
         """
         species = [sp for sp, _ in atoms]
         coords = [np.array(coord, dtype=float) * unit for _, coord in atoms]
@@ -68,7 +68,7 @@ class Geometry(object):
         return ''.join('{}{}'.format(sp, n if n > 1 else '') for sp, n in composition)
 
     def __format__(self, fmt):
-        """Return the geometry represented as a string, delegates to :py:meth:`dump`."""
+        """Return the geometry represented as a string, delegates to :meth:`dump`."""
         fp = StringIO()
         self.dump(fp, fmt)
         return fp.getvalue()
@@ -79,7 +79,8 @@ class Geometry(object):
         """Save the geometry into a file.
 
         :param file f: file object
-        :param str fmt: geometry format, one of '', 'xyz', 'aims', 'mopac'.
+        :param str fmt: geometry format, one of ``""``, ``"xyz"``, ``"aims"``,
+            ``"mopac"``.
         """
         if fmt == '':
             f.write(repr(self))
@@ -121,7 +122,7 @@ class Geometry(object):
 
     def write(self, filename):
         """
-        Write the geometry into a file, delegates to :py:meth:`dump`.
+        Write the geometry into a file, delegates to :meth:`dump`.
 
         :param str filename: path that will be overwritten
         """
@@ -143,7 +144,7 @@ class Geometry(object):
 
         :param float radius: circumscribed radius in angstroms
 
-        Returns None when geometry is not a crystal.
+        Returns :data:`None` when geometry is not a crystal.
         """
         if self.lattice is None:
             return
@@ -188,11 +189,13 @@ class Geometry(object):
         r"""
         Calculate distances and vectors between atoms.
 
-        :param Geometry other: calculate distances between two geometries if
-            given or within a geometry if not
+        Args:
+            other (:class:`~berny.Geometry`): calculate distances between two
+                geometries if given or within a geometry if not
 
-        Returns :math:`R_{ij}:=|\mathbf R_i-\mathbf R_j|` and
-        :math:`R_{ij\alpha}:=(\mathbf R_i)_\alpha-(\mathbf R_j)_\alpha`.
+        Returns:
+            :math:`R_{ij}:=|\mathbf R_i-\mathbf R_j|` and
+            :math:`R_{ij\alpha}:=(\mathbf R_i)_\alpha-(\mathbf R_j)_\alpha`.
         """
         if other is None:
             other = self
@@ -202,7 +205,7 @@ class Geometry(object):
         return dist, diff
 
     def dist(self, other=None):
-        """Alias for the first element of :py:meth:`dist_diff`."""
+        """Alias for the first element of :meth:`dist_diff`."""
         return self.dist_diff(other)[0]
 
     def bondmatrix(self, scale=1.3):
@@ -211,8 +214,8 @@ class Geometry(object):
 
         :param float scale: threshold for accepting a distance as a covalent bond
 
-        Returns :math:`b_{ij}:=R_{ij}<\text{scale}\times
-        (R_i^\text{cov}+R_j^\text{cov})`.
+        Returns:
+            :math:`b_{ij}:=R_{ij}<\text{scale}\times (R_i^\text{cov}+R_j^\text{cov})`.
         """
         dist = self.dist(self)
         radii = np.array([get_property(sp, 'covalent_radius') for sp in self.species])
@@ -222,8 +225,8 @@ class Geometry(object):
         r"""
         Calculate a measure of covalentness.
 
-        Returns
-        :math:`\rho_{ij}:=\exp\big(-R_{ij}/(R_i^\text{cov}+R_j^\text{cov})\big)`.
+        Returns:
+            :math:`\rho_{ij}:=\exp\big(-R_{ij}/(R_i^\text{cov}+R_j^\text{cov})\big)`.
         """
         geom = self.supercell()
         dist = geom.dist(geom)
@@ -232,7 +235,7 @@ class Geometry(object):
 
     @property
     def masses(self):
-        """Return an array of atomic masses."""
+        """Numpy array of atomic masses."""
         return np.array([get_property(sp, 'mass') for sp in self.species])
 
     @property
@@ -245,10 +248,11 @@ class Geometry(object):
     def inertia(self):
         r"""Calculate the moment of inertia.
 
-        :math:`I_{\alpha\beta}:=
-        \sum_im_i\big(r_i^2\delta_{\alpha\beta}-(\mathbf r_i)_\alpha(\mathbf
-        r_i)_\beta\big)` where :math:`\mathbf r_i=\mathbf R_i-\mathbf
-        R_\text{CMS}`
+        .. math::
+            I_{\alpha\beta}:=
+            \sum_im_i\big(r_i^2\delta_{\alpha\beta}-(\mathbf r_i)_\alpha(\mathbf
+            r_i)_\beta\big),\qquad
+            \mathbf r_i=\mathbf R_i-\mathbf R_\text{CMS}
         """
         coords_w = np.sqrt(self.masses)[:, None] * (self.coords - self.cms)
         A = np.array([np.diag(np.full(3, r)) for r in np.sum(coords_w ** 2, 1)])
@@ -261,9 +265,10 @@ def load(fp, fmt):
     Read a geometry from a file object.
 
     :param file fp: file object
-    :param str fmt: the format of the geometry file, can be one of 'xyz', 'aims'
+    :param str fmt: the format of the geometry file, can be one of ``"xyz"``,
+        ``"aims"``
 
-    Returns :py:class:`berny.Geometry`.
+    Returns :class:`~berny.Geometry`.
     """
     if fmt == 'xyz':
         n = int(fp.readline())
@@ -302,7 +307,7 @@ def load(fp, fmt):
 
 def loads(s, fmt):
     """
-    Read a geometry from a string, delegates to :py:func:`load`.
+    Read a geometry from a string, delegates to :func:`load`.
 
     :param str s: string with geometry
     """
@@ -312,7 +317,7 @@ def loads(s, fmt):
 
 def readfile(path, fmt=None):
     """
-    Read a geometry from a file path, delegates to :py:func:`load`.
+    Read a geometry from a file path, delegates to :func:`load`.
 
     :param str path: path to a geometry file
     :param str fmt: if not given, the format is given from the file extension

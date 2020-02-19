@@ -49,5 +49,5 @@ pydocstyle = "^5.0.1"
 berny = "berny.cli:main"
 
 [tool.black]
-target-version = ["py36"]
+target-version = ["py35"]
 skip-string-normalization = true

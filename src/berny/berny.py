@@ -28,18 +28,18 @@ defaults = {
     'superweakdih': False,
 }
 """
-- gradientmax, gradientrms, stepmax, steprms:
+``gradientmax``, ``gradientrms``, ``stepmax``, ``steprms``
     Convergence criteria in atomic units ("step" refers to the step in
     internal coordinates, assuming radian units for angles).
 
-- trust:
+``trust``
     Initial trust radius in atomic units. It is the maximum RMS of the
     quadratic step (see below).
 
-- dihedral:
+``dihedral``
     Form dihedral angles.
 
-- superweakdih:
+``superweakdih``
     Form dihedral angles containing two or more noncovalent bonds.
 """
 
@@ -50,16 +50,16 @@ class BernyAdapter(logging.LoggerAdapter):
 
 
 class Berny(Generator):
-    """
-    Generator that receives energy and gradients and yields the next geometry.
+    """Generator that receives energy and gradients and yields the next geometry.
 
-    :param Gometry geom: geometry to start with
-    :param bool debug: if True, the generator yields debug info on receiving
-        the energy and gradients, otherwise it yields None
-    :param dict restart: start from a state saved from previous run
-        using ``debug=True``
-    :param int maxsteps: abort after maximum number of steps
-    :param params: parameters that override the :py:data:`~berny.berny.defaults`
+    Args:
+        geom (:class:`~berny.Geometry`): geometry to start with
+        debug (bool): if :data:`True`, the generator yields debug info on receiving
+            the energy and gradients, otherwise it yields :data:`None`
+        restart (dict): start from a state saved from previous run
+            using ``debug=True``
+        maxsteps (int): abort after maximum number of steps
+        params: parameters that override the :data:`~berny.berny.defaults`
 
     The Berny object is to be used as follows::
 

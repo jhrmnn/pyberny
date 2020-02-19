@@ -13,7 +13,7 @@ This covers all supported public API.
 
 .. autodata:: berny.coords.angstrom
 
-    Can be imported directly as :py:data:`berny.angstrom`.
+    Can be imported directly as :data:`berny.angstrom`.
 
 .. autofunction:: optimize
 
@@ -35,7 +35,7 @@ Solvers
 -------
 
 All functions in this module are coroutines that satisfy the solver interface
-expected by :py:func:`~berny.optimize`.
+expected by :func:`~berny.optimize`.
 
 .. module:: berny.solvers
 

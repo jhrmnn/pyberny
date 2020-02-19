@@ -24,8 +24,12 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.intersphinx',
     'sphinx.ext.mathjax',
+    'sphinx.ext.napoleon',
     'sphinxcontrib.katex',
 ]
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+}
 exclude_patterns = ['build', '.DS_Store']
 
 html_theme = 'alabaster'
@@ -48,6 +52,8 @@ html_static_path = ['_static']
 autodoc_default_options = {'special-members': '__call__'}
 todo_include_todos = True
 pygments_style = 'sphinx'
+napoleon_numpy_docstring = False
+napoleon_use_ivar = True
 
 
 def skip_namedtuples(app, what, name, obj, skip, options):

@@ -9,18 +9,18 @@ Python >=3.5 with Numpy.
 Usage
 -----
 
-The Python API consists of coroutine :py:func:`~berny.Berny` and function
-:py:func:`~berny.optimize`::
+The Python API consists of coroutine :class:`~berny.Berny` and function
+:func:`~berny.optimize`::
 
    from berny import Berny, geomlib
    from berny.solvers import MopacSolver
 
-   optimizer = Berny(geomlib.readfile('start.xyz'), debug=True)
+   optimizer = Berny(geomlib.readfile('start.xyz'))
    solver = MopacSolver()
    for geom in optimizer:
        energy, gradients = solver(geom)
        optimizer.send((energy, gradients))
-    relaxed = geom
+   relaxed = geom
 
 or equivalently::
 
@@ -30,7 +30,9 @@ or equivalently::
    relaxed = optimize(Berny(geomlib.readfile('start.xyz')), MopacSolver())
 
 A different option is to use the package via a command-line or socket
-interface defined in ``berny``::
+interface defined by the ``berny`` command:
+
+.. code:: none
 
    usage: berny [-h] [--init] [-f {xyz,aims}] [-s host port] [paramfile]
 
@@ -45,14 +47,14 @@ interface defined in ``berny``::
      -s host port, --socket host port
                            Listen on given address
 
-A call with ``--init`` corresponds to initializing the ``Berny`` object
-where the geometry is taken from standard input, asssuming format
-``--format``. The object is then pickled to ``berny.pickle`` and the
-program quits. Subsequent calls to ``berny`` recover the ``Berny``
-object, read energy and gradients from the standard input (first line is
-energy, subsequent lines correspond to Cartesian gradients of individual
-atoms, all in atomic units) and write the new structure estimate to
-standard output. An example usage could look like this:
+A call with ``--init`` corresponds to initializing the :class:`~berny.Berny`
+object where the geometry is taken from standard input, assuming format
+``--format``. The object is then pickled to ``berny.pickle`` and the program
+quits. Subsequent calls to ``berny`` recover the :class:`~berny.Berny` object,
+read energy and gradients from the standard input (first line is energy,
+subsequent lines correspond to Cartesian gradients of individual atoms, all in
+atomic units) and write the new structure estimate to standard output. An
+example usage could look like this:
 
 .. code:: bash
 
@@ -69,10 +71,10 @@ standard output. An example usage could look like this:
    done
 
 Alternatively, one can start an optimizer server with the ``--socket``
-option on a given address and port. This initiates the ``Berny`` object
-and waits for connections, in which it expects to receive energy and
-gradients as a request (in the same format as above) and responds with a
-new structure estimate in a given format. Example usage would be
+option on a given address and port. This initiates the :class:`~berny.Berny`
+object and waits for connections, in which it expects to receive energy and
+gradients as a request (in the same format as above) and responds with a new
+structure estimate in a given format. Example usage would be
 
 .. code:: bash
 
