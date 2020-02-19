@@ -4,15 +4,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>berny.berny &#8212; berny 0.4.3 documentation</title>
+    <title>berny.berny &#8212; berny 0.5.0 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
@@ -35,25 +35,27 @@
 <span></span><span class="c1"># This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="c1"># License, v. 2.0. If a copy of the MPL was not distributed with this</span>
 <span class="c1"># file, You can obtain one at http://mozilla.org/MPL/2.0/.</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">chain</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">dot</span><span class="p">,</span> <span class="n">eye</span>
-<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">dot</span><span class="p">,</span> <span class="n">eye</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">norm</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">Math</span>
-<span class="kn">from</span> <span class="nn">.coords</span> <span class="k">import</span> <span class="n">InternalCoords</span>
-<span class="kn">from</span> <span class="nn">.Logger</span> <span class="k">import</span> <span class="n">Logger</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Math</span>
+<span class="kn">from</span> <span class="nn">.coords</span> <span class="kn">import</span> <span class="n">InternalCoords</span>
 
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">collections.abc</span> <span class="k">import</span> <span class="n">Generator</span>
+    <span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Generator</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">._py2</span> <span class="k">import</span> <span class="n">Generator</span>  <span class="c1"># noqa</span>
+    <span class="kn">from</span> <span class="nn">._py2</span> <span class="kn">import</span> <span class="n">Generator</span>  <span class="c1"># noqa</span>
 
-<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.2.2&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.3.0&#39;</span>
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Berny&#39;</span><span class="p">]</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;gradientmax&#39;</span><span class="p">:</span> <span class="mf">0.45e-3</span><span class="p">,</span>
@@ -81,19 +83,21 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
+<span class="k">class</span> <span class="nc">BernyAdapter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">LoggerAdapter</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],</span> <span class="n">msg</span><span class="p">),</span> <span class="n">kwargs</span>
+
+
 <div class="viewcode-block" id="Berny"><a class="viewcode-back" href="../../api.html#berny.Berny">[docs]</a><span class="k">class</span> <span class="nc">Berny</span><span class="p">(</span><span class="n">Generator</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generator that receives energy and gradients and yields the next geometry.</span>
 
 <span class="sd">    :param Gometry geom: geometry to start with</span>
-<span class="sd">    :param Logger log: used for logging if given</span>
 <span class="sd">    :param bool debug: if True, the generator yields debug info on receiving</span>
 <span class="sd">        the energy and gradients, otherwise it yields None</span>
 <span class="sd">    :param dict restart: start from a state saved from previous run</span>
 <span class="sd">        using ``debug=True``</span>
 <span class="sd">    :param int maxsteps: abort after maximum number of steps</span>
-<span class="sd">    :param int verbosity: if present and log is None, specifies the verbosity of</span>
-<span class="sd">        the default :py:class:`~berny.Logger`</span>
 <span class="sd">    :param params: parameters that override the :py:data:`~berny.berny.defaults`</span>
 
 <span class="sd">    The Berny object is to be used as follows::</span>
@@ -109,21 +113,20 @@
 
     <span class="n">Point</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Point&#39;</span><span class="p">,</span> <span class="s1">&#39;q E g&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">geom</span><span class="p">,</span>
-        <span class="n">log</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">restart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">maxsteps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">verbosity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="n">log</span> <span class="ow">or</span> <span class="n">Logger</span><span class="p">(</span><span class="n">verbosity</span><span class="o">=</span><span class="n">verbosity</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span> <span class="o">=</span> <span class="n">debug</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_maxsteps</span> <span class="o">=</span> <span class="n">maxsteps</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_converged</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_extra</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;step&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="n">BernyAdapter</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_extra</span><span class="p">)</span>
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">Berny</span><span class="o">.</span><span class="n">State</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">restart</span><span class="p">:</span>
             <span class="nb">vars</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">restart</span><span class="p">)</span>
@@ -139,9 +142,9 @@
         <span class="n">s</span><span class="o">.</span><span class="n">future</span> <span class="o">=</span> <span class="n">Berny</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">eval_geom</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">geom</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">s</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxsteps</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxsteps</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_converged</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">StopIteration</span>
@@ -154,12 +157,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">trust</span>
 
     <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energy_gradients</span><span class="p">):</span>  <span class="c1"># noqa: D102</span>
-        <span class="n">log</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+        <span class="n">log</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_extra</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
         <span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span> <span class="o">=</span> <span class="n">energy_gradients</span>
         <span class="n">gradients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gradients</span><span class="p">)</span>
-        <span class="n">log</span><span class="p">(</span><span class="s1">&#39;Energy: </span><span class="si">{:.12}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">energy</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s1">&#39;Energy: </span><span class="si">{:.12}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">energy</span><span class="p">))</span>
         <span class="n">B</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">B_matrix</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">geom</span><span class="p">)</span>
         <span class="n">B_inv</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Math</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">))</span>
         <span class="n">current</span> <span class="o">=</span> <span class="n">Berny</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">future</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="n">energy</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">B_inv</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">gradients</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
@@ -320,7 +323,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
             <span class="n">all_matched</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="n">all_matched</span><span class="p">:</span>
-        <span class="n">log</span><span class="p">(</span><span class="s1">&#39;* All criteria matched&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s1">&#39;* All criteria matched&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">all_matched</span>
 </pre></div>
 
@@ -389,24 +392,24 @@
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2017-2019, Jan Hermann.
+      &copy;2017-2020, Jan Hermann.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
