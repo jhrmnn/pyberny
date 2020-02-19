@@ -4,7 +4,7 @@ Getting started
 Dependencies
 ------------
 
-Python 2.7 or >=3.5 with Numpy
+Python >=3.5 with Numpy.
 
 Usage
 -----
