@@ -2,24 +2,17 @@ language: python
 dist: xenial
 matrix:
   include:
-    - python: 2.7
-      env: TOXENV=py27-coverage-codecov
-    - python: 3.4
-      env: TOXENV=py34
-    - python: 3.5
-      env: TOXENV=py35
     - python: 3.6
       env: TOXENV=py36
     - python: 3.7
-      env: TOXENV=py37-coverage-codecov
+      env: TOXENV=py37-codecov
     - python: 3.6
       stage: deploy
       env: TOXENV=docs
 before_install:
-  - pip install tox tox-venv
+  - pip install poetry tox tox-venv
   - |
     if [[ $TOXENV != docs ]]; then
-      pip install poetry
       source .travis/install-mopac.sh
     fi
 install: true

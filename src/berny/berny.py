@@ -2,8 +2,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 import logging
-import sys
 from collections import namedtuple
+from collections.abc import Generator
 from itertools import chain
 
 import numpy as np
@@ -12,11 +12,6 @@ from numpy.linalg import norm
 
 from . import Math
 from .coords import InternalCoords
-
-if sys.version_info[:2] >= (3, 5):
-    from collections.abc import Generator
-else:
-    from ._py2 import Generator  # noqa
 
 __version__ = '0.3.0'
 __all__ = ['Berny']
@@ -79,14 +74,7 @@ class Berny(Generator):
 
     Point = namedtuple('Point', 'q E g')
 
-    def __init__(
-        self,
-        geom,
-        debug=False,
-        restart=None,
-        maxsteps=100,
-        **params
-    ):
+    def __init__(self, geom, debug=False, restart=None, maxsteps=100, **params):
         self._debug = debug
         self._maxsteps = maxsteps
         self._converged = False

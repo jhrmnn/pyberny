@@ -1,43 +1,33 @@
 import datetime
-import os
-import sys
-from unittest.mock import MagicMock
 
-import toml
+from importlib_metadata import metadata
 
-sys.path.insert(0, os.path.abspath('..'))
-
-
-class Mock(MagicMock):
-    @classmethod
-    def __getattr__(cls, name):
-        return MagicMock()
-
-
-MOCK_MODULES = ['numpy', 'numpy.linalg']
-sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
-
-metadata = toml.load(open('../pyproject.toml'))['tool']['poetry']
+md = metadata('pyberny')
 
 project = 'berny'
-version = metadata['version']
-author = ' '.join(metadata['authors'][0].split()[:-1])
-description = metadata['description']
+author = md['Author']
+release = version = md['Version']
+description = md['Summary']
+year_range = (2016, datetime.date.today().year)
+year_str = (
+    str(year_range[0])
+    if year_range[0] == year_range[1]
+    else f'{year_range[0]}-{year_range[1]}'
+)
+copyright = f'{year_str}, {author}'
 
+master_doc = 'index'
 extensions = [
+    'sphinx.ext.githubpages',
     'sphinx.ext.autodoc',
     'sphinx.ext.todo',
-    'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.mathjax',
+    'sphinxcontrib.katex',
 ]
-source_suffix = '.rst'
-master_doc = 'index'
-copyright = f'2017-{datetime.date.today().year}, {author}'
-release = version
-language = None
 exclude_patterns = ['build', '.DS_Store']
-pygments_style = 'sphinx'
-todo_include_todos = True
+
 html_theme = 'alabaster'
 html_theme_options = {
     'description': description,
@@ -47,12 +37,17 @@ html_theme_options = {
     'badge_branch': 'master',
     'codecov_button': True,
     'travis_button': True,
+    'fixed_sidebar': True,
+    'page_width': '60em',
 }
 html_sidebars = {
     '**': ['about.html', 'navigation.html', 'relations.html', 'searchbox.html']
 }
-htmlhelp_basename = f'{project}doc'
+html_static_path = ['_static']
+
 autodoc_default_options = {'special-members': '__call__'}
+todo_include_todos = True
+pygments_style = 'sphinx'
 
 
 def skip_namedtuples(app, what, name, obj, skip, options):

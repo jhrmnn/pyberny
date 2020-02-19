@@ -1,11 +1,10 @@
 *.pyc
+*.egg-info/
 /.coverage
-/*.egg-info/
-/dist/
-/docs/build/
 /.pytest_cache/
 /.cache/
 /.tox/
+/dist/
+/docs/build/
 /htmlcov/
 /poetry.lock
-/setup.py

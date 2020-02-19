@@ -222,7 +222,8 @@ class Geometry(object):
         r"""
         Calculate a measure of covalentness.
 
-        Returns :math:`\rho_{ij}:=\exp\big(-R_{ij}/(R_i^\text{cov}+R_j^\text{cov})\big)`.
+        Returns
+        :math:`\rho_{ij}:=\exp\big(-R_{ij}/(R_i^\text{cov}+R_j^\text{cov})\big)`.
         """
         geom = self.supercell()
         dist = geom.dist(geom)
