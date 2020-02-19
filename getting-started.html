@@ -120,17 +120,17 @@
 </div>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
-<p>The Python API consists of coroutine <a class="reference internal" href="api.html#berny.Berny" title="berny.Berny"><code class="xref py py-func docutils literal notranslate"><span class="pre">Berny()</span></code></a> and function
+<p>The Python API consists of coroutine <a class="reference internal" href="api.html#berny.Berny" title="berny.Berny"><code class="xref py py-class docutils literal notranslate"><span class="pre">Berny</span></code></a> and function
 <a class="reference internal" href="api.html#berny.optimize" title="berny.optimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">optimize()</span></code></a>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">berny</span> <span class="kn">import</span> <span class="n">Berny</span><span class="p">,</span> <span class="n">geomlib</span>
 <span class="kn">from</span> <span class="nn">berny.solvers</span> <span class="kn">import</span> <span class="n">MopacSolver</span>
 
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">Berny</span><span class="p">(</span><span class="n">geomlib</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="s1">&#39;start.xyz&#39;</span><span class="p">),</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">Berny</span><span class="p">(</span><span class="n">geomlib</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="s1">&#39;start.xyz&#39;</span><span class="p">))</span>
 <span class="n">solver</span> <span class="o">=</span> <span class="n">MopacSolver</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">geom</span> <span class="ow">in</span> <span class="n">optimizer</span><span class="p">:</span>
     <span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span> <span class="o">=</span> <span class="n">solver</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span><span class="p">))</span>
- <span class="n">relaxed</span> <span class="o">=</span> <span class="n">geom</span>
+<span class="n">relaxed</span> <span class="o">=</span> <span class="n">geom</span>
 </pre></div>
 </div>
 <p>or equivalently:</p>
@@ -141,29 +141,29 @@
 </pre></div>
 </div>
 <p>A different option is to use the package via a command-line or socket
-interface defined in <code class="docutils literal notranslate"><span class="pre">berny</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">berny</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">init</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">f</span> <span class="p">{</span><span class="n">xyz</span><span class="p">,</span><span class="n">aims</span><span class="p">}]</span> <span class="p">[</span><span class="o">-</span><span class="n">s</span> <span class="n">host</span> <span class="n">port</span><span class="p">]</span> <span class="p">[</span><span class="n">paramfile</span><span class="p">]</span>
+interface defined by the <code class="docutils literal notranslate"><span class="pre">berny</span></code> command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>usage: berny [-h] [--init] [-f {xyz,aims}] [-s host port] [paramfile]
 
-<span class="n">positional</span> <span class="n">arguments</span><span class="p">:</span>
-  <span class="n">paramfile</span>             <span class="n">Optional</span> <span class="n">optimization</span> <span class="n">parameters</span> <span class="k">as</span> <span class="n">JSON</span>
+positional arguments:
+  paramfile             Optional optimization parameters as JSON
 
-<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
-  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
-  <span class="o">--</span><span class="n">init</span>                <span class="n">Initialize</span> <span class="n">Berny</span> <span class="n">optimizer</span><span class="o">.</span>
-  <span class="o">-</span><span class="n">f</span> <span class="p">{</span><span class="n">xyz</span><span class="p">,</span><span class="n">aims</span><span class="p">},</span> <span class="o">--</span><span class="nb">format</span> <span class="p">{</span><span class="n">xyz</span><span class="p">,</span><span class="n">aims</span><span class="p">}</span>
-                        <span class="n">Format</span> <span class="n">of</span> <span class="n">geometry</span>
-  <span class="o">-</span><span class="n">s</span> <span class="n">host</span> <span class="n">port</span><span class="p">,</span> <span class="o">--</span><span class="n">socket</span> <span class="n">host</span> <span class="n">port</span>
-                        <span class="n">Listen</span> <span class="n">on</span> <span class="n">given</span> <span class="n">address</span>
+optional arguments:
+  -h, --help            show this help message and exit
+  --init                Initialize Berny optimizer.
+  -f {xyz,aims}, --format {xyz,aims}
+                        Format of geometry
+  -s host port, --socket host port
+                        Listen on given address
 </pre></div>
 </div>
-<p>A call with <code class="docutils literal notranslate"><span class="pre">--init</span></code> corresponds to initializing the <code class="docutils literal notranslate"><span class="pre">Berny</span></code> object
-where the geometry is taken from standard input, asssuming format
-<code class="docutils literal notranslate"><span class="pre">--format</span></code>. The object is then pickled to <code class="docutils literal notranslate"><span class="pre">berny.pickle</span></code> and the
-program quits. Subsequent calls to <code class="docutils literal notranslate"><span class="pre">berny</span></code> recover the <code class="docutils literal notranslate"><span class="pre">Berny</span></code>
-object, read energy and gradients from the standard input (first line is
-energy, subsequent lines correspond to Cartesian gradients of individual
-atoms, all in atomic units) and write the new structure estimate to
-standard output. An example usage could look like this:</p>
+<p>A call with <code class="docutils literal notranslate"><span class="pre">--init</span></code> corresponds to initializing the <a class="reference internal" href="api.html#berny.Berny" title="berny.Berny"><code class="xref py py-class docutils literal notranslate"><span class="pre">Berny</span></code></a>
+object where the geometry is taken from standard input, assuming format
+<code class="docutils literal notranslate"><span class="pre">--format</span></code>. The object is then pickled to <code class="docutils literal notranslate"><span class="pre">berny.pickle</span></code> and the program
+quits. Subsequent calls to <code class="docutils literal notranslate"><span class="pre">berny</span></code> recover the <a class="reference internal" href="api.html#berny.Berny" title="berny.Berny"><code class="xref py py-class docutils literal notranslate"><span class="pre">Berny</span></code></a> object,
+read energy and gradients from the standard input (first line is energy,
+subsequent lines correspond to Cartesian gradients of individual atoms, all in
+atomic units) and write the new structure estimate to standard output. An
+example usage could look like this:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 ./berny --init params.json &lt;start.xyz
 cat start.xyz &gt;current.xyz
@@ -178,10 +178,10 @@ cat start.xyz &gt;current.xyz
 </pre></div>
 </div>
 <p>Alternatively, one can start an optimizer server with the <code class="docutils literal notranslate"><span class="pre">--socket</span></code>
-option on a given address and port. This initiates the <code class="docutils literal notranslate"><span class="pre">Berny</span></code> object
-and waits for connections, in which it expects to receive energy and
-gradients as a request (in the same format as above) and responds with a
-new structure estimate in a given format. Example usage would be</p>
+option on a given address and port. This initiates the <a class="reference internal" href="api.html#berny.Berny" title="berny.Berny"><code class="xref py py-class docutils literal notranslate"><span class="pre">Berny</span></code></a>
+object and waits for connections, in which it expects to receive energy and
+gradients as a request (in the same format as above) and responds with a new
+structure estimate in a given format. Example usage would be</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 ./berny -s localhost <span class="m">25000</span> -f xyz &lt;start.xyz <span class="p">&amp;</span>
 cat start.xyz &gt;current.xyz
