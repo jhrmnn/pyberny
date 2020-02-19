@@ -7,12 +7,16 @@
     <title>berny — Molecular optimizer &#8212; berny 0.5.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/katex-math.css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js"></script>
+    <script src="_static/katex_autorenderer.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Getting started" href="getting-started.html" />
@@ -23,53 +27,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
-
-          <div class="body" role="main">
-            
-  <div class="section" id="berny-molecular-optimizer">
-<h1><code class="docutils literal notranslate"><span class="pre">berny</span></code> — Molecular optimizer<a class="headerlink" href="#berny-molecular-optimizer" title="Permalink to this headline">¶</a></h1>
-<p>This Python 2/3 package can optimize molecular and crystal structures
-with respect to total energy, using nuclear gradient information.</p>
-<p>In each step, it takes energy and Cartesian gradients as an input, and
-returns a new structure estimate.</p>
-<p>The algorithm is an amalgam of several techniques, comprising redundant
-internal coordinates, iterative Hessian estimate, trust region, line
-search, and coordinate weighing, mostly inspired by the optimizer in the
-<a class="reference external" href="http://gaussian.com">Gaussian</a> program.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="getting-started.html#dependencies">Dependencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting-started.html#usage">Usage</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="algorithm.html">Algorithm</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="algorithm.html#sketch-of-the-algorithm">Sketch of the algorithm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="algorithm.html#redundant-internal-coordinates">Redundant internal coordinates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="algorithm.html#generalized-inverse">Generalized inverse</a></li>
-<li class="toctree-l2"><a class="reference internal" href="algorithm.html#references">References</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api.html#geometry-operations">Geometry operations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#solvers">Solvers</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-
-
-          </div>
-          
-        </div>
-      </div>
+  <div class="document">
+    
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h1 class="logo"><a href="#">berny</a></h1>
@@ -141,10 +100,54 @@ search, and coordinate weighing, mostly inspired by the optimizer in the
 <script>$('#searchbox').show(0);</script>
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="berny-molecular-optimizer">
+<h1><code class="docutils literal notranslate"><span class="pre">berny</span></code> — Molecular optimizer<a class="headerlink" href="#berny-molecular-optimizer" title="Permalink to this headline">¶</a></h1>
+<p>This Python 2/3 package can optimize molecular and crystal structures
+with respect to total energy, using nuclear gradient information.</p>
+<p>In each step, it takes energy and Cartesian gradients as an input, and
+returns a new structure estimate.</p>
+<p>The algorithm is an amalgam of several techniques, comprising redundant
+internal coordinates, iterative Hessian estimate, trust region, line
+search, and coordinate weighing, mostly inspired by the optimizer in the
+<a class="reference external" href="http://gaussian.com">Gaussian</a> program.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#usage">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="algorithm.html">Algorithm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#sketch-of-the-algorithm">Sketch of the algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#redundant-internal-coordinates">Redundant internal coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#generalized-inverse">Generalized inverse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#geometry-operations">Geometry operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#solvers">Solvers</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
-      &copy;2017-2020, Jan Hermann.
+      &copy;2016-2020, Jan Hermann.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.2</a>

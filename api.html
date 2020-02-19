@@ -7,12 +7,16 @@
     <title>API &#8212; berny 0.5.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/katex-math.css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js"></script>
+    <script src="_static/katex_autorenderer.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Algorithm" href="algorithm.html" />
@@ -23,9 +27,83 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">berny</a></h1>
 
-    <div class="document">
+
+
+<p class="blurb">Molecular/crystal structure optimizer</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=jhrmnn&repo=pyberny&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a class="badge" href="https://travis-ci.org/jhrmnn/pyberny">
+    <img
+        alt="https://secure.travis-ci.org/jhrmnn/pyberny.svg?branch=master"
+        src="https://secure.travis-ci.org/jhrmnn/pyberny.svg?branch=master"
+    />
+</a>
+</p>
+
+
+
+
+    
+
+<p>
+<a class="badge" href="https://codecov.io/github/jhrmnn/pyberny">
+    <img
+    alt="https://codecov.io/github/jhrmnn/pyberny/coverage.svg?branch=master"
+    src="https://codecov.io/github/jhrmnn/pyberny/coverage.svg?branch=master"
+    />
+</a>
+</p>
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithm.html">Algorithm</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#geometry-operations">Geometry operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#solvers">Solvers</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="algorithm.html" title="previous chapter">Algorithm</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
       <div class="documentwrapper">
         <div class="bodywrapper">
           
@@ -157,14 +235,14 @@ matrix in case of a crystal geometry)</p></li>
 <dd class="field-odd"><p><strong>scale</strong> (<em>float</em>) – threshold for accepting a distance as a covalent bond</p>
 </dd>
 </dl>
-<p>Returns <span class="math notranslate nohighlight">\(b_{ij}:=R_{ij}&lt;\text{scale}\times
+<p>Returns <span class="math">\(b_{ij}:=R_{ij}&lt;\text{scale}\times
 (R_i^\text{cov}+R_j^\text{cov})\)</span>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="berny.Geometry.cms">
 <em class="property">property </em><code class="sig-name descname">cms</code><a class="headerlink" href="#berny.Geometry.cms" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the center of mass, <span class="math notranslate nohighlight">\(\mathbf R_\text{CMS}\)</span>.</p>
+<dd><p>Calculate the center of mass, <span class="math">\(\mathbf R_\text{CMS}\)</span>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -189,8 +267,8 @@ matrix in case of a crystal geometry)</p></li>
 given or within a geometry if not</p>
 </dd>
 </dl>
-<p>Returns <span class="math notranslate nohighlight">\(R_{ij}:=|\mathbf R_i-\mathbf R_j|\)</span> and
-<span class="math notranslate nohighlight">\(R_{ij\alpha}:=(\mathbf R_i)_\alpha-(\mathbf R_j)_\alpha\)</span>.</p>
+<p>Returns <span class="math">\(R_{ij}:=|\mathbf R_i-\mathbf R_j|\)</span> and
+<span class="math">\(R_{ij\alpha}:=(\mathbf R_i)_\alpha-(\mathbf R_j)_\alpha\)</span>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -239,9 +317,9 @@ a coordinate</p></li>
 <dt id="berny.Geometry.inertia">
 <em class="property">property </em><code class="sig-name descname">inertia</code><a class="headerlink" href="#berny.Geometry.inertia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the moment of inertia.</p>
-<p><span class="math notranslate nohighlight">\(I_{\alpha\beta}:=
+<p><span class="math">\(I_{\alpha\beta}:=
 \sum_im_i\big(r_i^2\delta_{\alpha\beta}-(\mathbf r_i)_\alpha(\mathbf
-r_i)_\beta\big)\)</span> where <span class="math notranslate nohighlight">\(\mathbf r_i=\mathbf R_i-\mathbf
+r_i)_\beta\big)\)</span> where <span class="math">\(\mathbf r_i=\mathbf R_i-\mathbf
 R_\text{CMS}\)</span></p>
 </dd></dl>
 
@@ -255,7 +333,8 @@ R_\text{CMS}\)</span></p>
 <dt id="berny.Geometry.rho">
 <code class="sig-name descname">rho</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.rho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.rho" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate a measure of covalentness.</p>
-<p>Returns <span class="math notranslate nohighlight">\(\rho_{ij}:=\exp\big(-R_{ij}/(R_i^\text{cov}+R_j^\text{cov})\big)\)</span>.</p>
+<p>Returns
+<span class="math">\(\rho_{ij}:=\exp\big(-R_{ij}/(R_i^\text{cov}+R_j^\text{cov})\big)\)</span>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -368,85 +447,10 @@ expected by <a class="reference internal" href="#berny.optimize" title="berny.op
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">berny</a></h1>
-
-
-
-<p class="blurb">Molecular/crystal structure optimizer</p>
-
-
-
-
-<p>
-<iframe src="https://ghbtns.com/github-btn.html?user=jhrmnn&repo=pyberny&type=watch&count=true&size=large&v=2"
-  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
-</p>
-
-
-
-
-
-    
-
-<p>
-<a class="badge" href="https://travis-ci.org/jhrmnn/pyberny">
-    <img
-        alt="https://secure.travis-ci.org/jhrmnn/pyberny.svg?branch=master"
-        src="https://secure.travis-ci.org/jhrmnn/pyberny.svg?branch=master"
-    />
-</a>
-</p>
-
-
-
-
-    
-
-<p>
-<a class="badge" href="https://codecov.io/github/jhrmnn/pyberny">
-    <img
-    alt="https://codecov.io/github/jhrmnn/pyberny/coverage.svg?branch=master"
-    src="https://codecov.io/github/jhrmnn/pyberny/coverage.svg?branch=master"
-    />
-</a>
-</p>
-<h3>Navigation</h3>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="algorithm.html">Algorithm</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#geometry-operations">Geometry operations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#solvers">Solvers</a></li>
-</ul>
-</li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="algorithm.html" title="previous chapter">Algorithm</a></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
-      &copy;2017-2020, Jan Hermann.
+      &copy;2016-2020, Jan Hermann.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.2</a>
