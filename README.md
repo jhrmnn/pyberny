@@ -17,6 +17,8 @@ The package implements a single optimization algorithm, which is an amalgam of s
 
 Several desirable features are missing at the moment but planned, some of them being actively worked on (help is always welcome): [crystal geometries](https://github.com/jhrmnn/pyberny/issues/5), [coordinate constraints](https://github.com/jhrmnn/pyberny/issues/14), [coordinate weighting](https://github.com/jhrmnn/pyberny/issues/32), [transition state search](https://github.com/jhrmnn/pyberny/issues/4).
 
+Berny is available in [ASE](https://wiki.fysik.dtu.dk/ase/dev/ase/optimize.html?highlight=berny#pyberny).
+
 ## Installing
 
 Install and update using [Pip](https://pip.pypa.io/en/stable/quickstart/):
