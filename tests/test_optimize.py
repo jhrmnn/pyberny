@@ -1,7 +1,5 @@
-import numpy as np
 import pytest
 from pkg_resources import resource_filename
-from pytest import approx
 
 from berny import Berny, geomlib, optimize
 from berny.solvers import MopacSolver
@@ -12,49 +10,26 @@ def mopac(scope='session'):
     return MopacSolver()
 
 
-@pytest.fixture
 def ethanol():
-    return geomlib.readfile(resource_filename('tests', 'ethanol.xyz'))
+    return geomlib.readfile(resource_filename('tests', 'ethanol.xyz')), 5
 
 
-@pytest.fixture
 def aniline():
-    return geomlib.readfile(resource_filename('tests', 'aniline.xyz'))
+    return geomlib.readfile(resource_filename('tests', 'aniline.xyz')), 8
 
 
-@pytest.fixture
 def cyanogen():
-    return geomlib.readfile(resource_filename('tests', 'cyanogen.xyz'))
+    return geomlib.readfile(resource_filename('tests', 'cyanogen.xyz')), 4
 
 
-@pytest.fixture
 def water():
-    return geomlib.readfile(resource_filename('tests', 'water.xyz'))
+    return geomlib.readfile(resource_filename('tests', 'water.xyz')), 6
 
 
-def test_ethanol(mopac, ethanol):
-    berny = Berny(ethanol, steprms=0.01, stepmax=0.05, maxsteps=5)
-    final = optimize(berny, mopac)
-    inertia_princpl = np.linalg.eigvalsh(final.inertia)
-    assert inertia_princpl == approx([14.95, 52.58, 61.10], rel=1e-3)
-
-
-def test_aniline(mopac, aniline):
-    berny = Berny(aniline, steprms=0.01, stepmax=0.05, maxsteps=8)
-    final = optimize(berny, mopac)
-    inertia_princpl = np.linalg.eigvalsh(final.inertia)
-    assert inertia_princpl == approx([90.94, 193.1, 283.9], rel=1e-3)
-
-
-def test_cyanogen(mopac, cyanogen):
-    berny = Berny(cyanogen, steprms=0.01, stepmax=0.05, maxsteps=4)
-    final = optimize(berny, mopac)
-    inertia_princpl = np.linalg.eigvalsh(final.inertia)
-    assert inertia_princpl == approx([0, 107.5, 107.5], rel=1e-3, abs=1e-3)
-
-
-def test_water(mopac, water):
-    berny = Berny(water, steprms=0.01, stepmax=0.05, maxsteps=6)
-    final = optimize(berny, mopac)
-    inertia_princpl = np.linalg.eigvalsh(final.inertia)
-    assert inertia_princpl == approx([0.5998, 1.165, 1.764], rel=1e-2, abs=1e-2)
+@pytest.mark.parametrize('test_case', [ethanol, aniline, cyanogen, water])
+def test_optimize(mopac, test_case):
+    geom, n_ref = test_case()
+    berny = Berny(geom)
+    optimize(berny, mopac)
+    assert berny.converged
+    assert berny._n == n_ref
