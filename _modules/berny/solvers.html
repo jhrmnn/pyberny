@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>berny.solvers &#8212; berny 0.6.0 documentation</title>
+    <title>berny.solvers &#8212; berny 0.6.1 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" />
@@ -132,7 +132,7 @@
 <span class="sd">    :param str cmd: MOPAC executable</span>
 <span class="sd">    :param str method: model to calculate energy</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">kcal</span><span class="p">,</span> <span class="n">ev</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">627.503</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">27.2107</span>
+    <span class="n">kcal</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">627.503</span>
     <span class="n">tmpdir</span> <span class="o">=</span> <span class="n">workdir</span> <span class="ow">or</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">atoms</span><span class="p">,</span> <span class="n">lattice</span> <span class="o">=</span> <span class="k">yield</span>
@@ -149,19 +149,19 @@
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mopac_input</span><span class="p">)</span>
             <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">([</span><span class="n">cmd</span><span class="p">,</span> <span class="n">input_file</span><span class="p">])</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s1">&#39;job.out&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                <span class="n">energy</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="nb">float</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">f</span> <span class="k">if</span> <span class="s1">&#39;TOTAL ENERGY&#39;</span> <span class="ow">in</span> <span class="n">l</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">])</span> <span class="o">*</span> <span class="n">ev</span>
+                <span class="n">energy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="nb">next</span><span class="p">(</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">f</span> <span class="k">if</span> <span class="s1">&#39;FINAL HEAT OF FORMATION&#39;</span> <span class="ow">in</span> <span class="n">l</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">5</span><span class="p">]</span>
                 <span class="p">)</span>
                 <span class="nb">next</span><span class="p">(</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">f</span> <span class="k">if</span> <span class="s1">&#39;FINAL  POINT  AND  DERIVATIVES&#39;</span> <span class="ow">in</span> <span class="n">l</span><span class="p">)</span>
                 <span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
                 <span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
                 <span class="n">gradients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
                     <span class="p">[</span>
-                        <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">6</span><span class="p">])</span> <span class="o">*</span> <span class="n">kcal</span> <span class="o">/</span> <span class="n">angstrom</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+                        <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">6</span><span class="p">])</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
                         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">lattice</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">3</span><span class="p">))</span>
                     <span class="p">]</span>
                 <span class="p">)</span>
-            <span class="n">atoms</span><span class="p">,</span> <span class="n">lattice</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span>
+            <span class="n">atoms</span><span class="p">,</span> <span class="n">lattice</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">energy</span> <span class="o">*</span> <span class="n">kcal</span><span class="p">,</span> <span class="n">gradients</span> <span class="o">*</span> <span class="n">kcal</span> <span class="o">/</span> <span class="n">angstrom</span>
     <span class="k">finally</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">tmpdir</span> <span class="o">!=</span> <span class="n">workdir</span><span class="p">:</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">)</span></div>
