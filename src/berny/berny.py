@@ -13,7 +13,7 @@ from numpy.linalg import norm
 from . import Math
 from .coords import InternalCoords
 
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 __all__ = ['Berny']
 
 log = logging.getLogger(__name__)
@@ -109,6 +109,11 @@ class Berny(Generator):
     def trust(self):
         """Current trust radius."""
         return self._state.trust
+
+    @property
+    def converged(self):
+        """Whether the optimized has converged."""
+        return self._converged
 
     def send(self, energy_and_gradients):  # noqa: D102
         log = self._log.info
