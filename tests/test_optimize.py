@@ -15,7 +15,7 @@ def ethanol():
 
 
 def aniline():
-    return geomlib.readfile(resource_filename('tests', 'aniline.xyz')), 8
+    return geomlib.readfile(resource_filename('tests', 'aniline.xyz')), 11
 
 
 def cyanogen():
@@ -23,7 +23,7 @@ def cyanogen():
 
 
 def water():
-    return geomlib.readfile(resource_filename('tests', 'water.xyz')), 6
+    return geomlib.readfile(resource_filename('tests', 'water.xyz')), 7
 
 
 @pytest.mark.parametrize('test_case', [ethanol, aniline, cyanogen, water])
