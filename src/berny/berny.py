@@ -131,7 +131,7 @@ class Berny(Generator):
             )
             s.trust = update_trust(
                 s.trust,
-                current.E - s.previous.E,
+                current.E - s.previous.E,  # or should it be s.interpolated.E?
                 s.predicted.E - s.interpolated.E,
                 s.predicted.q - s.interpolated.q,
                 log=log,
@@ -141,7 +141,7 @@ class Berny(Generator):
                 current.E, s.best.E, dot(current.g, dq), dot(s.best.g, dq), log=log
             )
             s.interpolated = Berny.Point(
-                current.q + t * dq, E, t * s.best.g + (1 - t) * current.g
+                current.q + t * dq, E, current.g + t * (s.best.g - current.g)
             )
         else:
             s.interpolated = current
