@@ -110,11 +110,11 @@ class Berny(Generator):
         """Current trust radius."""
         return self._state.trust
 
-    def send(self, energy_gradients):  # noqa: D102
+    def send(self, energy_and_gradients):  # noqa: D102
         log = self._log.info
         self._log_extra['step'] = self._n
         s = self._state
-        energy, gradients = energy_gradients
+        energy, gradients = energy_and_gradients
         gradients = np.array(gradients)
         log('Energy: {:.12}'.format(energy))
         B = s.coords.B_matrix(s.geom)
