@@ -13,7 +13,7 @@ from numpy.linalg import norm
 from . import Math
 from .coords import InternalCoords
 
-__version__ = '0.3.1'
+__version__ = '0.3.2'
 __all__ = ['Berny']
 
 log = logging.getLogger(__name__)
@@ -59,6 +59,7 @@ class Berny(Generator):
         restart (dict): start from a state saved from previous run
             using ``debug=True``
         maxsteps (int): abort after maximum number of steps
+        logger (:class:`logging.Logger`): alternative logger to use
         params: parameters that override the :data:`~berny.berny.defaults`
 
     The Berny object is to be used as follows::
@@ -74,13 +75,15 @@ class Berny(Generator):
 
     Point = namedtuple('Point', 'q E g')
 
-    def __init__(self, geom, debug=False, restart=None, maxsteps=100, **params):
+    def __init__(
+        self, geom, debug=False, restart=None, maxsteps=100, logger=None, **params
+    ):
         self._debug = debug
         self._maxsteps = maxsteps
         self._converged = False
         self._n = 0
         self._log_extra = {'step': self._n}
-        self._log = BernyAdapter(log, self._log_extra)
+        self._log = BernyAdapter(logger or log, self._log_extra)
         s = self._state = Berny.State()
         if restart:
             vars(s).update(restart)

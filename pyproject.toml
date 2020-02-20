@@ -4,7 +4,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "pyberny"
-version = "0.6.1"
+version = "0.6.2"
 description = "Molecular/crystal structure optimizer"
 readme = "README.md"
 authors = ["Jan Hermann <dev@jan.hermann.name>"]
