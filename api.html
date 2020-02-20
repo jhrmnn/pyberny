@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>API &#8212; berny 0.6.1 documentation</title>
+    <title>API &#8212; berny 0.6.2 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" />
@@ -115,7 +115,7 @@
 <p>This covers all supported public API.</p>
 <span class="target" id="module-berny"></span><dl class="class">
 <dt id="berny.Berny">
-<em class="property">class </em><code class="sig-prename descclassname">berny.</code><code class="sig-name descname">Berny</code><span class="sig-paren">(</span><em class="sig-param">geom</em>, <em class="sig-param">debug=False</em>, <em class="sig-param">restart=None</em>, <em class="sig-param">maxsteps=100</em>, <em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/berny.html#Berny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Berny" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">berny.</code><code class="sig-name descname">Berny</code><span class="sig-paren">(</span><em class="sig-param">geom</em>, <em class="sig-param">debug=False</em>, <em class="sig-param">restart=None</em>, <em class="sig-param">maxsteps=100</em>, <em class="sig-param">logger=None</em>, <em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/berny.html#Berny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Berny" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generator that receives energy and gradients and yields the next geometry.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -126,6 +126,7 @@ the energy and gradients, otherwise it yields <a class="reference external" href
 <li><p><strong>restart</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – start from a state saved from previous run
 using <code class="docutils literal notranslate"><span class="pre">debug=True</span></code></p></li>
 <li><p><strong>maxsteps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – abort after maximum number of steps</p></li>
+<li><p><strong>logger</strong> (<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger</span></code></a>) – alternative logger to use</p></li>
 <li><p><strong>params</strong> – parameters that override the <a class="reference internal" href="#berny.berny.defaults" title="berny.berny.defaults"><code class="xref py py-data docutils literal notranslate"><span class="pre">defaults</span></code></a></p></li>
 </ul>
 </dd>
