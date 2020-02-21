@@ -82,8 +82,7 @@ class Berny(Generator):
         self._maxsteps = maxsteps
         self._converged = False
         self._n = 0
-        self._log_extra = {'step': self._n}
-        self._log = BernyAdapter(logger or log, self._log_extra)
+        self._log = BernyAdapter(logger or log, {'step': self._n})
         s = self._state = Berny.State()
         if restart:
             vars(s).update(restart)
@@ -119,9 +118,8 @@ class Berny(Generator):
         return self._converged
 
     def send(self, energy_and_gradients):  # noqa: D102
-        log = self._log.info
-        self._log_extra['step'] = self._n
-        s = self._state
+        self._log.extra['step'] = self._n
+        log, s = self._log.info, self._state
         energy, gradients = energy_and_gradients
         gradients = np.array(gradients)
         log('Energy: {:.12}'.format(energy))
