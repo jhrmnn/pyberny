@@ -1,5 +1,5 @@
-``berny`` — Molecular optimizer
-===============================
+PyBerny Documentation
+=====================
 
 This Python package can optimize molecular and crystal structures
 with respect to total energy, using nuclear gradient information.

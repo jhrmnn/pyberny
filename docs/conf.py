@@ -4,7 +4,7 @@ from importlib_metadata import metadata
 
 md = metadata('pyberny')
 
-project = 'berny'
+project = 'PyBerny'
 author = md['Author']
 release = version = md['Version']
 description = md['Summary']

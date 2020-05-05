@@ -1,4 +1,4 @@
-# Berny
+# PyBerny
 
 [![build](https://img.shields.io/travis/jhrmnn/pyberny/master.svg)](https://travis-ci.org/jhrmnn/pyberny)
 [![coverage](https://img.shields.io/codecov/c/github/jhrmnn/pyberny.svg)](https://codecov.io/gh/jhrmnn/pyberny)
@@ -9,7 +9,7 @@
 [![license](https://img.shields.io/github/license/jhrmnn/pyberny.svg)](https://github.com/jhrmnn/pyberny/blob/master/LICENSE)
 [![code style](https://img.shields.io/badge/code%20style-black-202020.svg)](https://github.com/ambv/black)
 
-Berny is an optimizer of molecular geometries with respect to the total energy, using nuclear gradient information.
+PyBerny is an optimizer of molecular geometries with respect to the total energy, using nuclear gradient information.
 
 In each step, it takes energy and Cartesian gradients as an input, and returns a new equilibrium structure estimate.
 
@@ -17,7 +17,7 @@ The package implements a single optimization algorithm, which is an amalgam of s
 
 Several desirable features are missing at the moment but planned, some of them being actively worked on (help is always welcome): [crystal geometries](https://github.com/jhrmnn/pyberny/issues/5), [coordinate constraints](https://github.com/jhrmnn/pyberny/issues/14), [coordinate weighting](https://github.com/jhrmnn/pyberny/issues/32), [transition state search](https://github.com/jhrmnn/pyberny/issues/4).
 
-Berny is available in [PySCF](https://sunqm.github.io/pyscf/geomopt.html#pyberny) and [ASE](https://wiki.fysik.dtu.dk/ase/dev/ase/optimize.html?highlight=berny#pyberny).
+PyBerny is available in [PySCF](https://sunqm.github.io/pyscf/geomopt.html#pyberny) and [ASE](https://wiki.fysik.dtu.dk/ase/dev/ase/optimize.html?highlight=berny#pyberny).
 
 ## Installing
 
