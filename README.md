@@ -7,6 +7,7 @@
 [![commits since](https://img.shields.io/github/commits-since/jhrmnn/pyberny/latest.svg)](https://github.com/jhrmnn/pyberny/releases)
 [![last commit](https://img.shields.io/github/last-commit/jhrmnn/pyberny.svg)](https://github.com/jhrmnn/pyberny/commits/master)
 [![license](https://img.shields.io/github/license/jhrmnn/pyberny.svg)](https://github.com/jhrmnn/pyberny/blob/master/LICENSE)
+[![doi](https://img.shields.io/badge/doi-10.5281/zenodo.3695038-ff69b4)](https://dx.doi.org/10.5281/zenodo.3695038)
 [![code style](https://img.shields.io/badge/code%20style-black-202020.svg)](https://github.com/ambv/black)
 
 PyBerny is an optimizer of molecular geometries with respect to the total energy, using nuclear gradient information.
