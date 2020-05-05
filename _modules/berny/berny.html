@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>berny.berny &#8212; berny 0.6.2 documentation</title>
+    <title>berny.berny &#8212; PyBerny 0.6.2 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" />
@@ -30,7 +30,7 @@
     
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../index.html">berny</a></h1>
+<h1 class="logo"><a href="../../index.html">PyBerny</a></h1>
 
 
 
@@ -191,8 +191,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_maxsteps</span> <span class="o">=</span> <span class="n">maxsteps</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_converged</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_extra</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;step&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="n">BernyAdapter</span><span class="p">(</span><span class="n">logger</span> <span class="ow">or</span> <span class="n">log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_extra</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="n">BernyAdapter</span><span class="p">(</span><span class="n">logger</span> <span class="ow">or</span> <span class="n">log</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;step&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">})</span>
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">Berny</span><span class="o">.</span><span class="n">State</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">restart</span><span class="p">:</span>
             <span class="nb">vars</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">restart</span><span class="p">)</span>
@@ -228,9 +227,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_converged</span>
 
     <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energy_and_gradients</span><span class="p">):</span>  <span class="c1"># noqa: D102</span>
-        <span class="n">log</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_extra</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">extra</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+        <span class="n">log</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
         <span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span> <span class="o">=</span> <span class="n">energy_and_gradients</span>
         <span class="n">gradients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gradients</span><span class="p">)</span>
         <span class="n">log</span><span class="p">(</span><span class="s1">&#39;Energy: </span><span class="si">{:.12}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">energy</span><span class="p">))</span>
@@ -408,7 +406,7 @@
       &copy;2016-2020, Jan Hermann.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

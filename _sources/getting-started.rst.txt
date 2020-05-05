@@ -59,11 +59,11 @@ example usage could look like this:
 .. code:: bash
 
    #!/bin/bash
-   ./berny --init params.json <start.xyz
+   berny --init params.json <start.xyz
    cat start.xyz >current.xyz
    while true; do
        # calculate energy and gradients of current.xyz
-       cat energy_gradients.txt | ./berny >next.xyz
+       cat energy_gradients.txt | berny >next.xyz
        if [[ $? == 0 ]]; then  # minimum reached
            break
        fi
@@ -79,7 +79,7 @@ structure estimate in a given format. Example usage would be
 .. code:: bash
 
    #!/bin/bash
-   ./berny -s localhost 25000 -f xyz <start.xyz &
+   berny -s localhost 25000 -f xyz <start.xyz &
    cat start.xyz >current.xyz
    while true; do
        # calculate energy and gradients of current.xyz

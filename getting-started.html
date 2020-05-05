@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Getting started &#8212; berny 0.6.2 documentation</title>
+    <title>Getting started &#8212; PyBerny 0.6.2 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" />
@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Algorithm" href="algorithm.html" />
-    <link rel="prev" title="berny — Molecular optimizer" href="index.html" />
+    <link rel="prev" title="PyBerny Documentation" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -32,7 +32,7 @@
     
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">berny</a></h1>
+<h1 class="logo"><a href="index.html">PyBerny</a></h1>
 
 
 
@@ -89,7 +89,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter"><code class="docutils literal notranslate"><span class="pre">berny</span></code> — Molecular optimizer</a></li>
+      <li>Previous: <a href="index.html" title="previous chapter">PyBerny Documentation</a></li>
       <li>Next: <a href="algorithm.html" title="next chapter">Algorithm</a></li>
   </ul></li>
 </ul>
@@ -165,11 +165,11 @@ subsequent lines correspond to Cartesian gradients of individual atoms, all in
 atomic units) and write the new structure estimate to standard output. An
 example usage could look like this:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
-./berny --init params.json &lt;start.xyz
+berny --init params.json &lt;start.xyz
 cat start.xyz &gt;current.xyz
 <span class="k">while</span> true<span class="p">;</span> <span class="k">do</span>
     <span class="c1"># calculate energy and gradients of current.xyz</span>
-    cat energy_gradients.txt <span class="p">|</span> ./berny &gt;next.xyz
+    cat energy_gradients.txt <span class="p">|</span> berny &gt;next.xyz
     <span class="k">if</span> <span class="o">[[</span> <span class="nv">$?</span> <span class="o">==</span> <span class="m">0</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>  <span class="c1"># minimum reached</span>
         <span class="nb">break</span>
     <span class="k">fi</span>
@@ -183,7 +183,7 @@ object and waits for connections, in which it expects to receive energy and
 gradients as a request (in the same format as above) and responds with a new
 structure estimate in a given format. Example usage would be</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
-./berny -s localhost <span class="m">25000</span> -f xyz &lt;start.xyz <span class="p">&amp;</span>
+berny -s localhost <span class="m">25000</span> -f xyz &lt;start.xyz <span class="p">&amp;</span>
 cat start.xyz &gt;current.xyz
 <span class="k">while</span> true<span class="p">;</span> <span class="k">do</span>
     <span class="c1"># calculate energy and gradients of current.xyz</span>
@@ -209,7 +209,7 @@ cat start.xyz &gt;current.xyz
       &copy;2016-2020, Jan Hermann.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

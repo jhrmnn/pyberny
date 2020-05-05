@@ -1,7 +1,7 @@
 Algorithm
 =========
 
-The optimization algorithm implemented in Berny loosely follows the
+The optimization algorithm implemented in PyBerny loosely follows the
 "standard method" (SM) described in the appendix of [BirkholzTCA16]_. What
 follows is a summary of that method, more detailed specification when
 necessary, and description of any deviations.
