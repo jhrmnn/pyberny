@@ -1,14 +1,14 @@
 # PyBerny
 
-[![build](https://img.shields.io/travis/jhrmnn/pyberny/master.svg)](https://travis-ci.org/jhrmnn/pyberny)
+[![build](https://img.shields.io/travis/com/jhrmnn/pyberny/master.svg)](https://travis-ci.com/jhrmnn/pyberny)
 [![coverage](https://img.shields.io/codecov/c/github/jhrmnn/pyberny.svg)](https://codecov.io/gh/jhrmnn/pyberny)
 ![python](https://img.shields.io/pypi/pyversions/pyberny.svg)
 [![pypi](https://img.shields.io/pypi/v/pyberny.svg)](https://pypi.org/project/pyberny/)
 [![commits since](https://img.shields.io/github/commits-since/jhrmnn/pyberny/latest.svg)](https://github.com/jhrmnn/pyberny/releases)
 [![last commit](https://img.shields.io/github/last-commit/jhrmnn/pyberny.svg)](https://github.com/jhrmnn/pyberny/commits/master)
 [![license](https://img.shields.io/github/license/jhrmnn/pyberny.svg)](https://github.com/jhrmnn/pyberny/blob/master/LICENSE)
-[![doi](https://img.shields.io/badge/doi-10.5281/zenodo.3695038-ff69b4)](https://dx.doi.org/10.5281/zenodo.3695038)
 [![code style](https://img.shields.io/badge/code%20style-black-202020.svg)](https://github.com/ambv/black)
+[![doi](https://img.shields.io/badge/doi-10.5281%2Fzenodo.3695037-blue)](http://doi.org/10.5281/zenodo.3695037)
 
 PyBerny is an optimizer of molecular geometries with respect to the total energy, using nuclear gradient information.
 
@@ -18,7 +18,7 @@ The package implements a single optimization algorithm, which is an amalgam of s
 
 Several desirable features are missing at the moment but planned, some of them being actively worked on (help is always welcome): [crystal geometries](https://github.com/jhrmnn/pyberny/issues/5), [coordinate constraints](https://github.com/jhrmnn/pyberny/issues/14), [coordinate weighting](https://github.com/jhrmnn/pyberny/issues/32), [transition state search](https://github.com/jhrmnn/pyberny/issues/4).
 
-PyBerny is available in [PySCF](https://sunqm.github.io/pyscf/geomopt.html#pyberny) and [ASE](https://wiki.fysik.dtu.dk/ase/dev/ase/optimize.html?highlight=berny#pyberny).
+PyBerny is available in [PySCF](https://sunqm.github.io/pyscf/geomopt.html#pyberny), [ASE](https://wiki.fysik.dtu.dk/ase/dev/ase/optimize.html?highlight=berny#pyberny), and [QCEngine](http://docs.qcarchive.molssi.org/projects/QCEngine/en/latest/index.html?highlight=pyberny#backends).
 
 ## Installing
 
@@ -41,4 +41,4 @@ for geom in optimizer:
 
 ## Links
 
-- Documentation: <https://jhrmnn.github.io/pyberny>
+- Documentation: https://jhrmnn.github.io/pyberny
