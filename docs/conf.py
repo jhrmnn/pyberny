@@ -1,13 +1,17 @@
 import datetime
+import os
+import sys
 
-from importlib_metadata import metadata
+import toml
 
-md = metadata('pyberny')
+sys.path.insert(0, os.path.abspath('../src'))
+with open('../pyproject.toml') as f:
+    metadata = toml.load(f)['tool']['poetry']
 
 project = 'PyBerny'
-author = md['Author']
-release = version = md['Version']
-description = md['Summary']
+author = ' '.join(metadata['authors'][0].split()[:-1])
+release = version = metadata['version']
+description = metadata['description']
 year_range = (2016, datetime.date.today().year)
 year_str = (
     str(year_range[0])
@@ -50,6 +54,7 @@ html_sidebars = {
 html_static_path = ['_static']
 
 autodoc_default_options = {'special-members': '__call__'}
+autodoc_mock_imports = ['numpy']
 todo_include_todos = True
 pygments_style = 'sphinx'
 napoleon_numpy_docstring = False
