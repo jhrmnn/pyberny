@@ -1,21 +1,22 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API &#8212; PyBerny 0.6.2 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" />
     <link rel="stylesheet" type="text/css" href="_static/katex-math.css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
     <script src="_static/katex_autorenderer.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -113,9 +114,9 @@
   <div class="section" id="api">
 <h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
 <p>This covers all supported public API.</p>
-<span class="target" id="module-berny"></span><dl class="class">
+<span class="target" id="module-berny"></span><dl class="py class">
 <dt id="berny.Berny">
-<em class="property">class </em><code class="sig-prename descclassname">berny.</code><code class="sig-name descname">Berny</code><span class="sig-paren">(</span><em class="sig-param">geom</em>, <em class="sig-param">debug=False</em>, <em class="sig-param">restart=None</em>, <em class="sig-param">maxsteps=100</em>, <em class="sig-param">logger=None</em>, <em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/berny.html#Berny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Berny" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">berny.</code><code class="sig-name descname">Berny</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">geom</span></em>, <em class="sig-param"><span class="n">debug</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">restart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">maxsteps</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/berny.html#Berny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Berny" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generator that receives energy and gradients and yields the next geometry.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -138,13 +139,13 @@ using <code class="docutils literal notranslate"><span class="pre">debug=True</s
     <span class="n">debug</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span><span class="p">))</span>
 </pre></div>
 </div>
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Berny.converged">
 <em class="property">property </em><code class="sig-name descname">converged</code><a class="headerlink" href="#berny.Berny.converged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Whether the optimized has converged.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Berny.trust">
 <em class="property">property </em><code class="sig-name descname">trust</code><a class="headerlink" href="#berny.Berny.trust" title="Permalink to this definition">¶</a></dt>
 <dd><p>Current trust radius.</p>
@@ -152,7 +153,7 @@ using <code class="docutils literal notranslate"><span class="pre">debug=True</s
 
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="berny.berny.defaults">
 <code class="sig-prename descclassname">berny.berny.</code><code class="sig-name descname">defaults</code><em class="property"> = {'dihedral': True, 'gradientmax': 0.00045, 'gradientrms': 0.00015, 'stepmax': 0.0018, 'steprms': 0.0012, 'superweakdih': False, 'trust': 0.3}</em><a class="headerlink" href="#berny.berny.defaults" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
@@ -169,15 +170,15 @@ quadratic step (see below).</p>
 </dl>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="berny.coords.angstrom">
 <code class="sig-prename descclassname">berny.coords.</code><code class="sig-name descname">angstrom</code><em class="property"> = 1.8897261245650618</em><a class="headerlink" href="#berny.coords.angstrom" title="Permalink to this definition">¶</a></dt>
 <dd><p>Can be imported directly as <code class="xref py py-data docutils literal notranslate"><span class="pre">berny.angstrom</span></code>.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="berny.optimize">
-<code class="sig-prename descclassname">berny.</code><code class="sig-name descname">optimize</code><span class="sig-paren">(</span><em class="sig-param">optimizer</em>, <em class="sig-param">solver</em>, <em class="sig-param">trajectory=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/optimize.html#optimize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.optimize" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">berny.</code><code class="sig-name descname">optimize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer</span></em>, <em class="sig-param"><span class="n">solver</span></em>, <em class="sig-param"><span class="n">trajectory</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/optimize.html#optimize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.optimize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optimize a geometry with respect to a solver.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -210,9 +211,9 @@ in case of a crystal geometry).</p>
 
 <div class="section" id="geometry-operations">
 <h2>Geometry operations<a class="headerlink" href="#geometry-operations" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="berny.Geometry">
-<em class="property">class </em><code class="sig-prename descclassname">berny.</code><code class="sig-name descname">Geometry</code><span class="sig-paren">(</span><em class="sig-param">species</em>, <em class="sig-param">coords</em>, <em class="sig-param">lattice=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">berny.</code><code class="sig-name descname">Geometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">species</span></em>, <em class="sig-param"><span class="n">coords</span></em>, <em class="sig-param"><span class="n">lattice</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a single molecule or a crystal.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -226,9 +227,9 @@ in case of a crystal geometry).</p>
 <p>Iterating over a geometry yields 2-tuples of symbols and coordinates.
 <a class="reference external" href="https://docs.python.org/3/library/functions.html#len" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">len()</span></code></a> returns the number of atoms in a geometry. The class supports
 <a class="reference external" href="https://docs.python.org/3/library/functions.html#format" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">format()</span></code></a> with the same available formats as <a class="reference internal" href="#berny.Geometry.dump" title="berny.Geometry.dump"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dump()</span></code></a>.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.bondmatrix">
-<code class="sig-name descname">bondmatrix</code><span class="sig-paren">(</span><em class="sig-param">scale=1.3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.bondmatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.bondmatrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">bondmatrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">1.3</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.bondmatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.bondmatrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the covalent connectedness matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -240,27 +241,27 @@ in case of a crystal geometry).</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.cms">
 <em class="property">property </em><code class="sig-name descname">cms</code><a class="headerlink" href="#berny.Geometry.cms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the center of mass, <span class="math">\(\mathbf R_\text{CMS}\)</span>.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.copy">
 <code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a copy of the geometry.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.dist">
-<code class="sig-name descname">dist</code><span class="sig-paren">(</span><em class="sig-param">other=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.dist" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.dist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for the first element of <a class="reference internal" href="#berny.Geometry.dist_diff" title="berny.Geometry.dist_diff"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dist_diff()</span></code></a>.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.dist_diff">
-<code class="sig-name descname">dist_diff</code><span class="sig-paren">(</span><em class="sig-param">other=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.dist_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.dist_diff" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dist_diff</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.dist_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.dist_diff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate distances and vectors between atoms.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -274,9 +275,9 @@ geometries if given or within a geometry if not</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.dump">
-<code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">fmt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.dump" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">fmt</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.dump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save the geometry into a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -289,21 +290,21 @@ geometries if given or within a geometry if not</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.dumps">
-<code class="sig-name descname">dumps</code><span class="sig-paren">(</span><em class="sig-param">fmt</em><span class="sig-paren">)</span><a class="headerlink" href="#berny.Geometry.dumps" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dumps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fmt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#berny.Geometry.dumps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the geometry represented as a string, delegates to <a class="reference internal" href="#berny.Geometry.dump" title="berny.Geometry.dump"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dump()</span></code></a>.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.formula">
 <em class="property">property </em><code class="sig-name descname">formula</code><a class="headerlink" href="#berny.Geometry.formula" title="Permalink to this definition">¶</a></dt>
 <dd><p>Chemical formula of the molecule or a unit cell.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.from_atoms">
-<em class="property">classmethod </em><code class="sig-name descname">from_atoms</code><span class="sig-paren">(</span><em class="sig-param">atoms</em>, <em class="sig-param">lattice=None</em>, <em class="sig-param">unit=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.from_atoms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.from_atoms" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">from_atoms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">atoms</span></em>, <em class="sig-param"><span class="n">lattice</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">unit</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.from_atoms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.from_atoms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alternative contructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -317,7 +318,7 @@ a coordinate</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.inertia">
 <em class="property">property </em><code class="sig-name descname">inertia</code><a class="headerlink" href="#berny.Geometry.inertia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the moment of inertia.</p>
@@ -330,13 +331,13 @@ r_i)_\beta\big),\qquad
 \]</div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.masses">
 <em class="property">property </em><code class="sig-name descname">masses</code><a class="headerlink" href="#berny.Geometry.masses" title="Permalink to this definition">¶</a></dt>
 <dd><p>Numpy array of atomic masses.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.rho">
 <code class="sig-name descname">rho</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.rho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.rho" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate a measure of covalentness.</p>
@@ -347,9 +348,9 @@ r_i)_\beta\big),\qquad
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.super_circum">
-<code class="sig-name descname">super_circum</code><span class="sig-paren">(</span><em class="sig-param">radius</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.super_circum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.super_circum" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">super_circum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">radius</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.super_circum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.super_circum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Supercell dimensions such that the supercell circumsribes a sphere.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -359,9 +360,9 @@ r_i)_\beta\big),\qquad
 <p>Returns <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> when geometry is not a crystal.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.supercell">
-<code class="sig-name descname">supercell</code><span class="sig-paren">(</span><em class="sig-param">ranges=((-1</em>, <em class="sig-param">1)</em>, <em class="sig-param">(-1</em>, <em class="sig-param">1)</em>, <em class="sig-param">(-1</em>, <em class="sig-param">1))</em>, <em class="sig-param">cutoff=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.supercell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.supercell" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">supercell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ranges</span><span class="o">=</span><span class="default_value">- 1, 1, - 1, 1, - 1, 1</span></em>, <em class="sig-param"><span class="n">cutoff</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.supercell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.supercell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a crystal supercell.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -376,9 +377,9 @@ the supercell contains a sphere with the radius qual to the cutoff</p></li>
 <p>Returns a copy of itself when geometry is not a crystal.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="berny.Geometry.write">
-<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.write" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#Geometry.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.Geometry.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write the geometry into a file, delegates to <a class="reference internal" href="#berny.Geometry.dump" title="berny.Geometry.dump"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dump()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -389,9 +390,9 @@ the supercell contains a sphere with the radius qual to the cutoff</p></li>
 
 </dd></dl>
 
-<span class="target" id="module-berny.geomlib"></span><dl class="function">
+<span class="target" id="module-berny.geomlib"></span><dl class="py function">
 <dt id="berny.geomlib.load">
-<code class="sig-prename descclassname">berny.geomlib.</code><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">fp</em>, <em class="sig-param">fmt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.geomlib.load" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">berny.geomlib.</code><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fp</span></em>, <em class="sig-param"><span class="n">fmt</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.geomlib.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a geometry from a file object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -405,9 +406,9 @@ the supercell contains a sphere with the radius qual to the cutoff</p></li>
 <p>Returns <a class="reference internal" href="#berny.Geometry" title="berny.Geometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geometry</span></code></a>.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="berny.geomlib.loads">
-<code class="sig-prename descclassname">berny.geomlib.</code><code class="sig-name descname">loads</code><span class="sig-paren">(</span><em class="sig-param">s</em>, <em class="sig-param">fmt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#loads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.geomlib.loads" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">berny.geomlib.</code><code class="sig-name descname">loads</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">fmt</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#loads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.geomlib.loads" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a geometry from a string, delegates to <a class="reference internal" href="#berny.geomlib.load" title="berny.geomlib.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">load()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -416,9 +417,9 @@ the supercell contains a sphere with the radius qual to the cutoff</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="berny.geomlib.readfile">
-<code class="sig-prename descclassname">berny.geomlib.</code><code class="sig-name descname">readfile</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">fmt=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#readfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.geomlib.readfile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">berny.geomlib.</code><code class="sig-name descname">readfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">fmt</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/geomlib.html#readfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.geomlib.readfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a geometry from a file path, delegates to <a class="reference internal" href="#berny.geomlib.load" title="berny.geomlib.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">load()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -435,9 +436,9 @@ the supercell contains a sphere with the radius qual to the cutoff</p></li>
 <h2>Solvers<a class="headerlink" href="#solvers" title="Permalink to this headline">¶</a></h2>
 <p>All functions in this module are coroutines that satisfy the solver interface
 expected by <a class="reference internal" href="#berny.optimize" title="berny.optimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">optimize()</span></code></a>.</p>
-<span class="target" id="module-berny.solvers"></span><dl class="function">
+<span class="target" id="module-berny.solvers"></span><dl class="py function">
 <dt id="berny.solvers.MopacSolver">
-<code class="sig-prename descclassname">berny.solvers.</code><code class="sig-name descname">MopacSolver</code><span class="sig-paren">(</span><em class="sig-param">cmd='mopac'</em>, <em class="sig-param">method='PM7'</em>, <em class="sig-param">workdir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/solvers.html#MopacSolver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.solvers.MopacSolver" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">berny.solvers.</code><code class="sig-name descname">MopacSolver</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd</span><span class="o">=</span><span class="default_value">'mopac'</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'PM7'</span></em>, <em class="sig-param"><span class="n">workdir</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/berny/solvers.html#MopacSolver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#berny.solvers.MopacSolver" title="Permalink to this definition">¶</a></dt>
 <dd><p>Crate a solver that wraps <a class="reference external" href="http://openmopac.net">MOPAC</a>.</p>
 <p>Mopac needs to be installed on the system.</p>
 <dl class="field-list simple">
@@ -464,7 +465,7 @@ expected by <a class="reference internal" href="#berny.optimize" title="berny.op
       &copy;2016-2020, Jan Hermann.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
