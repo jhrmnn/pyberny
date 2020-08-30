@@ -26,7 +26,7 @@ class InternalCoord(object):
             )
 
     def __eq__(self, other):
-        self.idx == other.idx
+        self.idx == other.idx  # noqa B015
 
     def __hash__(self):
         return hash(self.idx)
