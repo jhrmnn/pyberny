@@ -44,6 +44,9 @@ defaults = {
 """
 
 
+OptPoint = namedtuple('OptPoint', 'q E g')
+
+
 class BernyAdapter(logging.LoggerAdapter):
     def process(self, msg, kwargs):
         return '{} {}'.format(self.extra['step'], msg), kwargs
@@ -73,8 +76,6 @@ class Berny(Generator):
     class State(object):
         pass
 
-    Point = namedtuple('Point', 'q E g')
-
     def __init__(
         self, geom, debug=False, restart=None, maxsteps=100, logger=None, **params
     ):
@@ -95,7 +96,7 @@ class Berny(Generator):
         )
         s.H = s.coords.hessian_guess(s.geom)
         s.weights = s.coords.weights(s.geom)
-        s.future = Berny.Point(s.coords.eval_geom(s.geom), None, None)
+        s.future = OptPoint(s.coords.eval_geom(s.geom), None, None)
         s.first = True
         for line in str(s.coords).split('\n'):
             self._log.info(line)
@@ -125,7 +126,7 @@ class Berny(Generator):
         log('Energy: {:.12}'.format(energy))
         B = s.coords.B_matrix(s.geom)
         B_inv = B.T.dot(Math.pinv(np.dot(B, B.T), log=log))
-        current = Berny.Point(s.future.q, energy, dot(B_inv.T, gradients.reshape(-1)))
+        current = OptPoint(s.future.q, energy, dot(B_inv.T, gradients.reshape(-1)))
         if not s.first:
             s.H = update_hessian(
                 s.H, current.q - s.best.q, current.g - s.best.g, log=log
@@ -141,7 +142,7 @@ class Berny(Generator):
             t, E = linear_search(
                 current.E, s.best.E, dot(current.g, dq), dot(s.best.g, dq), log=log
             )
-            s.interpolated = Berny.Point(
+            s.interpolated = OptPoint(
                 current.q + t * dq, E, current.g + t * (s.best.g - current.g)
             )
         else:
@@ -153,13 +154,13 @@ class Berny(Generator):
         dq, dE, on_sphere = quadratic_step(
             dot(proj, s.interpolated.g), H_proj, s.weights, s.trust, log=log
         )
-        s.predicted = Berny.Point(s.interpolated.q + dq, s.interpolated.E + dE, None)
+        s.predicted = OptPoint(s.interpolated.q + dq, s.interpolated.E + dE, None)
         dq = s.predicted.q - current.q
         log('Total step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
         q, s.geom = s.coords.update_geom(
             s.geom, current.q, s.predicted.q - current.q, B_inv, log=log
         )
-        s.future = Berny.Point(q, None, None)
+        s.future = OptPoint(q, None, None)
         s.previous = current
         if s.first or current.E < s.best.E:
             s.best = current
