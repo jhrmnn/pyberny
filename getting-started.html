@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Getting started &#8212; PyBerny 0.6.2.post14.dev0+4b6d042 documentation</title>
+    <title>Getting started &#8212; PyBerny 0.6.2.post15.dev0+37ca6ec documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" />
@@ -127,8 +127,9 @@
 
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">Berny</span><span class="p">(</span><span class="n">geomlib</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="s1">&#39;start.xyz&#39;</span><span class="p">))</span>
 <span class="n">solver</span> <span class="o">=</span> <span class="n">MopacSolver</span><span class="p">()</span>
+<span class="nb">next</span><span class="p">(</span><span class="n">solver</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">geom</span> <span class="ow">in</span> <span class="n">optimizer</span><span class="p">:</span>
-    <span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span> <span class="o">=</span> <span class="n">solver</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+    <span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="nb">list</span><span class="p">(</span><span class="n">geom</span><span class="p">),</span> <span class="n">geom</span><span class="o">.</span><span class="n">lattice</span><span class="p">))</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="n">energy</span><span class="p">,</span> <span class="n">gradients</span><span class="p">))</span>
 <span class="n">relaxed</span> <span class="o">=</span> <span class="n">geom</span>
 </pre></div>

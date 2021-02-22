@@ -17,8 +17,9 @@ The Python API consists of coroutine :class:`~berny.Berny` and function
 
    optimizer = Berny(geomlib.readfile('start.xyz'))
    solver = MopacSolver()
+   next(solver)
    for geom in optimizer:
-       energy, gradients = solver(geom)
+       energy, gradients = solver.send((list(geom), geom.lattice))
        optimizer.send((energy, gradients))
    relaxed = geom
 
