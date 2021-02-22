@@ -40,7 +40,7 @@ def get_berny(args):
         with open(args.paramfile) as f:
             params = json.load(f)
     else:
-        params = None
+        params = {}
     berny = Berny(geom, **params)
     next(berny)
     return berny
