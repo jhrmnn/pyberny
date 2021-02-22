@@ -36,7 +36,7 @@ jobs:
     - name: Documentation
       python: 3.7
       script:
-        - pip install sphinx sphinxcontrib-katex toml
+        - pip install "sphinx<3" sphinxcontrib-katex toml
         - sphinx-build -E docs docs/build
       workspaces:
         create:
