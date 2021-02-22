@@ -3,6 +3,7 @@ dist: xenial
 language: python
 install:
   - curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+  - python -m pip install poetry-dynamic-versioning
   - source $HOME/.poetry/env
   - echo VIRTUAL_ENV=$VIRTUAL_ENV
   - |
@@ -11,7 +12,7 @@ install:
     fi
 script:
   - poetry build
-  - pip install pyberny[test] -f ./dist
+  - pip install pyberny[test] --pre -f ./dist
   - coverage run -m pytest -v
 after_success:
   - coverage xml
@@ -33,10 +34,9 @@ jobs:
     - python: 3.8
     - python: 3.9
     - name: Documentation
-      python: 3.6
-      install:
-        - pip install sphinx sphinxcontrib-katex toml
+      python: 3.7
       script:
+        - pip install sphinx sphinxcontrib-katex toml
         - sphinx-build -E docs docs/build
       workspaces:
         create:
@@ -48,7 +48,7 @@ jobs:
       language: minimal
       install: skip
       script: skip
-      if: branch = master
+      if: (branch = master) AND (NOT type IN (pull_request)) OR (tag =~ ^\d+\.\d+\.\d+)
       workspaces:
         use: ws1
       deploy:
