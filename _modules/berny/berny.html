@@ -4,19 +4,18 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>berny.berny &#8212; PyBerny 0.6.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>berny.berny &#8212; PyBerny 0.0.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/katex-math.css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
     <script src="../../_static/katex_autorenderer.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -154,6 +153,9 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
+<span class="n">OptPoint</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;OptPoint&#39;</span><span class="p">,</span> <span class="s1">&#39;q E g&#39;</span><span class="p">)</span>
+
+
 <span class="k">class</span> <span class="nc">BernyAdapter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">LoggerAdapter</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],</span> <span class="n">msg</span><span class="p">),</span> <span class="n">kwargs</span>
@@ -183,8 +185,6 @@
     <span class="k">class</span> <span class="nc">State</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
         <span class="k">pass</span>
 
-    <span class="n">Point</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Point&#39;</span><span class="p">,</span> <span class="s1">&#39;q E g&#39;</span><span class="p">)</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">geom</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">restart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxsteps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span>
     <span class="p">):</span>
@@ -205,7 +205,7 @@
         <span class="p">)</span>
         <span class="n">s</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">hessian_guess</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">geom</span><span class="p">)</span>
         <span class="n">s</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">weights</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">geom</span><span class="p">)</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">future</span> <span class="o">=</span> <span class="n">Berny</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">eval_geom</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">geom</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">future</span> <span class="o">=</span> <span class="n">OptPoint</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">eval_geom</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">geom</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">s</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -235,7 +235,7 @@
         <span class="n">log</span><span class="p">(</span><span class="s1">&#39;Energy: </span><span class="si">{:.12}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">energy</span><span class="p">))</span>
         <span class="n">B</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">B_matrix</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">geom</span><span class="p">)</span>
         <span class="n">B_inv</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Math</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">))</span>
-        <span class="n">current</span> <span class="o">=</span> <span class="n">Berny</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">future</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="n">energy</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">B_inv</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">gradients</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="n">OptPoint</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">future</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="n">energy</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">B_inv</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">gradients</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span><span class="o">.</span><span class="n">first</span><span class="p">:</span>
             <span class="n">s</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">update_hessian</span><span class="p">(</span>
                 <span class="n">s</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="n">current</span><span class="o">.</span><span class="n">q</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">best</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="n">current</span><span class="o">.</span><span class="n">g</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">best</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="n">log</span>
@@ -251,7 +251,7 @@
             <span class="n">t</span><span class="p">,</span> <span class="n">E</span> <span class="o">=</span> <span class="n">linear_search</span><span class="p">(</span>
                 <span class="n">current</span><span class="o">.</span><span class="n">E</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">best</span><span class="o">.</span><span class="n">E</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">current</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">dq</span><span class="p">),</span> <span class="n">dot</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">best</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">dq</span><span class="p">),</span> <span class="n">log</span><span class="o">=</span><span class="n">log</span>
             <span class="p">)</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">interpolated</span> <span class="o">=</span> <span class="n">Berny</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">interpolated</span> <span class="o">=</span> <span class="n">OptPoint</span><span class="p">(</span>
                 <span class="n">current</span><span class="o">.</span><span class="n">q</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="n">dq</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">current</span><span class="o">.</span><span class="n">g</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">best</span><span class="o">.</span><span class="n">g</span> <span class="o">-</span> <span class="n">current</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -263,13 +263,13 @@
         <span class="n">dq</span><span class="p">,</span> <span class="n">dE</span><span class="p">,</span> <span class="n">on_sphere</span> <span class="o">=</span> <span class="n">quadratic_step</span><span class="p">(</span>
             <span class="n">dot</span><span class="p">(</span><span class="n">proj</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">interpolated</span><span class="o">.</span><span class="n">g</span><span class="p">),</span> <span class="n">H_proj</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">trust</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="n">log</span>
         <span class="p">)</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">predicted</span> <span class="o">=</span> <span class="n">Berny</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">interpolated</span><span class="o">.</span><span class="n">q</span> <span class="o">+</span> <span class="n">dq</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">interpolated</span><span class="o">.</span><span class="n">E</span> <span class="o">+</span> <span class="n">dE</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">predicted</span> <span class="o">=</span> <span class="n">OptPoint</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">interpolated</span><span class="o">.</span><span class="n">q</span> <span class="o">+</span> <span class="n">dq</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">interpolated</span><span class="o">.</span><span class="n">E</span> <span class="o">+</span> <span class="n">dE</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">dq</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">predicted</span><span class="o">.</span><span class="n">q</span> <span class="o">-</span> <span class="n">current</span><span class="o">.</span><span class="n">q</span>
         <span class="n">log</span><span class="p">(</span><span class="s1">&#39;Total step: RMS: </span><span class="si">{:.3}</span><span class="s1">, max: </span><span class="si">{:.3}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Math</span><span class="o">.</span><span class="n">rms</span><span class="p">(</span><span class="n">dq</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dq</span><span class="p">))))</span>
         <span class="n">q</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">geom</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">update_geom</span><span class="p">(</span>
             <span class="n">s</span><span class="o">.</span><span class="n">geom</span><span class="p">,</span> <span class="n">current</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">predicted</span><span class="o">.</span><span class="n">q</span> <span class="o">-</span> <span class="n">current</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="n">B_inv</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="n">log</span>
         <span class="p">)</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">future</span> <span class="o">=</span> <span class="n">Berny</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">future</span> <span class="o">=</span> <span class="n">OptPoint</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">s</span><span class="o">.</span><span class="n">previous</span> <span class="o">=</span> <span class="n">current</span>
         <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">first</span> <span class="ow">or</span> <span class="n">current</span><span class="o">.</span><span class="n">E</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="n">best</span><span class="o">.</span><span class="n">E</span><span class="p">:</span>
             <span class="n">s</span><span class="o">.</span><span class="n">best</span> <span class="o">=</span> <span class="n">current</span>
@@ -404,10 +404,10 @@
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2016-2020, Jan Hermann.
+      &copy;2016-2021, Jan Hermann.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
