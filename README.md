@@ -1,6 +1,6 @@
 # PyBerny
 
-[![build](https://img.shields.io/travis/com/jhrmnn/pyberny/master.svg)](https://travis-ci.com/jhrmnn/pyberny)
+![checks](https://img.shields.io/github/checks-status/jhrmnn/pyberny/master.svg)
 [![coverage](https://img.shields.io/codecov/c/github/jhrmnn/pyberny.svg)](https://codecov.io/gh/jhrmnn/pyberny)
 ![python](https://img.shields.io/pypi/pyversions/pyberny.svg)
 [![pypi](https://img.shields.io/pypi/v/pyberny.svg)](https://pypi.org/project/pyberny/)
