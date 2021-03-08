@@ -23,7 +23,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.5"
+python = "^3.6"
 numpy = "^1.15"
 pytest = { version = "^3.6", optional = true }
 coverage = { version = "^4.5", optional = true }
@@ -53,5 +53,5 @@ enable = true
 pattern = '^(?P<base>\d+\.\d+\.\d+)$'
 
 [tool.black]
-target-version = ["py35"]
+target-version = ["py36"]
 skip-string-normalization = true
