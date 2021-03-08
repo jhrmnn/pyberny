@@ -4,6 +4,6 @@
 /.pytest_cache/
 /.cache/
 /dist/
-/docs/build/
+/doc/build/
 /htmlcov/
 /poetry.lock
