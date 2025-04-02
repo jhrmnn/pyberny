@@ -24,6 +24,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.6"
+setuptools = ">=39"  # for berny.species_data
 numpy = ">=1.15,<3"
 pytest = { version = "^3.6", optional = true }
 coverage = { version = "^4.5", optional = true }
