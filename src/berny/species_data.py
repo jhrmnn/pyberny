@@ -12,7 +12,7 @@ def get_property(idx, name):
     try:
         return next(row[name] for row in species_data if row['number'] == idx)
     except StopIteration:
-        raise KeyError('No species with number "{}"'.format(idx))
+        raise KeyError('No species with number "{}"'.format(idx)) from None
 
 
 def _get_species_data():

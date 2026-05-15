@@ -108,7 +108,7 @@ def fit_quartic(y0, y1, g0, g1):
             return minim2, minval2
 
 
-class FindrootException(Exception):
+class FindrootError(Exception):
     pass
 
 
@@ -139,4 +139,4 @@ def findroot(f, lim):
             return x
         err = err_new
     else:
-        raise FindrootException()
+        raise FindrootError()
