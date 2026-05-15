@@ -1,10 +1,12 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+from __future__ import annotations
+
 import logging
-from collections import namedtuple
 from collections.abc import Generator
-from itertools import chain
+from dataclasses import dataclass, fields
+from typing import Any, NamedTuple
 
 import numpy as np
 from numpy import dot, eye
@@ -12,38 +14,59 @@ from numpy.linalg import norm
 
 from . import Math
 from .coords import InternalCoords
+from .geomlib import Geometry
 
-__all__ = ['Berny']
+__all__ = ['Berny', 'BernyParams']
 
 log = logging.getLogger(__name__)
 
-defaults = {
-    'gradientmax': 0.45e-3,
-    'gradientrms': 0.15e-3,
-    'stepmax': 1.8e-3,
-    'steprms': 1.2e-3,
-    'trust': 0.3,
-    'dihedral': True,
-    'superweakdih': False,
-}
-"""
-``gradientmax``, ``gradientrms``, ``stepmax``, ``steprms``
-    Convergence criteria in atomic units ("step" refers to the step in
-    internal coordinates, assuming radian units for angles).
 
-``trust``
-    Initial trust radius in atomic units. It is the maximum RMS of the
-    quadratic step (see below).
+@dataclass
+class BernyParams:
+    """Tunable parameters for :class:`Berny`.
 
-``dihedral``
-    Form dihedral angles.
+    Attributes:
+        gradientmax, gradientrms, stepmax, steprms: convergence criteria in
+            atomic units (``step`` refers to the step in internal coordinates,
+            assuming radian units for angles).
+        trust: initial trust radius in atomic units; the maximum RMS of the
+            quadratic step.
+        dihedral: whether to form dihedral angles.
+        superweakdih: whether to form dihedral angles containing two or more
+            noncovalent bonds.
+    """
 
-``superweakdih``
-    Form dihedral angles containing two or more noncovalent bonds.
-"""
+    gradientmax: float = 0.45e-3
+    gradientrms: float = 0.15e-3
+    stepmax: float = 1.8e-3
+    steprms: float = 1.2e-3
+    trust: float = 0.3
+    dihedral: bool = True
+    superweakdih: bool = False
 
 
-OptPoint = namedtuple('OptPoint', 'q E g')
+class OptPoint(NamedTuple):
+    q: np.ndarray
+    E: float | None
+    g: np.ndarray | None
+
+
+@dataclass
+class BernyState:
+    """Mutable optimizer state. Captured/restored via the ``debug``/``restart`` API."""
+
+    geom: Geometry
+    params: BernyParams
+    trust: float
+    coords: InternalCoords
+    H: np.ndarray
+    weights: np.ndarray
+    future: OptPoint
+    first: bool = True
+    interpolated: OptPoint | None = None
+    predicted: OptPoint | None = None
+    previous: OptPoint | None = None
+    best: OptPoint | None = None
 
 
 class BernyAdapter(logging.LoggerAdapter):
@@ -55,14 +78,13 @@ class Berny(Generator):
     """Generator that receives energy and gradients and yields the next geometry.
 
     Args:
-        geom (:class:`~berny.Geometry`): geometry to start with
-        debug (bool): if :data:`True`, the generator yields debug info on receiving
+        geom: geometry to start with
+        debug: if :data:`True`, the generator yields debug info on receiving
             the energy and gradients, otherwise it yields :data:`None`
-        restart (dict): start from a state saved from previous run
-            using ``debug=True``
-        maxsteps (int): abort after maximum number of steps
-        logger (:class:`logging.Logger`): alternative logger to use
-        params: parameters that override the :data:`~berny.berny.defaults`
+        restart: state captured from a previous run with ``debug=True``
+        maxsteps: abort after maximum number of steps
+        logger: alternative logger to use
+        params: parameter overrides — see :class:`BernyParams`
 
     The Berny object is to be used as follows::
 
@@ -72,35 +94,40 @@ class Berny(Generator):
             debug = optimizer.send((energy, gradients))
     """
 
-    class State:
-        pass
-
     def __init__(
-        self, geom, debug=False, restart=None, maxsteps=100, logger=None, **params
-    ):
+        self,
+        geom: Geometry,
+        debug: bool = False,
+        restart: dict[str, Any] | None = None,
+        maxsteps: int = 100,
+        logger: logging.Logger | None = None,
+        **params: Any,
+    ) -> None:
         self._debug = debug
         self._maxsteps = maxsteps
         self._converged = False
         self._n = 0
         self._log = BernyAdapter(logger or log, {'step': self._n})
-        s = self._state = Berny.State()
         if restart:
-            vars(s).update(restart)
+            self._state = BernyState(**restart)
             return
-        s.geom = geom
-        s.params = dict(chain(defaults.items(), params.items()))
-        s.trust = s.params['trust']
-        s.coords = InternalCoords(
-            s.geom, dihedral=s.params['dihedral'], superweakdih=s.params['superweakdih']
+        bparams = BernyParams(**params)
+        coords = InternalCoords(
+            geom, dihedral=bparams.dihedral, superweakdih=bparams.superweakdih
         )
-        s.H = s.coords.hessian_guess(s.geom)
-        s.weights = s.coords.weights(s.geom)
-        s.future = OptPoint(s.coords.eval_geom(s.geom), None, None)
-        s.first = True
-        for line in str(s.coords).split('\n'):
+        self._state = BernyState(
+            geom=geom,
+            params=bparams,
+            trust=bparams.trust,
+            coords=coords,
+            H=coords.hessian_guess(geom),
+            weights=coords.weights(geom),
+            future=OptPoint(coords.eval_geom(geom), None, None),
+        )
+        for line in str(coords).split('\n'):
             self._log.info(line)
 
-    def __next__(self):
+    def __next__(self) -> Geometry:
         assert self._n <= self._maxsteps
         if self._n >= self._maxsteps or self._converged:
             raise StopIteration
@@ -108,16 +135,18 @@ class Berny(Generator):
         return self._state.geom
 
     @property
-    def trust(self):
+    def trust(self) -> float:
         """Current trust radius."""
         return self._state.trust
 
     @property
-    def converged(self):
+    def converged(self) -> bool:
         """Whether the optimized has converged."""
         return self._converged
 
-    def send(self, energy_and_gradients):  # noqa: D102
+    def send(
+        self, energy_and_gradients: tuple[float, Any]
+    ) -> dict[str, Any] | None:  # noqa: D102
         self._log.extra['step'] = self._n
         log, s = self._log.info, self._state
         energy, gradients = energy_and_gradients
@@ -170,7 +199,8 @@ class Berny(Generator):
         if self._n == self._maxsteps:
             log('Maximum number of steps reached')
         if self._debug:
-            return vars(s).copy()
+            return {f.name: getattr(s, f.name) for f in fields(s)}
+        return None
 
     def throw(self, *args, **kwargs):  # noqa: D102
         return Generator.throw(self, *args, **kwargs)
@@ -255,18 +285,18 @@ def quadratic_step(g, H, w, trust, log=no_log):
     return dq, dE, on_sphere
 
 
-def is_converged(forces, step, on_sphere, params, log=no_log):
+def is_converged(forces, step, on_sphere, params: BernyParams, log=no_log) -> bool:
     criteria = [
-        ('Gradient RMS', Math.rms(forces), params['gradientrms']),
-        ('Gradient maximum', np.max(abs(forces)), params['gradientmax']),
+        ('Gradient RMS', Math.rms(forces), params.gradientrms),
+        ('Gradient maximum', np.max(abs(forces)), params.gradientmax),
     ]
     if on_sphere:
         criteria.append(('Minimization on sphere', False))
     else:
         criteria.extend(
             [
-                ('Step RMS', Math.rms(step), params['steprms']),
-                ('Step maximum', np.max(abs(step)), params['stepmax']),
+                ('Step RMS', Math.rms(step), params.steprms),
+                ('Step maximum', np.max(abs(step)), params.stepmax),
             ]
         )
     log('Convergence criteria:')
