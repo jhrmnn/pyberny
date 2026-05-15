@@ -200,7 +200,7 @@ class Geometry(object):
         if other is None:
             other = self
         diff = self.coords[:, None, :] - other.coords[None, :, :]
-        dist = np.sqrt(np.sum(diff ** 2, 2))
+        dist = np.sqrt(np.sum(diff**2, 2))
         dist[np.diag_indices(len(self))] = np.inf
         return dist, diff
 
@@ -255,7 +255,7 @@ class Geometry(object):
             \mathbf r_i=\mathbf R_i-\mathbf R_\text{CMS}
         """
         coords_w = np.sqrt(self.masses)[:, None] * (self.coords - self.cms)
-        A = np.array([np.diag(np.full(3, r)) for r in np.sum(coords_w ** 2, 1)])
+        A = np.array([np.diag(np.full(3, r)) for r in np.sum(coords_w**2, 1)])
         B = coords_w[:, :, None] * coords_w[:, None, :]
         return np.sum(A - B, 0)
 

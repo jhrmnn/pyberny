@@ -1,9 +1,7 @@
 # Any copyright is dedicated to the Public Domain.
 # http://creativecommons.org/publicdomain/zero/1.0/
 import csv
-import sys
-
-from pkg_resources import resource_string
+from importlib.resources import files
 
 __all__ = ()
 
@@ -18,10 +16,8 @@ def get_property(idx, name):
 
 
 def _get_species_data():
-    csv_lines = resource_string(__name__, 'species-data.csv').split(b'\n')
-    if sys.version_info[0] > 2:
-        csv_lines = [l.decode() for l in csv_lines]
-    reader = csv.DictReader(csv_lines, quoting=csv.QUOTE_NONNUMERIC)
+    csv_text = files(__package__).joinpath('species-data.csv').read_text()
+    reader = csv.DictReader(csv_text.splitlines(), quoting=csv.QUOTE_NONNUMERIC)
     species_data = {row['symbol']: row for row in reader}
     return species_data
 

@@ -344,7 +344,7 @@ class InternalCoords(object):
         return q
 
     def _reduce(self, n):
-        idxs = np.int64(np.floor(np.array(range(3 ** 3 * n)) / n))
+        idxs = np.int64(np.floor(np.array(range(3**3 * n)) / n))
         idxs, i = np.divmod(idxs, 3)
         idxs, j = np.divmod(idxs, 3)
         k = idxs % 3

@@ -1,6 +1,5 @@
 import datetime
 import os
-import subprocess
 import sys
 
 import toml
@@ -11,11 +10,7 @@ with open('../pyproject.toml') as f:
 
 project = 'PyBerny'
 author = ' '.join(metadata['authors'][0].split()[:-1])
-release = version = (
-    subprocess.run(['poetry', 'version'], capture_output=True, cwd='..')
-    .stdout.decode()
-    .split()[1]
-)
+release = version = metadata['version']
 description = metadata['description']
 year_range = (2016, datetime.date.today().year)
 year_str = (

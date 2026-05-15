@@ -9,7 +9,7 @@ __all__ = ['fit_cubic', 'fit_quartic', 'findroot']
 def rms(A):
     if A.size == 0:
         return None
-    return np.sqrt(np.sum(A ** 2) / A.size)
+    return np.sqrt(np.sum(A**2) / A.size)
 
 
 def pinv(A, log=lambda _: None):

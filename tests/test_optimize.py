@@ -1,8 +1,11 @@
+from pathlib import Path
+
 import pytest
-from pkg_resources import resource_filename
 
 from berny import Berny, geomlib, optimize
 from berny.solvers import MopacSolver
+
+XYZ_DIR = Path(__file__).parent
 
 
 @pytest.fixture
@@ -11,19 +14,19 @@ def mopac(scope='session'):
 
 
 def ethanol():
-    return geomlib.readfile(resource_filename('tests', 'ethanol.xyz')), 5
+    return geomlib.readfile(str(XYZ_DIR / 'ethanol.xyz')), 5
 
 
 def aniline():
-    return geomlib.readfile(resource_filename('tests', 'aniline.xyz')), 12
+    return geomlib.readfile(str(XYZ_DIR / 'aniline.xyz')), 12
 
 
 def cyanogen():
-    return geomlib.readfile(resource_filename('tests', 'cyanogen.xyz')), 4
+    return geomlib.readfile(str(XYZ_DIR / 'cyanogen.xyz')), 4
 
 
 def water():
-    return geomlib.readfile(resource_filename('tests', 'water.xyz')), 7
+    return geomlib.readfile(str(XYZ_DIR / 'water.xyz')), 7
 
 
 @pytest.mark.parametrize('test_case', [ethanol, aniline, cyanogen, water])

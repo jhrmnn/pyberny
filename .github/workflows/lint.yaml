@@ -9,7 +9,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install dependencies
-        run: pip install flake8 flake8-bugbear flake8-comprehensions flake8-quotes pep8-naming
+        run: pip install flake8 flake8-bugbear flake8-comprehensions pep8-naming
       - run: flake8
   black:
     runs-on: ubuntu-latest
