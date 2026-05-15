@@ -14,13 +14,13 @@ def get_property(idx, name):
             raise KeyError('No species with symbol "{}"'.format(idx)) from None
     else:
         try:
-            value = next(row[name] for row in species_data.values() if row['number'] == idx)
+            value = next(
+                row[name] for row in species_data.values() if row['number'] == idx
+            )
         except StopIteration:
             raise KeyError('No species with number "{}"'.format(idx)) from None
     if value == '':
-        raise KeyError(
-            'No "{}" data for species "{}"'.format(name, idx)
-        )
+        raise KeyError('No "{}" data for species "{}"'.format(name, idx))
     return value
 
 
