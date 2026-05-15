@@ -9,7 +9,8 @@ This covers all supported public API.
    :members:
    :exclude-members: Point, send, throw
 
-.. autodata:: berny.berny.defaults
+.. autoclass:: BernyParams
+   :members:
 
 .. autodata:: berny.coords.angstrom
 

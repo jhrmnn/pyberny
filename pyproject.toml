@@ -43,6 +43,7 @@ black = ">=22"
 pep8-naming = ">=0.13"
 isort = ">=5"
 pydocstyle = ">=6"
+mypy = ">=1"
 
 [tool.poetry.scripts]
 berny = "berny.cli:main"
@@ -55,3 +56,11 @@ pattern = '^(?P<base>\d+\.\d+\.\d+)$'
 [tool.black]
 target-version = ["py39"]
 skip-string-normalization = true
+
+[tool.mypy]
+python_version = "3.9"
+files = ["src/berny"]
+
+[[tool.mypy.overrides]]
+module = ["numpy", "numpy.*"]
+ignore_missing_imports = true

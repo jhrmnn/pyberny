@@ -1,9 +1,13 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+from __future__ import annotations
+
 import os
+from collections.abc import Iterable, Iterator
 from io import StringIO
 from itertools import chain, groupby, product, repeat
+from typing import Any
 
 import numpy as np
 from numpy import pi
@@ -15,57 +19,69 @@ __all__ = ['Geometry', 'loads', 'readfile']
 
 
 class Geometry:
-    """
-    Represents a single molecule or a crystal.
-
-    :param list species: list of element symbols
-    :param list coords: list of atomic coordinates in angstroms (as 3-tuples)
-    :param list lattice: list of lattice vectors (:data:`None` for a moleucle)
+    """Represents a single molecule or a crystal.
 
     Iterating over a geometry yields 2-tuples of symbols and coordinates.
     :func:`len` returns the number of atoms in a geometry. The class supports
     :func:`format` with the same available formats as :meth:`dump`.
+
+    Args:
+        species: list of element symbols.
+        coords: atomic coordinates in angstroms, shape ``(N, 3)``.
+        lattice: lattice vectors, shape ``(3, 3)``, or :data:`None` for a
+            molecule.
     """
 
-    def __init__(self, species, coords, lattice=None):
+    def __init__(
+        self,
+        species: list[str],
+        coords: Any,
+        lattice: Any = None,
+    ) -> None:
         self.species = species
         self.coords = np.array(coords, dtype=float)
         self.lattice = np.array(lattice, dtype=float) if lattice is not None else None
 
     @classmethod
-    def from_atoms(cls, atoms, lattice=None, unit=1.0):
-        """Alternative contructor.
+    def from_atoms(
+        cls,
+        atoms: Iterable[tuple[str, Any]],
+        lattice: Any = None,
+        unit: float = 1.0,
+    ) -> Geometry:
+        """Alternative constructor.
 
-        :param list atoms: list of 2-tuples with an elemnt symbol and
-            a coordinate
-        :param float unit: value to multiple atomic coordiantes with
-        :param list lattice: list of lattice vectors (:data:`None` for a moleucle)
+        Args:
+            atoms: iterable of ``(element_symbol, coordinate)`` 2-tuples.
+            lattice: lattice vectors, or :data:`None` for a molecule.
+            unit: value to multiply atomic coordinates with.
         """
+        atoms = list(atoms)
         species = [sp for sp, _ in atoms]
         coords = [np.array(coord, dtype=float) * unit for _, coord in atoms]
         return cls(species, coords, lattice)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         s = repr(self.formula)
         if self.lattice is not None:
             s += ' in a lattice'
         return f'<{self.__class__.__name__} {s}>'
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[tuple[str, np.ndarray]]:
         yield from zip(self.species, self.coords)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.species)
 
     @property
-    def formula(self):
+    def formula(self) -> str:
         """Chemical formula of the molecule or a unit cell."""
         composition = sorted(
             (sp, len(list(g))) for sp, g in groupby(sorted(self.species))
         )
         return ''.join(f"{sp}{n if n > 1 else ''}" for sp, n in composition)
 
-    def __format__(self, fmt):
+    def __format__(self, fmt: str) -> str:
         """Return the geometry represented as a string, delegates to :meth:`dump`."""
         fp = StringIO()
         self.dump(fp, fmt)
@@ -73,7 +89,7 @@ class Geometry:
 
     dumps = __format__
 
-    def dump(self, f, fmt):
+    def dump(self, f: Any, fmt: str) -> None:
         """Save the geometry into a file.
 
         :param file f: file object
@@ -105,7 +121,7 @@ class Geometry:
         else:
             raise ValueError(f'Unknown format: {fmt!r}')
 
-    def copy(self):
+    def copy(self) -> Geometry:
         """Make a copy of the geometry."""
         return Geometry(
             list(self.species),
@@ -113,11 +129,11 @@ class Geometry:
             self.lattice.copy() if self.lattice is not None else None,
         )
 
-    def write(self, filename):
-        """
-        Write the geometry into a file, delegates to :meth:`dump`.
+    def write(self, filename: str) -> None:
+        """Write the geometry into a file, delegates to :meth:`dump`.
 
-        :param str filename: path that will be overwritten
+        Args:
+            filename: path that will be overwritten.
         """
         ext = os.path.splitext(filename)[1]
         if ext == '.xyz':
@@ -253,15 +269,12 @@ class Geometry:
         return np.sum(A - B, 0)
 
 
-def load(fp, fmt):
-    """
-    Read a geometry from a file object.
+def load(fp: Any, fmt: str) -> Geometry:
+    """Read a geometry from a file object.
 
-    :param file fp: file object
-    :param str fmt: the format of the geometry file, can be one of ``"xyz"``,
-        ``"aims"``
-
-    Returns :class:`~berny.Geometry`.
+    Args:
+        fp: file object.
+        fmt: geometry format, one of ``"xyz"`` or ``"aims"``.
     """
     if fmt == 'xyz':
         n = int(fp.readline())
@@ -294,32 +307,35 @@ def load(fp, fmt):
         if lattice:
             assert len(lattice) == 3
             return Geometry(species, coords, lattice)
-        else:
-            return Geometry(species, coords)
+        return Geometry(species, coords)
+    raise ValueError(f'Unknown format: {fmt!r}')
 
 
-def loads(s, fmt):
-    """
-    Read a geometry from a string, delegates to :func:`load`.
+def loads(s: str, fmt: str) -> Geometry:
+    """Read a geometry from a string, delegates to :func:`load`.
 
-    :param str s: string with geometry
+    Args:
+        s: string with geometry.
+        fmt: geometry format (see :func:`load`).
     """
     fp = StringIO(s)
     return load(fp, fmt)
 
 
-def readfile(path, fmt=None):
-    """
-    Read a geometry from a file path, delegates to :func:`load`.
+def readfile(path: str, fmt: str | None = None) -> Geometry:
+    """Read a geometry from a file path, delegates to :func:`load`.
 
-    :param str path: path to a geometry file
-    :param str fmt: if not given, the format is given from the file extension
+    Args:
+        path: path to a geometry file.
+        fmt: format; if not given, derived from the file extension.
     """
     if not fmt:
         ext = os.path.splitext(path)[1]
         if ext == '.xyz':
             fmt = 'xyz'
-        if ext == '.aims' or os.path.basename(path) == 'geometry.in':
+        elif ext == '.aims' or os.path.basename(path) == 'geometry.in':
             fmt = 'aims'
+        else:
+            raise ValueError(f'Cannot infer format from path {path!r}')
     with open(path) as f:
         return load(f, fmt)
