@@ -24,19 +24,12 @@ jobs:
           mkdir mopac
           echo mopac >>.git/info/exclude
           cd mopac
-          wget -q $MOPAC_DOWNLOAD_URL $MOPAC_PASSWORD_URL
-          unzip MOPAC2016_for_Linux_64_bit.zip
-          cat >mopac <<EOF
-          #!/bin/bash
-          export LD_LIBRARY_PATH=$PWD
-          export MOPAC_LICENSE=$PWD
-          $PWD/MOPAC2016.exe "\$@"
-          EOF
-          chmod +x mopac MOPAC2016.exe
-          echo $PWD >>$GITHUB_PATH
+          wget -q https://github.com/openmopac/mopac/releases/download/v${MOPAC_VERSION}/mopac-${MOPAC_VERSION}-linux.tar.gz
+          tar --strip-components=1 -xzf mopac-${MOPAC_VERSION}-linux.tar.gz
+          echo "$PWD/bin" >>$GITHUB_PATH
+          echo "LD_LIBRARY_PATH=$PWD/lib" >>$GITHUB_ENV
         env:
-          MOPAC_PASSWORD_URL: ${{ secrets.MOPAC_PASSWORD_URL }}
-          MOPAC_DOWNLOAD_URL: ${{ secrets.MOPAC_DOWNLOAD_URL }}
+          MOPAC_VERSION: 23.2.5
       - name: Create Python virtual environment
         run: |
           python -m venv venv
