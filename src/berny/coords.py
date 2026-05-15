@@ -2,6 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import math
 from collections import OrderedDict
 from itertools import combinations, product
 
@@ -209,7 +210,10 @@ class Dihedral(InternalCoord):
 # Linear-bend handling --------------------------------------------------------
 # Angles above this threshold trigger introduction of dummy ("ghost") atoms;
 # below it, the regular angle gradient (with 1/sin(phi) terms) is well behaved.
-_LIN_THRE = pi - 5 * pi / 180  # 175 degrees
+# Computed via math.radians (rather than `pi - 5 * pi / 180`) so that the
+# expression survives Sphinx's autodoc dynamic-import mocking, which replaces
+# `pi` with a type stub at module scope.
+_LIN_THRE = math.radians(175)
 
 # Distance (angstrom) from host atom j to its dummy. Choice is arbitrary as
 # long as it is comparable to typical bond lengths; the angle-through-dummy
