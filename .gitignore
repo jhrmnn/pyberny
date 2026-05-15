@@ -7,3 +7,4 @@
 /doc/build/
 /htmlcov/
 /poetry.lock
+.claude/mopac/
