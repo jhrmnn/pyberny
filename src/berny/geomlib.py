@@ -103,7 +103,7 @@ class Geometry:
                 coords_str = ' '.join(f'{x:15.8} 1' for x in coord)
                 f.write(f'{specie:>2} {coords_str}\n')
         else:
-            raise ValueError(f'Unknown format: "{fmt}"')
+            raise ValueError(f'Unknown format: {fmt!r}')
 
     def copy(self):
         """Make a copy of the geometry."""

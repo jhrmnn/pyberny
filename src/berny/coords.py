@@ -299,7 +299,7 @@ class InternalCoords:
         parts = ', '.join(
             f'{name}: {len(coords)}' for name, coords in self.dict.items()
         )
-        return f'<InternalCoords "{parts}">'
+        return f'<InternalCoords {parts!r}>'
 
     def __str__(self):
         ncoords = sum(len(coords) for coords in self.dict.values())
