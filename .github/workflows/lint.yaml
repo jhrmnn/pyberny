@@ -51,5 +51,5 @@ jobs:
       - name: Install dependencies
         # Install the package so mypy picks up bundled NumPy stubs and our own
         # type hints via the installed module rather than just the source tree.
-        run: pip install mypy -e .
+        run: pip install -e . mypy
       - run: mypy

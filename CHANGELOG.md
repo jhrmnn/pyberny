@@ -11,12 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for NumPy 2.
 - Covalent radii for Ce–Yb, Po, At, and Fr–U from Cordero et al., *Dalton Trans.*, 2008, 2832, so that geometries containing these elements no longer crash `InternalCoords`.
+- New `berny.BernyParams` dataclass listing every tunable optimizer parameter; useful for discovery and type-checked construction.
 
 ### Changed
 
 - Minimum supported Python version raised to 3.9.
 - `berny.Math.FindrootException` renamed to `berny.Math.FindrootError`.
 - Dropped the runtime dependency on `setuptools` (`pkg_resources`).
+- Unknown keyword arguments to `Berny()` now raise `TypeError` instead of being silently absorbed.
+
+### Removed
+
+- The module-level `berny.berny.defaults` dict. Use `berny.BernyParams` (or pass overrides as keyword arguments to `Berny()`) instead.
 
 ### Fixed
 

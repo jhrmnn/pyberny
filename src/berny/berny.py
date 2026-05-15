@@ -72,10 +72,9 @@ class BernyState:
 
 
 class BernyAdapter(logging.LoggerAdapter):
-    step: int = 0
-
     def __init__(self, logger: logging.Logger) -> None:
         super().__init__(logger, {})
+        self.step: int = 0
 
     def process(self, msg, kwargs):
         return f'{self.step} {msg}', kwargs
