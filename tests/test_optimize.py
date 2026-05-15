@@ -15,7 +15,7 @@ def ethanol():
 
 
 def aniline():
-    return geomlib.readfile(resource_filename('tests', 'aniline.xyz')), 11
+    return geomlib.readfile(resource_filename('tests', 'aniline.xyz')), 12
 
 
 def cyanogen():
