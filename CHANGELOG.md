@@ -10,12 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Support for NumPy 2.
+- Covalent radii for Ce–Yb, Po, At, and Fr–U from Cordero et al., *Dalton Trans.*, 2008, 2832, so that geometries containing these elements no longer crash `InternalCoords`.
 
 ### Changed
 
 - Minimum supported Python version raised to 3.9.
 - `berny.Math.FindrootException` renamed to `berny.Math.FindrootError`.
 - Dropped the runtime dependency on `setuptools` (`pkg_resources`).
+
+### Fixed
+
+- `get_property` now raises a clear `KeyError` identifying the species and property when the requested datum is missing, instead of letting the call fail later with an opaque numpy error.
+- Lookup of species data by atomic number (rather than symbol) now works correctly.
 
 ## [0.6.3] - 2021-02-22
 
