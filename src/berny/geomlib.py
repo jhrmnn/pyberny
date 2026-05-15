@@ -30,8 +30,8 @@ class Geometry(object):
 
     def __init__(self, species, coords, lattice=None):
         self.species = species
-        self.coords = np.array(coords)
-        self.lattice = np.array(lattice) if lattice is not None else None
+        self.coords = np.array(coords, dtype=float)
+        self.lattice = np.array(lattice, dtype=float) if lattice is not None else None
 
     @classmethod
     def from_atoms(cls, atoms, lattice=None, unit=1.0):
@@ -95,6 +95,13 @@ class Geometry(object):
                 )
         elif fmt == 'aims':
             f.write('# Formula: {}\n'.format(self.formula))
+            if self.lattice is not None:
+                for vec in self.lattice:
+                    f.write(
+                        'lattice_vector {}\n'.format(
+                            ' '.join('{:15.8}'.format(x) for x in vec)
+                        )
+                    )
             for specie, coord in self:
                 f.write(
                     'atom {} {:>2}\n'.format(

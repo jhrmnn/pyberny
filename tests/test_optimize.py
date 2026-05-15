@@ -9,7 +9,7 @@ XYZ_DIR = Path(__file__).parent
 
 
 @pytest.fixture
-def mopac(scope='session'):
+def mopac():
     return MopacSolver()
 
 

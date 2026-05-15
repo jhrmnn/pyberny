@@ -30,8 +30,11 @@ def berny_unpickled(berny=None):
 def handler(berny, f):
     energy = float(next(f))
     gradients = [[float(x) for x in l.split()] for l in f if l.strip()]
-    berny.send(energy, gradients)
-    return next(berny)
+    berny.send((energy, gradients))
+    try:
+        return next(berny)
+    except StopIteration:
+        return None
 
 
 def get_berny(args):

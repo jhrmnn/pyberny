@@ -1,8 +1,26 @@
 import pytest
 
-from berny.coords import InternalCoords, angstrom
+from berny.coords import Angle, Bond, Dihedral, InternalCoords, angstrom
 from berny.geomlib import Geometry
 from berny.species_data import get_property, species_data
+
+
+def test_internal_coord_equality_and_hashing():
+    # Until 2026, InternalCoord.__eq__ silently returned None, breaking every
+    # `x in set(...)`/`dict` lookup that the dihedral-swap logic in
+    # InternalCoords.eval_geom relies on.
+    assert Bond(1, 2) == Bond(2, 1)
+    assert Bond(1, 2) != Bond(1, 3)
+    assert hash(Bond(1, 2)) == hash(Bond(2, 1))
+    assert Angle(1, 2, 3) == Angle(3, 2, 1)
+    assert Angle(1, 2, 3) != Bond(1, 2)
+    s = {Bond(1, 2), Bond(2, 1), Angle(1, 2, 3)}
+    assert len(s) == 2
+    assert Dihedral(1, 2, 3, 4) == Dihedral(4, 3, 2, 1)
+    # Comparison against an unrelated type returns NotImplemented from
+    # __eq__, which Python turns into False.
+    assert Bond(1, 2) != 'not-a-coord'
+    assert Bond(1, 2) != 42
 
 
 def test_cycle_dihedrals():
