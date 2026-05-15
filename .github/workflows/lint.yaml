@@ -41,3 +41,15 @@ jobs:
       - name: Install dependencies
         run: pip install pydocstyle
       - run: pydocstyle src
+  mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        # Install the package so mypy picks up bundled NumPy stubs and our own
+        # type hints via the installed module rather than just the source tree.
+        run: pip install mypy -e .
+      - run: mypy

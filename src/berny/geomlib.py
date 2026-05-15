@@ -270,14 +270,11 @@ class Geometry:
 
 
 def load(fp: Any, fmt: str) -> Geometry:
-    """
-    Read a geometry from a file object.
+    """Read a geometry from a file object.
 
-    :param file fp: file object
-    :param str fmt: the format of the geometry file, can be one of ``"xyz"``,
-        ``"aims"``
-
-    Returns :class:`~berny.Geometry`.
+    Args:
+        fp: file object.
+        fmt: geometry format, one of ``"xyz"`` or ``"aims"``.
     """
     if fmt == 'xyz':
         n = int(fp.readline())
@@ -310,8 +307,8 @@ def load(fp: Any, fmt: str) -> Geometry:
         if lattice:
             assert len(lattice) == 3
             return Geometry(species, coords, lattice)
-        else:
-            return Geometry(species, coords)
+        return Geometry(species, coords)
+    raise ValueError(f'Unknown format: {fmt!r}')
 
 
 def loads(s: str, fmt: str) -> Geometry:
@@ -336,7 +333,9 @@ def readfile(path: str, fmt: str | None = None) -> Geometry:
         ext = os.path.splitext(path)[1]
         if ext == '.xyz':
             fmt = 'xyz'
-        if ext == '.aims' or os.path.basename(path) == 'geometry.in':
+        elif ext == '.aims' or os.path.basename(path) == 'geometry.in':
             fmt = 'aims'
+        else:
+            raise ValueError(f'Cannot infer format from path {path!r}')
     with open(path) as f:
         return load(f, fmt)

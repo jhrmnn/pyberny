@@ -3,14 +3,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from __future__ import annotations
 
-from collections.abc import Generator
+from typing import Any
 
 from .geomlib import Geometry
 
 
 def optimize(
-    optimizer: Generator,
-    solver: Generator,
+    optimizer: Any,
+    solver: Any,
     trajectory: str | None = None,
 ) -> Geometry:
     """Optimize a geometry with respect to a solver.

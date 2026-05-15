@@ -46,9 +46,11 @@ class BernyParams:
 
 
 class OptPoint(NamedTuple):
+    # E and g are None for ``future``/``predicted`` points whose energy or
+    # gradient haven't been computed yet, and a float/ndarray otherwise.
     q: np.ndarray
-    E: float | None
-    g: np.ndarray | None
+    E: Any
+    g: Any
 
 
 @dataclass
@@ -70,8 +72,13 @@ class BernyState:
 
 
 class BernyAdapter(logging.LoggerAdapter):
+    step: int = 0
+
+    def __init__(self, logger: logging.Logger) -> None:
+        super().__init__(logger, {})
+
     def process(self, msg, kwargs):
-        return f"{self.extra['step']} {msg}", kwargs
+        return f'{self.step} {msg}', kwargs
 
 
 class Berny(Generator):
@@ -107,7 +114,7 @@ class Berny(Generator):
         self._maxsteps = maxsteps
         self._converged = False
         self._n = 0
-        self._log = BernyAdapter(logger or log, {'step': self._n})
+        self._log = BernyAdapter(logger or log)
         if restart:
             self._state = BernyState(**restart)
             return
@@ -144,10 +151,10 @@ class Berny(Generator):
         """Whether the optimized has converged."""
         return self._converged
 
-    def send(
+    def send(  # type: ignore[override]
         self, energy_and_gradients: tuple[float, Any]
     ) -> dict[str, Any] | None:  # noqa: D102
-        self._log.extra['step'] = self._n
+        self._log.step = self._n
         log, s = self._log.info, self._state
         energy, gradients = energy_and_gradients
         gradients = np.array(gradients)
@@ -156,6 +163,10 @@ class Berny(Generator):
         B_inv = B.T.dot(Math.pinv(np.dot(B, B.T), log=log))
         current = OptPoint(s.future.q, energy, dot(B_inv.T, gradients.reshape(-1)))
         if not s.first:
+            assert s.best is not None
+            assert s.previous is not None
+            assert s.predicted is not None
+            assert s.interpolated is not None
             s.H = update_hessian(
                 s.H, current.q - s.best.q, current.g - s.best.g, log=log
             )
@@ -190,7 +201,7 @@ class Berny(Generator):
         )
         s.future = OptPoint(q, None, None)
         s.previous = current
-        if s.first or current.E < s.best.E:
+        if s.first or (s.best is not None and current.E < s.best.E):
             s.best = current
         s.first = False
         self._converged = is_converged(
@@ -286,7 +297,7 @@ def quadratic_step(g, H, w, trust, log=no_log):
 
 
 def is_converged(forces, step, on_sphere, params: BernyParams, log=no_log) -> bool:
-    criteria = [
+    criteria: list[tuple] = [
         ('Gradient RMS', Math.rms(forces), params.gradientrms),
         ('Gradient maximum', np.max(abs(forces)), params.gradientmax),
     ]
