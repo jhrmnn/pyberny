@@ -24,7 +24,7 @@ def pinv(A, log=lambda _: None):
     else:
         gap = gaps[n]
         if gap < thre_log:
-            log('Pseudoinverse gap of only: {:.1e}'.format(gap))
+            log(f'Pseudoinverse gap of only: {gap:.1e}')
     D[n + 1 :] = 0
     D[: n + 1] = 1 / D[: n + 1]
     return U.dot(np.diag(D)).dot(V)

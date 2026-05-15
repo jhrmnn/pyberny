@@ -11,16 +11,16 @@ def get_property(idx, name):
         try:
             value = species_data[idx][name]
         except KeyError:
-            raise KeyError('No species with symbol "{}"'.format(idx)) from None
+            raise KeyError(f'No species with symbol "{idx}"') from None
     else:
         try:
             value = next(
                 row[name] for row in species_data.values() if row['number'] == idx
             )
         except StopIteration:
-            raise KeyError('No species with number "{}"'.format(idx)) from None
+            raise KeyError(f'No species with number "{idx}"') from None
     if value == '':
-        raise KeyError('No "{}" data for species "{}"'.format(name, idx))
+        raise KeyError(f'No "{name}" data for species "{idx}"')
     return value
 
 

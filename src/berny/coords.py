@@ -1,7 +1,6 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-from __future__ import division
 
 from collections import OrderedDict
 from itertools import combinations, product
@@ -18,7 +17,7 @@ __all__ = ()
 angstrom = 1 / 0.52917721092  #:
 
 
-class InternalCoord(object):
+class InternalCoord:
     def __init__(self, C=None):
         if C is not None:
             self.weak = sum(
@@ -37,7 +36,7 @@ class InternalCoord(object):
         args = list(map(str, self.idx))
         if self.weak is not None:
             args.append('weak=' + str(self.weak))
-        return '{}({})'.format(self.__class__.__name__, ', '.join(args))
+        return f"{self.__class__.__name__}({', '.join(args)})"
 
 
 class Bond(InternalCoord):
@@ -223,7 +222,7 @@ def get_clusters(C):
     return clusters, C
 
 
-class InternalCoords(object):
+class InternalCoords:
     def __init__(self, geom, allowed=None, dihedral=True, superweakdih=False):
         self._coords = []
         n = len(geom)
@@ -297,22 +296,21 @@ class InternalCoords(object):
         )
 
     def __repr__(self):
-        return '<InternalCoords "{}">'.format(
-            ', '.join(
-                '{}: {}'.format(name, len(coords)) for name, coords in self.dict.items()
-            )
+        parts = ', '.join(
+            f'{name}: {len(coords)}' for name, coords in self.dict.items()
         )
+        return f'<InternalCoords "{parts}">'
 
     def __str__(self):
         ncoords = sum(len(coords) for coords in self.dict.values())
         s = 'Internal coordinates:\n'
-        s += '* Number of fragments: {}\n'.format(len(self.fragments))
-        s += '* Number of internal coordinates: {}\n'.format(ncoords)
+        s += f'* Number of fragments: {len(self.fragments)}\n'
+        s += f'* Number of internal coordinates: {ncoords}\n'
         for name, coords in self.dict.items():
             for degree, adjective in [(0, 'strong'), (1, 'weak'), (2, 'superweak')]:
                 n = len([None for c in coords if min(2, c.weak) == degree])
                 if n > 0:
-                    s += '* Number of {} {}: {}\n'.format(adjective, name, n)
+                    s += f'* Number of {adjective} {name}: {n}\n'
         return s.rstrip()
 
     def eval_geom(self, geom, template=None):
@@ -400,7 +398,7 @@ class InternalCoords(object):
             msg = 'Transformation did not converge in {} iterations'
             geom, q, dcart_rms, dq_rms = keep_first
         log(msg.format(i + 1))
-        log('* RMS(dcart): {:.3}, RMS(dq): {:.3}'.format(dcart_rms, dq_rms))
+        log(f'* RMS(dcart): {dcart_rms:.3}, RMS(dq): {dq_rms:.3}')
         return q, geom
 
 

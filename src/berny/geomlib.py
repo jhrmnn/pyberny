@@ -11,11 +11,10 @@ from numpy.linalg import inv, norm
 
 from .species_data import get_property
 
-__version__ = '0.1.0'
 __all__ = ['Geometry', 'loads', 'readfile']
 
 
-class Geometry(object):
+class Geometry:
     """
     Represents a single molecule or a crystal.
 
@@ -50,11 +49,10 @@ class Geometry(object):
         s = repr(self.formula)
         if self.lattice is not None:
             s += ' in a lattice'
-        return '<{} {}>'.format(self.__class__.__name__, s)
+        return f'<{self.__class__.__name__} {s}>'
 
     def __iter__(self):
-        for specie, coord in zip(self.species, self.coords):
-            yield specie, coord
+        yield from zip(self.species, self.coords)
 
     def __len__(self):
         return len(self.species)
@@ -65,7 +63,7 @@ class Geometry(object):
         composition = sorted(
             (sp, len(list(g))) for sp, g in groupby(sorted(self.species))
         )
-        return ''.join('{}{}'.format(sp, n if n > 1 else '') for sp, n in composition)
+        return ''.join(f"{sp}{n if n > 1 else ''}" for sp, n in composition)
 
     def __format__(self, fmt):
         """Return the geometry represented as a string, delegates to :meth:`dump`."""
@@ -85,39 +83,27 @@ class Geometry(object):
         if fmt == '':
             f.write(repr(self))
         elif fmt == 'xyz':
-            f.write('{}\n'.format(len(self)))
-            f.write('Formula: {}\n'.format(self.formula))
+            f.write(f'{len(self)}\n')
+            f.write(f'Formula: {self.formula}\n')
             for specie, coord in self:
-                f.write(
-                    '{:>2} {}\n'.format(
-                        specie, ' '.join('{:15.8}'.format(x) for x in coord)
-                    )
-                )
+                coords_str = ' '.join(f'{x:15.8}' for x in coord)
+                f.write(f'{specie:>2} {coords_str}\n')
         elif fmt == 'aims':
-            f.write('# Formula: {}\n'.format(self.formula))
+            f.write(f'# Formula: {self.formula}\n')
             if self.lattice is not None:
                 for vec in self.lattice:
-                    f.write(
-                        'lattice_vector {}\n'.format(
-                            ' '.join('{:15.8}'.format(x) for x in vec)
-                        )
-                    )
+                    vec_str = ' '.join(f'{x:15.8}' for x in vec)
+                    f.write(f'lattice_vector {vec_str}\n')
             for specie, coord in self:
-                f.write(
-                    'atom {} {:>2}\n'.format(
-                        ' '.join('{:15.8}'.format(x) for x in coord), specie
-                    )
-                )
+                coords_str = ' '.join(f'{x:15.8}' for x in coord)
+                f.write(f'atom {coords_str} {specie:>2}\n')
         elif fmt == 'mopac':
-            f.write('* Formula: {}\n'.format(self.formula))
+            f.write(f'* Formula: {self.formula}\n')
             for specie, coord in self:
-                f.write(
-                    '{:>2} {}\n'.format(
-                        specie, ' '.join('{:15.8} 1'.format(x) for x in coord)
-                    )
-                )
+                coords_str = ' '.join(f'{x:15.8} 1' for x in coord)
+                f.write(f'{specie:>2} {coords_str}\n')
         else:
-            raise ValueError('Unknown format: "{}"'.format(fmt))
+            raise ValueError(f'Unknown format: "{fmt}"')
 
     def copy(self):
         """Make a copy of the geometry."""
