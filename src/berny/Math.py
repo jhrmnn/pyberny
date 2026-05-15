@@ -112,6 +112,9 @@ class FindrootError(Exception):
     pass
 
 
+FindrootException = FindrootError
+
+
 def findroot(f, lim):
     """Find root of increasing function on (-inf,lim).
 

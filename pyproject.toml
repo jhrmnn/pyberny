@@ -23,27 +23,26 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.9"
 numpy = "^1.15"
-pytest = { version = "^3.6", optional = true }
-coverage = { version = "^4.5", optional = true }
-sphinx = { version = "^2.2", optional = true }
-sphinxcontrib-katex = { version = "^0.5.1", optional = true }
-toml = { version = "^0.10.0", optional = true }
+pytest = { version = ">=6", optional = true }
+coverage = { version = ">=6", optional = true }
+sphinx = { version = ">=5", optional = true }
+sphinxcontrib-katex = { version = ">=0.9", optional = true }
+toml = { version = ">=0.10", optional = true }
 
 [tool.poetry.extras]
 test = ["pytest", "coverage"]
 doc = ["sphinx", "sphinxcontrib-katex", "toml"]
 
-[tool.poetry.dev-dependencies]
-flake8 = "^3.5"
-flake8-bugbear = { version = ">=18.8", python = "^3.6" }
-flake8-comprehensions = ">=1.4"
-flake8-quotes = "^2"
-black = { version = ">=20-beta.0", python = "^3.6" }
-pep8-naming = ">=0.7"
-isort = { version = "^5", python = "^3.6" }
-pydocstyle = ">=5"
+[tool.poetry.group.dev.dependencies]
+flake8 = ">=5"
+flake8-bugbear = ">=22"
+flake8-comprehensions = ">=3"
+black = ">=22"
+pep8-naming = ">=0.13"
+isort = ">=5"
+pydocstyle = ">=6"
 
 [tool.poetry.scripts]
 berny = "berny.cli:main"
@@ -54,5 +53,5 @@ dirty = true
 pattern = '^(?P<base>\d+\.\d+\.\d+)$'
 
 [tool.black]
-target-version = ["py36"]
+target-version = ["py39"]
 skip-string-normalization = true

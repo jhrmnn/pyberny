@@ -1,6 +1,7 @@
 import datetime
 import os
 import sys
+from importlib.metadata import version as get_version
 
 import toml
 
@@ -10,7 +11,7 @@ with open('../pyproject.toml') as f:
 
 project = 'PyBerny'
 author = ' '.join(metadata['authors'][0].split()[:-1])
-release = version = metadata['version']
+release = version = get_version('pyberny')
 description = metadata['description']
 year_range = (2016, datetime.date.today().year)
 year_str = (
