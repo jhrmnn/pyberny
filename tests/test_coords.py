@@ -17,6 +17,10 @@ def test_internal_coord_equality_and_hashing():
     s = {Bond(1, 2), Bond(2, 1), Angle(1, 2, 3)}
     assert len(s) == 2
     assert Dihedral(1, 2, 3, 4) == Dihedral(4, 3, 2, 1)
+    # Comparison against an unrelated type returns NotImplemented from
+    # __eq__, which Python turns into False.
+    assert Bond(1, 2) != 'not-a-coord'
+    assert Bond(1, 2) != 42
 
 
 def test_cycle_dihedrals():
