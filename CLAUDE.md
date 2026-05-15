@@ -1,5 +1,12 @@
 # Project conventions
 
+## Pre-push checks
+
+Before `git push`, run `scripts/check.sh`. It runs the same lint and test
+commands CI runs (`flake8`, `black --check`, `isort --check`, `pydocstyle src`,
+`pytest`) against the current Python, so most CI failures are catchable
+locally without waiting for the 5-version matrix.
+
 ## CHANGELOG
 
 `CHANGELOG.md` is reserved for important user-facing changes — new features,
