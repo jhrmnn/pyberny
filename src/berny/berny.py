@@ -103,7 +103,7 @@ class Berny(Generator):
 
     def __next__(self):
         assert self._n <= self._maxsteps
-        if self._n == self._maxsteps or self._converged:
+        if self._n >= self._maxsteps or self._converged:
             raise StopIteration
         self._n += 1
         return self._state.geom
