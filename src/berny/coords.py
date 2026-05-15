@@ -26,10 +26,12 @@ class InternalCoord(object):
             )
 
     def __eq__(self, other):
-        self.idx == other.idx  # noqa B015
+        if not isinstance(other, InternalCoord):
+            return NotImplemented
+        return type(self) is type(other) and self.idx == other.idx
 
     def __hash__(self):
-        return hash(self.idx)
+        return hash((type(self), self.idx))
 
     def __repr__(self):
         args = list(map(str, self.idx))

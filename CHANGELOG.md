@@ -22,6 +22,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `get_property` now raises a clear `KeyError` identifying the species and property when the requested datum is missing, instead of letting the call fail later with an opaque numpy error.
 - Lookup of species data by atomic number (rather than symbol) now works correctly.
+- `InternalCoord.__eq__` no longer silently returns `None`; equality and hashing now behave consistently, fixing membership checks used in dihedral-swap detection.
+- The `berny` CLI no longer crashes on every step: it now passes energy and gradients to `Berny.send` as a tuple and terminates cleanly on convergence.
+- Dumping a crystal `Geometry` in the `aims` format now includes `lattice_vector` lines, so the format round-trips correctly.
+- `Geometry` now coerces `coords` and `lattice` to `float`, so integer inputs no longer trip the dump formatter.
+- The `mopac` pytest fixture is now decorated correctly (the previous form used a function-default that pytest ignored).
+- `Berny.__next__` no longer relies on an `assert` for its loop invariant, which would have been stripped under `python -O`.
 
 ## [0.6.3] - 2021-02-22
 
