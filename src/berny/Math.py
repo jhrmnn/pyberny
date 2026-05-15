@@ -9,7 +9,7 @@ __all__ = ['fit_cubic', 'fit_quartic', 'findroot']
 def rms(A):
     if A.size == 0:
         return None
-    return np.sqrt(np.sum(A ** 2) / A.size)
+    return np.sqrt(np.sum(A**2) / A.size)
 
 
 def pinv(A, log=lambda _: None):
@@ -108,7 +108,7 @@ def fit_quartic(y0, y1, g0, g1):
             return minim2, minval2
 
 
-class FindrootException(Exception):
+class FindrootError(Exception):
     pass
 
 
@@ -139,4 +139,4 @@ def findroot(f, lim):
             return x
         err = err_new
     else:
-        raise FindrootException()
+        raise FindrootError()
