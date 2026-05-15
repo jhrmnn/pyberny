@@ -27,7 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dumping a crystal `Geometry` in the `aims` format now includes `lattice_vector` lines, so the format round-trips correctly.
 - `Geometry` now coerces `coords` and `lattice` to `float`, so integer inputs no longer trip the dump formatter.
 - The `mopac` pytest fixture is now decorated correctly (the previous form used a function-default that pytest ignored).
-- `Berny.__next__` no longer relies on an `assert` for its loop invariant, which would have been stripped under `python -O`.
 
 ## [0.6.3] - 2021-02-22
 
