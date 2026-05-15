@@ -58,6 +58,81 @@ def test_internal_coords_with_previously_missing_radius():
     assert len(coords.bonds) == 1
 
 
+def _no_singular_angle(coords, geom):
+    """Assert that no Angle coordinate is near the singular branch (~180 deg)."""
+    all_coords = coords._all_coords(geom.supercell())
+    for c in coords.angles:
+        phi = c.eval(all_coords)
+        assert phi < np.pi - 5 * np.pi / 180, (c, phi)
+
+
+def test_linear_bends_replace_singular_angle_co2():
+    # CO2 is linear; the O-C-O angle should not appear as a regular angle
+    # coordinate. Instead two dummies should be placed and four angles
+    # routed through them.
+    geom = Geometry(
+        ['O', 'C', 'O'],
+        [[0.0, 0.0, -1.16], [0.0, 0.0, 0.0], [0.0, 0.0, 1.16]],
+    )
+    coords = InternalCoords(geom)
+    assert coords.dummy_atoms.shape == (2, 3)
+    assert len(coords.angles) == 4
+    _no_singular_angle(coords, geom)
+
+
+def test_linear_bends_acetylene():
+    # H-C#C-H: two linear triples (H-C-C and C-C-H), four dummies, eight angles.
+    geom = Geometry(
+        ['H', 'C', 'C', 'H'],
+        [[0, 0, -1.7], [0, 0, -0.6], [0, 0, 0.6], [0, 0, 1.7]],
+    )
+    coords = InternalCoords(geom)
+    assert coords.dummy_atoms.shape == (4, 3)
+    assert len(coords.angles) == 8
+    _no_singular_angle(coords, geom)
+
+
+def test_linear_bends_dummies_perpendicular_to_axis():
+    # Each dummy should sit perpendicular to the host i-k axis, displaced
+    # from the host j atom.
+    geom = Geometry(
+        ['O', 'C', 'O'],
+        [[0.0, 0.0, -1.16], [0.0, 0.0, 0.0], [0.0, 0.0, 1.16]],
+    )
+    coords = InternalCoords(geom)
+    for spec, d in zip(coords._dummy_specs, coords.dummy_atoms):
+        offset = d - geom.coords[spec.j]
+        axis = geom.coords[spec.k] - geom.coords[spec.i]
+        axis = axis / np.linalg.norm(axis)
+        assert abs(np.dot(offset, axis)) < 1e-10
+        assert abs(np.linalg.norm(offset) - 1.0) < 1e-10  # _DUMMY_OFFSET
+
+
+def test_b_matrix_shape_excludes_dummies():
+    # The B-matrix should be sized over real atoms only; dummies are
+    # handled implicitly through the frozen-dummy approximation.
+    geom = Geometry(
+        ['O', 'C', 'O'],
+        [[0.0, 0.0, -1.16], [0.0, 0.0, 0.0], [0.0, 0.0, 1.16]],
+    )
+    coords = InternalCoords(geom)
+    B = coords.B_matrix(geom)
+    assert B.shape == (len(coords), 3 * len(geom))
+
+
+def test_ghost_atom_in_geometry_does_not_crash():
+    # Issue #9: previously, a "Ghost" species in the input geometry raised
+    # KeyError deep inside InternalCoords. Now it should build without
+    # raising and the ghost should not enter any covalent bond.
+    geom = Geometry(
+        ['H', 'H', 'Ghost'],
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 1.0], [0.0, 0.5, 0.5]],
+    )
+    coords = InternalCoords(geom)
+    # No bond should connect a ghost atom (index 2) covalently.
+    assert all(b.weak >= 1 for b in coords.bonds if 2 in b.idx)
+
+
 def test_get_property_missing_data_raises_keyerror():
     # If a species exists but the requested property is empty, the user
     # should get a clear KeyError naming the species and the property,
