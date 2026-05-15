@@ -1,5 +1,8 @@
+import pytest
+
 from berny.coords import InternalCoords, angstrom
 from berny.geomlib import Geometry
+from berny.species_data import get_property, species_data
 
 
 def test_cycle_dihedrals():
@@ -23,3 +26,35 @@ def test_cycle_dihedrals():
     )
     coords = InternalCoords(geom)
     assert not [dih for dih in coords.dihedrals if len(set(dih.idx)) < 4]
+
+
+def test_internal_coords_with_previously_missing_radius():
+    # Astatine had no covalent radius, which used to crash InternalCoords
+    # with an opaque numpy error (see issue #...).
+    geom = Geometry.from_atoms(
+        [('At', [0.0, 0.0, 0.0]), ('At', [0.0, 0.0, 2.5])],
+        unit=1 / angstrom,
+    )
+    coords = InternalCoords(geom)
+    assert len(coords.bonds) == 1
+
+
+def test_get_property_missing_data_raises_keyerror():
+    # If a species exists but the requested property is empty, the user
+    # should get a clear KeyError naming the species and the property,
+    # not a cryptic numpy TypeError further down the line.
+    species_data['Zz'] = {
+        'number': 999.0,
+        'name': 'fake',
+        'symbol': 'Zz',
+        'covalent_radius': '',
+        'mass': 0.0,
+        'vdw_radius': 0.0,
+    }
+    try:
+        with pytest.raises(KeyError, match='covalent_radius'):
+            get_property('Zz', 'covalent_radius')
+        with pytest.raises(KeyError, match='covalent_radius'):
+            get_property(999, 'covalent_radius')
+    finally:
+        del species_data['Zz']

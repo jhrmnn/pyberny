@@ -8,11 +8,20 @@ __all__ = ()
 
 def get_property(idx, name):
     if isinstance(idx, str):
-        return species_data[idx][name]
-    try:
-        return next(row[name] for row in species_data if row['number'] == idx)
-    except StopIteration:
-        raise KeyError('No species with number "{}"'.format(idx)) from None
+        try:
+            value = species_data[idx][name]
+        except KeyError:
+            raise KeyError('No species with symbol "{}"'.format(idx)) from None
+    else:
+        try:
+            value = next(row[name] for row in species_data.values() if row['number'] == idx)
+        except StopIteration:
+            raise KeyError('No species with number "{}"'.format(idx)) from None
+    if value == '':
+        raise KeyError(
+            'No "{}" data for species "{}"'.format(name, idx)
+        )
+    return value
 
 
 def _get_species_data():
