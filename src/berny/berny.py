@@ -13,7 +13,6 @@ from numpy.linalg import norm
 from . import Math
 from .coords import InternalCoords
 
-__version__ = '0.3.2'
 __all__ = ['Berny']
 
 log = logging.getLogger(__name__)
@@ -49,7 +48,7 @@ OptPoint = namedtuple('OptPoint', 'q E g')
 
 class BernyAdapter(logging.LoggerAdapter):
     def process(self, msg, kwargs):
-        return '{} {}'.format(self.extra['step'], msg), kwargs
+        return f"{self.extra['step']} {msg}", kwargs
 
 
 class Berny(Generator):
@@ -73,7 +72,7 @@ class Berny(Generator):
             debug = optimizer.send((energy, gradients))
     """
 
-    class State(object):
+    class State:
         pass
 
     def __init__(
@@ -123,7 +122,7 @@ class Berny(Generator):
         log, s = self._log.info, self._state
         energy, gradients = energy_and_gradients
         gradients = np.array(gradients)
-        log('Energy: {:.12}'.format(energy))
+        log(f'Energy: {energy:.12}')
         B = s.coords.B_matrix(s.geom)
         B_inv = B.T.dot(Math.pinv(np.dot(B, B.T), log=log))
         current = OptPoint(s.future.q, energy, dot(B_inv.T, gradients.reshape(-1)))
@@ -156,7 +155,7 @@ class Berny(Generator):
         )
         s.predicted = OptPoint(s.interpolated.q + dq, s.interpolated.E + dE, None)
         dq = s.predicted.q - current.q
-        log('Total step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
+        log(f'Total step: RMS: {Math.rms(dq):.3}, max: {max(abs(dq)):.3}')
         q, s.geom = s.coords.update_geom(
             s.geom, current.q, s.predicted.q - current.q, B_inv, log=log
         )
@@ -186,7 +185,7 @@ def update_hessian(H, dq, dg, log=no_log):
     dH2 = H.dot(dq[None, :] * dq[:, None]).dot(H) / dq.dot(H).dot(dq)
     dH = dH1 - dH2  # BFGS update
     log('Hessian update information:')
-    log('* Change: RMS: {:.3}, max: {:.3}'.format(Math.rms(dH), abs(dH).max()))
+    log(f'* Change: RMS: {Math.rms(dH):.3}, max: {abs(dH).max():.3}')
     return H + dH
 
 
@@ -195,7 +194,7 @@ def update_trust(trust, dE, dE_predicted, dq, log=no_log):
         r = dE / dE_predicted  # Fletcher's parameter
     else:
         r = 1.0
-    log("Trust update: Fletcher's parameter: {:.3}".format(r))
+    log(f"Trust update: Fletcher's parameter: {r:.3}")
     if r < 0.25:
         return norm(dq) / 4
     elif r > 0.75 and abs(norm(dq) - trust) < 1e-10:
@@ -206,8 +205,8 @@ def update_trust(trust, dE, dE_predicted, dq, log=no_log):
 
 def linear_search(E0, E1, g0, g1, log=no_log):
     log('Linear interpolation:')
-    log('* Energies: {:.8}, {:.8}'.format(E0, E1))
-    log('* Derivatives: {:.3}, {:.3}'.format(g0, g1))
+    log(f'* Energies: {E0:.8}, {E1:.8}')
+    log(f'* Derivatives: {g0:.3}, {g1:.3}')
     t, E = Math.fit_quartic(E0, E1, g0, g1)
     if t is None or t < -1 or t > 2:
         t, E = Math.fit_cubic(E0, E1, g0, g1)
@@ -223,8 +222,8 @@ def linear_search(E0, E1, g0, g1, log=no_log):
             msg = 'Cubic interpolation was performed'
     else:
         msg = 'Quartic interpolation was performed'
-    log('* {}: t = {:.3}'.format(msg, t))
-    log('* Interpolated energy: {:.8}'.format(E))
+    log(f'* {msg}: t = {t:.3}')
+    log(f'* Interpolated energy: {E:.8}')
     return t, E
 
 
@@ -247,12 +246,12 @@ def quadratic_step(g, H, w, trust, log=no_log):
         on_sphere = True
         log('Minimization on sphere was performed:')
     dE = dot(g, dq) + 0.5 * dq.dot(H).dot(dq)  # predicted energy change
-    log('* Trust radius: {:.2}'.format(trust))
-    log('* Number of negative eigenvalues: {}'.format((ev < 0).sum()))
-    log('* Lowest eigenvalue: {:.3}'.format(ev[0]))
-    log('* lambda: {:.3}'.format(l))
-    log('Quadratic step: RMS: {:.3}, max: {:.3}'.format(Math.rms(dq), max(abs(dq))))
-    log('* Predicted energy change: {:.3}'.format(dE))
+    log(f'* Trust radius: {trust:.2}')
+    log(f'* Number of negative eigenvalues: {(ev < 0).sum()}')
+    log(f'* Lowest eigenvalue: {ev[0]:.3}')
+    log(f'* lambda: {l:.3}')
+    log(f'Quadratic step: RMS: {Math.rms(dq):.3}, max: {max(abs(dq)):.3}')
+    log(f'* Predicted energy change: {dE:.3}')
     return dq, dE, on_sphere
 
 
@@ -275,11 +274,13 @@ def is_converged(forces, step, on_sphere, params, log=no_log):
     for crit in criteria:
         if len(crit) > 2:
             result = crit[1] < crit[2]
-            msg = '{:.3} {} {:.3}'.format(crit[1], '<' if result else '>', crit[2])
+            op = '<' if result else '>'
+            msg = f'{crit[1]:.3} {op} {crit[2]:.3}'
         else:
             msg, result = crit
-        msg = '{}: {}'.format(crit[0], msg) if msg else crit[0]
-        msg = '* {} => {}'.format(msg, 'OK' if result else 'no')
+        msg = f'{crit[0]}: {msg}' if msg else crit[0]
+        verdict = 'OK' if result else 'no'
+        msg = f'* {msg} => {verdict}'
         log(msg)
         if not result:
             all_matched = False

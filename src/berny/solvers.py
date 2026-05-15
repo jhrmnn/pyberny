@@ -1,6 +1,5 @@
 # Any copyright is dedicated to the Public Domain.
 # http://creativecommons.org/publicdomain/zero/1.0/
-from __future__ import division
 
 import os
 import shutil
@@ -28,12 +27,12 @@ def MopacSolver(cmd='mopac', method='PM7', workdir=None):
     try:
         atoms, lattice = yield
         while True:
-            mopac_input = '{} 1SCF GRADIENTS\n\n\n'.format(method) + '\n'.join(
-                '{} {} 1 {} 1 {} 1'.format(el, *coord) for el, coord in atoms
+            mopac_input = f'{method} 1SCF GRADIENTS\n\n\n' + '\n'.join(
+                f'{el} {x} 1 {y} 1 {z} 1' for el, (x, y, z) in atoms
             )
             if lattice is not None:
                 mopac_input += '\n' + '\n'.join(
-                    'Tv {} 1 {} 1 {} 1'.format(*vec) for vec in lattice
+                    f'Tv {x} 1 {y} 1 {z} 1' for x, y, z in lattice
                 )
             input_file = os.path.join(tmpdir, 'job.mop')
             with open(input_file, 'w') as f:
