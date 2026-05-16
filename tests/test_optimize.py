@@ -42,3 +42,20 @@ def test_optimize(mopac, test_case):
     assert (
         berny._n <= n_ref + 2
     ), f'converged in {berny._n} steps, more than the {n_ref} + 2 band'
+
+
+def test_optimize_writes_trajectory(mopac, tmp_path):
+    geom, _ = water()
+    berny = Berny(geom)
+    traj = tmp_path / 'traj.xyz'
+    optimize(berny, mopac, trajectory=str(traj))
+    assert berny.converged
+    # One XYZ frame per optimizer step. Each frame is atom_count + comment +
+    # N atom lines = N + 2 lines.
+    lines = traj.read_text().splitlines()
+    n = len(geom)
+    assert len(lines) % (n + 2) == 0
+    n_frames = len(lines) // (n + 2)
+    assert n_frames == berny._n
+    for i in range(n_frames):
+        assert lines[i * (n + 2)].strip() == str(n)

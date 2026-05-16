@@ -45,6 +45,17 @@ class TestPinv:
         P = Math.pinv(A) @ A
         assert np.linalg.matrix_rank(P, tol=1e-6) == 2
 
+    def test_warns_on_modest_singular_value_gap(self):
+        # A gap above the truncation threshold (1e3) but below the "safe"
+        # threshold (1e8) triggers a diagnostic log message.
+        Q = np.linalg.qr(np.random.default_rng(2).standard_normal((3, 3)))[0]
+        # gaps = [1.0/1e-5, 1e-5/1e-6] = [1e5, 10] → first gap is in the
+        # warn band.
+        A = Q @ np.diag([1.0, 1e-5, 1e-6]) @ Q.T
+        messages = []
+        Math.pinv(A, log=messages.append)
+        assert any('Pseudoinverse gap' in m for m in messages)
+
 
 class TestCross:
     def test_matches_numpy(self):
