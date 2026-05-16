@@ -255,8 +255,6 @@ def main(argv=None):
         emit(reference, args.solvers, args.nbins, cache, args.cache, args.exclude),
         end='',
     )
-    if args.cache:
-        args.cache.write_text(json.dumps(cache, indent=2, sort_keys=True))
 
 
 if __name__ == '__main__':

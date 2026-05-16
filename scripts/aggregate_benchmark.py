@@ -8,6 +8,9 @@ to ``$GITHUB_STEP_SUMMARY`` (when set) and writes ``results/summary.md``.
 
 Exits 1 if any molecule failed to converge and its reference entry for that
 solver is not ``null`` — same rule as ``benchmark.py``'s exit-code logic.
+``pyberny_steps`` is currently ``null`` for every entry, so pyscf is in
+baseline-establishment mode: no pyscf run can trip this gate yet. Fill in
+``pyberny_steps`` as pyscf results stabilize to enable the regression check.
 """
 
 import argparse
@@ -25,14 +28,18 @@ REF_KEY = {'mopac': 'mopac_pm7_steps', 'pyscf': 'pyberny_steps'}
 
 def load_rows(results_dir, solver):
     rows = {}
+    sources = {}
     for path in sorted(results_dir.glob(f'{solver}-*.json')):
         data = json.loads(path.read_text())
         for row in data['rows']:
-            if row['name'] in rows:
+            name = row['name']
+            if name in rows:
                 raise SystemExit(
-                    f'duplicate row for {solver}/{row["name"]} ' f'(from {path.name})'
+                    f'duplicate row for {solver}/{name}: '
+                    f'in {sources[name].name} and {path.name}'
                 )
-            rows[row['name']] = row
+            rows[name] = row
+            sources[name] = path
     return rows
 
 
