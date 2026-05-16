@@ -86,9 +86,9 @@ def emit(reference, solvers, nbins_arg):
             f'# {solver}: {nbins} batches, ' f'cost spread = {spread:.0%} of mean'
         )
         for i, names in enumerate(bins):
+            mols = ' '.join(names)
             out.append(
-                f'- {{ solver: {solver}, batch_id: b{i}, '
-                f'molecules: "{" ".join(names)}" }}'
+                f'- {{ solver: {solver}, batch_id: b{i}, molecules: {mols} }}'
             )
     return '\n'.join(out) + '\n'
 

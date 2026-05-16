@@ -25,13 +25,13 @@ jobs:
         # mopac ~ N^2 * pm7_steps; pyscf ~ N^4 * paper_steps).
         # Rerun the script and paste a fresh block if reference.json changes.
         include:
-          - { solver: mopac, batch_id: b0, molecules: "sphingomyelin" }
-          - { solver: mopac, batch_id: b1, molecules: "artemisinin azadirachtin" }
-          - { solver: mopac, batch_id: b2, molecules: "easc mg_porphin penicillin_v raffinose" }
-          - { solver: mopac, batch_id: b3, molecules: "inosine_cation zn_edta bisphenol_a estradiol ochratoxin_a tamoxifen" }
-          - { solver: mopac, batch_id: b4, molecules: "vitamin_c diisobutyl_phthalate codeine avobenzone maltose cetirizine" }
-          - { solver: pyscf, batch_id: b0, molecules: "azadirachtin" }
-          - { solver: pyscf, batch_id: b1, molecules: "vitamin_c easc inosine_cation bisphenol_a zn_edta mg_porphin penicillin_v diisobutyl_phthalate artemisinin codeine estradiol avobenzone maltose ochratoxin_a cetirizine tamoxifen raffinose sphingomyelin" }
+          - { solver: mopac, batch_id: b0, molecules: sphingomyelin }
+          - { solver: mopac, batch_id: b1, molecules: artemisinin azadirachtin }
+          - { solver: mopac, batch_id: b2, molecules: easc mg_porphin penicillin_v raffinose }
+          - { solver: mopac, batch_id: b3, molecules: inosine_cation zn_edta bisphenol_a estradiol ochratoxin_a tamoxifen }
+          - { solver: mopac, batch_id: b4, molecules: vitamin_c diisobutyl_phthalate codeine avobenzone maltose cetirizine }
+          - { solver: pyscf, batch_id: b0, molecules: azadirachtin }
+          - { solver: pyscf, batch_id: b1, molecules: vitamin_c easc inosine_cation bisphenol_a zn_edta mg_porphin penicillin_v diisobutyl_phthalate artemisinin codeine estradiol avobenzone maltose ochratoxin_a cetirizine tamoxifen raffinose sphingomyelin }
     steps:
       - uses: actions/checkout@v4
         with:
