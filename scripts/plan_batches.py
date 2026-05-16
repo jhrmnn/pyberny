@@ -87,9 +87,7 @@ def emit(reference, solvers, nbins_arg):
         )
         for i, names in enumerate(bins):
             mols = ' '.join(names)
-            out.append(
-                f'- {{ solver: {solver}, batch_id: b{i}, molecules: {mols} }}'
-            )
+            out.append(f'- {{ solver: {solver}, batch_id: b{i}, molecules: {mols} }}')
     return '\n'.join(out) + '\n'
 
 
