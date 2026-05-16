@@ -13,7 +13,32 @@ from .coords import angstrom
 __all__ = ['MopacSolver']
 
 
-def MopacSolver(cmd='mopac', method='PM7', workdir=None):
+_MOPAC_MULT_KEYWORDS = {
+    1: '',
+    2: 'DOUBLET',
+    3: 'TRIPLET',
+    4: 'QUARTET',
+    5: 'QUINTET',
+    6: 'SEXTET',
+    7: 'SEPTET',
+}
+
+
+def _mopac_keyword_line(method, charge, mult):
+    """Build the MOPAC keyword line for a single-point gradient run."""
+    try:
+        mult_kw = _MOPAC_MULT_KEYWORDS[mult]
+    except KeyError as e:
+        raise ValueError(f'unsupported MOPAC multiplicity: {mult}') from e
+    keywords = [method, '1SCF', 'GRADIENTS']
+    if charge:
+        keywords.append(f'CHARGE={charge}')
+    if mult_kw:
+        keywords += [mult_kw, 'UHF']
+    return ' '.join(keywords)
+
+
+def MopacSolver(cmd='mopac', method='PM7', charge=0, mult=1, workdir=None):
     """
     Crate a solver that wraps `MOPAC <http://openmopac.net>`_.
 
@@ -21,13 +46,17 @@ def MopacSolver(cmd='mopac', method='PM7', workdir=None):
 
     :param str cmd: MOPAC executable
     :param str method: model to calculate energy
+    :param int charge: total charge
+    :param int mult: spin multiplicity (1 = singlet, 2 = doublet, ...);
+        values > 1 also switch MOPAC to UHF
     """
+    keyword_line = _mopac_keyword_line(method, charge, mult)
     kcal = 1 / 627.503
     tmpdir = workdir or tempfile.mkdtemp()
     try:
         atoms, lattice = yield
         while True:
-            mopac_input = f'{method} 1SCF GRADIENTS\n\n\n' + '\n'.join(
+            mopac_input = f'{keyword_line}\n\n\n' + '\n'.join(
                 f'{el} {x} 1 {y} 1 {z} 1' for el, (x, y, z) in atoms
             )
             if lattice is not None:

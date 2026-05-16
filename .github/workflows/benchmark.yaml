@@ -1,0 +1,80 @@
+name: Benchmark
+on:
+  workflow_dispatch:
+    inputs:
+      solver:
+        description: 'Which solver to run'
+        type: choice
+        options: [mopac, pyscf, both]
+        default: mopac
+      molecules:
+        description: 'Subset of molecule names (space-separated; empty = all)'
+        type: string
+        default: ''
+
+jobs:
+  benchmark:
+    name: ${{ inputs.solver }}${{ inputs.molecules && format(' [{0}]', inputs.molecules) || '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 350  # under GitHub's 360-min job cap
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pin numeric-library threads to physical cores
+        run: |
+          n=$(lscpu -p=Core,Socket | grep -v '^#' | sort -u | wc -l)
+          echo "Detected $n physical cores on this runner."
+          echo "OMP_NUM_THREADS=$n" >> "$GITHUB_ENV"
+          echo "MKL_NUM_THREADS=$n" >> "$GITHUB_ENV"
+          echo "OPENBLAS_NUM_THREADS=$n" >> "$GITHUB_ENV"
+      - name: Install MOPAC
+        if: inputs.solver != 'pyscf'
+        run: |
+          mkdir mopac
+          cd mopac
+          wget -q https://github.com/openmopac/mopac/releases/download/v${MOPAC_VERSION}/mopac-${MOPAC_VERSION}-linux.tar.gz
+          tar --strip-components=1 -xzf mopac-${MOPAC_VERSION}-linux.tar.gz
+          echo "$PWD/bin" >>$GITHUB_PATH
+          echo "LD_LIBRARY_PATH=$PWD/lib" >>$GITHUB_ENV
+        env:
+          MOPAC_VERSION: 23.2.5
+      - name: Install pyberny
+        run: |
+          if [ "${{ inputs.solver }}" = "mopac" ]; then
+            pip install -e .
+          else
+            pip install -e '.[benchmark]'
+          fi
+      - name: Run benchmark
+        env:
+          SOLVER: ${{ inputs.solver }}
+          MOLECULES: ${{ inputs.molecules }}
+        run: |
+          mkdir results
+          read -ra mols <<< "$MOLECULES"
+          args=()
+          if [ ${#mols[@]} -gt 0 ]; then
+            args+=(--molecules "${mols[@]}")
+          fi
+          status=0
+          for kind in mopac pyscf; do
+            if [ "$SOLVER" != "$kind" ] && [ "$SOLVER" != "both" ]; then
+              continue
+            fi
+            echo "## $kind" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            python scripts/benchmark.py --solver "$kind" "${args[@]}" \
+              --out "results/${kind}.md" || status=$?
+            cat "results/${kind}.md" >> "$GITHUB_STEP_SUMMARY"
+          done
+          exit $status
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-${{ inputs.solver }}
+          path: results/

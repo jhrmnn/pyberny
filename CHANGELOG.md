@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for NumPy 2.
 - Covalent radii for Ce–Yb, Po, At, and Fr–U from Cordero et al., *Dalton Trans.*, 2008, 2832, so that geometries containing these elements no longer crash `InternalCoords`.
 - New `berny.BernyParams` dataclass listing every tunable optimizer parameter; useful for discovery and type-checked construction.
+- `berny.solvers.MopacSolver` now accepts `charge` and `mult` keyword arguments so charged or open-shell systems no longer have to be patched in by hand.
+- Opt-in benchmark suite (`pytest -m benchmark`, `scripts/benchmark.py`) reproducing 19 of the 20 molecules from Birkholz & Schlegel, *Theor. Chem. Acc.* **135**, 84 (2016); PySCF runs are driven through PySCF's own `pyscf.geomopt.berny_solver` bridge.
 
 ### Changed
 
