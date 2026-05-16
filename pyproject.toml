@@ -30,10 +30,12 @@ coverage = { version = ">=6", optional = true }
 sphinx = { version = ">=5", optional = true }
 sphinxcontrib-katex = { version = ">=0.9", optional = true }
 toml = { version = ">=0.10", optional = true }
+pyscf = { version = ">=2.5", optional = true }
 
 [tool.poetry.extras]
 test = ["pytest", "coverage"]
 doc = ["sphinx", "sphinxcontrib-katex", "toml"]
+benchmark = ["pyscf"]
 
 [tool.poetry.group.dev.dependencies]
 flake8 = ">=5"
@@ -64,3 +66,10 @@ files = ["src/berny"]
 [[tool.mypy.overrides]]
 module = ["numpy", "numpy.*"]
 ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+markers = [
+    "benchmark: paper-reproduction benchmarks (slow; opt-in via -m benchmark)",
+]
+addopts = "-m 'not benchmark'"
+filterwarnings = ["ignore::PendingDeprecationWarning"]

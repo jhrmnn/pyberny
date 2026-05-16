@@ -9,3 +9,4 @@
 /poetry.lock
 .claude/mopac/
 /mopac/
+/fort*

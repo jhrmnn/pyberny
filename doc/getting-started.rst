@@ -30,6 +30,21 @@ or equivalently::
 
    relaxed = optimize(Berny(geomlib.readfile('start.xyz')), MopacSolver())
 
+For PySCF, use upstream PySCF's own bridge to pyberny (it imports ``Berny``
+internally and handles unit conversion, ghost atoms, symmetry, and the
+gradient scanner)::
+
+   from pyscf import gto, scf
+   from pyscf.geomopt.berny_solver import optimize
+
+   mol = gto.M(atom='start.xyz', basis='3-21G')
+   mol_opt = optimize(scf.RHF(mol))
+
+The 19-molecule benchmark under ``tests/data/birkholz_schlegel/`` reproduces
+the geometries of [BirkholzTCA16]_; ``scripts/benchmark.py`` runs the suite
+through that PySCF bridge (and optionally :func:`~berny.solvers.MopacSolver`)
+and prints a step-count comparison table.
+
 A different option is to use the package via a command-line or socket
 interface defined by the ``berny`` command:
 
