@@ -156,6 +156,9 @@ def main(argv=None):
         help='subset of molecule names (default: all in reference.json)',
     )
     ap.add_argument('--out', type=Path, default=None, help='write markdown table here')
+    ap.add_argument(
+        '--out-json', type=Path, default=None, help='write per-row results as JSON'
+    )
     args = ap.parse_args(argv)
 
     if args.solver == 'mopac' and not shutil.which('mopac'):
@@ -176,6 +179,10 @@ def main(argv=None):
     errors = format_errors(rows)
     if args.out:
         args.out.write_text(table + errors)
+    if args.out_json:
+        args.out_json.write_text(
+            json.dumps({'solver': args.solver, 'rows': rows}, indent=2)
+        )
     print()
     print(table, end='')
     if errors:
