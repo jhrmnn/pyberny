@@ -52,8 +52,8 @@ def test_pyberny_vs_paper(name):
         mf, callback=lambda loc: state.update(n=loc['cycle'] + 1)
     )
     assert converged, f'{name}: did not converge'
-    assert state['n'] <= expected + PYBERNY_STEP_MARGIN, (
-        f'{name}: {state["n"]} steps vs paper {expected} ' f'(+{PYBERNY_STEP_MARGIN})'
+    assert abs(state['n'] - expected) <= PYBERNY_STEP_MARGIN, (
+        f'{name}: {state["n"]} steps vs paper {expected} ' f'(±{PYBERNY_STEP_MARGIN})'
     )
 
 

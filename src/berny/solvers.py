@@ -38,7 +38,7 @@ def _mopac_keyword_line(method, charge, mult):
     return ' '.join(keywords)
 
 
-def MopacSolver(cmd='mopac', method='PM7', charge=0, mult=1, workdir=None):
+def MopacSolver(cmd='mopac', method='PM7', workdir=None, *, charge=0, mult=1):
     """
     Crate a solver that wraps `MOPAC <http://openmopac.net>`_.
 
@@ -46,9 +46,10 @@ def MopacSolver(cmd='mopac', method='PM7', charge=0, mult=1, workdir=None):
 
     :param str cmd: MOPAC executable
     :param str method: model to calculate energy
-    :param int charge: total charge
-    :param int mult: spin multiplicity (1 = singlet, 2 = doublet, ...);
-        values > 1 also switch MOPAC to UHF
+    :param workdir: directory for MOPAC scratch files (default: a tempdir)
+    :param int charge: total charge (keyword-only)
+    :param int mult: spin multiplicity, keyword-only (1 = singlet, 2 = doublet,
+        ...); values > 1 also switch MOPAC to UHF
     """
     keyword_line = _mopac_keyword_line(method, charge, mult)
     kcal = 1 / 627.503

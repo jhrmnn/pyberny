@@ -8,9 +8,11 @@ Usage::
 
 PySCF mode drives the optimization through ``pyscf.geomopt.berny_solver``
 and requires ``pip install pyberny[benchmark]``; MOPAC mode uses
-:func:`berny.solvers.MopacSolver` and requires a ``mopac`` binary on
-``$PATH``. Non-neutral / open-shell molecules are skipped in MOPAC mode
-because :func:`MopacSolver` does not currently expose charge/multiplicity.
+:func:`berny.solvers.MopacSolver` (charge and multiplicity from
+``reference.json``) and requires a ``mopac`` binary on ``$PATH``.
+Molecules whose ``<solver>_steps`` reference value is ``null`` in
+``reference.json`` are documented non-convergers / unmeasured and do not
+contribute to the script's exit code.
 """
 
 # Pin numeric-library thread counts to physical cores before importing
@@ -22,25 +24,30 @@ import os
 
 
 def _physical_cores():
-    try:
-        ids = set()
-        for path in glob.glob('/sys/devices/system/cpu/cpu*/topology/core_id'):
-            with open(path) as f:
-                ids.add(f.read().strip())
-        if ids:
-            return len(ids)
-    except OSError:
-        pass
-    return os.cpu_count() or 1
+    # core_id is only unique within a CPU package; pair with physical_package_id
+    # so multi-socket machines don't undercount.
+    ids = set()
+    for base in glob.glob('/sys/devices/system/cpu/cpu*/topology'):
+        try:
+            with open(f'{base}/core_id') as f:
+                core = f.read().strip()
+            with open(f'{base}/physical_package_id') as f:
+                pkg = f.read().strip()
+        except OSError:
+            continue
+        ids.add((pkg, core))
+    return len(ids) or os.cpu_count() or 1
 
 
-_THREAD_VARS = ('OMP_NUM_THREADS', 'MKL_NUM_THREADS', 'OPENBLAS_NUM_THREADS')
-if not any(v in os.environ for v in _THREAD_VARS):
-    _n = str(_physical_cores())
-    for _v in _THREAD_VARS:
+_n = None
+for _v in ('OMP_NUM_THREADS', 'MKL_NUM_THREADS', 'OPENBLAS_NUM_THREADS'):
+    # Each var honored independently: a user-set OMP_NUM_THREADS must not
+    # leave MKL_NUM_THREADS / OPENBLAS_NUM_THREADS unpinned.
+    if _v not in os.environ:
+        if _n is None:
+            _n = str(_physical_cores())
         os.environ[_v] = _n
-    del _n, _v
-del _THREAD_VARS
+del _n, _v
 
 import argparse  # noqa: E402
 import json  # noqa: E402
@@ -174,7 +181,16 @@ def main(argv=None):
     if errors:
         print(errors, end='')
 
-    return 0 if all(r['converged'] for r in rows) else 1
+    # Treat documented-null reference entries (e.g. MOPAC's three
+    # known non-convergers) as expected rather than failing the run.
+    ref_key = {'mopac': 'mopac_pm7_steps', 'pyscf': 'pyberny_steps'}[args.solver]
+    return (
+        0
+        if all(
+            row['converged'] or reference[row['name']][ref_key] is None for row in rows
+        )
+        else 1
+    )
 
 
 if __name__ == '__main__':
