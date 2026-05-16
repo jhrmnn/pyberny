@@ -118,29 +118,22 @@ def run_one(name, ref, kind):
     }
 
 
-def _table_header(kind):
-    return (
-        f'| Molecule | Atoms | Paper | pyberny ({kind}) | Converged | Wall (s) |\n'
-        '|---|---:|---:|---:|---|---:|\n'
-    )
-
-
-def _table_row(row, ref):
-    paper = ref.get('paper_steps')
-    return (
-        f"| {row['name']} | {ref['atoms']} "
-        f"| {'-' if paper is None else paper} "
-        f"| {'-' if row['steps'] is None else row['steps']} "
-        f"| {'yes' if row['converged'] else 'no'} "
-        f"| {row['wall']:.1f} |\n"
-    )
-
-
 def format_table(rows, kind, reference):
-    out = _table_header(kind)
+    out = [
+        f'| Molecule | Atoms | Paper | pyberny ({kind}) | Converged | Wall (s) |',
+        '|---|---:|---:|---:|---|---:|',
+    ]
     for row in rows:
-        out += _table_row(row, reference[row['name']])
-    return out
+        ref = reference[row['name']]
+        paper = ref.get('paper_steps')
+        out.append(
+            f"| {row['name']} | {ref['atoms']} "
+            f"| {'-' if paper is None else paper} "
+            f"| {'-' if row['steps'] is None else row['steps']} "
+            f"| {'yes' if row['converged'] else 'no'} "
+            f"| {row['wall']:.1f} |"
+        )
+    return '\n'.join(out) + '\n'
 
 
 def format_errors(rows):
@@ -166,12 +159,6 @@ def main(argv=None):
     ap.add_argument(
         '--out-json', type=Path, default=None, help='write per-row results as JSON'
     )
-    ap.add_argument(
-        '--append-md',
-        type=Path,
-        default=None,
-        help='append table header + one row per molecule as they complete',
-    )
     args = ap.parse_args(argv)
 
     if args.solver == 'mopac' and not shutil.which('mopac'):
@@ -183,18 +170,10 @@ def main(argv=None):
     if missing:
         raise SystemExit(f'unknown molecules: {missing}')
 
-    if args.append_md:
-        with open(args.append_md, 'a') as f:
-            f.write(_table_header(args.solver))
-
     rows = []
     for name in names:
         print(f'==> {name}', flush=True)
-        row = run_one(name, reference[name], args.solver)
-        rows.append(row)
-        if args.append_md:
-            with open(args.append_md, 'a') as f:
-                f.write(_table_row(row, reference[name]))
+        rows.append(run_one(name, reference[name], args.solver))
 
     table = format_table(rows, args.solver, reference)
     errors = format_errors(rows)
