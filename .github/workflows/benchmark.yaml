@@ -15,7 +15,6 @@ on:
 jobs:
   benchmark:
     name: ${{ matrix.solver }} ${{ matrix.batch_id }}
-    if: matrix.solver == inputs.solver || inputs.solver == 'both'
     runs-on: ubuntu-latest
     timeout-minutes: 350  # under GitHub's 360-min job cap
     strategy:
@@ -39,7 +38,32 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      # `matrix` context isn't available in `jobs.<id>.if`, so we filter
+      # off-solver shards here instead and gate every subsequent step on
+      # the result. Same logic handles an empty intersection with
+      # `inputs.molecules`.
+      - name: Decide whether this shard runs
+        id: gate
+        env:
+          SHARD_SOLVER: ${{ matrix.solver }}
+          SHARD_MOLS: ${{ matrix.molecules }}
+          INPUT_SOLVER: ${{ inputs.solver }}
+          SUBSET: ${{ inputs.molecules }}
+        run: |
+          python - >> "$GITHUB_OUTPUT" <<'PY'
+          import os
+          shard_solver = os.environ['SHARD_SOLVER']
+          input_solver = os.environ['INPUT_SOLVER']
+          shard = os.environ['SHARD_MOLS'].split()
+          subset = os.environ['SUBSET'].split()
+          solver_match = input_solver in (shard_solver, 'both')
+          mols = [m for m in shard if m in subset] if subset else shard
+          skip = not (solver_match and mols)
+          print(f"mols={' '.join(mols)}")
+          print(f"skip={'true' if skip else 'false'}")
+          PY
       - name: Pin numeric-library threads to physical cores
+        if: steps.gate.outputs.skip == 'false'
         run: |
           n=$(lscpu -p=Core,Socket | grep -v '^#' | sort -u | wc -l)
           echo "Detected $n physical cores on this runner."
@@ -47,7 +71,7 @@ jobs:
           echo "MKL_NUM_THREADS=$n" >> "$GITHUB_ENV"
           echo "OPENBLAS_NUM_THREADS=$n" >> "$GITHUB_ENV"
       - name: Install MOPAC
-        if: matrix.solver == 'mopac'
+        if: steps.gate.outputs.skip == 'false' && matrix.solver == 'mopac'
         run: |
           mkdir mopac
           cd mopac
@@ -58,32 +82,19 @@ jobs:
         env:
           MOPAC_VERSION: 23.2.5
       - name: Install pyberny
+        if: steps.gate.outputs.skip == 'false'
         run: |
           if [ "${{ matrix.solver }}" = "mopac" ]; then
             pip install -e .
           else
             pip install -e '.[benchmark]'
           fi
-      - name: Compute molecules for this shard
-        id: mols
-        env:
-          SHARD_MOLS: ${{ matrix.molecules }}
-          SUBSET: ${{ inputs.molecules }}
-        run: |
-          python - >> "$GITHUB_OUTPUT" <<'PY'
-          import os
-          shard = os.environ['SHARD_MOLS'].split()
-          subset = os.environ['SUBSET'].split()
-          mols = [m for m in shard if m in subset] if subset else shard
-          print(f"mols={' '.join(mols)}")
-          print(f"skip={'true' if not mols else 'false'}")
-          PY
       - name: Run batch
-        if: steps.mols.outputs.skip == 'false'
+        if: steps.gate.outputs.skip == 'false'
         env:
           SOLVER: ${{ matrix.solver }}
           BATCH: ${{ matrix.batch_id }}
-          MOLS: ${{ steps.mols.outputs.mols }}
+          MOLS: ${{ steps.gate.outputs.mols }}
         run: |
           mkdir -p results
           read -ra mols <<< "$MOLS"
@@ -95,7 +106,7 @@ jobs:
             --out-json "results/${SOLVER}-${BATCH}.json"
           cat "results/${SOLVER}-${BATCH}.md" >> "$GITHUB_STEP_SUMMARY"
       - name: Upload results
-        if: always() && steps.mols.outputs.skip == 'false'
+        if: always() && steps.gate.outputs.skip == 'false'
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-results-${{ matrix.solver }}-${{ matrix.batch_id }}
