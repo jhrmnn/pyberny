@@ -13,7 +13,7 @@
   "avobenzone": {
     "atoms": 45,
     "charge": 0,
-    "mopac_pm7_steps": 90,
+    "mopac_pm7_steps": 94,
     "mult": 1,
     "name": "Avobenzone",
     "paper_steps": 43,
@@ -24,7 +24,7 @@
   "azadirachtin": {
     "atoms": 95,
     "charge": 0,
-    "mopac_pm7_steps": 61,
+    "mopac_pm7_steps": 60,
     "mult": 1,
     "name": "Azadirachtin",
     "paper_steps": 77,
@@ -46,7 +46,7 @@
   "cetirizine": {
     "atoms": 52,
     "charge": 0,
-    "mopac_pm7_steps": 57,
+    "mopac_pm7_steps": 58,
     "mult": 1,
     "name": "Cetirizine",
     "paper_steps": 35,
@@ -134,7 +134,7 @@
   "ochratoxin_a": {
     "atoms": 45,
     "charge": 0,
-    "mopac_pm7_steps": null,
+    "mopac_pm7_steps": 67,
     "mult": 1,
     "name": "Ochratoxin A",
     "paper_steps": 31,
@@ -156,7 +156,7 @@
   "raffinose": {
     "atoms": 66,
     "charge": 0,
-    "mopac_pm7_steps": null,
+    "mopac_pm7_steps": 99,
     "mult": 1,
     "name": "Raffinose",
     "paper_steps": 53,
@@ -167,7 +167,7 @@
   "sphingomyelin": {
     "atoms": 84,
     "charge": 0,
-    "mopac_pm7_steps": 87,
+    "mopac_pm7_steps": 95,
     "mult": 1,
     "name": "Sphingomyelin",
     "paper_steps": 56,
@@ -178,7 +178,7 @@
   "tamoxifen": {
     "atoms": 57,
     "charge": 0,
-    "mopac_pm7_steps": 72,
+    "mopac_pm7_steps": 70,
     "mult": 1,
     "name": "Tamoxifen",
     "paper_steps": 35,

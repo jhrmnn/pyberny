@@ -19,6 +19,7 @@ DATA = Path(__file__).parent / 'data' / 'birkholz_schlegel'
 REF = json.loads((DATA / 'reference.json').read_text())
 
 PYBERNY_STEP_MARGIN = 3
+MOPAC_STEP_MARGIN = 3
 
 
 @pytest.mark.benchmark
@@ -72,4 +73,10 @@ def test_mopac_pm7(name):
     berny = Berny(geom)
     optimize(berny, MopacSolver(charge=ref['charge'], mult=ref['mult']))
     assert berny.converged, f'{name}: did not converge'
-    assert berny._n == expected, f'{name}: {berny._n} steps vs reference {expected}'
+    # MOPAC PM7 is not bitwise-reproducible across hosts: BLAS/LAPACK
+    # summation order and threading produce small gradient differences
+    # that propagate over the optimizer's 30-100 iterations. The reference
+    # numbers come from ubuntu-latest CI; tolerate a small drift.
+    assert (
+        abs(berny._n - expected) <= MOPAC_STEP_MARGIN
+    ), f'{name}: {berny._n} steps vs reference {expected} (±{MOPAC_STEP_MARGIN})'

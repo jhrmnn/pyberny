@@ -28,9 +28,13 @@ B3LYP/6-31G(d,p)). The ``pyberny_steps`` and ``mopac_pm7_steps`` fields are
 populated by running ``scripts/benchmark.py`` and committing the measured
 counts as a regression baseline.
 
-``mopac_pm7_steps`` is left ``null`` for ``bisphenol_a``, ``ochratoxin_a``
-and ``raffinose``: these did not converge with PM7 within pyberny's default
-100-step ceiling and so have no meaningful step count to record.
+``mopac_pm7_steps`` is left ``null`` for ``bisphenol_a``: this one does not
+converge with PM7 within pyberny's default 100-step ceiling and so has no
+meaningful step count to record. The reference values come from a run on
+GitHub Actions' ``ubuntu-latest`` (MOPAC 23.2.5, BLAS threads pinned to the
+runner's physical-core count); MOPAC PM7 is not bitwise-reproducible across
+hosts, so the ``-m benchmark`` test compares with a small ±3 step
+tolerance.
 
 Coordinate data is treated as factual and is redistributed under pyberny's
 MPL-2.0 license, with attribution to Birkholz & Schlegel via this file and
