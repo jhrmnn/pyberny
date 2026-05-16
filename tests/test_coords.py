@@ -1,3 +1,4 @@
+import numpy as np
 import pytest
 
 from berny.coords import Angle, Bond, Dihedral, InternalCoords, angstrom
@@ -76,3 +77,125 @@ def test_get_property_missing_data_raises_keyerror():
             get_property(999, 'covalent_radius')
     finally:
         del species_data['Zz']
+
+
+def test_get_property_unknown_symbol_raises():
+    with pytest.raises(KeyError, match="'Xx'"):
+        get_property('Xx', 'mass')
+
+
+def test_get_property_unknown_number_raises():
+    with pytest.raises(KeyError, match='9999'):
+        get_property(9999, 'mass')
+
+
+def test_get_property_known_species_lookup_by_number():
+    # Hydrogen is element 1 — exercises the int-lookup branch.
+    assert get_property(1, 'symbol') == 'H'
+
+
+def test_internal_coord_repr_with_connectivity():
+    # __repr__ requires the `weak` attribute, which is only populated when
+    # the coord is constructed with a connectivity matrix `C`.
+    C = np.ones((4, 4), dtype=bool)
+    assert repr(Bond(0, 1, C=C)).startswith('Bond(') and 'weak=0' in repr(
+        Bond(0, 1, C=C)
+    )
+    assert repr(Angle(0, 1, 2, C=C)).startswith('Angle(')
+    assert repr(Dihedral(0, 1, 2, 3, C=C)).startswith('Dihedral(')
+
+
+def test_angle_eval_clamps_collinear_atoms():
+    # Three colinear atoms — the dot product would round to slightly above
+    # 1, triggering the upper clip; arccos must still return 0 or π.
+    a = Angle(0, 1, 2)
+    coords = np.array([[1.0, 0.0, 0.0], [0.0, 0.0, 0.0], [2.0, 0.0, 0.0]])
+    # Both extend the same way → 0 rad after clamp.
+    assert a.eval(coords) == pytest.approx(0.0)
+    # Opposite direction → π rad.
+    coords[2] = [-2.0, 0.0, 0.0]
+    assert a.eval(coords) == pytest.approx(np.pi)
+
+
+def test_angle_grad_near_pi():
+    # A nearly-π angle hits the "phi > π − 1e-6" gradient branch.
+    a = Angle(0, 1, 2)
+    coords = np.array([[1.0, 0.0, 0.0], [0.0, 0.0, 0.0], [-1.0, 1e-8, 0.0]])
+    phi, grad = a.eval(coords, grad=True)
+    assert phi == pytest.approx(np.pi, abs=1e-3)
+    assert len(grad) == 3
+    assert all(np.all(np.isfinite(g)) for g in grad)
+
+
+def test_dihedral_grad_near_zero():
+    # Planar geometry → phi ≈ 0 → hits the small-phi gradient branch.
+    d = Dihedral(0, 1, 2, 3)
+    coords = np.array(
+        [
+            [0.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [1.0, 1.0, 0.0],
+        ]
+    )
+    phi, grad = d.eval(coords, grad=True)
+    assert abs(phi) < 1e-6
+    assert len(grad) == 4
+    assert all(np.all(np.isfinite(g)) for g in grad)
+
+
+def test_dihedral_grad_near_pi():
+    # cis vs trans: trans → phi ≈ π.
+    d = Dihedral(0, 1, 2, 3)
+    coords = np.array(
+        [
+            [0.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [1.0, -1.0, 0.0],
+        ]
+    )
+    phi, grad = d.eval(coords, grad=True)
+    assert abs(abs(phi) - np.pi) < 1e-6
+    assert len(grad) == 4
+    assert all(np.all(np.isfinite(g)) for g in grad)
+
+
+def test_internal_coords_repr_and_str_describe_counts():
+    geom = Geometry(
+        ['O', 'H', 'H'],
+        [[0.0, 0.0, 0.0], [0.96, 0.0, 0.0], [0.0, 0.96, 0.0]],
+    )
+    coords = InternalCoords(geom)
+    r = repr(coords)
+    assert r.startswith('<InternalCoords')
+    assert 'bonds' in r and 'angles' in r and 'dihedrals' in r
+    s = str(coords)
+    assert 'Internal coordinates' in s
+    assert 'Number of fragments' in s
+
+
+def test_internal_coords_without_dihedrals():
+    # `dihedral=False` skips the get_dihedrals loop — covers the missing
+    # branch around InternalCoords.__init__.
+    geom = Geometry(
+        ['O', 'H', 'H', 'H'],
+        [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]],
+    )
+    coords = InternalCoords(geom, dihedral=False)
+    assert coords.dihedrals == []
+    assert len(coords.bonds) > 0
+
+
+def test_internal_coords_on_crystal_prunes_via_reduce():
+    # A small primitive H₂ crystal exercises the `_reduce` path that
+    # InternalCoords runs only when geom.lattice is not None.
+    geom = Geometry(
+        ['H', 'H'],
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 0.74]],
+        lattice=[[5.0, 0.0, 0.0], [0.0, 5.0, 0.0], [0.0, 0.0, 5.0]],
+    )
+    coords = InternalCoords(geom)
+    # Reduce keeps at least one bond between the two atoms.
+    assert len(coords.bonds) >= 1
+    assert len(coords) > 0
