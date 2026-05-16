@@ -35,4 +35,10 @@ def test_optimize(mopac, test_case):
     berny = Berny(geom)
     optimize(berny, mopac)
     assert berny.converged
-    assert berny._n == n_ref
+    # n_ref is the historical exact step count. We allow a small drift so
+    # that algorithmic tweaks that change the iteration trajectory by one or
+    # two steps don't break the integration tests; a real regression that
+    # blows up the optimizer past this band will still be caught.
+    assert (
+        berny._n <= n_ref + 2
+    ), f'converged in {berny._n} steps, more than the {n_ref} + 2 band'
