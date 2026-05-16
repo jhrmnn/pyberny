@@ -26,9 +26,13 @@ jobs:
         include:
           - { solver: mopac, batch_id: b0, molecules: easc }
           - { solver: mopac, batch_id: b1, molecules: vitamin_c inosine_cation zn_edta bisphenol_a mg_porphin penicillin_v diisobutyl_phthalate artemisinin codeine estradiol avobenzone ochratoxin_a maltose cetirizine tamoxifen raffinose sphingomyelin azadirachtin }
-          - { solver: pyscf, batch_id: b0, molecules: azadirachtin }
-          - { solver: pyscf, batch_id: b1, molecules: easc zn_edta bisphenol_a mg_porphin penicillin_v artemisinin estradiol ochratoxin_a cetirizine tamoxifen }
-          - { solver: pyscf, batch_id: b2, molecules: vitamin_c inosine_cation diisobutyl_phthalate codeine avobenzone maltose raffinose sphingomyelin }
+          - { solver: pyscf, batch_id: b0, molecules: easc }
+          - { solver: pyscf, batch_id: b1, molecules: raffinose }
+          - { solver: pyscf, batch_id: b2, molecules: sphingomyelin }
+          - { solver: pyscf, batch_id: b3, molecules: vitamin_c inosine_cation tamoxifen }
+          - { solver: pyscf, batch_id: b4, molecules: zn_edta bisphenol_a mg_porphin cetirizine }
+          - { solver: pyscf, batch_id: b5, molecules: penicillin_v diisobutyl_phthalate estradiol avobenzone }
+          - { solver: pyscf, batch_id: b6, molecules: artemisinin codeine ochratoxin_a maltose }
     steps:
       - uses: actions/checkout@v4
         with:
