@@ -127,6 +127,10 @@ jobs:
           path: all-results
           pattern: benchmark-results-*
           merge-multiple: true
+      - name: Install pyberny
+        # aggregate_benchmark.py imports format_table from scripts/benchmark.py,
+        # which top-level-imports `berny`. Plain install (no benchmark extra).
+        run: pip install -e .
       - name: Aggregate
         env:
           SOLVERS: ${{ inputs.solver == 'both' && 'mopac pyscf' || inputs.solver }}
