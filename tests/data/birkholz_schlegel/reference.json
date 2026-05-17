@@ -134,7 +134,7 @@
   "ochratoxin_a": {
     "atoms": 45,
     "charge": 0,
-    "mopac_pm7_steps": 67,
+    "mopac_pm7_steps": null,
     "mult": 1,
     "name": "Ochratoxin A",
     "paper_steps": 31,
