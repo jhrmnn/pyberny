@@ -1,16 +1,50 @@
 name: Documentation
-on: [push, pull_request]
+on:
+  push:
+    branches: [master]
+  pull_request:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install
         run: pip install -e ".[doc]"
+      - name: Check
+        run: sphinx-build -W -E doc doc/_check
       - name: Build
-        run: sphinx-build -W -E doc doc/build
-      - run: touch doc/build/.nojekyll
+        run: sphinx-multiversion doc doc/build
+      - name: Add Pages metadata
+        run: |
+          touch doc/build/.nojekyll
+          cat >doc/build/index.html <<'EOF'
+          <!doctype html>
+          <meta http-equiv="refresh" content="0; url=master/">
+          EOF
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: doc/build
+  deploy:
+    name: Deploy
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

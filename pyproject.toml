@@ -27,14 +27,15 @@ python = "^3.9"
 numpy = ">=1.15,<3"
 pytest = { version = ">=6", optional = true }
 coverage = { version = ">=6", optional = true }
-sphinx = { version = ">=5", optional = true }
+sphinx = { version = ">=5,<8", optional = true }
 sphinxcontrib-katex = { version = ">=0.9", optional = true }
+sphinx-multiversion = { version = ">=0.2", optional = true }
 toml = { version = ">=0.10", optional = true }
 pyscf = { version = ">=2.5", optional = true }
 
 [tool.poetry.extras]
 test = ["pytest", "coverage"]
-doc = ["sphinx", "sphinxcontrib-katex", "toml"]
+doc = ["sphinx", "sphinxcontrib-katex", "sphinx-multiversion", "toml"]
 benchmark = ["pyscf"]
 
 [tool.poetry.group.dev.dependencies]

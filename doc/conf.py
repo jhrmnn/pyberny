@@ -31,6 +31,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.napoleon',
     'sphinxcontrib.katex',
+    'sphinx_multiversion',
 ]
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
@@ -49,9 +50,20 @@ html_theme_options = {
     'page_width': '60em',
 }
 html_sidebars = {
-    '**': ['about.html', 'navigation.html', 'relations.html', 'searchbox.html']
+    '**': [
+        'about.html',
+        'navigation.html',
+        'relations.html',
+        'searchbox.html',
+        'versions.html',
+    ]
 }
 html_static_path = ['_static']
+templates_path = ['_templates']
+
+smv_branch_whitelist = r'^master$'
+smv_tag_whitelist = r'^\d+\.\d+\.\d+$'
+smv_remote_whitelist = r'^origin$'
 
 autodoc_default_options = {'special-members': '__call__'}
 autodoc_mock_imports = ['numpy']
