@@ -10,9 +10,11 @@ PySCF mode drives the optimization through ``pyscf.geomopt.berny_solver``
 and requires ``pip install pyberny[benchmark]``; MOPAC mode uses
 :func:`berny.solvers.MopacSolver` (charge and multiplicity from
 ``reference.json``) and requires a ``mopac`` binary on ``$PATH``.
-Molecules whose ``<solver>_steps`` reference value is ``null`` in
-``reference.json`` are documented non-convergers / unmeasured and do not
-contribute to the script's exit code.
+A molecule fails the run when it either does not converge or its step
+count deviates from the reference by more than 2; molecules whose
+``<solver>_steps`` reference value is ``null`` in ``reference.json`` are
+documented non-convergers / unmeasured and do not contribute to the
+script's exit code.
 """
 
 # Pin numeric-library thread counts to physical cores before importing
@@ -191,13 +193,16 @@ def main(argv=None):
     # Treat documented-null reference entries (e.g. MOPAC's three
     # known non-convergers) as expected rather than failing the run.
     ref_key = {'mopac': 'mopac_pm7_steps', 'pyscf': 'pyberny_steps'}[args.solver]
-    return (
-        0
-        if all(
-            row['converged'] or reference[row['name']][ref_key] is None for row in rows
-        )
-        else 1
-    )
+
+    def passes(row):
+        ref = reference[row['name']][ref_key]
+        if ref is None:
+            return True
+        if not row['converged']:
+            return False
+        return abs(row['steps'] - ref) <= 2
+
+    return 0 if all(passes(row) for row in rows) else 1
 
 
 if __name__ == '__main__':

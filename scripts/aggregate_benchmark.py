@@ -6,11 +6,13 @@ re-sorts rows to ``sorted(reference)`` order, renders one markdown table per
 solver via ``benchmark.format_table`` / ``format_errors``, appends the result
 to ``$GITHUB_STEP_SUMMARY`` (when set) and writes ``results/summary.md``.
 
-Exits 1 if any molecule failed to converge and its reference entry for that
-solver is not ``null`` — same rule as ``benchmark.py``'s exit-code logic.
+Exits 1 if any molecule with a non-``null`` reference entry for the active
+solver either failed to converge or deviates from the reference step count
+by more than 2 — same rule as ``benchmark.py``'s exit-code logic.
 ``pyberny_steps`` is currently ``null`` for every entry, so pyscf is in
-baseline-establishment mode: no pyscf run can trip this gate yet. Fill in
-``pyberny_steps`` as pyscf results stabilize to enable the regression check.
+baseline-establishment mode: no pyscf run can trip either half of this gate
+yet. Fill in ``pyberny_steps`` as pyscf results stabilize to enable the
+regression check.
 """
 
 import argparse
@@ -77,11 +79,17 @@ def render(reference, solver, rows_by_name):
 
 def violations(reference, solver, rows_by_name):
     key = REF_KEY[solver]
-    return [
-        n
-        for n, r in rows_by_name.items()
-        if not r['converged'] and reference[n][key] is not None
-    ]
+    out = []
+    for n, r in rows_by_name.items():
+        ref = reference[n][key]
+        if ref is None:
+            continue
+        if not r['converged']:
+            out.append((n, 'did not converge'))
+        elif abs(r['steps'] - ref) > 2:
+            drift = r['steps'] - ref
+            out.append((n, f"{r['steps']} steps vs ref {ref} ({drift:+d})"))
+    return out
 
 
 def main(argv=None):
@@ -101,7 +109,8 @@ def main(argv=None):
             continue
         parts.append(f'## {solver}\n\n' + render(reference, solver, rows_by_name))
         failed.extend(
-            f'{solver}/{n}' for n in violations(reference, solver, rows_by_name)
+            f'{solver}/{n}: {reason}'
+            for n, reason in violations(reference, solver, rows_by_name)
         )
 
     summary = '\n'.join(parts)
@@ -114,7 +123,9 @@ def main(argv=None):
     print(summary, end='')
 
     if failed:
-        print(f'\nUnexpected non-convergence: {failed}', file=sys.stderr)
+        print('\nBenchmark regressions:', file=sys.stderr)
+        for entry in failed:
+            print(f'  {entry}', file=sys.stderr)
         return 1
     return 0
 
