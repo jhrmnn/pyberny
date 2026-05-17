@@ -275,16 +275,24 @@ class _DummySpec(object):
 
 
 def _find_linear_triples(bondmatrix, coords):
-    """Yield (j, i, k) for every triple ``i-j-k`` whose angle exceeds ``_LIN_THRE``.
+    """Yield (j, i, k) for every sp-like near-linear triple ``i-j-k``.
 
-    ``bondmatrix`` is the boolean adjacency matrix. ``coords`` is the
-    (real-atom) coordinate array used to evaluate the angle.
+    Restricted to central atoms with exactly two covalent neighbours so the
+    treatment fires on genuine sp-hybridised geometries (alkynes, nitriles,
+    cumulenes, CO₂) and not on coincidentally-linear trans angles in
+    higher-coordination centres (square-planar / octahedral metals, T-shaped
+    halides). Those latter cases are chemically stiff and converge fine under
+    the regular singular-angle handling; introducing dummies there
+    over-parameterises the problem and prevents convergence
+    (e.g. mg_porphin, zn_edta in the Birkholz-Schlegel benchmark).
     """
     for j in range(len(bondmatrix)):
         neighbors = list(np.flatnonzero(bondmatrix[j, :]))
-        for i, k in combinations(neighbors, 2):
-            if Angle(i, j, k).eval(coords) > _LIN_THRE:
-                yield j, i, k
+        if len(neighbors) != 2:
+            continue
+        i, k = neighbors
+        if Angle(i, j, k).eval(coords) > _LIN_THRE:
+            yield j, i, k
 
 
 def get_clusters(C):
