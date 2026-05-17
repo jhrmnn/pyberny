@@ -33,8 +33,9 @@ converge with PM7 within pyberny's default 100-step ceiling and so has no
 meaningful step count to record. The reference values come from a run on
 GitHub Actions' ``ubuntu-latest`` (MOPAC 23.2.5, BLAS threads pinned to the
 runner's physical-core count); MOPAC PM7 is not bitwise-reproducible across
-hosts, so the ``-m benchmark`` test compares with a small ±3 step
-tolerance.
+hosts, so ``scripts/benchmark.py`` and ``scripts/aggregate_benchmark.py``
+allow each row to drift by up to ±2 steps from its reference before failing
+the run.
 
 Coordinate data is treated as factual and is redistributed under pyberny's
 MPL-2.0 license, with attribution to Birkholz & Schlegel via this file and

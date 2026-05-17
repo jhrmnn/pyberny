@@ -23,7 +23,12 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from benchmark import DATA, format_errors, format_table  # noqa: E402
+from benchmark import (  # noqa: E402
+    DATA,
+    format_errors,
+    format_table,
+    regression_reason,
+)
 
 REF_KEY = {'mopac': 'mopac_pm7_steps', 'pyscf': 'pyberny_steps'}
 
@@ -81,14 +86,9 @@ def violations(reference, solver, rows_by_name):
     key = REF_KEY[solver]
     out = []
     for n, r in rows_by_name.items():
-        ref = reference[n][key]
-        if ref is None:
-            continue
-        if not r['converged']:
-            out.append((n, 'did not converge'))
-        elif abs(r['steps'] - ref) > 2:
-            drift = r['steps'] - ref
-            out.append((n, f"{r['steps']} steps vs ref {ref} ({drift:+d})"))
+        reason = regression_reason(r, reference[n][key])
+        if reason:
+            out.append((n, reason))
     return out
 
 

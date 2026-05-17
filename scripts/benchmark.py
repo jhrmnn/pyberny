@@ -148,6 +148,24 @@ def format_errors(rows):
     return '\n'.join(lines) + '\n'
 
 
+def regression_reason(row, ref):
+    """Return ``None`` if the row passes the regression gate, else a reason.
+
+    ``ref`` is the reference step count for the row's solver (or ``None`` if
+    no baseline is recorded, in which case the gate is skipped). A row fails
+    if it didn't converge, or if its step count drifted from ``ref`` by more
+    than 2 (the same tolerance ``tests/test_optimize.py`` uses).
+    """
+    if ref is None:
+        return None
+    if not row['converged']:
+        return 'did not converge'
+    drift = row['steps'] - ref
+    if abs(drift) > 2:
+        return f"{row['steps']} steps vs ref {ref} ({drift:+d})"
+    return None
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument('--solver', choices=['pyscf', 'mopac'], required=True)
@@ -190,19 +208,20 @@ def main(argv=None):
     if errors:
         print(errors, end='')
 
-    # Treat documented-null reference entries (e.g. MOPAC's three
-    # known non-convergers) as expected rather than failing the run.
+    # Treat documented-null reference entries (e.g. MOPAC's one
+    # known non-converger) as expected rather than failing the run.
     ref_key = {'mopac': 'mopac_pm7_steps', 'pyscf': 'pyberny_steps'}[args.solver]
-
-    def passes(row):
-        ref = reference[row['name']][ref_key]
-        if ref is None:
-            return True
-        if not row['converged']:
-            return False
-        return abs(row['steps'] - ref) <= 2
-
-    return 0 if all(passes(row) for row in rows) else 1
+    regressions = [
+        (row['name'], regression_reason(row, reference[row['name']][ref_key]))
+        for row in rows
+    ]
+    regressions = [(n, r) for n, r in regressions if r]
+    if regressions:
+        print('\nBenchmark regressions:', file=sys.stderr)
+        for n, reason in regressions:
+            print(f'  {n}: {reason}', file=sys.stderr)
+        return 1
+    return 0
 
 
 if __name__ == '__main__':
