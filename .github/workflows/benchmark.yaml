@@ -23,12 +23,12 @@ jobs:
   # pyscf shards when `inputs.mode == 'fast-mopac'`) and shards with no
   # molecule overlap with `inputs.molecules` are not instantiated at all.
   # A static matrix with per-step `if:` gates would still produce green
-  # check-mark jobs for the skipped shards, which is misleading.
-  setup:
+  # check-mark jobs for the skipped shards, which is misleading. Keep the
+  # actual benchmark fan-out inside one job so only the aggregate check shows
+  # up in the PR status-check list.
+  aggregate:
     runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.plan.outputs.matrix }}
-      has_jobs: ${{ steps.plan.outputs.has_jobs }}
+    timeout-minutes: 350  # under GitHub's 360-min job cap
     steps:
       - name: Build benchmark matrix
         id: plan
@@ -86,33 +86,30 @@ jobs:
               include.append({**shard, "molecules": " ".join(mols)})
           print("matrix=" + json.dumps({"include": include}))
           print("has_jobs=" + ("true" if include else "false"))
+          print(
+              "needs_mopac="
+              + ("true" if any(s["solver"] == "mopac" for s in include) else "false")
+          )
+          print(
+              "needs_benchmark="
+              + ("true" if any(s["solver"] == "pyscf" for s in include) else "false")
+          )
           PY
-
-  benchmark:
-    needs: setup
-    if: needs.setup.outputs.has_jobs == 'true'
-    name: ${{ matrix.solver }} ${{ matrix.batch_id }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 350  # under GitHub's 360-min job cap
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.setup.outputs.matrix) }}
-    steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Pin numeric-library threads to physical cores
+      - name: Detect runner parallelism
+        id: runner
+        if: steps.plan.outputs.has_jobs == 'true'
         run: |
           n=$(lscpu -p=Core,Socket | grep -v '^#' | sort -u | wc -l)
           echo "Detected $n physical cores on this runner."
-          echo "OMP_NUM_THREADS=$n" >> "$GITHUB_ENV"
-          echo "MKL_NUM_THREADS=$n" >> "$GITHUB_ENV"
-          echo "OPENBLAS_NUM_THREADS=$n" >> "$GITHUB_ENV"
+          echo "physical_cores=$n" >> "$GITHUB_OUTPUT"
       - name: Install MOPAC
-        if: matrix.solver == 'mopac'
+        if: steps.plan.outputs.has_jobs == 'true' && steps.plan.outputs.needs_mopac == 'true'
         run: |
           mkdir mopac
           cd mopac
@@ -123,58 +120,120 @@ jobs:
         env:
           MOPAC_VERSION: 23.2.5
       - name: Install pyberny
+        if: steps.plan.outputs.has_jobs == 'true'
         run: |
-          if [ "${{ matrix.solver }}" = "mopac" ]; then
-            pip install -e .
-          else
+          if [ "${{ steps.plan.outputs.needs_benchmark }}" = "true" ]; then
             pip install -e '.[benchmark]'
+          else
+            pip install -e .
           fi
-      - name: Run batch
+      - name: Run benchmark shards
+        id: benchmark
+        if: steps.plan.outputs.has_jobs == 'true'
+        continue-on-error: true
         env:
-          SOLVER: ${{ matrix.solver }}
-          BATCH: ${{ matrix.batch_id }}
-          MOLS: ${{ matrix.molecules }}
+          MATRIX_JSON: ${{ steps.plan.outputs.matrix }}
+          PHYSICAL_CORES: ${{ steps.runner.outputs.physical_cores }}
         run: |
-          mkdir -p results
-          read -ra mols <<< "$MOLS"
-          python scripts/benchmark.py --solver "$SOLVER" \
-            --molecules "${mols[@]}" \
-            --out-json "results/${SOLVER}-${BATCH}.json"
+          python - <<'PY'
+          import json
+          import os
+          import subprocess
+          import sys
+          import time
+          from pathlib import Path
+
+          shards = json.loads(os.environ["MATRIX_JSON"])["include"]
+          if not shards:
+              raise SystemExit(0)
+
+          results = Path("results")
+          logs = Path("logs")
+          results.mkdir(exist_ok=True)
+          logs.mkdir(exist_ok=True)
+
+          parallel = max(1, min(int(os.environ["PHYSICAL_CORES"]), len(shards)))
+          print(f"Running {len(shards)} shard(s) with parallelism={parallel}", flush=True)
+
+          env = os.environ.copy()
+          env["OMP_NUM_THREADS"] = "1"
+          env["MKL_NUM_THREADS"] = "1"
+          env["OPENBLAS_NUM_THREADS"] = "1"
+          env["PYTHONUNBUFFERED"] = "1"
+
+          queue = list(shards)
+          running = []
+          failed = []
+
+          def start(shard):
+              stem = f'{shard["solver"]}-{shard["batch_id"]}'
+              log_path = logs / f"{stem}.log"
+              cmd = [
+                  sys.executable,
+                  "scripts/benchmark.py",
+                  "--solver",
+                  shard["solver"],
+                  "--molecules",
+                  *shard["molecules"].split(),
+                  "--out-json",
+                  str(results / f"{stem}.json"),
+              ]
+              handle = log_path.open("w")
+              proc = subprocess.Popen(cmd, stdout=handle, stderr=subprocess.STDOUT, env=env)
+              print(f"Started {stem}: {shard['molecules']}", flush=True)
+              running.append((stem, log_path, handle, proc))
+
+          while queue or running:
+              while queue and len(running) < parallel:
+                  start(queue.pop(0))
+              time.sleep(5)
+              still_running = []
+              for stem, log_path, handle, proc in running:
+                  rc = proc.poll()
+                  if rc is None:
+                      still_running.append((stem, log_path, handle, proc))
+                      continue
+                  handle.close()
+                  if rc:
+                      failed.append((stem, log_path))
+                      print(f"::error::{stem} failed with exit code {rc}")
+                      tail = log_path.read_text(errors="replace").splitlines()[-200:]
+                      print(f"::group::{stem} log tail")
+                      for line in tail:
+                          print(line)
+                      print("::endgroup::")
+                  else:
+                      print(f"Finished {stem}", flush=True)
+              running = still_running
+
+          if failed:
+              print("\nFailed shard(s):", file=sys.stderr)
+              for stem, log_path in failed:
+                  print(f"  {stem} (see {log_path})", file=sys.stderr)
+              raise SystemExit(1)
+          PY
+      - name: Note empty selection
+        if: steps.plan.outputs.has_jobs != 'true'
+        run: |
+          echo "No benchmark shards matched the selected mode/molecules." >> "$GITHUB_STEP_SUMMARY"
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: benchmark-results-${{ matrix.solver }}-${{ matrix.batch_id }}
-          path: results/
-
-  aggregate:
-    needs: benchmark
-    # Skip aggregation when `benchmark` itself was skipped (empty matrix);
-    # otherwise still run so partial results aggregate even on failures.
-    if: always() && needs.benchmark.result != 'cancelled' && needs.benchmark.result != 'skipped'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - uses: actions/download-artifact@v4
-        with:
-          path: all-results
-          pattern: benchmark-results-*
-          merge-multiple: true
-      - name: Install pyberny
-        # aggregate_benchmark.py imports format_table from scripts/benchmark.py,
-        # which top-level-imports `berny`. Plain install (no benchmark extra).
-        run: pip install -e .
+          name: benchmark-results
+          path: |
+            results/
+            logs/
+          if-no-files-found: ignore
       - name: Aggregate
+        id: aggregate
         # aggregate_benchmark.py silently skips solvers with no shard files,
         # so passing both unconditionally is safe across every `mode`.
+        if: always() && steps.plan.outputs.has_jobs == 'true'
+        continue-on-error: true
         run: |
-          mkdir -p results
           python scripts/aggregate_benchmark.py \
-            --results-dir all-results \
+            --results-dir results \
             --solvers mopac pyscf
       - name: Upload summary
         if: always()
@@ -182,3 +241,7 @@ jobs:
         with:
           name: benchmark-summary
           path: results/summary.md
+          if-no-files-found: ignore
+      - name: Fail workflow on shard or aggregate errors
+        if: always() && (steps.benchmark.outcome == 'failure' || steps.aggregate.outcome == 'failure')
+        run: exit 1
