@@ -68,8 +68,4 @@ module = ["numpy", "numpy.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-markers = [
-    "benchmark: paper-reproduction benchmarks (slow; opt-in via -m benchmark)",
-]
-addopts = "-m 'not benchmark'"
 filterwarnings = ["ignore::PendingDeprecationWarning"]
