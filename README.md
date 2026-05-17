@@ -14,9 +14,9 @@ PyBerny is an optimizer of molecular geometries with respect to the total energy
 
 In each step, it takes energy and Cartesian gradients as an input, and returns a new equilibrium structure estimate.
 
-The package implements a single optimization algorithm, which is an amalgam of several techniques, comprising the quasi-Newton method, redundant internal coordinates, an iterative Hessian approximation, a trust region scheme, and linear search. The algorithm is described in more detailed in the [documentation](https://jhrmnn.github.io/pyberny/algorithm.html).
+The package implements a single optimization algorithm, which is an amalgam of several techniques, comprising the quasi-Newton method, redundant internal coordinates, an iterative Hessian approximation, a trust region scheme, linear search, and coordinate weighting. The algorithm is described in more detail in the [documentation](https://jhrmnn.github.io/pyberny/algorithm.html).
 
-Several desirable features are missing at the moment but planned, some of them being actively worked on (help is always welcome): [crystal geometries](https://github.com/jhrmnn/pyberny/issues/5), [coordinate constraints](https://github.com/jhrmnn/pyberny/issues/14), [coordinate weighting](https://github.com/jhrmnn/pyberny/issues/32), [transition state search](https://github.com/jhrmnn/pyberny/issues/4).
+Several desirable features are missing at the moment but planned, some of them being actively worked on (help is always welcome): [crystal geometries](https://github.com/jhrmnn/pyberny/issues/5), [coordinate constraints](https://github.com/jhrmnn/pyberny/issues/14), [transition state search](https://github.com/jhrmnn/pyberny/issues/4).
 
 PyBerny is available in [PySCF](https://sunqm.github.io/pyscf/geomopt.html#pyberny) and [QCEngine](http://docs.qcarchive.molssi.org/projects/QCEngine/en/latest/index.html?highlight=pyberny#backends).
 
@@ -30,14 +30,28 @@ pip install -U pyberny
 
 ## Example
 
+The snippet below optimizes a geometry from `geom.xyz` end-to-end using
+[MOPAC](http://openmopac.net) as the energy/gradient backend:
+
 ```python
-from berny import Berny, geomlib
+from berny import Berny, geomlib, optimize
+from berny.solvers import MopacSolver
 
 optimizer = Berny(geomlib.readfile('geom.xyz'))
-for geom in optimizer:
-    # get energy and gradients for geom
-    optimizer.send((energy, gradients))
+relaxed = optimize(optimizer, MopacSolver())
 ```
+
+To plug in a different backend, replace `MopacSolver()` with any
+coroutine that follows the same interface (see the
+[documentation](https://jhrmnn.github.io/pyberny/getting-started.html)
+for the manual generator pattern and the solver protocol).
+
+## Citing
+
+If you use PyBerny in published work, please cite it via its Zenodo DOI:
+[10.5281/zenodo.3695037](https://doi.org/10.5281/zenodo.3695037). The
+linked record resolves to the latest release and lists per-version DOIs
+for citing a specific version.
 
 ## Links
 
