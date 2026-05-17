@@ -214,8 +214,8 @@ def main(argv=None):
     if errors:
         print(errors, end='')
 
-    # Treat documented-null reference entries (e.g. MOPAC's one
-    # known non-converger) as expected rather than failing the run.
+    # Treat documented-null reference entries (MOPAC's known
+    # non-convergers) as expected rather than failing the run.
     ref_key = {'mopac': 'mopac_pm7_steps', 'pyscf': 'pyberny_steps'}[args.solver]
     regressions = [
         (row['name'], regression_reason(row, reference[row['name']][ref_key]))
