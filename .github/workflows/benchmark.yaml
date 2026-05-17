@@ -106,12 +106,9 @@ jobs:
         run: |
           mkdir -p results
           read -ra mols <<< "$MOLS"
-          printf '## %s batch %s\n\n' "$SOLVER" "$BATCH" >> "$GITHUB_STEP_SUMMARY"
           python scripts/benchmark.py --solver "$SOLVER" \
             --molecules "${mols[@]}" \
-            --out "results/${SOLVER}-${BATCH}.md" \
             --out-json "results/${SOLVER}-${BATCH}.json"
-          cat "results/${SOLVER}-${BATCH}.md" >> "$GITHUB_STEP_SUMMARY"
       - name: Upload results
         if: always() && steps.gate.outputs.skip == 'false'
         uses: actions/upload-artifact@v4
@@ -124,10 +121,6 @@ jobs:
     if: always() && needs.benchmark.result != 'cancelled'
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # Needed for the cleanup step below to delete the per-shard
-    # `benchmark-results-*` artifacts via the REST API.
-    permissions:
-      actions: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -156,19 +149,3 @@ jobs:
         with:
           name: benchmark-summary
           path: results/summary.md
-      # The per-shard `benchmark-results-*` artifacts exist only so this
-      # aggregate job can read their JSON. Once we've consumed them they
-      # would just clutter the run's Artifacts list, so delete them.
-      - name: Delete per-shard artifacts
-        if: always()
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          RUN_ID: ${{ github.run_id }}
-        run: |
-          gh api --paginate \
-            "repos/$GH_REPO/actions/runs/$RUN_ID/artifacts" \
-            --jq '.artifacts[] | select(.name | startswith("benchmark-results-")) | .id' \
-            | while read -r id; do
-                gh api -X DELETE "repos/$GH_REPO/actions/artifacts/$id"
-              done
