@@ -43,9 +43,36 @@ def load_rows(results_dir, solver):
     return rows
 
 
+def totals_row(rows, reference):
+    """Render a markdown totals row summing the per-molecule columns.
+
+    ``paper_steps`` and ``steps`` may be ``None`` (no paper reference /
+    non-converged run); those are skipped from their respective sums so a
+    missing entry doesn't poison the total. ``Converged`` is reported as
+    ``converged/total`` rather than summed.
+    """
+    atoms = sum(reference[r['name']]['atoms'] for r in rows)
+    paper = sum(
+        reference[r['name']].get('paper_steps') or 0
+        for r in rows
+        if reference[r['name']].get('paper_steps') is not None
+    )
+    steps = sum(r['steps'] for r in rows if r['steps'] is not None)
+    converged = sum(1 for r in rows if r['converged'])
+    wall = sum(r['wall'] for r in rows)
+    return (
+        f'| **Total** | **{atoms}** | **{paper}** | **{steps}** '
+        f'| **{converged}/{len(rows)}** | **{wall:.1f}** |\n'
+    )
+
+
 def render(reference, solver, rows_by_name):
     rows = [rows_by_name[n] for n in sorted(reference) if n in rows_by_name]
-    return format_table(rows, solver, reference) + format_errors(rows)
+    return (
+        format_table(rows, solver, reference)
+        + totals_row(rows, reference)
+        + format_errors(rows)
+    )
 
 
 def violations(reference, solver, rows_by_name):
