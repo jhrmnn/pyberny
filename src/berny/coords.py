@@ -401,10 +401,9 @@ class InternalCoords:
 
     def _refresh_dummies_from_coords(self, real_coords):
         """Recompute every dummy position from the given (supercell-shaped)
-        real coordinates."""
-        if not self._dummy_specs:
-            self.dummy_atoms = np.zeros((0, 3))
-            return
+        real coordinates. Must only be called when ``_dummy_specs`` is
+        non-empty; callers that may have no dummies should short-circuit.
+        """
         self.dummy_atoms = np.array(
             [spec.place(real_coords) for spec in self._dummy_specs]
         )
