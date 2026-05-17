@@ -152,13 +152,17 @@ jobs:
           results.mkdir(exist_ok=True)
           logs.mkdir(exist_ok=True)
 
-          parallel = max(1, min(int(os.environ["PHYSICAL_CORES"]), len(shards)))
+          physical_cores = int(os.environ["PHYSICAL_CORES"])
+          parallel = max(1, min(physical_cores, len(shards)))
+          threads_per_shard = max(1, physical_cores // parallel)
+          poll_seconds = 5
+          log_tail_lines = 200
           print(f"Running {len(shards)} shard(s) with parallelism={parallel}", flush=True)
 
           env = os.environ.copy()
-          env["OMP_NUM_THREADS"] = "1"
-          env["MKL_NUM_THREADS"] = "1"
-          env["OPENBLAS_NUM_THREADS"] = "1"
+          env["OMP_NUM_THREADS"] = str(threads_per_shard)
+          env["MKL_NUM_THREADS"] = str(threads_per_shard)
+          env["OPENBLAS_NUM_THREADS"] = str(threads_per_shard)
           env["PYTHONUNBUFFERED"] = "1"
 
           queue = list(shards)
@@ -186,7 +190,7 @@ jobs:
           while queue or running:
               while queue and len(running) < parallel:
                   start(queue.pop(0))
-              time.sleep(5)
+              time.sleep(poll_seconds)
               still_running = []
               for stem, log_path, handle, proc in running:
                   rc = proc.poll()
@@ -197,7 +201,7 @@ jobs:
                   if rc:
                       failed.append((stem, log_path))
                       print(f"::error::{stem} failed with exit code {rc}")
-                      tail = log_path.read_text(errors="replace").splitlines()[-200:]
+                      tail = log_path.read_text(errors="replace").splitlines()[-log_tail_lines:]
                       print(f"::group::{stem} log tail")
                       for line in tail:
                           print(line)
