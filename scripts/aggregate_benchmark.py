@@ -7,12 +7,12 @@ solver via ``benchmark.format_table`` / ``format_errors``, appends the result
 to ``$GITHUB_STEP_SUMMARY`` (when set) and writes ``results/summary.md``.
 
 Exits 1 if any molecule with a non-``null`` reference entry for the active
-solver either failed to converge or deviates from the reference step count
-by more than 2 — same rule as ``benchmark.py``'s exit-code logic.
-``pyberny_steps`` is currently ``null`` for every entry, so pyscf is in
-baseline-establishment mode: no pyscf run can trip either half of this gate
-yet. Fill in ``pyberny_steps`` as pyscf results stabilize to enable the
-regression check.
+solver either failed to converge or drifts from its reference step count
+by more than 7% (with an absolute floor of 2 steps) — same rule as
+``benchmark.py``'s exit-code logic. ``pyberny_steps`` is currently
+``null`` for every entry, so pyscf is in baseline-establishment mode: no
+pyscf run can trip either half of this gate yet. Fill in ``pyberny_steps``
+as pyscf results stabilize to enable the regression check.
 """
 
 import argparse

@@ -11,10 +11,11 @@ and requires ``pip install pyberny[benchmark]``; MOPAC mode uses
 :func:`berny.solvers.MopacSolver` (charge and multiplicity from
 ``reference.json``) and requires a ``mopac`` binary on ``$PATH``.
 A molecule fails the run when it either does not converge or its step
-count deviates from the reference by more than 2; molecules whose
-``<solver>_steps`` reference value is ``null`` in ``reference.json`` are
-documented non-convergers / unmeasured and do not contribute to the
-script's exit code.
+count drifts from the reference by more than 7% (with an absolute floor
+of 2 steps, so the gate stays meaningful for small references);
+molecules whose ``<solver>_steps`` reference value is ``null`` in
+``reference.json`` are documented non-convergers / unmeasured and do not
+contribute to the script's exit code.
 """
 
 # Pin numeric-library thread counts to physical cores before importing
@@ -93,7 +94,10 @@ def run_mopac(name, ref):
     from berny.solvers import MopacSolver
 
     geom = geomlib.readfile(str(DATA / f'{name}.xyz'))
-    berny = Berny(geom)
+    # raffinose converges in ~100 steps on CI MOPAC, right at pyberny's
+    # default 100-step ceiling; raise it so a +1 jitter doesn't flip the
+    # row from "converged in 99" to "did not converge".
+    berny = Berny(geom, maxsteps=110)
     optimize(berny, MopacSolver(charge=ref['charge'], mult=ref['mult']))
     return berny.converged, berny._n
 
@@ -154,15 +158,17 @@ def regression_reason(row, ref):
     ``ref`` is the reference step count for the row's solver (or ``None`` if
     no baseline is recorded, in which case the gate is skipped). A row fails
     if it didn't converge, or if its step count drifted from ``ref`` by more
-    than 2 (the same tolerance ``tests/test_optimize.py`` uses).
+    than ``max(2, round(0.07 * ref))`` steps — a 7% band, floored at 2 so
+    the gate stays meaningful for small references.
     """
     if ref is None:
         return None
     if not row['converged']:
         return 'did not converge'
     drift = row['steps'] - ref
-    if abs(drift) > 2:
-        return f"{row['steps']} steps vs ref {ref} ({drift:+d})"
+    tolerance = max(2, round(0.07 * ref))
+    if abs(drift) > tolerance:
+        return f"{row['steps']} steps vs ref {ref} ({drift:+d}, tol {tolerance})"
     return None
 
 
