@@ -3,7 +3,6 @@ on:
   workflow_run:
     workflows: [Tests, Lint, Benchmark, Documentation]
     types: [completed]
-    branches: [master]
 permissions:
   contents: read
   pages: write
@@ -25,8 +24,17 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const sha = context.payload.workflow_run.head_sha;
-            const required = ['Tests', 'Lint', 'Benchmark', 'Documentation'];
+            const trigger = context.payload.workflow_run;
+            if (trigger.event !== 'push') {
+              core.info(`event=${trigger.event} - skipping`);
+              core.setOutput('ok', 'false');
+              return;
+            }
+
+            const sha = trigger.head_sha;
+            const required = trigger.head_branch === 'master'
+              ? ['Tests', 'Lint', 'Benchmark', 'Documentation']
+              : ['Documentation'];
             const { data: { workflow_runs } } = await github.rest.actions
               .listWorkflowRunsForRepo({
                 owner: context.repo.owner,
