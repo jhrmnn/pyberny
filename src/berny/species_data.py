@@ -12,10 +12,7 @@ _GHOST_ALIASES = {'ghost', 'x', 'bq'}
 
 
 def _is_ghost(symbol):
-    if not isinstance(symbol, str):
-        return False
-    name = symbol.lstrip('-').lower()
-    return name in _GHOST_ALIASES
+    return symbol.lstrip('-').lower() in _GHOST_ALIASES
 
 
 _GHOST_ROW = {

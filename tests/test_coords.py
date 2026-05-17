@@ -1,7 +1,15 @@
 import numpy as np
 import pytest
 
-from berny.coords import Angle, Bond, Dihedral, InternalCoords, angstrom
+from berny.coords import (
+    Angle,
+    Bond,
+    Dihedral,
+    InternalCoords,
+    _DummySpec,
+    _perp_from_ref,
+    angstrom,
+)
 from berny.geomlib import Geometry
 from berny.species_data import get_property, species_data
 
@@ -118,6 +126,39 @@ def test_b_matrix_shape_excludes_dummies():
     coords = InternalCoords(geom)
     B = coords.B_matrix(geom)
     assert B.shape == (len(coords), 3 * len(geom))
+
+
+def test_perp_from_ref_returns_none_when_parallel():
+    # Defensive branch: if the reference vector is exactly parallel to the
+    # axis, the projection onto the perpendicular plane vanishes and we
+    # must signal failure so callers can pick a different reference.
+    axis = np.array([1.0, 0.0, 0.0])
+    assert _perp_from_ref(axis, axis) is None
+
+
+def test_dummyspec_place_coincident_hosts():
+    # Defensive branch: if i and k happen to coincide (degenerate input,
+    # not produced by the normal builder), placing the dummy falls back
+    # to the host j position rather than dividing by zero on the axis norm.
+    spec = _DummySpec(0, 1, 2, np.array([1.0, 0.0, 0.0]))
+    coords = np.array(
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 1.0], [0.0, 0.0, 0.0]]
+    )  # i and k coincide
+    placed = spec.place(coords)
+    assert np.allclose(placed, coords[1])
+
+
+def test_dummyspec_place_falls_back_when_ref_parallel():
+    # If the stored ref ends up parallel to the i-k axis (e.g. after large
+    # rotations of the host triple), _perp_from_ref returns None and
+    # _DummySpec.place falls back to a deterministically picked perp.
+    spec = _DummySpec(0, 1, 2, np.array([0.0, 0.0, 1.0]))
+    coords = np.array([[0.0, 0.0, -1.0], [0.0, 0.0, 0.0], [0.0, 0.0, 1.0]])
+    placed = spec.place(coords)
+    offset = placed - coords[1]
+    # Result must be unit length perpendicular to the z-axis.
+    assert abs(np.linalg.norm(offset) - 1.0) < 1e-10
+    assert abs(offset[2]) < 1e-10
 
 
 def test_ghost_atom_in_geometry_does_not_crash():
