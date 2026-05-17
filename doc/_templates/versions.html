@@ -1,0 +1,17 @@
+{%- if current_version %}
+<div class="versions">
+  <h3>Versions</h3>
+  <ul>
+    {%- for item in versions.branches %}
+    <li{% if item.name == current_version.name %} class="current"{% endif %}>
+      <a href="{{ vpathto(item.name) }}">{{ item.name }}</a>
+    </li>
+    {%- endfor %}
+    {%- for item in versions.tags %}
+    <li{% if item.name == current_version.name %} class="current"{% endif %}>
+      <a href="{{ vpathto(item.name) }}">{{ item.name }}</a>
+    </li>
+    {%- endfor %}
+  </ul>
+</div>
+{%- endif %}

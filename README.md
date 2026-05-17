@@ -14,7 +14,7 @@ PyBerny is an optimizer of molecular geometries with respect to the total energy
 
 In each step, it takes energy and Cartesian gradients as an input, and returns a new equilibrium structure estimate.
 
-The package implements a single optimization algorithm, which is an amalgam of several techniques, comprising the quasi-Newton method, redundant internal coordinates, an iterative Hessian approximation, a trust region scheme, linear search, and coordinate weighting. The algorithm is described in more detail in the [documentation](https://jhrmnn.github.io/pyberny/algorithm.html).
+The package implements a single optimization algorithm, which is an amalgam of several techniques, comprising the quasi-Newton method, redundant internal coordinates, an iterative Hessian approximation, a trust region scheme, linear search, and coordinate weighting. The algorithm is described in more detail in the [documentation](https://jhrmnn.github.io/pyberny/master/algorithm.html).
 
 Several desirable features are missing or incomplete at the moment, some of them being actively worked on (help is always welcome): [crystal geometries](https://github.com/jhrmnn/pyberny/issues/5), [coordinate constraints](https://github.com/jhrmnn/pyberny/issues/14), [coordinate weighting](https://github.com/jhrmnn/pyberny/issues/32), [transition state search](https://github.com/jhrmnn/pyberny/issues/4).
 
@@ -43,7 +43,7 @@ relaxed = optimize(optimizer, MopacSolver())
 
 To plug in a different backend, replace `MopacSolver()` with any
 coroutine that follows the same interface (see the
-[documentation](https://jhrmnn.github.io/pyberny/getting-started.html)
+[documentation](https://jhrmnn.github.io/pyberny/master/getting-started.html)
 for the manual generator pattern and the solver protocol).
 
 ## Citing
