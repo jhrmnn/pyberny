@@ -1,0 +1,74 @@
+name: Deploy Docs
+on:
+  workflow_run:
+    workflows: [Tests, Lint, Benchmark, Documentation]
+    types: [completed]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  actions: read
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check all CI passed
+        id: gate
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const trigger = context.payload.workflow_run;
+            if (trigger.event !== 'push') {
+              core.info(`event=${trigger.event} - skipping`);
+              core.setOutput('ok', 'false');
+              return;
+            }
+
+            const sha = trigger.head_sha;
+            const required = trigger.head_branch === 'master'
+              ? ['Tests', 'Lint', 'Benchmark', 'Documentation']
+              : ['Documentation'];
+            const { data: { workflow_runs } } = await github.rest.actions
+              .listWorkflowRunsForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                head_sha: sha,
+                per_page: 100,
+              });
+            for (const name of required) {
+              const runs = workflow_runs
+                .filter(r => r.name === name)
+                .sort((a, b) => b.id - a.id);
+              const run = runs[0];
+              if (!run || run.status !== 'completed' || run.conclusion !== 'success') {
+                core.info(`${name}: ${run ? (run.conclusion ?? run.status) : 'not found'} - skipping`);
+                core.setOutput('ok', 'false');
+                return;
+              }
+              if (name === 'Documentation') core.setOutput('doc_run_id', run.id);
+            }
+            core.setOutput('ok', 'true');
+      - name: Download docs artifact
+        if: steps.gate.outputs.ok == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: docs
+          path: doc/build
+          run-id: ${{ steps.gate.outputs.doc_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload pages artifact
+        if: steps.gate.outputs.ok == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: doc/build
+      - name: Deploy
+        if: steps.gate.outputs.ok == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4
