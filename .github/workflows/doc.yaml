@@ -5,11 +5,6 @@ on:
   pull_request:
 permissions:
   contents: read
-  pages: write
-  id-token: write
-concurrency:
-  group: pages
-  cancel-in-progress: false
 jobs:
   build:
     name: Build
@@ -34,17 +29,7 @@ jobs:
           <!doctype html>
           <meta http-equiv="refresh" content="0; url=master/">
           EOF
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
+          name: docs
           path: doc/build
-  deploy:
-    name: Deploy
-    needs: build
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
