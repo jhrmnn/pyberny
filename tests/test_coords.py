@@ -161,6 +161,27 @@ def test_dummyspec_place_falls_back_when_ref_parallel():
     assert abs(offset[2]) < 1e-10
 
 
+def test_linear_bends_skipped_for_multi_coord_centre():
+    # Trans angles in a square-planar or octahedral metal centre are
+    # geometrically near 180° but chemically stiff (the cis neighbours hold
+    # the geometry). Introducing dummies here over-parameterises the
+    # problem and prevents convergence (regression observed for mg_porphin
+    # and zn_edta in the Birkholz-Schlegel benchmark). The detector must
+    # only fire when the central atom has exactly two covalent neighbours.
+    geom = Geometry(
+        ['Mg', 'N', 'N', 'N', 'N'],
+        [
+            [0.0, 0.0, 0.0],
+            [2.0, 0.0, 0.0],
+            [-2.0, 0.0, 0.0],
+            [0.0, 2.0, 0.0],
+            [0.0, -2.0, 0.0],
+        ],
+    )
+    coords = InternalCoords(geom)
+    assert coords.dummy_atoms.shape == (0, 3)
+
+
 def test_ghost_atom_in_geometry_does_not_crash():
     # Issue #9: previously, a "Ghost" species in the input geometry raised
     # KeyError deep inside InternalCoords. Now it should build without
