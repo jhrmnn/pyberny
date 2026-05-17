@@ -167,7 +167,7 @@
   "sphingomyelin": {
     "atoms": 84,
     "charge": 0,
-    "mopac_pm7_steps": 95,
+    "mopac_pm7_steps": null,
     "mult": 1,
     "name": "Sphingomyelin",
     "paper_steps": 56,
