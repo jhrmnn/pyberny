@@ -64,6 +64,7 @@ def totals_row(rows, reference, solver):
     ``total`` denominator (so a partial CI run is visibly partial).
     """
     solver_key = REF_STEPS_KEY[solver]
+    run_rows = [r for r in rows if r.get('wall') is not None]
     atoms = sum(reference[r['name']]['atoms'] for r in rows)
     paper = sum(
         reference[r['name']].get('paper_steps') or 0
@@ -75,11 +76,9 @@ def totals_row(rows, reference, solver):
         for r in rows
         if reference[r['name']].get(solver_key) is not None
     )
-    steps = sum(
-        r['steps'] for r in rows if r.get('wall') is not None and r['steps'] is not None
-    )
-    converged = sum(1 for r in rows if r.get('wall') is not None and r['converged'])
-    wall = sum(r['wall'] for r in rows if r.get('wall') is not None)
+    steps = sum(r['steps'] for r in run_rows if r['steps'] is not None)
+    converged = sum(1 for r in run_rows if r['converged'])
+    wall = sum(r['wall'] for r in run_rows)
     return (
         f'| **Total** | **{atoms}** | **{paper}** | **{ref_total}** '
         f'| **{steps}** | **{converged}/{len(rows)}** | **{wall:.1f}** |\n'
