@@ -20,7 +20,11 @@ echo "export PATH=\"$MOPAC_DIR/bin:\$PATH\"" >> "$CLAUDE_ENV_FILE"
 echo "export LD_LIBRARY_PATH=\"$MOPAC_DIR/lib:\${LD_LIBRARY_PATH:-}\"" >> "$CLAUDE_ENV_FILE"
 
 cd "$CLAUDE_PROJECT_DIR"
-pip install -e ".[test]"
+# [doc] is needed for the sphinx-build step in scripts/check.sh. The
+# Sphinx step relies on `node` for sphinxcontrib-katex's server-side
+# prerender; the Claude Code on the web base image ships node, so no
+# extra install is required here.
+pip install -e ".[test,doc]"
 
 # `flake8` on PATH comes from a uv-managed tool environment that is
 # isolated from system site-packages, so `pip install flake8-bugbear ...`

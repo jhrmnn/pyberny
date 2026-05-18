@@ -25,6 +25,12 @@ jobs:
           cache: pip
           cache-dependency-path: pyproject.toml
 
+      # Node is required by sphinxcontrib-katex's server-side prerender,
+      # which scripts/check.sh and .github/workflows/doc.yaml both run.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
       # MOPAC is required by tests/test_optimize.py, which shells out to the
       # `mopac` binary. Install it OUTSIDE the repository checkout (under
       # $RUNNER_TEMP) so the extracted files are never picked up by `git add`
