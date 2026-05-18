@@ -94,9 +94,11 @@ def run_mopac(name, ref):
     from berny.solvers import MopacSolver
 
     geom = geomlib.readfile(str(DATA / f'{name}.xyz'))
-    # raffinose converges in ~100 steps on CI MOPAC, right at pyberny's
-    # default 100-step ceiling; raise it so a +1 jitter doesn't flip the
-    # row from "converged in 99" to "did not converge".
+    # A couple of molecules (raffinose, sphingomyelin) need more than
+    # pyberny's default 100-step ceiling under MOPAC PM7 on CI; raise it
+    # so they still have a chance to converge and be reported. Both are
+    # documented non-convergers in reference.json (mopac_pm7_steps=null)
+    # so the regression gate ignores them either way.
     berny = Berny(geom, maxsteps=110)
     optimize(berny, MopacSolver(charge=ref['charge'], mult=ref['mult']))
     return berny.converged, berny._n
