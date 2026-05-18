@@ -59,6 +59,7 @@ html_sidebars = {
     ]
 }
 html_static_path = ['_static']
+html_css_files = ['custom.css']
 templates_path = ['_templates']
 
 smv_branch_whitelist = r'^master$'

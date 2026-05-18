@@ -1,1 +1,13 @@
 .katex { font-size: 1em; }
+
+/* Inline callouts used in doc/standard_method.rst */
+.sm {
+    background: #fff8c5;
+    padding: 0 .25em;
+    border-radius: 3px;
+}
+.pb {
+    background: #ddf4ff;
+    padding: 0 .25em;
+    border-radius: 3px;
+}
