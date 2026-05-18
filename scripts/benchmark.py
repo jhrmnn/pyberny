@@ -126,20 +126,43 @@ def run_one(name, ref, kind):
     }
 
 
+REF_STEPS_KEY = {'mopac': 'mopac_pm7_steps', 'pyscf': 'pyberny_steps'}
+
+
 def format_table(rows, kind, reference):
+    """Render the per-molecule markdown table.
+
+    Columns: molecule, atoms, paper (SM reference from Birkholz–Schlegel),
+    ref (this solver's regression baseline from ``reference.json``), the
+    measured pyberny step count, convergence flag, and wall time.
+
+    Rows whose ``wall`` is ``None`` are treated as "not run" placeholders
+    (used by ``aggregate_benchmark.py`` to keep the table shape stable
+    across partial CI runs); they render as ``-`` across the measured
+    columns but still occupy a line so the molecule list is always
+    complete.
+    """
+    ref_key = REF_STEPS_KEY[kind]
     out = [
-        f'| Molecule | Atoms | Paper | pyberny ({kind}) | Converged | Wall (s) |',
-        '|---|---:|---:|---:|---|---:|',
+        f'| Molecule | Atoms | Paper | Ref ({kind}) '
+        f'| pyberny ({kind}) | Converged | Wall (s) |',
+        '|---|---:|---:|---:|---:|---|---:|',
     ]
     for row in rows:
         ref = reference[row['name']]
         paper = ref.get('paper_steps')
+        ref_steps = ref.get(ref_key)
+        not_run = row.get('wall') is None
+        steps_s = '-' if not_run or row['steps'] is None else str(row['steps'])
+        conv_s = '-' if not_run else ('yes' if row['converged'] else 'no')
+        wall_s = '-' if not_run else f"{row['wall']:.1f}"
         out.append(
             f"| {row['name']} | {ref['atoms']} "
             f"| {'-' if paper is None else paper} "
-            f"| {'-' if row['steps'] is None else row['steps']} "
-            f"| {'yes' if row['converged'] else 'no'} "
-            f"| {row['wall']:.1f} |"
+            f"| {'-' if ref_steps is None else ref_steps} "
+            f"| {steps_s} "
+            f"| {conv_s} "
+            f"| {wall_s} |"
         )
     return '\n'.join(out) + '\n'
 
@@ -218,7 +241,7 @@ def main(argv=None):
 
     # Treat documented-null reference entries (e.g. MOPAC's one
     # known non-converger) as expected rather than failing the run.
-    ref_key = {'mopac': 'mopac_pm7_steps', 'pyscf': 'pyberny_steps'}[args.solver]
+    ref_key = REF_STEPS_KEY[args.solver]
     regressions = [
         (row['name'], regression_reason(row, reference[row['name']][ref_key]))
         for row in rows
