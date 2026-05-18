@@ -2,10 +2,12 @@
 
 ## Pre-push checks
 
-Before `git push`, run `scripts/check.sh`. It runs the same lint and test
-commands CI runs (`flake8`, `black --check`, `isort --check`, `pydocstyle src`,
-`pytest`) against the current Python, so most CI failures are catchable
-locally without waiting for the 5-version matrix.
+Before `git push`, run `scripts/check.sh`. It runs the same lint, test, and
+doc-build commands CI runs (`flake8`, `black --check`, `isort --check`,
+`pydocstyle src`, `pytest`, and `sphinx-build -W -E doc doc/_check`) against
+the current Python, so most CI failures are catchable locally without waiting
+for the 5-version matrix. The Sphinx step uses server-side KaTeX prerender, so
+`node` and the `[doc]` extra (`pip install -e ".[doc]"`) must be installed.
 
 ## CI results
 

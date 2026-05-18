@@ -117,12 +117,14 @@ B-matrix rows (Wilson, Decius & Cross [WilsonDeciusCross]_; with
 
 .. math::
 
+   \begin{aligned}
    \frac{\partial\theta}{\partial x_i} &=
        \frac{\cos\theta\,\hat e_1 - \hat e_2}{\|v_1\|\sin\theta}, \\
    \frac{\partial\theta}{\partial x_k} &=
        \frac{\cos\theta\,\hat e_2 - \hat e_1}{\|v_2\|\sin\theta}, \\
    \frac{\partial\theta}{\partial x_j} &= -\frac{\partial\theta}{\partial x_i}
        - \frac{\partial\theta}{\partial x_k}.
+   \end{aligned}
 
 :sm:`Note (unspecified in [BirkholzTCA16]_):` the formulas above become
 singular at :math:`\theta=0` or :math:`\pi`. The SM handles
@@ -150,6 +152,7 @@ Compact B-matrix rows, with
 
 .. math::
 
+   \begin{aligned}
    \frac{\partial\varphi}{\partial x_i} &=
        \cot\varphi\,\frac{a_1}{\|a_1\|^2} - \frac{a_2}{\|a_1\|\|a_2\|\sin\varphi}, \\
    \frac{\partial\varphi}{\partial x_l} &=
@@ -160,6 +163,7 @@ Compact B-matrix rows, with
    \frac{\partial\varphi}{\partial x_k} &=
        \frac{(1+B)\,a_1 + A\,a_2}{\|a_1\|\|a_2\|\sin\varphi}
        - \cot\varphi\left[(1+B)\frac{a_2}{\|a_2\|^2} + A\frac{a_1}{\|a_1\|^2}\right].
+   \end{aligned}
 
 These formulas are due to Wilson [WilsonDeciusCross]_; the compact form
 above (avoiding singularities from the chain rule applied to
@@ -665,9 +669,11 @@ Diagonal entries are
 
 .. math::
 
+   \begin{aligned}
    k_\text{bond} &= 0.45\,\rho_{ij}, \\
    k_\text{angle} &= 0.15\,\rho_{ij}\,\rho_{jk}, \\
    k_\text{dihedral} &= 0.005\,\rho_{ij}\,\rho_{jk}\,\rho_{kl}.
+   \end{aligned}
 
 The prefactors 0.45 / 0.15 / 0.005 are the original Lindh values quoted
 in [SwartIJQC06]_; PyBerny implements these in

@@ -18,13 +18,21 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
       - name: Install
         run: pip install -e ".[doc]"
       - name: Check
+        # Single-version sphinx build of the PR's own source, with strict
+        # KaTeX prerender (see doc/conf.py). Multi-version build only runs
+        # on push events below, so prerender can be unconditional.
         run: sphinx-build -W -E doc doc/_check
       - name: Build
+        if: github.event_name == 'push'
         run: sphinx-multiversion doc doc/build
       - name: Add Pages metadata
+        if: github.event_name == 'push'
         run: |
           touch doc/build/.nojekyll
           cat >doc/build/index.html <<'EOF'
@@ -32,6 +40,7 @@ jobs:
           <meta http-equiv="refresh" content="0; url=master/">
           EOF
       - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push'
         with:
           name: docs
           path: doc/build
