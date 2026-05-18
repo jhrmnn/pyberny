@@ -1,9 +1,6 @@
 Standard method — full reference
 ================================
 
-.. role:: sm
-.. role:: pb
-
 This page documents the *standard method* (SM) for geometry optimization in
 sufficient detail to reimplement it from scratch. The SM was defined in the
 appendix of [BirkholzTCA16]_ as a reference algorithm against which various
