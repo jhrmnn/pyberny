@@ -23,17 +23,14 @@ jobs:
           node-version: "20"
       - name: Install
         run: pip install -e ".[doc]"
-      - name: Debug versions
-        run: |
-          which node && node --version
-          which sphinx-build && sphinx-build --version
-          python -c "import sphinx, alabaster, sphinxcontrib.katex as k; print('sphinx', sphinx.__version__); print('alabaster', alabaster.__version__); print('katex', k.__version__)"
       - name: Check
-        run: sphinx-build -W --keep-going -E doc doc/_check 2>&1 | tee /tmp/sphinx.log
-        continue-on-error: true
-      - name: Dump sphinx log
-        if: always()
-        run: cat /tmp/sphinx.log 2>/dev/null || echo "no log"
+        # SPHINX_KATEX_PRERENDER turns on server-side KaTeX rendering so a
+        # math parse error fails the build (see doc/conf.py). Not set on the
+        # sphinx-multiversion step below, which rebuilds historical refs
+        # whose source we can't retroactively fix.
+        env:
+          SPHINX_KATEX_PRERENDER: "1"
+        run: sphinx-build -W -E doc doc/_check
       - name: Build
         run: sphinx-multiversion doc doc/build
       - name: Add Pages metadata
