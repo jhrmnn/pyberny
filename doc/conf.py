@@ -5,6 +5,8 @@ from importlib.metadata import version as get_version
 
 import sphinxcontrib.katex as _katex
 import toml
+from docutils import nodes
+from docutils.parsers.rst import roles
 
 # Server-side KaTeX prerender so a math parse error fails the build.
 # sphinxcontrib-katex's throwOnError=False default is overridden so a
@@ -89,5 +91,23 @@ def skip_namedtuples(app, what, name, obj, skip, options):
         return True
 
 
+def _callout_role(css_class):
+    """Inline role that wraps content in <span class=css_class> while still
+    parsing inline markup (citations, refs, code spans, etc.) inside the
+    body. A bare `.. role:: foo` directive instead treats its content as
+    plain text, which silently breaks links like `[BirkholzTCA16]_`.
+    """
+
+    def role(name, rawtext, text, lineno, inliner, options=None, content=None):
+        opts = (options or {}).copy()
+        opts.setdefault('classes', []).append(css_class)
+        children, messages = inliner.parse(text, lineno, inliner, inliner.parent)
+        return [nodes.inline(rawtext, '', *children, **opts)], messages
+
+    return role
+
+
 def setup(app):
     app.connect('autodoc-skip-member', skip_namedtuples)
+    roles.register_local_role('sm', _callout_role('sm'))
+    roles.register_local_role('pb', _callout_role('pb'))
