@@ -37,6 +37,13 @@ hosts, so ``scripts/benchmark.py`` and ``scripts/aggregate_benchmark.py``
 allow each row to drift from its reference by up to 7% (with an absolute
 floor of 2 steps) before failing the run.
 
+``pyberny_steps`` records the PySCF step counts from a GitHub Actions run
+using the method and basis in ``paper_steps_method``/``paper_steps_basis``
+(HF/3-21G or B3LYP/6-31G(d,p) per molecule). Two molecules are left
+``null``: ``azadirachtin`` is excluded from PySCF runs because its ~526 s/call
+cost would exceed GitHub's 6-hour job cap; ``ochratoxin_a`` did not converge
+within the 100-step default ceiling.
+
 Coordinate data is treated as factual and is redistributed under pyberny's
 MPL-2.0 license, with attribution to Birkholz & Schlegel via this file and
 via the citation embedded in the comment line of each ``.xyz``. The
