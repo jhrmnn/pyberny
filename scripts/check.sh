@@ -21,7 +21,7 @@ run black      black . --check
 run isort      isort . --check
 run pydocstyle pydocstyle src
 run pytest     python -m pytest -q
-run sphinx     env SPHINX_KATEX_PRERENDER=1 sphinx-build -W -E doc doc/_check
+run sphinx     sphinx-build -W -E doc doc/_check
 
 if [ "$fail" -ne 0 ]; then
     echo "One or more checks failed."

@@ -25,18 +25,11 @@ jobs:
         run: pip install -e ".[doc]"
       - name: Check
         # Single-version sphinx build of the PR's own source, with strict
-        # KaTeX prerender (see doc/conf.py). SPHINX_KATEX_PRERENDER is NOT
-        # set on the multiversion Build step below — sphinx-multiversion
-        # reuses this conf.py against historical refs whose math we can't
-        # retroactively patch.
-        env:
-          SPHINX_KATEX_PRERENDER: "1"
+        # KaTeX prerender (see doc/conf.py). Multi-version build only runs
+        # on push events below, so prerender can be unconditional.
         run: sphinx-build -W -E doc doc/_check
       - name: Build
-        # Multi-version build of master + tags. Runs on every event so
-        # config/extension breakage that only manifests against historical
-        # refs is caught at PR time. The artifact upload below is gated on
-        # push events because only those drive the Deploy Docs workflow.
+        if: github.event_name == 'push'
         run: sphinx-multiversion doc doc/build
       - name: Add Pages metadata
         if: github.event_name == 'push'
