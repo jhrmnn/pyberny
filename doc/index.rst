@@ -17,4 +17,5 @@ the `Gaussian <http://gaussian.com>`_ program.
 
    getting-started
    algorithm
+   standard_method
    api
