@@ -3,7 +3,13 @@ import os
 import sys
 from importlib.metadata import version as get_version
 
+import sphinxcontrib.katex as _katex
 import toml
+
+# sphinxcontrib-katex defaults throwOnError to False so KaTeX renders parse
+# errors as red HTML instead of failing the build. Override so a broken
+# math block fails sphinx-build locally and in CI.
+_katex.KATEX_DEFAULT_OPTIONS['throwOnError'] = True
 
 sys.path.insert(0, os.path.abspath('../src'))
 with open('../pyproject.toml') as f:
@@ -38,12 +44,6 @@ intersphinx_mapping = {
 }
 exclude_patterns = ['build', '.DS_Store']
 katex_prerender = True
-# sphinxcontrib-katex defaults throwOnError to False so KaTeX renders parse
-# errors as red HTML instead of failing the build. Override so a broken
-# math block fails sphinx-build locally and in CI.
-import sphinxcontrib.katex as _katex
-
-_katex.KATEX_DEFAULT_OPTIONS['throwOnError'] = True
 
 html_theme = 'alabaster'
 html_theme_options = {
