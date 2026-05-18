@@ -25,12 +25,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from benchmark import (  # noqa: E402
     DATA,
+    REF_STEPS_KEY,
     format_errors,
     format_table,
     regression_reason,
 )
-
-REF_KEY = {'mopac': 'mopac_pm7_steps', 'pyscf': 'pyberny_steps'}
 
 
 def load_rows(results_dir, solver):
@@ -50,40 +49,73 @@ def load_rows(results_dir, solver):
     return rows
 
 
-def totals_row(rows, reference):
+def totals_row(rows, reference, solver):
     """Render a markdown totals row summing the per-molecule columns.
 
-    ``paper_steps`` and ``steps`` may be ``None`` (no paper reference /
-    non-converged run); those are skipped from their respective sums so a
-    missing entry doesn't poison the total. ``Converged`` is reported as
-    ``converged/total`` rather than summed.
+    ``paper_steps`` and the per-solver reference may be ``None`` (no paper
+    reference / documented non-converger); those are skipped from their
+    respective sums so a missing entry doesn't poison the total.
+    ``Converged`` is reported as ``converged/total`` rather than summed.
+
+    Rows whose ``wall`` is ``None`` are "not run" placeholders inserted by
+    :func:`render` so the table always covers every molecule in
+    ``reference.json``; they're skipped from the wall and step sums and
+    don't count as converged, but still contribute to ``atoms`` and to the
+    ``total`` denominator (so a partial CI run is visibly partial).
     """
+    solver_key = REF_STEPS_KEY[solver]
     atoms = sum(reference[r['name']]['atoms'] for r in rows)
     paper = sum(
         reference[r['name']].get('paper_steps') or 0
         for r in rows
         if reference[r['name']].get('paper_steps') is not None
     )
-    steps = sum(r['steps'] for r in rows if r['steps'] is not None)
-    converged = sum(1 for r in rows if r['converged'])
-    wall = sum(r['wall'] for r in rows)
+    ref_total = sum(
+        reference[r['name']].get(solver_key) or 0
+        for r in rows
+        if reference[r['name']].get(solver_key) is not None
+    )
+    steps = sum(
+        r['steps'] for r in rows if r.get('wall') is not None and r['steps'] is not None
+    )
+    converged = sum(1 for r in rows if r.get('wall') is not None and r['converged'])
+    wall = sum(r['wall'] for r in rows if r.get('wall') is not None)
     return (
-        f'| **Total** | **{atoms}** | **{paper}** | **{steps}** '
-        f'| **{converged}/{len(rows)}** | **{wall:.1f}** |\n'
+        f'| **Total** | **{atoms}** | **{paper}** | **{ref_total}** '
+        f'| **{steps}** | **{converged}/{len(rows)}** | **{wall:.1f}** |\n'
     )
 
 
+def _stub_row(name):
+    # ``wall is None`` is the sentinel both format_table and totals_row use
+    # to recognize a "not run" placeholder.
+    return {
+        'name': name,
+        'converged': False,
+        'steps': None,
+        'wall': None,
+        'error': None,
+    }
+
+
 def render(reference, solver, rows_by_name):
-    rows = [rows_by_name[n] for n in sorted(reference) if n in rows_by_name]
+    """Render the table for ``solver``, padding missing molecules with stubs.
+
+    Iterating over ``sorted(reference)`` (rather than only ``rows_by_name``)
+    keeps the table shape stable across partial CI runs: a shard failure or
+    a ``--molecules`` subset leaves a placeholder line per missing molecule
+    rather than silently shrinking the table.
+    """
+    rows = [rows_by_name.get(n, _stub_row(n)) for n in sorted(reference)]
     return (
         format_table(rows, solver, reference)
-        + totals_row(rows, reference)
+        + totals_row(rows, reference, solver)
         + format_errors(rows)
     )
 
 
 def violations(reference, solver, rows_by_name):
-    key = REF_KEY[solver]
+    key = REF_STEPS_KEY[solver]
     out = []
     for n, r in rows_by_name.items():
         reason = regression_reason(r, reference[n][key])
