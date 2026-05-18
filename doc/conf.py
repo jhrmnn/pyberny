@@ -6,16 +6,11 @@ from importlib.metadata import version as get_version
 import sphinxcontrib.katex as _katex
 import toml
 
-# Server-side KaTeX prerender, opt-in via env var. Off by default so
-# sphinx-multiversion (which uses this conf.py to rebuild historical refs)
-# doesn't choke on math blocks that were only fixed in newer commits.
-# scripts/check.sh and .github/workflows/doc.yaml's "Check" step set the
-# var so the gate catches bad math at PR time.
-if os.environ.get('SPHINX_KATEX_PRERENDER') == '1':
-    katex_prerender = True
-    # Override sphinxcontrib-katex's default of throwOnError=False so a
-    # KaTeX parse error fails the build instead of rendering red HTML.
-    _katex.KATEX_DEFAULT_OPTIONS['throwOnError'] = True
+# Server-side KaTeX prerender so a math parse error fails the build.
+# sphinxcontrib-katex's default of throwOnError=False is overridden so
+# errors raise instead of rendering as red HTML.
+katex_prerender = True
+_katex.KATEX_DEFAULT_OPTIONS['throwOnError'] = True
 
 sys.path.insert(0, os.path.abspath('../src'))
 with open('../pyproject.toml') as f:

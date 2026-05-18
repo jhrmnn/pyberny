@@ -24,16 +24,15 @@ jobs:
       - name: Install
         run: pip install -e ".[doc]"
       - name: Check
-        # SPHINX_KATEX_PRERENDER turns on server-side KaTeX rendering so a
-        # math parse error fails the build (see doc/conf.py). Not set on the
-        # sphinx-multiversion step below, which rebuilds historical refs
-        # whose source we can't retroactively fix.
-        env:
-          SPHINX_KATEX_PRERENDER: "1"
+        # Single-version sphinx build with strict KaTeX prerender (see
+        # doc/conf.py). Catches bad math at PR time without touching
+        # historical refs.
         run: sphinx-build -W -E doc doc/_check
       - name: Build
+        if: github.event_name == 'push'
         run: sphinx-multiversion doc doc/build
       - name: Add Pages metadata
+        if: github.event_name == 'push'
         run: |
           touch doc/build/.nojekyll
           cat >doc/build/index.html <<'EOF'
@@ -41,6 +40,7 @@ jobs:
           <meta http-equiv="refresh" content="0; url=master/">
           EOF
       - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push'
         with:
           name: docs
           path: doc/build
