@@ -1,6 +1,6 @@
 #!/bin/bash
-# Run the same checks CI runs (lint + tests) against the current Python.
-# Mirrors .github/workflows/lint.yaml and .github/workflows/tests.yaml.
+# Run the same checks CI runs (lint + tests + doc) against the current Python.
+# Mirrors .github/workflows/lint.yaml, tests.yaml, and doc.yaml.
 set -uo pipefail
 
 cd "$(dirname "$0")/.."
@@ -21,6 +21,7 @@ run black      black . --check
 run isort      isort . --check
 run pydocstyle pydocstyle src
 run pytest     python -m pytest -q
+run sphinx     sphinx-build -W -E doc doc/_check
 
 if [ "$fail" -ne 0 ]; then
     echo "One or more checks failed."

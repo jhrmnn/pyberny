@@ -5,6 +5,8 @@
 /.cache/
 /dist/
 /doc/build/
+/doc/_build/
+/doc/_check/
 /htmlcov/
 /poetry.lock
 .claude/mopac/
