@@ -7,6 +7,13 @@ commands CI runs (`flake8`, `black --check`, `isort --check`, `pydocstyle src`,
 `pytest`) against the current Python, so most CI failures are catchable
 locally without waiting for the 5-version matrix.
 
+## CI results
+
+After pushing a PR, subscribe to it with `subscribe_pr_activity` and wait for
+CI results before closing the task. When CI events arrive, investigate failures
+and push fixes. Only mark CI checklist items as done once CI actually passes —
+do not leave them unchecked at end of turn.
+
 ## CHANGELOG
 
 `CHANGELOG.md` is reserved for important user-facing changes — new features,
