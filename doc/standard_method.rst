@@ -112,7 +112,7 @@ For atoms :math:`i,j,k` with central atom :math:`j`, define
    \cos\theta_{ijk} \;=\; \frac{v_1\cdot v_2}{\|v_1\|\,\|v_2\|},\qquad
    0 \le \theta_{ijk} \le \pi.
 
-B-matrix rows (Wilson [Schlegel1984]_; with
+B-matrix rows (Wilson, Decius & Cross [WilsonDeciusCross]_; with
 :math:`\hat e_1=v_1/\|v_1\|`, :math:`\hat e_2=v_2/\|v_2\|`):
 
 .. math::
@@ -161,8 +161,11 @@ Compact B-matrix rows, with
        \frac{(1+B)\,a_1 + A\,a_2}{\|a_1\|\|a_2\|\sin\varphi}
        - \cot\varphi\left[(1+B)\frac{a_2}{\|a_2\|^2} + A\frac{a_1}{\|a_1\|^2}\right].
 
-These formulas are due to Wilson and tabulated in [Schlegel1984]_; PyBerny
-implements them in :func:`berny.coords.Dihedral.eval` and includes the
+These formulas are due to Wilson [WilsonDeciusCross]_; the compact form
+above (avoiding singularities from the chain rule applied to
+:math:`\arccos`) follows Bakken & Helgaker [BakkenHelgaker02]_ and is
+the form Schlegel reviews in [Schlegel1984]_. PyBerny implements them
+in :func:`berny.coords.Dihedral.eval` and includes the
 :math:`\varphi\to 0,\pm\pi` limiting forms there.
 
 :sm:`Note:` the SM appendix simply states that :math:`\varphi` lies in
@@ -229,10 +232,11 @@ constraint if needed.
 :pb:`Not implemented in PyBerny.` Linear-bend handling via dummy atoms is
 open issue
 `#30 <https://github.com/jhrmnn/pyberny/issues/30>`_. PyBerny currently
-just skips dihedrals through nearly-linear angles via a recursive
-"chain through the linear atom" rule (see `Construction of the
-coordinate set`_), which works for most cases but is not equivalent to
-the SM treatment.
+just skips dihedrals through nearly-linear angles (within
+:math:`5°` of :math:`0` or :math:`\pi`; see ``lin_thre`` in
+:func:`berny.coords.get_dihedrals`) via a recursive "chain through the
+linear atom" rule (see `Construction of the coordinate set`_), which
+works for most cases but is not equivalent to the SM treatment.
 
 
 Construction of the coordinate set
@@ -528,12 +532,16 @@ Update :math:`\tau` according to:
   unchanged. See [Fletcher00]_ §5.1 and [DennisSchnabel83]_ ch. 6 for
   the theoretical background of these thresholds.
 
-:pb:`PyBerny note:` PyBerny implements this rule in
-:func:`berny.berny.update_trust` exactly as written above. The
-boundary check :math:`\|\Delta q\|\ge 0.8\tau` is, however, applied as a
-strict-equality test in code (``abs(norm(dq) - trust) < 1e-10``), which
-in practice is satisfied only when the previous step hit the trust
-sphere — equivalent to the SM rule in floating-point arithmetic.
+:pb:`PyBerny deviation:` PyBerny implements the :math:`r<0.25` branch
+exactly as written above, but the upper branch is *stricter* than the
+SM rule. Instead of :math:`\|\Delta q\|\ge 0.8\,\tau`, PyBerny tests
+``abs(norm(dq) - trust) < 1e-10`` (:func:`berny.berny.update_trust`),
+which is true only when the previous step landed essentially exactly
+on the trust sphere — i.e. when the sphere-restricted minimisation was
+actually triggered. Consequently, well-predicted but interior steps
+(e.g. :math:`r>0.75` with :math:`\|\Delta q\|\approx 0.85\,\tau` from a
+pure RFO solve) grow :math:`\tau` under the SM rule but leave it
+unchanged in PyBerny.
 
 
 Hessian update
@@ -629,7 +637,9 @@ PyBerny falls back to the first-iteration estimate
 :math:`x_0 + B_0^- \Delta q_0`
 (:meth:`berny.coords.InternalCoords.update_geom`). This fallback is the
 same as that suggested by [PengJCC96]_ ("in the rare cases in which the
-iteration does not converge").
+iteration does not converge"). Note that PyBerny's threshold is
+:math:`10^{-6}\,\text{Å}` rather than :math:`10^{-6}\,a_0` — i.e.
+~1.89× looser than the SM in absolute terms.
 
 
 Initial Hessian
@@ -791,10 +801,18 @@ Additional references
 In addition to the references defined in :doc:`algorithm`, this page
 cites:
 
+.. [WilsonDeciusCross] Wilson, E. B., Decius, J. C. & Cross, P. C.
+   *Molecular Vibrations: The Theory of Infrared and Raman Vibrational
+   Spectra.* McGraw-Hill (1955). Original source of the Wilson B-matrix
+   and the analytic gradients of stretch / bend / torsion coordinates.
+.. [BakkenHelgaker02] Bakken, V. & Helgaker, T. The efficient
+   optimization of molecular geometries using redundant internal
+   coordinates. *J. Chem. Phys.* 117, 9160 (2002). Source of the
+   compact, non-singular form of the torsion B-matrix rows used here.
 .. [Schlegel1984] Schlegel, H. B. Estimating the Hessian for gradient-type
-   geometry optimizations. *Theor. Chim. Acta* 66, 333 (1984). Source of
+   geometry optimizations. *Theor. Chim. Acta* 66, 333 (1984). Reviews
    the analytic B-matrix derivatives for stretch/bend/torsion
-   coordinates.
+   coordinates (originally due to Wilson [WilsonDeciusCross]_).
 .. [Bofill1994] Bofill, J. M. Updated Hessian matrix and the restricted
    step method for locating transition structures. *J. Comput. Chem.*
    15(1):1 (1994). Source of the MSP / "Bofill" Hessian update.
