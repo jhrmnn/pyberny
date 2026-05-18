@@ -4,7 +4,10 @@ Algorithm
 The optimization algorithm implemented in PyBerny loosely follows the
 "standard method" (SM) described in the appendix of [BirkholzTCA16]_. What
 follows is a summary of that method, more detailed specification when
-necessary, and description of any deviations.
+necessary, and description of any deviations. For a full reference-manual
+treatment of the SM itself, with every equation needed to reimplement it
+and an explicit catalogue of PyBerny's deviations, see
+:doc:`standard_method`.
 
 .. todo:: Make the algorithm `fully conform <https://github.com/jhrmnn/pyberny/issues/29>`_ to the SM.
 
