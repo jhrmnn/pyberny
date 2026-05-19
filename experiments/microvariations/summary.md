@@ -92,3 +92,39 @@ Two practical takeaways for the pyberny benchmark:
 - The single-point step counts in `reference.json` are reasonably representative for `artemisinin`/`vitamin_c`/`mg_porphin`/`easc` (within a couple of steps of the perturbed median) but understate the spread for `estradiol` (8-55 once you wiggle the start) and `codeine` at sigma=0.05.
 - "Converged" is not synonymous with "same minimum": `estradiol`, `mg_porphin`, and `easc` all show seeds that finish at a different conformer of the molecule. A future benchmark gate that compared *final structures* (not just step counts) would catch this.
 
+## Tight-threshold follow-up
+
+The within-basin energy spreads of 50-200 µHa observed at small sigma for
+estradiol and mg_porphin sit ~100x above pyberny's default gradient-implied
+limit (`gradmax = 0.45e-3 a.u.`, `stepmax = 1.8e-3 a.u.`). To test whether
+this is loose-on-soft-modes termination or something else, the four
+suspicious cells were rerun with all four convergence thresholds tightened
+10x (`scripts/microvariation_tight.py`, results in
+`results_tight.json`).
+
+| Cell | Default spread | Tight spread | Default median steps | Tight median steps | Verdict |
+|---|---:|---:|---:|---:|---|
+| vitamin_c sigma=0.001 (control) | 0.08 µHa | **0.00 µHa** | 29 | 34 | Already at noise; tightens cleanly. |
+| mg_porphin sigma=0.001 | 1.3 µHa | **0.05 µHa** | 34 | 42 | Confirms soft-mode termination: ~27x collapse. |
+| mg_porphin sigma=0.005 | 205 µHa | **0.05 µHa** | 35 | 47 | Confirms soft-mode termination: ~4000x collapse, driven by a single outlier seed that had stopped at the wrong amplitude of the macrocycle out-of-plane mode. |
+| estradiol sigma=0.001 | 154 µHa | **154 µHa** | 11 | 11 | Tightening had **zero** effect: all 10 seeds produced bit-identical trajectories. |
+
+The estradiol result is the interesting one. The 10 seeds all converge in
+exactly 11 steps under both the default and 10x-tighter criteria, with
+identical final coordinates and identical 154 µHa cross-seed spread. That
+means *the loose criteria were not the binding constraint*: by step 11 the
+gradient and step magnitudes were already well below the tight thresholds.
+The energy spread is intrinsic to how the sigma=0.001 starting perturbation
+propagates through 11 BFGS steps - presumably the BFGS-projected step in
+estradiol's softest internal coordinate (a phenolic OH or methyl torsion)
+shrinks below `stepmax` quickly enough to stop the optimizer at slightly
+displaced points, with no remaining driver to push them together.
+
+So the 100-200 µHa "loose convergence" picture from the first run is
+**half right**: it applies to mg_porphin (and presumably any molecule with
+genuinely soft macrocycle modes), but for estradiol the spread is a
+BFGS-trajectory phenomenon that the gradient threshold cannot influence.
+Fixing the latter would require either a stricter step criterion that
+specifically responds to the BFGS Hessian's projection onto soft modes, or
+forcing additional polish iterations beyond the standard convergence test.
+
