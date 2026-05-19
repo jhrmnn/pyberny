@@ -196,18 +196,27 @@ def test_dummyspec_place_coincident_hosts():
     # Defensive branch: if i and k happen to coincide (degenerate input,
     # not produced by the normal builder), placing the dummy falls back
     # to the host j position rather than dividing by zero on the axis norm.
+    # ``place_and_jacobians`` mirrors that behaviour and returns the rigid-
+    # attachment Jacobian (∂d/∂r_j = I, others zero).
     spec = _DummySpec(0, 1, 2, np.array([1.0, 0.0, 0.0]))
     coords = np.array(
         [[0.0, 0.0, 0.0], [0.0, 0.0, 1.0], [0.0, 0.0, 0.0]]
     )  # i and k coincide
     placed = spec.place(coords)
     assert np.allclose(placed, coords[1])
+    d, J_i, J_j, J_k = spec.place_and_jacobians(coords)
+    assert np.allclose(d, coords[1])
+    assert np.allclose(J_i, 0)
+    assert np.allclose(J_j, np.eye(3))
+    assert np.allclose(J_k, 0)
 
 
 def test_dummyspec_place_falls_back_when_ref_parallel():
     # If the stored ref ends up parallel to the i-k axis (e.g. after large
     # rotations of the host triple), _perp_from_ref returns None and
-    # _DummySpec.place falls back to a deterministically picked perp.
+    # _DummySpec.place falls back to a deterministically picked perp. The
+    # Jacobian path in that branch snaps to the rigid-attachment-to-j
+    # approximation, avoiding a discontinuous derivative.
     spec = _DummySpec(0, 1, 2, np.array([0.0, 0.0, 1.0]))
     coords = np.array([[0.0, 0.0, -1.0], [0.0, 0.0, 0.0], [0.0, 0.0, 1.0]])
     placed = spec.place(coords)
@@ -215,6 +224,10 @@ def test_dummyspec_place_falls_back_when_ref_parallel():
     # Result must be unit length perpendicular to the z-axis.
     assert abs(np.linalg.norm(offset) - 1.0) < 1e-10
     assert abs(offset[2]) < 1e-10
+    _, J_i, J_j, J_k = spec.place_and_jacobians(coords)
+    assert np.allclose(J_i, 0)
+    assert np.allclose(J_j, np.eye(3))
+    assert np.allclose(J_k, 0)
 
 
 def test_linear_bends_skipped_for_multi_coord_centre():
