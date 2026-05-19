@@ -85,17 +85,20 @@ jobs:
               {"solver": "pyscf", "batch_id": "b5", "molecules": "penicillin_v diisobutyl_phthalate estradiol avobenzone"},
               {"solver": "pyscf", "batch_id": "b6", "molecules": "artemisinin codeine ochratoxin_a maltose"},
           ]
-          # All 30 Baker molecules are small organics; no measured cost data
-          # yet, so split alphabetically into roughly-equal bins. Rebalance
-          # once a baseline run records per-row wall times.
+          # All 30 Baker molecules are small organics. Mopac under PM7
+          # finishes the whole set in ~15s on a CI runner, so one shard is
+          # plenty -- additional shards would be dominated by per-job
+          # setup overhead (~60s of checkout + python + MOPAC install).
+          # Pyscf shards are LPT-balanced on the wall times measured by the
+          # first manual-dispatch baseline run (PR #84), bringing per-shard
+          # spread from 46% of mean (alphabetic) down to 0%.
           baker_mopac = [
-              {"solver": "mopac", "batch_id": "b0", "molecules": "acanil01 acetone acetylene achtar10 allene ammonia benzaldehyde benzene benzidine caffeine difluorobenzene_13 difluoronaphthalene_15 difuropyrazine dimethylpentane disilyl_ether"},
-              {"solver": "mopac", "batch_id": "b1", "molecules": "ethane ethanol furan histidine hydroxybicyclopentane_2 hydroxysulfane menthone mesityl_oxide methylamine naphthalene neopentane pterin trifluorobenzene_135 trisilacyclohexane_135 water"},
+              {"solver": "mopac", "batch_id": "b0", "molecules": "acanil01 acetone acetylene achtar10 allene ammonia benzaldehyde benzene benzidine caffeine difluorobenzene_13 difluoronaphthalene_15 difuropyrazine dimethylpentane disilyl_ether ethane ethanol furan histidine hydroxybicyclopentane_2 hydroxysulfane menthone mesityl_oxide methylamine naphthalene neopentane pterin trifluorobenzene_135 trisilacyclohexane_135 water"},
           ]
           baker_pyscf = [
-              {"solver": "pyscf", "batch_id": "b0", "molecules": "acanil01 acetone acetylene achtar10 allene ammonia benzaldehyde benzene benzidine caffeine"},
-              {"solver": "pyscf", "batch_id": "b1", "molecules": "difluorobenzene_13 difluoronaphthalene_15 difuropyrazine dimethylpentane disilyl_ether ethane ethanol furan histidine hydroxybicyclopentane_2"},
-              {"solver": "pyscf", "batch_id": "b2", "molecules": "hydroxysulfane menthone mesityl_oxide methylamine naphthalene neopentane pterin trifluorobenzene_135 trisilacyclohexane_135 water"},
+              {"solver": "pyscf", "batch_id": "b0", "molecules": "acanil01 benzaldehyde benzene caffeine ethane furan hydroxybicyclopentane_2 naphthalene pterin water"},
+              {"solver": "pyscf", "batch_id": "b1", "molecules": "acetone acetylene achtar10 allene ammonia difluorobenzene_13 difluoronaphthalene_15 difuropyrazine dimethylpentane menthone neopentane"},
+              {"solver": "pyscf", "batch_id": "b2", "molecules": "benzidine disilyl_ether ethanol histidine hydroxysulfane mesityl_oxide methylamine trifluorobenzene_135 trisilacyclohexane_135"},
           ]
           # The "benchmark" key on each shard is consumed below to set the
           # --benchmark flag on benchmark.py and threads through to the
