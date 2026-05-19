@@ -2,3 +2,6 @@ final_coords.json
 final_coords_tight.json
 run.log
 tight_run.log
+# Temporarily ignored while the tight-threshold experiment is mid-run.
+# Will be removed and the final JSON committed once the sweep finishes.
+results_tight.json
