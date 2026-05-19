@@ -181,3 +181,59 @@ direction in Cartesian space toward a deeper basin. The published
 estradiol.xyz starting structure is one of these (basin 4, ~4.86
 kcal/mol above the true PM7 minimum).
 
+## Why pyberny declares basin 3 and basin 4 as converged
+
+`scripts/estradiol_verbose_diag.py` re-runs the offending seeds with
+full pyberny logging plus `debug=True` so we can grab the optimizer
+state at termination. The verbose logs land in
+`experiments/microvariations/verbose_diag/log_*.txt`.
+
+The diagnostics:
+
+| metric                            | basin 4 (high) | basin 3        | basin 0 (deepest, sanity) |
+|-----------------------------------|---------------:|---------------:|--------------------------:|
+| Internal-coord gradient (max)     | 2.0e-6         | 5.0e-7         | 1.9e-5                    |
+| Convergence threshold (max)       | 4.5e-4         | 4.5e-4         | 4.5e-4                    |
+| **Internal grad below threshold** | **220x**       | **910x**       | **23x**                   |
+| **Cartesian gradient norm**       | **3.6e-2 Ha/bohr** | **2.3e-2 Ha/bohr** | **8.9e-5 Ha/bohr**    |
+| Proj. of g_cart onto basin-0 dir  | -6.8e-3        | -4.8e-3        | -6.3e-6                   |
+| Pseudoinverse gap (last step)     | **1.9e+03**    | **1.6e+05**    | (no warning)              |
+| Smallest BFGS Hessian eigenvalue  | 0.002          | **0.0002**     | 0.0008                    |
+
+At a *true* minimum (basin 0), the Cartesian gradient norm is 8.9e-5
+Ha/bohr - genuinely small. At basins 3 and 4 it's ~25-400x larger than
+that and ~50-80x above pyberny's gradient threshold itself - the
+Cartesian gradient is far from zero. **Yet pyberny's internal-coord
+gradient reads 5 orders of magnitude below threshold.**
+
+The culprit is `src/berny/Math.py:15`. The redundant-internal-coord
+gradient transformation goes via `pinv(B B^T)`, where `B` is the
+Wilson B-matrix mapping internals to Cartesians. Pyberny's `pinv`:
+
+```python
+gaps = D[:-1] / D[1:]            # ratios between consecutive singular values
+n = np.flatnonzero(gaps > 1e3)[0]  # first gap above 1000
+D[n + 1 :] = 0                   # zero everything past that gap
+```
+
+When the redundant internals become linearly dependent in some
+Cartesian direction - which is what happens at basins 3 and 4, where
+the verbose log records `Pseudoinverse gap of only: 1.9e+03` (basin 4)
+and `1.6e+05` (basin 3) - that direction is **silently discarded**.
+The 3.6e-2 Ha/bohr Cartesian gradient component along it gets projected
+to zero, leaving an internal gradient of 2e-6. The convergence test
+sees a satisfied criterion and the optimizer halts.
+
+Pyberny *does* log the warning, but does not propagate it into the
+convergence test - so a user reading only `converged=True` would never
+notice the optimization terminated on a rank-deficient projection.
+
+Potential fixes (out of scope here):
+- Add a backup Cartesian-gradient convergence criterion.
+- Refuse to declare convergence whenever `Math.pinv` issues the gap
+  warning at the final step.
+- Investigate the `Transformation did not converge in 20 iterations`
+  step that immediately precedes both pathological convergences -
+  that's the Cartesian<->internal back-transform also struggling on
+  the same singular geometry, and it could be an earlier red flag.
+
