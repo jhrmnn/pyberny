@@ -128,3 +128,56 @@ Fixing the latter would require either a stricter step criterion that
 specifically responds to the BFGS Hessian's projection onto soft modes, or
 forcing additional polish iterations beyond the standard convergence test.
 
+### MOPAC-side tightening does not help either
+
+Re-running estradiol sigma=0.001 with the MOPAC `PRECISE` keyword
+(tightens SCF criterion 100x) had no effect on the cross-seed energy
+spread:
+
+| condition | spread (uHa) | stdev (uHa) |
+|---|---:|---:|
+| default | 154.15 | 46.98 |
+| MOPAC `PRECISE` only | 152.76 | 46.85 |
+| pyberny 10x only | 154.15 | 46.98 |
+| both | 154.29 | 47.02 |
+
+With `PRECISE` each seed's absolute energy shifts by ~4 uHa (the MOPAC
+SCF noise floor) but the cross-seed *pattern* is preserved bit-for-bit.
+So MOPAC's SCF noise is ~4 uHa per call, well below the 154 uHa
+cross-seed spread - confirming the spread is a pyberny BFGS-trajectory
+effect, not MOPAC numerical noise.
+
+## Connecting the estradiol minima by linear interpolation
+
+The default-tolerance run found 5 energy-distinct minima for estradiol
+(clustered at 0.5 kcal/mol tolerance): basin 0 at -0.158928 Ha (deepest,
+6 seeds) up to basin 4 at -0.151174 Ha (the published Birkholz-Schlegel
+start, 28 seeds in this cluster). `scripts/estradiol_minima_path.py`
+Kabsch-aligns one representative seed per basin and runs MOPAC PM7
+single points along straight-line Cartesian interpolations between
+consecutive basins. Plot: `minima_interpolation.png`.
+
+The result is striking: **every segment is monotonically uphill, no
+peaks**. The energy slides smoothly from each deeper basin up to the
+shallower one along the linear path.
+
+Endpoint slopes (numerical derivative of E along the path) clarify what's
+real and what isn't:
+
+| Segment | slope at t=0 (deeper basin) | slope at t=1 (shallower basin) |
+|---|---:|---:|
+| 0 -> 1 | +89 uHa/unit | +1620 uHa/unit |
+| 1 -> 2 | +5 uHa/unit | +5741 uHa/unit |
+| 2 -> 3 | +94 uHa/unit | +3528 uHa/unit |
+| 3 -> 4 | **+1647 uHa/unit** | +3512 uHa/unit |
+
+Basins 0, 1, 2 look like genuine minima (slope ~0 at t=0). Basin 3 has
+a substantial slope leaving toward basin 4 (+1647 uHa/unit), and at t=1
+every segment shows a large positive slope - meaning the higher basins
+sit on shoulders the linear path is still climbing to reach. **Basins 3
+and 4 are very likely not true minima** but points where pyberny's
+gradient criteria were satisfied even though there's a downhill
+direction in Cartesian space toward a deeper basin. The published
+estradiol.xyz starting structure is one of these (basin 4, ~4.86
+kcal/mol above the true PM7 minimum).
+
