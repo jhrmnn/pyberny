@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
-"""Run the Birkholz-Schlegel 2016 benchmark and print a markdown summary.
+"""Run one of the geometry-optimization benchmarks and print a markdown summary.
 
 Usage::
 
-    scripts/benchmark.py --solver pyscf [--molecules NAME ...] [--out PATH]
+    scripts/benchmark.py --solver pyscf [--benchmark NAME]
+                         [--molecules NAME ...] [--out PATH]
     scripts/benchmark.py --solver mopac
 
+``--benchmark`` selects the molecule set under ``tests/data/`` -- either
+``birkholz`` (the Birkholz-Schlegel 2016 19-molecule set, the default) or
+``baker`` (the 30-molecule Baker set from Shajan et al., chemrxiv 2023).
 PySCF mode drives the optimization through ``pyscf.geomopt.berny_solver``
 and requires ``pip install pyberny[benchmark]``; MOPAC mode uses
 :func:`berny.solvers.MopacSolver` (charge and multiplicity from
@@ -61,15 +65,22 @@ from pathlib import Path  # noqa: E402
 
 from berny import Berny, geomlib, optimize  # noqa: E402
 
-DATA = Path(__file__).resolve().parents[1] / 'tests' / 'data' / 'birkholz_schlegel'
+_DATA_ROOT = Path(__file__).resolve().parents[1] / 'tests' / 'data'
+BENCHMARKS = {
+    'birkholz': _DATA_ROOT / 'birkholz_schlegel',
+    'baker': _DATA_ROOT / 'baker_shajan_2023',
+}
+# Default exposed for backward compatibility: external callers (and
+# aggregate_benchmark.py) used to import ``DATA`` directly.
+DATA = BENCHMARKS['birkholz']
 
 
-def run_pyscf(name, ref):
+def run_pyscf(name, ref, data_dir):
     from pyscf import dft, gto, scf
     from pyscf.geomopt import berny_solver
 
     mol = gto.M(
-        atom=str(DATA / f'{name}.xyz'),
+        atom=str(data_dir / f'{name}.xyz'),
         basis=ref['paper_steps_basis'],
         charge=ref['charge'],
         spin=ref['mult'] - 1,
@@ -90,10 +101,10 @@ def run_pyscf(name, ref):
     return converged, state['n']
 
 
-def run_mopac(name, ref):
+def run_mopac(name, ref, data_dir):
     from berny.solvers import MopacSolver
 
-    geom = geomlib.readfile(str(DATA / f'{name}.xyz'))
+    geom = geomlib.readfile(str(data_dir / f'{name}.xyz'))
     # A couple of molecules (raffinose, sphingomyelin) need more than
     # pyberny's default 100-step ceiling under MOPAC PM7 on CI; raise it
     # so they still have a chance to converge and be reported. Both are
@@ -104,11 +115,11 @@ def run_mopac(name, ref):
     return berny.converged, berny._n
 
 
-def run_one(name, ref, kind):
+def run_one(name, ref, kind, data_dir):
     runner = run_pyscf if kind == 'pyscf' else run_mopac
     t0 = time.perf_counter()
     try:
-        converged, n = runner(name, ref)
+        converged, n = runner(name, ref, data_dir)
     except Exception as e:  # noqa: BLE001
         return {
             'name': name,
@@ -201,6 +212,12 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument('--solver', choices=['pyscf', 'mopac'], required=True)
     ap.add_argument(
+        '--benchmark',
+        choices=sorted(BENCHMARKS),
+        default='birkholz',
+        help='which molecule set to run (default: birkholz)',
+    )
+    ap.add_argument(
         '--molecules',
         nargs='*',
         default=None,
@@ -215,7 +232,8 @@ def main(argv=None):
     if args.solver == 'mopac' and not shutil.which('mopac'):
         raise SystemExit('mopac not on PATH')
 
-    reference = json.loads((DATA / 'reference.json').read_text())
+    data_dir = BENCHMARKS[args.benchmark]
+    reference = json.loads((data_dir / 'reference.json').read_text())
     names = args.molecules or sorted(reference)
     missing = [n for n in names if n not in reference]
     if missing:
@@ -224,7 +242,7 @@ def main(argv=None):
     rows = []
     for name in names:
         print(f'==> {name}', flush=True)
-        rows.append(run_one(name, reference[name], args.solver))
+        rows.append(run_one(name, reference[name], args.solver, data_dir))
 
     table = format_table(rows, args.solver, reference)
     errors = format_errors(rows)

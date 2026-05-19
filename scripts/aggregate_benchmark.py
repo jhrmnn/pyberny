@@ -24,7 +24,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from benchmark import (  # noqa: E402
-    DATA,
+    BENCHMARKS,
     REF_STEPS_KEY,
     format_errors,
     format_table,
@@ -127,9 +127,29 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument('--results-dir', type=Path, required=True)
     ap.add_argument('--solvers', nargs='+', required=True)
-    ap.add_argument('--reference', type=Path, default=DATA / 'reference.json')
-    ap.add_argument('--out', type=Path, default=Path('results/summary.md'))
+    ap.add_argument(
+        '--benchmark',
+        choices=sorted(BENCHMARKS),
+        default='birkholz',
+        help='which benchmark these shards belong to (default: birkholz)',
+    )
+    ap.add_argument(
+        '--reference',
+        type=Path,
+        default=None,
+        help='reference.json path (default: derived from --benchmark)',
+    )
+    ap.add_argument(
+        '--out',
+        type=Path,
+        default=None,
+        help='summary path (default: results/summary-<benchmark>.md)',
+    )
     args = ap.parse_args(argv)
+    if args.reference is None:
+        args.reference = BENCHMARKS[args.benchmark] / 'reference.json'
+    if args.out is None:
+        args.out = Path(f'results/summary-{args.benchmark}.md')
 
     reference = json.loads(args.reference.read_text())
     parts = []

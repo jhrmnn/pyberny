@@ -11,7 +11,15 @@ on:
         # fast-mopac drops easc (~90 s on its own) and rebatches the remaining
         # 18 mopac molecules into 3 bins of ~25 s each, so it can serve as
         # the auto-trigger on push/pull_request without holding up CI.
-        options: [fast-mopac, full-mopac, pyscf, both]
+        # baker-* modes target the Shajan et al. 2023 30-molecule set and are
+        # workflow_dispatch only until a baseline is seeded into reference.json.
+        options:
+          - fast-mopac
+          - full-mopac
+          - pyscf
+          - both
+          - baker-mopac
+          - baker-pyscf
         default: fast-mopac
       molecules:
         description: 'Subset of molecule names (space-separated; empty = all)'
@@ -69,11 +77,32 @@ jobs:
               {"solver": "pyscf", "batch_id": "b5", "molecules": "penicillin_v diisobutyl_phthalate estradiol avobenzone"},
               {"solver": "pyscf", "batch_id": "b6", "molecules": "artemisinin codeine ochratoxin_a maltose"},
           ]
+          # All 30 Baker molecules are small organics; no measured cost data
+          # yet, so split alphabetically into roughly-equal bins. Rebalance
+          # once a baseline run records per-row wall times.
+          baker_mopac = [
+              {"solver": "mopac", "batch_id": "b0", "molecules": "acanil01 acetone acetylene achtar10 allene ammonia benzaldehyde benzene benzidine caffeine difluorobenzene_13 difluoronaphthalene_15 difuropyrazine dimethylpentane disilyl_ether"},
+              {"solver": "mopac", "batch_id": "b1", "molecules": "ethane ethanol furan histidine hydroxybicyclopentane_2 hydroxysulfane menthone mesityl_oxide methylamine naphthalene neopentane pterin trifluorobenzene_135 trisilacyclohexane_135 water"},
+          ]
+          baker_pyscf = [
+              {"solver": "pyscf", "batch_id": "b0", "molecules": "acanil01 acetone acetylene achtar10 allene ammonia benzaldehyde benzene benzidine caffeine"},
+              {"solver": "pyscf", "batch_id": "b1", "molecules": "difluorobenzene_13 difluoronaphthalene_15 difuropyrazine dimethylpentane disilyl_ether ethane ethanol furan histidine hydroxybicyclopentane_2"},
+              {"solver": "pyscf", "batch_id": "b2", "molecules": "hydroxysulfane menthone mesityl_oxide methylamine naphthalene neopentane pterin trifluorobenzene_135 trisilacyclohexane_135 water"},
+          ]
+          # The "benchmark" key on each shard is consumed below to set the
+          # --benchmark flag on benchmark.py and threads through to the
+          # aggregate step's --benchmark / artifact-name suffix.
+          for s in mopac_fast + mopac_full + pyscf:
+              s["benchmark"] = "birkholz"
+          for s in baker_mopac + baker_pyscf:
+              s["benchmark"] = "baker"
           by_mode = {
               "fast-mopac": mopac_fast,
               "full-mopac": mopac_full,
               "pyscf": pyscf,
               "both": mopac_full + pyscf,
+              "baker-mopac": baker_mopac,
+              "baker-pyscf": baker_pyscf,
           }
           mode = os.environ["MODE"]
           subset = os.environ["SUBSET"].split()
@@ -91,7 +120,7 @@ jobs:
   benchmark:
     needs: setup
     if: needs.setup.outputs.has_jobs == 'true'
-    name: ${{ matrix.solver }} ${{ matrix.batch_id }}
+    name: ${{ matrix.benchmark }} ${{ matrix.solver }} ${{ matrix.batch_id }}
     runs-on: ubuntu-latest
     timeout-minutes: 350  # under GitHub's 360-min job cap
     strategy:
@@ -131,20 +160,22 @@ jobs:
           fi
       - name: Run batch
         env:
+          BENCHMARK: ${{ matrix.benchmark }}
           SOLVER: ${{ matrix.solver }}
           BATCH: ${{ matrix.batch_id }}
           MOLS: ${{ matrix.molecules }}
         run: |
           mkdir -p results
           read -ra mols <<< "$MOLS"
-          python scripts/benchmark.py --solver "$SOLVER" \
+          python scripts/benchmark.py --benchmark "$BENCHMARK" \
+            --solver "$SOLVER" \
             --molecules "${mols[@]}" \
             --out-json "results/${SOLVER}-${BATCH}.json"
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: benchmark-results-${{ matrix.solver }}-${{ matrix.batch_id }}
+          name: benchmark-results-${{ matrix.benchmark }}-${{ matrix.solver }}-${{ matrix.batch_id }}
           path: results/
 
   aggregate:
@@ -170,10 +201,18 @@ jobs:
         run: pip install -e .
       - name: Aggregate
         # aggregate_benchmark.py silently skips solvers with no shard files,
-        # so passing both unconditionally is safe across every `mode`.
+        # so passing both unconditionally is safe across every `mode`. The
+        # baker-* modes use a different reference.json; pick the right one.
+        env:
+          MODE: ${{ inputs.mode || 'fast-mopac' }}
         run: |
           mkdir -p results
+          case "$MODE" in
+            baker-*) bench=baker ;;
+            *)       bench=birkholz ;;
+          esac
           python scripts/aggregate_benchmark.py \
+            --benchmark "$bench" \
             --results-dir all-results \
             --solvers mopac pyscf
       - name: Upload summary
@@ -181,4 +220,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-summary
-          path: results/summary.md
+          path: results/summary-*.md
