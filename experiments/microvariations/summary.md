@@ -237,3 +237,69 @@ Potential fixes (out of scope here):
   that's the Cartesian<->internal back-transform also struggling on
   the same singular geometry, and it could be an earlier red flag.
 
+## Which internal coordinate becomes problematic, exactly
+
+`scripts/estradiol_internals_diag.py` tracks the B-matrix's singular
+value spectrum at every step and identifies which internal coordinates
+contribute to the discarded null direction.
+
+For both pathological cases the trace is identical and traces to a
+**single near-linear angle**: `Angle(37-36-40)` = **H37-C36-O40, the
+H-C-O angle at estradiol's 17-beta-hydroxyl carbon**.
+
+| Step | basin 4: H-C-O angle | sv[0] of B*B^T | pinv gap index | gap |
+|---|---:|---:|---:|---:|
+| 1-6 | ~110-160 deg | ~1e4 | 125 (natural)  | ~1e13 |
+| 7 (warning) | 176.23 deg | ~3e4 | 125 (natural)  | 6e11 |
+| 8 (final) | **179.59 deg** | **30898** | **0 (spurious)** | 1927 |
+
+| Step | basin 3: H-C-O angle | sv[0] of B*B^T | pinv gap index | gap |
+|---|---:|---:|---:|---:|
+| 1-7 | normal | ~1e4 | 125 (natural)  | ~1e13 |
+| 8 | ~178 deg | ~1.6e6 | 125 (natural)  | 3e10 |
+| 9 (final) | **179.96 deg** | **2.5e6** | **0 (spurious)** | 155387 |
+
+At a true minimum (basin 0), the H-C-O angle stays around 110 deg and
+`sv[0]` stays ~1e4 throughout all 25 steps; the pinv gap is the
+"natural" one at index 125 (after the 3N - 6 = 126 chemical DOFs).
+
+### Mechanism
+
+The BFGS step at the previous iteration pushes H37-C36-O40 past 175
+deg. Two dihedrals (`Dihedral(37-36-40-34)` and `Dihedral(37-36-40-41)`)
+use this near-180 angle as one of their constituent angles. In
+`Dihedral.eval(grad=True)` (`src/berny/coords.py:148-204`) the gradient
+formula contains `1 / norm(a1)`, where `a1 = v1 - dot(v1, ew) * ew` is
+the projection of v1 onto the plane perpendicular to the central bond.
+**When the H-C-O angle goes to 180 deg, `norm(a1) -> 0` and the
+dihedral's B-row gradient magnitude diverges.**
+
+The next iteration computes B*B^T and its top singular value spikes
+into the thousands (or millions). `Math.pinv` then finds a spurious
+gap at index 0 between `sv[0]` (the rogue dihedral) and `sv[1]` (a
+normal-magnitude coordinate), truncates everything past index 0, and
+returns a pseudoinverse that retains only the one uninformative
+direction. The projection of the Cartesian gradient through this
+crippled pseudoinverse yields an internal gradient ~1e-7 Ha/bohr
+- far below threshold - and the convergence test passes.
+
+### What this means for the published Birkholz-Schlegel start
+
+The published estradiol.xyz starts with a normal H-C-O angle, but
+**pyberny's BFGS step magnitude is large enough that small starting
+perturbations can push this angle past 175 deg within a few steps**.
+Once that happens, the dihedral gradient blows up and the pinv
+truncation fires - producing a "converged" structure ~5 kcal/mol above
+the true PM7 minimum.
+
+This is not a soft-mode story. It's a **coordinate-singularity
+catastrophe** triggered by an sp3 carbon being pushed close to
+inversion (planar) by the BFGS path. Robust fixes would include:
+- Special-casing dihedral gradients when adjacent angles approach 180 deg
+  (analogous to the existing `abs(phi) > pi - 1e-6` branch for the
+  dihedral itself).
+- Trust-radius clipping per-coordinate to prevent any individual angle
+  step from crossing 175 deg.
+- Rebuilding the internal-coord set when an angle goes near-linear,
+  removing the now-ill-defined dihedrals.
+
