@@ -32,16 +32,20 @@ from benchmark import (  # noqa: E402
 )
 
 
-def load_rows(results_dir, solver):
+def load_rows(results_dir, solver, benchmark):
     rows = {}
     sources = {}
-    for path in sorted(results_dir.glob(f'{solver}-*.json')):
+    # Filenames are ``<solver>-<benchmark>-<batch_id>.json`` (set by the CI
+    # workflow's Run-batch step). Globbing on both axes lets a single
+    # results directory hold shards from multiple benchmarks side-by-side,
+    # which is what the push/pull_request auto-trigger produces.
+    for path in sorted(results_dir.glob(f'{solver}-{benchmark}-*.json')):
         data = json.loads(path.read_text())
         for row in data['rows']:
             name = row['name']
             if name in rows:
                 raise SystemExit(
-                    f'duplicate row for {solver}/{name}: '
+                    f'duplicate row for {solver}/{benchmark}/{name}: '
                     f'in {sources[name].name} and {path.name}'
                 )
             rows[name] = row
@@ -155,7 +159,7 @@ def main(argv=None):
     parts = []
     failed = []
     for solver in args.solvers:
-        rows_by_name = load_rows(args.results_dir, solver)
+        rows_by_name = load_rows(args.results_dir, solver, args.benchmark)
         if not rows_by_name:
             continue
         parts.append(f'## {solver}\n\n' + render(reference, solver, rows_by_name))
@@ -164,7 +168,12 @@ def main(argv=None):
             for n, reason in violations(reference, solver, rows_by_name)
         )
 
-    summary = '\n'.join(parts)
+    # Skip writing the summary entirely if no shards for this benchmark were
+    # produced -- otherwise a multi-benchmark CI run that only exercised one
+    # set would leave an empty summary-<other>.md artifact.
+    if not parts:
+        return 0
+    summary = f'# {args.benchmark}\n\n' + '\n'.join(parts)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(summary)
     step_summary = os.environ.get('GITHUB_STEP_SUMMARY')
