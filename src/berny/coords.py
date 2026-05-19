@@ -273,6 +273,50 @@ class _DummySpec(object):
             perp = _pick_perp(axis)
         return coords[self.j] + _DUMMY_OFFSET * perp
 
+    def place_and_jacobians(self, coords):
+        """Place the dummy and return its Jacobians w.r.t. the three host atoms.
+
+        Returns ``(d, J_i, J_j, J_k)`` where each ``J_*`` is the 3×3 matrix
+        ``∂d/∂r_*`` evaluated at the current ``coords``. ``J_j`` is always
+        the identity (the dummy is anchored to ``r_j``); ``J_i = -J_k``
+        (sign change from ``w = r_k - r_i``). Used by ``B_matrix`` to
+        propagate gradient contributions on the dummy back onto the host
+        atoms via the chain rule, in place of the older frozen-dummy
+        approximation.
+
+        In the degenerate fallback paths (coincident hosts, reference
+        parallel to the axis) we report the dummy as rigidly attached to
+        ``r_j`` (zero Jacobians on ``i`` and ``k``). Those branches only
+        fire on pathological inputs and the discontinuity is preferable to
+        propagating a near-singular Jacobian.
+        """
+        ri = coords[self.i]
+        rj = coords[self.j]
+        rk = coords[self.k]
+        I3 = np.eye(3)
+        Z3 = np.zeros((3, 3))
+        w = rk - ri
+        n_w = norm(w)
+        if n_w < 1e-8:
+            return rj.copy(), Z3, I3, Z3
+        ahat = w / n_w
+        a_dot_ref = float(np.dot(ahat, self.ref))
+        q = self.ref - a_dot_ref * ahat
+        n_q = norm(q)
+        if n_q < 1e-8:
+            return rj + _DUMMY_OFFSET * _pick_perp(ahat), Z3, I3, Z3
+        phat = q / n_q
+        d = rj + _DUMMY_OFFSET * phat
+        P_a = I3 - np.outer(ahat, ahat)
+        P_p = I3 - np.outer(phat, phat)
+        # ∂q/∂r_k = -(â qᵀ + (â·ref) P_a) / |w|
+        dq_drk = -(np.outer(ahat, q) + a_dot_ref * P_a) / n_w
+        # ∂p̂/∂q = P_p / |q|; chain to r_k
+        dp_drk = (P_p / n_q) @ dq_drk
+        J_k = _DUMMY_OFFSET * dp_drk
+        J_i = -J_k
+        return d, J_i, I3, J_k
+
 
 def _find_linear_triples(bondmatrix, coords):
     """Yield (j, i, k) for every sp-like near-linear triple ``i-j-k``.
@@ -556,18 +600,28 @@ class InternalCoords:
         geom = geom.supercell()
         n_real = len(geom)
         coords = self._all_coords(geom)
+        # Pre-compute Jacobians of each dummy w.r.t. its three host atoms
+        # so we can chain gradient contributions on dummy indices back onto
+        # real atoms. ``J_j`` is always identity (the dummy is anchored to
+        # ``r_j``); ``J_i`` and ``J_k`` carry the axis-bending sensitivity.
+        # Without this chain-rule term, small steps in linear-bend angle
+        # coordinates can amplify into huge Cartesian displacements via
+        # the pseudoinverse (see issue #23 large molecule).
+        jac = [
+            (spec.i, spec.j, spec.k) + spec.place_and_jacobians(coords[:n_real])[1:]
+            for spec in self._dummy_specs
+        ]
         B = np.zeros((len(self), n_real, 3))
         for i, coord in enumerate(self):
             _, grads = coord.eval(coords, grad=True)
             for k, grad in zip(coord.idx, grads):
                 if k < n_real:
                     B[i, k % n_real] += grad
-                # Dummy contributions are discarded under the frozen-dummy
-                # approximation: the dummy is treated as a rigid attachment to
-                # its host atoms, so its motion is implicit and need not be
-                # propagated through the B-matrix. After each Cartesian step,
-                # _all_coords() refreshes the dummy positions from the new
-                # real coordinates.
+                else:
+                    hi, hj, hk, J_i, J_j, J_k = jac[k - n_real]
+                    B[i, hi] += J_i.T @ grad
+                    B[i, hj] += J_j.T @ grad
+                    B[i, hk] += J_k.T @ grad
         return B.reshape(len(self), 3 * n_real)
 
     def update_geom(self, geom, q, dq, B_inv, log=lambda _: None):

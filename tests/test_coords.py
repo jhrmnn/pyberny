@@ -100,6 +100,62 @@ def test_linear_bends_acetylene():
     _no_singular_angle(coords, geom)
 
 
+def test_dummyspec_analytical_jacobian_matches_finite_diff():
+    # The analytical 3×3 ``∂d/∂r_a`` matrices (a ∈ {i, j, k}) returned by
+    # _DummySpec.place_and_jacobians must agree with central finite
+    # differences of place(), to within FD precision. Without this, the
+    # chain-rule propagation in B_matrix would project gradients onto the
+    # wrong directions and explode the Cartesian step in update_geom
+    # (regression observed on the issue-23 large molecule).
+    rng = np.random.default_rng(7)
+    h = 1e-6
+    for _ in range(5):
+        ri = rng.normal(size=3)
+        rj = rng.normal(size=3)
+        # roughly along the i-j axis through j, plus noise (near-linear triple)
+        rk = 2 * rj - ri + 0.1 * rng.normal(size=3)
+        ref = rng.normal(size=3)
+        ref /= np.linalg.norm(ref)
+        spec = _DummySpec(0, 1, 2, ref)
+        coords = np.array([ri, rj, rk])
+        _, J_i, J_j, J_k = spec.place_and_jacobians(coords)
+        for atom_id, J in [(0, J_i), (1, J_j), (2, J_k)]:
+            for alpha in range(3):
+                c_plus = coords.copy()
+                c_plus[atom_id, alpha] += h
+                c_minus = coords.copy()
+                c_minus[atom_id, alpha] -= h
+                num = (spec.place(c_plus) - spec.place(c_minus)) / (2 * h)
+                assert np.allclose(J[:, alpha], num, atol=1e-7)
+
+
+def test_b_matrix_chain_rule_matches_finite_diff():
+    # End-to-end check: for a linear molecule with dummies, the analytical
+    # B-matrix row must equal the finite-differenced gradient of the
+    # composite function q(r_real) = c(r_real, D(r_real)), where the
+    # dummy position D is refreshed from the real atoms. Without the
+    # chain-rule term in B_matrix, small dq → huge dcart amplification in
+    # the pseudoinverse projection.
+    from berny.coords import angstrom as _ang
+
+    geom = Geometry(['O', 'C', 'O'], [[0, 0, -1.16], [0, 0, 0], [0, 0, 1.16]])
+    geom.coords[1, 0] += 0.05  # slight bend so angles are away from exactly 90°
+    coords = InternalCoords(geom)
+    B = coords.B_matrix(geom)
+    h = 1e-6
+    B_num = np.zeros_like(B)
+    for atom in range(len(geom)):
+        for alpha in range(3):
+            g_plus = geom.copy()
+            g_plus.coords[atom, alpha] += h
+            g_minus = geom.copy()
+            g_minus.coords[atom, alpha] -= h
+            B_num[:, atom * 3 + alpha] = (
+                coords.eval_geom(g_plus) - coords.eval_geom(g_minus)
+            ) / (2 * h * _ang)
+    assert np.allclose(B, B_num, atol=1e-7)
+
+
 def test_linear_bends_dummies_perpendicular_to_axis():
     # Each dummy should sit perpendicular to the host i-k axis, displaced
     # from the host j atom.
