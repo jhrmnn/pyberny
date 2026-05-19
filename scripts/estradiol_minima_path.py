@@ -115,7 +115,7 @@ def main():
     for i in range(len(BASINS) - 1):
         a = aligned[i]
         b = aligned[i + 1]
-        print(f'\nSegment {i}: {BASINS[i]["label"]} -> {BASINS[i+1]["label"]}')
+        print(f'\nSegment {i}: {BASINS[i]["label"]} -> {BASINS[i + 1]["label"]}')
         for j, t in enumerate(np.linspace(0, 1, POINTS_PER_SEGMENT)):
             coords = (1 - t) * a + t * b
             energy = mopac_single_point(species, coords)
