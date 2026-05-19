@@ -86,7 +86,9 @@ def run_one(geom, ref, maxsteps):
 
 def parse_args(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument('--out', type=Path, default=REPO_ROOT / 'experiments' / 'microvariations')
+    ap.add_argument(
+        '--out', type=Path, default=REPO_ROOT / 'experiments' / 'microvariations'
+    )
     ap.add_argument('--molecules', nargs='+', default=DEFAULT_MOLECULES)
     ap.add_argument('--sigmas', nargs='+', type=float, default=DEFAULT_SIGMAS)
     ap.add_argument('--seeds', type=int, default=DEFAULT_SEEDS)
@@ -109,15 +111,17 @@ def summarize(rows, molecules, sigmas):
             continue
         by_cell.setdefault((r['molecule'], r['sigma']), []).append(r)
 
+    n_seeds = len({r['seed'] for r in rows if r['sigma'] != 0})
     out = []
     out.append('# Geometric micro-variation experiment\n')
     out.append(
-        'Each row reports the optimizer outcome for one molecule under Gaussian '
-        'noise of standard deviation `sigma` (angstrom) applied to every '
-        'Cartesian coordinate of the Birkholz-Schlegel starting geometry. The '
-        'PES is MOPAC PM7 (the same backend that produced the '
-        '`mopac_pm7_steps` column of `tests/data/birkholz_schlegel/reference.json`). '
-        f'Each non-zero sigma cell aggregates {len(set(r["seed"] for r in rows if r["sigma"] != 0))} seeds.\n'
+        'Each row reports the optimizer outcome for one molecule under '
+        'Gaussian noise of standard deviation `sigma` (angstrom) applied to '
+        'every Cartesian coordinate of the Birkholz-Schlegel starting '
+        'geometry. The PES is MOPAC PM7 (the same backend that produced the '
+        '`mopac_pm7_steps` column of '
+        '`tests/data/birkholz_schlegel/reference.json`). Each non-zero sigma '
+        f'cell aggregates {n_seeds} seeds.\n'
     )
     out.append(
         '`conv` is the fraction of seeds that converged within `--maxsteps`. '
@@ -133,11 +137,14 @@ def summarize(rows, molecules, sigmas):
         if base is None:
             continue
         out.append(f'\n## {mol}\n')
+        conv_word = 'converged' if base['converged'] else 'did not converge'
         out.append(
-            f'Baseline (sigma=0): {"converged" if base["converged"] else "did not converge"} '
-            f'in {base["steps"]} steps, E = {base["energy"]:.3f} hartree.\n'
+            f'Baseline (sigma=0): {conv_word} in {base["steps"]} steps, '
+            f'E = {base["energy"]:.3f} hartree.\n'
         )
-        out.append('| sigma (A) | conv | steps (min/max) | max dE (kcal/mol) | max RMSD (A) |')
+        out.append(
+            '| sigma (A) | conv | steps (min/max) | max dE (kcal/mol) | max RMSD (A) |'
+        )
         out.append('|---:|---:|---:|---:|---:|')
         for sigma in sigmas:
             cell = by_cell.get((mol, sigma), [])
@@ -150,11 +157,17 @@ def summarize(rows, molecules, sigmas):
                 steps = [c['steps'] for c in converged]
                 steps_s = f'{int(statistics.median(steps))} ({min(steps)}/{max(steps)})'
                 if base['energy'] is not None:
-                    de = [abs(c['energy'] - base['energy']) * 627.503 for c in converged]
+                    de = [
+                        abs(c['energy'] - base['energy']) * 627.503 for c in converged
+                    ]
                     de_s = f'{max(de):.3f}'
                 else:
                     de_s = '-'
-                rmsds = [c['rmsd_vs_baseline'] for c in converged if c['rmsd_vs_baseline'] is not None]
+                rmsds = [
+                    c['rmsd_vs_baseline']
+                    for c in converged
+                    if c['rmsd_vs_baseline'] is not None
+                ]
                 rmsd_s = f'{max(rmsds):.4f}' if rmsds else '-'
             else:
                 steps_s = '-'
@@ -175,6 +188,67 @@ def summarize(rows, molecules, sigmas):
         'baseline column tells you what the "intended" minimum was.\n'
     )
     return '\n'.join(out) + '\n'
+
+
+def _run_cell(mol, sigma, seed, ref, maxsteps, baseline_geoms):
+    """Execute one (mol, sigma, seed) run, returning the row dict."""
+    base_geom = geomlib.readfile(str(DATA / f'{mol}.xyz'))
+    geom = base_geom if sigma == 0.0 else perturb(base_geom, sigma, seed)
+    t0 = time.perf_counter()
+    try:
+        converged, n_steps, final_geom, energy = run_one(geom, ref, maxsteps)
+        error = None
+    except Exception as e:  # noqa: BLE001
+        converged, n_steps, final_geom, energy = False, None, None, None
+        error = f'{type(e).__name__}: {e}'
+    wall = time.perf_counter() - t0
+
+    rmsd = None
+    final_coords = None
+    if final_geom is not None:
+        final_coords = final_geom.coords.tolist()
+        if sigma == 0.0:
+            baseline_geoms[mol] = final_geom.coords
+        elif mol in baseline_geoms:
+            rmsd = kabsch_rmsd(baseline_geoms[mol], final_geom.coords)
+
+    return {
+        'molecule': mol,
+        'sigma': sigma,
+        'seed': seed,
+        'converged': converged,
+        'steps': n_steps,
+        'energy': energy,
+        'rmsd_vs_baseline': rmsd,
+        'wall': wall,
+        'error': error,
+        'final_coords': final_coords,
+    }
+
+
+def _persist(args, rows):
+    """Write the incremental results.json and final_coords.json."""
+    slim = [{k: v for k, v in r.items() if k != 'final_coords'} for r in rows]
+    with open(args.out / 'results.json', 'w') as f:
+        json.dump(
+            {
+                'molecules': args.molecules,
+                'sigmas': args.sigmas,
+                'seeds': args.seeds,
+                'maxsteps': args.maxsteps,
+                'rows': slim,
+            },
+            f,
+            indent=2,
+        )
+    with open(args.out / 'final_coords.json', 'w') as f:
+        json.dump(
+            {
+                f'{r["molecule"]}|{r["sigma"]}|{r["seed"]}': r['final_coords']
+                for r in rows
+            },
+            f,
+        )
 
 
 def main(argv=None):
@@ -207,75 +281,25 @@ def main(argv=None):
         key = (mol, sigma, seed)
         if key in existing:
             row = existing[key]
-            print(f'[{i}/{len(plan)}] {mol} sigma={sigma} seed={seed}: cached', flush=True)
+            print(
+                f'[{i}/{len(plan)}] {mol} sigma={sigma} seed={seed}: cached',
+                flush=True,
+            )
             rows.append(row)
             if sigma == 0.0 and row.get('final_coords') is not None:
                 baseline_geoms[mol] = np.array(row['final_coords'])
             continue
 
-        ref = reference[mol]
-        base_geom = geomlib.readfile(str(DATA / f'{mol}.xyz'))
-        geom = base_geom if sigma == 0.0 else perturb(base_geom, sigma, seed)
-        t0 = time.perf_counter()
-        try:
-            converged, n_steps, final_geom, energy = run_one(geom, ref, args.maxsteps)
-            error = None
-        except Exception as e:  # noqa: BLE001
-            converged, n_steps, final_geom, energy = False, None, None, None
-            error = f'{type(e).__name__}: {e}'
-        wall = time.perf_counter() - t0
-
-        rmsd = None
-        final_coords = None
-        if final_geom is not None:
-            final_coords = final_geom.coords.tolist()
-            if sigma == 0.0:
-                baseline_geoms[mol] = final_geom.coords
-            elif mol in baseline_geoms:
-                rmsd = kabsch_rmsd(baseline_geoms[mol], final_geom.coords)
-
-        row = {
-            'molecule': mol,
-            'sigma': sigma,
-            'seed': seed,
-            'converged': converged,
-            'steps': n_steps,
-            'energy': energy,
-            'rmsd_vs_baseline': rmsd,
-            'wall': wall,
-            'error': error,
-            'final_coords': final_coords,
-        }
+        row = _run_cell(mol, sigma, seed, reference[mol], args.maxsteps, baseline_geoms)
         rows.append(row)
         elapsed = time.perf_counter() - t_start
         print(
             f'[{i}/{len(plan)}] {mol} sigma={sigma} seed={seed}: '
-            f'converged={converged} steps={n_steps} wall={wall:.1f}s '
-            f'(total {elapsed:.0f}s)',
+            f'converged={row["converged"]} steps={row["steps"]} '
+            f'wall={row["wall"]:.1f}s (total {elapsed:.0f}s)',
             flush=True,
         )
-
-        # Persist after every row so a crash mid-run is recoverable.
-        slim = [{k: v for k, v in r.items() if k != 'final_coords'} for r in rows]
-        with open(args.out / 'results.json', 'w') as f:
-            json.dump(
-                {
-                    'molecules': args.molecules,
-                    'sigmas': args.sigmas,
-                    'seeds': args.seeds,
-                    'maxsteps': args.maxsteps,
-                    'rows': slim,
-                },
-                f,
-                indent=2,
-            )
-        # Keep the heavy final_coords payload in a side file so summary writers
-        # can ignore it.
-        with open(args.out / 'final_coords.json', 'w') as f:
-            json.dump(
-                {f'{r["molecule"]}|{r["sigma"]}|{r["seed"]}': r['final_coords'] for r in rows},
-                f,
-            )
+        _persist(args, rows)
 
     summary = summarize(rows, args.molecules, args.sigmas)
     (args.out / 'summary.md').write_text(summary)
