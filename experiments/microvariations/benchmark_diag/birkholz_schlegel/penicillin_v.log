@@ -1,0 +1,1265 @@
+0 Internal coordinates:
+0 * Number of fragments: 1
+0 * Number of internal coordinates: 239
+0 * Number of strong bonds: 44
+0 * Number of strong angles: 78
+0 * Number of strong dihedrals: 117
+1 Energy: -0.0145792131671
+1 Minimization on sphere was performed:
+1 * Trust radius: 0.3
+1 * Number of negative eigenvalues: 0
+1 * Lowest eigenvalue: 0.00524
+1 * lambda: -1.11
+1 Quadratic step: RMS: 0.0194, max: 0.0791
+1 * Predicted energy change: -0.11
+1 Total step: RMS: 0.0194, max: 0.0791
+1 Perfect transformation to cartesians in 7 iterations
+1 * RMS(dcart): 2.04e-07, RMS(dq): 2e-07
+1 Convergence criteria:
+1 * Gradient RMS: 0.0261 > 0.00015 => no
+1 * Gradient maximum: 0.129 > 0.00045 => no
+1 * Minimization on sphere: Minimization on sphere => no
+2 Energy: -0.0909700670754
+2 Hessian update information:
+2 * Change: RMS: 0.00359, max: 0.0649
+2 Trust update: Fletcher's parameter: 0.696
+2 Linear interpolation:
+2 * Energies: -0.090970067, -0.014579213
+2 * Derivatives: 0.0449, 0.119
+2 * No fit succeeded, staying in new point
+2 Minimization on sphere was performed:
+2 * Trust radius: 0.3
+2 * Number of negative eigenvalues: 0
+2 * Lowest eigenvalue: 0.00524
+2 * lambda: -0.372
+2 Quadratic step: RMS: 0.0194, max: 0.123
+2 * Predicted energy change: -0.0439
+2 Total step: RMS: 0.0194, max: 0.123
+2 Perfect transformation to cartesians in 5 iterations
+2 * RMS(dcart): 3.4e-07, RMS(dq): 1.19e-07
+2 Convergence criteria:
+2 * Gradient RMS: 0.0123 > 0.00015 => no
+2 * Gradient maximum: 0.0823 > 0.00045 => no
+2 * Minimization on sphere: Minimization on sphere => no
+3 Energy: -0.125315687734
+3 Hessian update information:
+3 * Change: RMS: 0.00235, max: 0.178
+3 Trust update: Fletcher's parameter: 0.783
+3 Linear interpolation:
+3 * Energies: -0.12531569, -0.090970067
+3 * Derivatives: 0.0134, 0.0542
+3 * Quartic interpolation was performed: t = -0.296
+3 * Interpolated energy: -0.12731186
+3 Minimization on sphere was performed:
+3 * Trust radius: 0.6
+3 * Number of negative eigenvalues: 0
+3 * Lowest eigenvalue: 0.00524
+3 * lambda: -0.0712
+3 Quadratic step: RMS: 0.0388, max: 0.162
+3 * Predicted energy change: -0.0374
+3 Total step: RMS: 0.0415, max: 0.169
+3 Perfect transformation to cartesians in 8 iterations
+3 * RMS(dcart): 3.22e-07, RMS(dq): 2e-07
+3 Convergence criteria:
+3 * Gradient RMS: 0.00657 > 0.00015 => no
+3 * Gradient maximum: 0.0265 > 0.00045 => no
+3 * Minimization on sphere: Minimization on sphere => no
+4 Energy: -0.158509457325
+4 Hessian update information:
+4 * Change: RMS: 0.000873, max: 0.0346
+4 Trust update: Fletcher's parameter: 0.888
+4 Linear interpolation:
+4 * Energies: -0.15850946, -0.12531569
+4 * Derivatives: 0.0158, 0.0519
+4 * Quartic interpolation was performed: t = -0.517
+4 * Interpolated energy: -0.16249735
+4 Pure RFO step was performed:
+4 * Trust radius: 1.2
+4 * Number of negative eigenvalues: 0
+4 * Lowest eigenvalue: 0.00524
+4 * lambda: -0.0237
+4 Quadratic step: RMS: 0.0407, max: 0.188
+4 * Predicted energy change: -0.0166
+4 Total step: RMS: 0.0556, max: 0.275
+4 Perfect transformation to cartesians in 11 iterations
+4 * RMS(dcart): 4.19e-07, RMS(dq): 2.96e-07
+4 Convergence criteria:
+4 * Gradient RMS: 0.00325 > 0.00015 => no
+4 * Gradient maximum: 0.0178 > 0.00045 => no
+4 * Step RMS: 0.0556 > 0.0012 => no
+4 * Step maximum: 0.272 > 0.0018 => no
+5 Energy: -0.179054649938
+5 Hessian update information:
+5 * Change: RMS: 0.000721, max: 0.0215
+5 Trust update: Fletcher's parameter: 1.24
+5 Linear interpolation:
+5 * Energies: -0.17905465, -0.15850946
+5 * Derivatives: 0.0134, 0.0276
+5 * Quartic interpolation was performed: t = -0.898
+5 * Interpolated energy: -0.18509929
+5 Pure RFO step was performed:
+5 * Trust radius: 1.2
+5 * Number of negative eigenvalues: 0
+5 * Lowest eigenvalue: 0.00465
+5 * lambda: -0.0171
+5 Quadratic step: RMS: 0.0404, max: 0.241
+5 * Predicted energy change: -0.0119
+5 Total step: RMS: 0.081, max: 0.424
+5 Perfect transformation to cartesians in 15 iterations
+5 * RMS(dcart): 4.93e-07, RMS(dq): 2.84e-07
+5 Convergence criteria:
+5 * Gradient RMS: 0.00231 > 0.00015 => no
+5 * Gradient maximum: 0.00992 > 0.00045 => no
+5 * Step RMS: 0.081 > 0.0012 => no
+5 * Step maximum: 0.425 > 0.0018 => no
+6 Energy: -0.197720361496
+6 Hessian update information:
+6 * Change: RMS: 0.000509, max: 0.0171
+6 Trust update: Fletcher's parameter: 1.57
+6 Linear interpolation:
+6 * Energies: -0.19772036, -0.17905465
+6 * Derivatives: 0.0117, 0.0246
+6 * Quartic interpolation was performed: t = -0.642
+6 * Interpolated energy: -0.2016288
+6 Pure RFO step was performed:
+6 * Trust radius: 1.2
+6 * Number of negative eigenvalues: 0
+6 * Lowest eigenvalue: 0.00397
+6 * lambda: -0.0121
+6 Quadratic step: RMS: 0.0381, max: 0.283
+6 * Predicted energy change: -0.00815
+6 Total step: RMS: 0.083, max: 0.534
+6 Perfect transformation to cartesians in 14 iterations
+6 * RMS(dcart): 4.72e-07, RMS(dq): 2.35e-07
+6 Convergence criteria:
+6 * Gradient RMS: 0.00248 > 0.00015 => no
+6 * Gradient maximum: 0.00996 > 0.00045 => no
+6 * Step RMS: 0.083 > 0.0012 => no
+6 * Step maximum: 0.536 > 0.0018 => no
+7 Energy: -0.209491269364
+7 Hessian update information:
+7 * Change: RMS: 0.000651, max: 0.0249
+7 Trust update: Fletcher's parameter: 1.45
+7 Linear interpolation:
+7 * Energies: -0.20949127, -0.19772036
+7 * Derivatives: 0.00474, 0.0179
+7 * Quartic interpolation was performed: t = -0.283
+7 * Interpolated energy: -0.21017464
+7 Pure RFO step was performed:
+7 * Trust radius: 1.2
+7 * Number of negative eigenvalues: 0
+7 * Lowest eigenvalue: 0.00399
+7 * lambda: -0.00774
+7 Quadratic step: RMS: 0.0347, max: 0.165
+7 * Predicted energy change: -0.00499
+7 Total step: RMS: 0.0509, max: 0.317
+7 Perfect transformation to cartesians in 9 iterations
+7 * RMS(dcart): 4.44e-07, RMS(dq): 2.38e-07
+7 Convergence criteria:
+7 * Gradient RMS: 0.00237 > 0.00015 => no
+7 * Gradient maximum: 0.0113 > 0.00045 => no
+7 * Step RMS: 0.0509 > 0.0012 => no
+7 * Step maximum: 0.319 > 0.0018 => no
+8 Energy: -0.214836678072
+8 Hessian update information:
+8 * Change: RMS: 0.00112, max: 0.0887
+8 Trust update: Fletcher's parameter: 1.07
+8 Linear interpolation:
+8 * Energies: -0.21483668, -0.20949127
+8 * Derivatives: 0.00198, 0.00863
+8 * Quartic interpolation was performed: t = -0.283
+8 * Interpolated energy: -0.21511749
+8 Pure RFO step was performed:
+8 * Trust radius: 1.2
+8 * Number of negative eigenvalues: 0
+8 * Lowest eigenvalue: 0.00311
+8 * lambda: -0.00642
+8 Quadratic step: RMS: 0.0364, max: 0.157
+8 * Predicted energy change: -0.00423
+8 Total step: RMS: 0.0473, max: 0.219
+8 Perfect transformation to cartesians in 8 iterations
+8 * RMS(dcart): 1.38e-07, RMS(dq): 6.99e-08
+8 Convergence criteria:
+8 * Gradient RMS: 0.00199 > 0.00015 => no
+8 * Gradient maximum: 0.0163 > 0.00045 => no
+8 * Step RMS: 0.0473 > 0.0012 => no
+8 * Step maximum: 0.219 > 0.0018 => no
+9 Energy: -0.21904217191
+9 Hessian update information:
+9 * Change: RMS: 0.000982, max: 0.0387
+9 Trust update: Fletcher's parameter: 0.995
+9 Linear interpolation:
+9 * Energies: -0.21904217, -0.21483668
+9 * Derivatives: 0.00199, 0.00646
+9 * Quartic interpolation was performed: t = -0.462
+9 * Interpolated energy: -0.21949973
+9 Pure RFO step was performed:
+9 * Trust radius: 1.2
+9 * Number of negative eigenvalues: 0
+9 * Lowest eigenvalue: 0.00286
+9 * lambda: -0.00479
+9 Quadratic step: RMS: 0.0337, max: 0.15
+9 * Predicted energy change: -0.00305
+9 Total step: RMS: 0.052, max: 0.251
+9 Perfect transformation to cartesians in 6 iterations
+9 * RMS(dcart): 7.08e-07, RMS(dq): 3.93e-07
+9 Convergence criteria:
+9 * Gradient RMS: 0.00137 > 0.00015 => no
+9 * Gradient maximum: 0.00739 > 0.00045 => no
+9 * Step RMS: 0.0521 > 0.0012 => no
+9 * Step maximum: 0.247 > 0.0018 => no
+10 Energy: -0.223132829644
+10 Hessian update information:
+10 * Change: RMS: 0.00118, max: 0.117
+10 Trust update: Fletcher's parameter: 1.34
+10 Linear interpolation:
+10 * Energies: -0.22313283, -0.21904217
+10 * Derivatives: 0.00296, 0.00501
+10 * Quartic interpolation was performed: t = -0.86
+10 * Interpolated energy: -0.2244924
+10 Pure RFO step was performed:
+10 * Trust radius: 1.2
+10 * Number of negative eigenvalues: 0
+10 * Lowest eigenvalue: 0.00143
+10 * lambda: -0.00569
+10 Quadratic step: RMS: 0.0393, max: 0.151
+10 * Predicted energy change: -0.00389
+10 Total step: RMS: 0.0794, max: 0.361
+10 Perfect transformation to cartesians in 8 iterations
+10 * RMS(dcart): 7.04e-07, RMS(dq): 4.57e-07
+10 Convergence criteria:
+10 * Gradient RMS: 0.00148 > 0.00015 => no
+10 * Gradient maximum: 0.00898 > 0.00045 => no
+10 * Step RMS: 0.0797 > 0.0012 => no
+10 * Step maximum: 0.346 > 0.0018 => no
+11 Energy: -0.226193340908
+11 Hessian update information:
+11 * Change: RMS: 0.00092, max: 0.0319
+11 Trust update: Fletcher's parameter: 0.786
+11 Linear interpolation:
+11 * Energies: -0.22619334, -0.22313283
+11 * Derivatives: -0.00436, 0.00735
+11 * Quartic interpolation was performed: t = 0.222
+11 * Interpolated energy: -0.22665501
+11 Pure RFO step was performed:
+11 * Trust radius: 1.2
+11 * Number of negative eigenvalues: 0
+11 * Lowest eigenvalue: 0.00408
+11 * lambda: -0.0028
+11 Quadratic step: RMS: 0.0202, max: 0.103
+11 * Predicted energy change: -0.00153
+11 Total step: RMS: 0.0239, max: 0.121
+11 Perfect transformation to cartesians in 5 iterations
+11 * RMS(dcart): 6.18e-07, RMS(dq): 3.55e-07
+11 Convergence criteria:
+11 * Gradient RMS: 0.0018 > 0.00015 => no
+11 * Gradient maximum: 0.0145 > 0.00045 => no
+11 * Step RMS: 0.0239 > 0.0012 => no
+11 * Step maximum: 0.12 > 0.0018 => no
+12 Energy: -0.227784727722
+12 Hessian update information:
+12 * Change: RMS: 0.000776, max: 0.0267
+12 Trust update: Fletcher's parameter: 1.04
+12 Linear interpolation:
+12 * Energies: -0.22778473, -0.22619334
+12 * Derivatives: -0.00082, 0.00409
+12 * Quartic interpolation was performed: t = 0.175
+12 * Interpolated energy: -0.22785652
+12 Pure RFO step was performed:
+12 * Trust radius: 1.2
+12 * Number of negative eigenvalues: 0
+12 * Lowest eigenvalue: 0.00405
+12 * lambda: -0.00116
+12 Quadratic step: RMS: 0.0152, max: 0.0852
+12 * Predicted energy change: -0.000613
+12 Total step: RMS: 0.0146, max: 0.0841
+12 Perfect transformation to cartesians in 5 iterations
+12 * RMS(dcart): 7.67e-08, RMS(dq): 4.41e-08
+12 Convergence criteria:
+12 * Gradient RMS: 0.00104 > 0.00015 => no
+12 * Gradient maximum: 0.00687 > 0.00045 => no
+12 * Step RMS: 0.0146 > 0.0012 => no
+12 * Step maximum: 0.0839 > 0.0018 => no
+13 Energy: -0.228356326583
+13 Hessian update information:
+13 * Change: RMS: 0.000811, max: 0.0285
+13 Trust update: Fletcher's parameter: 0.933
+13 Linear interpolation:
+13 * Energies: -0.22835633, -0.22778473
+13 * Derivatives: -0.00016, 0.0013
+13 * Quartic interpolation was performed: t = 0.109
+13 * Interpolated energy: -0.2283651
+13 Pure RFO step was performed:
+13 * Trust radius: 1.2
+13 * Number of negative eigenvalues: 0
+13 * Lowest eigenvalue: 0.00362
+13 * lambda: -0.000906
+13 Quadratic step: RMS: 0.021, max: 0.081
+13 * Predicted energy change: -0.000501
+13 Total step: RMS: 0.0205, max: 0.0757
+13 Perfect transformation to cartesians in 5 iterations
+13 * RMS(dcart): 1.04e-07, RMS(dq): 9.79e-08
+13 Convergence criteria:
+13 * Gradient RMS: 0.000657 > 0.00015 => no
+13 * Gradient maximum: 0.00408 > 0.00045 => no
+13 * Step RMS: 0.0205 > 0.0012 => no
+13 * Step maximum: 0.0759 > 0.0018 => no
+14 Energy: -0.228632612115
+14 Hessian update information:
+14 * Change: RMS: 0.000586, max: 0.0157
+14 Trust update: Fletcher's parameter: 0.552
+14 Linear interpolation:
+14 * Energies: -0.22863261, -0.22835633
+14 * Derivatives: -0.000429, 0.000926
+14 * Quartic interpolation was performed: t = 0.291
+14 * Interpolated energy: -0.22869432
+14 Pure RFO step was performed:
+14 * Trust radius: 1.2
+14 * Number of negative eigenvalues: 0
+14 * Lowest eigenvalue: 0.00335
+14 * lambda: -0.000557
+14 Quadratic step: RMS: 0.0157, max: 0.0924
+14 * Predicted energy change: -0.000295
+14 Total step: RMS: 0.0138, max: 0.089
+14 Perfect transformation to cartesians in 5 iterations
+14 * RMS(dcart): 1.98e-07, RMS(dq): 1.24e-07
+14 Convergence criteria:
+14 * Gradient RMS: 0.000646 > 0.00015 => no
+14 * Gradient maximum: 0.00479 > 0.00045 => no
+14 * Step RMS: 0.0138 > 0.0012 => no
+14 * Step maximum: 0.0889 > 0.0018 => no
+15 Energy: -0.228648723592
+15 Hessian update information:
+15 * Change: RMS: 0.000608, max: 0.0167
+15 Trust update: Fletcher's parameter: 0.0547
+15 Linear interpolation:
+15 * Energies: -0.22864872, -0.22863261
+15 * Derivatives: -0.000676, 0.000697
+15 * Quartic interpolation was performed: t = 0.486
+15 * Interpolated energy: -0.22881233
+15 Minimization on sphere was performed:
+15 * Trust radius: 0.061
+15 * Number of negative eigenvalues: 0
+15 * Lowest eigenvalue: 0.00387
+15 * lambda: -0.0276
+15 Quadratic step: RMS: 0.00392, max: 0.0139
+15 * Predicted energy change: -0.000183
+15 Total step: RMS: 0.00773, max: 0.0423
+15 Perfect transformation to cartesians in 4 iterations
+15 * RMS(dcart): 1.58e-07, RMS(dq): 1.36e-07
+15 Convergence criteria:
+15 * Gradient RMS: 0.000569 > 0.00015 => no
+15 * Gradient maximum: 0.00362 > 0.00045 => no
+15 * Minimization on sphere: Minimization on sphere => no
+16 Energy: -0.228982443112
+16 Hessian update information:
+16 * Change: RMS: 0.000472, max: 0.0177
+16 Trust update: Fletcher's parameter: 1.83
+16 Linear interpolation:
+16 * Energies: -0.22898244, -0.22864872
+16 * Derivatives: 7.8e-05, 0.000599
+16 * Quartic interpolation was performed: t = -0.16
+16 * Interpolated energy: -0.22898865
+16 Minimization on sphere was performed:
+16 * Trust radius: 0.12
+16 * Number of negative eigenvalues: 0
+16 * Lowest eigenvalue: 0.00392
+16 * lambda: -0.00338
+16 Quadratic step: RMS: 0.00783, max: 0.0276
+16 * Predicted energy change: -0.000136
+16 Total step: RMS: 0.00799, max: 0.0273
+16 Perfect transformation to cartesians in 4 iterations
+16 * RMS(dcart): 4e-08, RMS(dq): 3.63e-08
+16 Convergence criteria:
+16 * Gradient RMS: 0.000339 > 0.00015 => no
+16 * Gradient maximum: 0.00291 > 0.00045 => no
+16 * Minimization on sphere: Minimization on sphere => no
+17 Energy: -0.229156593674
+17 Hessian update information:
+17 * Change: RMS: 0.000888, max: 0.0398
+17 Trust update: Fletcher's parameter: 1.28
+17 Linear interpolation:
+17 * Energies: -0.22915659, -0.22898244
+17 * Derivatives: 0.000119, 0.000233
+17 * No fit succeeded, staying in new point
+17 Minimization on sphere was performed:
+17 * Trust radius: 0.24
+17 * Number of negative eigenvalues: 0
+17 * Lowest eigenvalue: 0.00207
+17 * lambda: -0.00265
+17 Quadratic step: RMS: 0.0157, max: 0.0573
+17 * Predicted energy change: -0.000254
+17 Total step: RMS: 0.0157, max: 0.0573
+17 Perfect transformation to cartesians in 4 iterations
+17 * RMS(dcart): 9.61e-07, RMS(dq): 9.68e-07
+17 Convergence criteria:
+17 * Gradient RMS: 0.000283 > 0.00015 => no
+17 * Gradient maximum: 0.00132 > 0.00045 => no
+17 * Minimization on sphere: Minimization on sphere => no
+18 Energy: -0.22945146079
+18 Hessian update information:
+18 * Change: RMS: 0.00061, max: 0.0102
+18 Trust update: Fletcher's parameter: 1.16
+18 Linear interpolation:
+18 * Energies: -0.22945146, -0.22915659
+18 * Derivatives: 0.000234, 0.000354
+18 * No fit succeeded, staying in new point
+18 Minimization on sphere was performed:
+18 * Trust radius: 0.48
+18 * Number of negative eigenvalues: 0
+18 * Lowest eigenvalue: 0.000692
+18 * lambda: -0.0018
+18 Quadratic step: RMS: 0.0313, max: 0.106
+18 * Predicted energy change: -0.000567
+18 Total step: RMS: 0.0313, max: 0.106
+18 Perfect transformation to cartesians in 6 iterations
+18 * RMS(dcart): 9.97e-08, RMS(dq): 9.21e-08
+18 Convergence criteria:
+18 * Gradient RMS: 0.000355 > 0.00015 => no
+18 * Gradient maximum: 0.00153 > 0.00045 => no
+18 * Minimization on sphere: Minimization on sphere => no
+19 Energy: -0.230004015917
+19 Hessian update information:
+19 * Change: RMS: 0.000697, max: 0.0201
+19 Trust update: Fletcher's parameter: 0.975
+19 Linear interpolation:
+19 * Energies: -0.23000402, -0.22945146
+19 * Derivatives: 0.000394, 0.000712
+19 * No fit succeeded, staying in new point
+19 Pure RFO step was performed:
+19 * Trust radius: 0.97
+19 * Number of negative eigenvalues: 0
+19 * Lowest eigenvalue: 0.000429
+19 * lambda: -0.00108
+19 Quadratic step: RMS: 0.0484, max: 0.171
+19 * Predicted energy change: -0.000845
+19 Total step: RMS: 0.0484, max: 0.171
+19 Perfect transformation to cartesians in 7 iterations
+19 * RMS(dcart): 1.27e-07, RMS(dq): 8.22e-08
+19 Convergence criteria:
+19 * Gradient RMS: 0.000484 > 0.00015 => no
+19 * Gradient maximum: 0.00282 > 0.00045 => no
+19 * Step RMS: 0.0484 > 0.0012 => no
+19 * Step maximum: 0.171 > 0.0018 => no
+20 Energy: -0.230897764632
+20 Hessian update information:
+20 * Change: RMS: 0.000717, max: 0.0174
+20 Trust update: Fletcher's parameter: 1.06
+20 Linear interpolation:
+20 * Energies: -0.23089776, -0.23000402
+20 * Derivatives: 0.000668, 0.00108
+20 * No fit succeeded, staying in new point
+20 Pure RFO step was performed:
+20 * Trust radius: 0.97
+20 * Number of negative eigenvalues: 0
+20 * Lowest eigenvalue: 0.000225
+20 * lambda: -0.00133
+20 Quadratic step: RMS: 0.0489, max: 0.173
+20 * Predicted energy change: -0.00105
+20 Total step: RMS: 0.0489, max: 0.173
+20 Perfect transformation to cartesians in 7 iterations
+20 * RMS(dcart): 1.39e-07, RMS(dq): 8.54e-08
+20 Convergence criteria:
+20 * Gradient RMS: 0.000687 > 0.00015 => no
+20 * Gradient maximum: 0.00435 > 0.00045 => no
+20 * Step RMS: 0.0489 > 0.0012 => no
+20 * Step maximum: 0.173 > 0.0018 => no
+21 Energy: -0.232035209393
+21 Hessian update information:
+21 * Change: RMS: 0.000891, max: 0.0393
+21 Trust update: Fletcher's parameter: 1.09
+21 Linear interpolation:
+21 * Energies: -0.23203521, -0.23089776
+21 * Derivatives: 0.000914, 0.00133
+21 * No fit succeeded, staying in new point
+21 Pure RFO step was performed:
+21 * Trust radius: 0.97
+21 * Number of negative eigenvalues: 0
+21 * Lowest eigenvalue: 0.000345
+21 * lambda: -0.00146
+21 Quadratic step: RMS: 0.043, max: 0.146
+21 * Predicted energy change: -0.00105
+21 Total step: RMS: 0.043, max: 0.146
+21 Perfect transformation to cartesians in 6 iterations
+21 * RMS(dcart): 7.96e-07, RMS(dq): 4.54e-07
+21 Convergence criteria:
+21 * Gradient RMS: 0.000563 > 0.00015 => no
+21 * Gradient maximum: 0.00412 > 0.00045 => no
+21 * Step RMS: 0.043 > 0.0012 => no
+21 * Step maximum: 0.146 > 0.0018 => no
+22 Energy: -0.232858360837
+22 Hessian update information:
+22 * Change: RMS: 0.000437, max: 0.0197
+22 Trust update: Fletcher's parameter: 0.782
+22 Linear interpolation:
+22 * Energies: -0.23285836, -0.23203521
+22 * Derivatives: 0.000147, 0.00146
+22 * Quartic interpolation was performed: t = -0.101
+22 * Interpolated energy: -0.23286581
+22 Pure RFO step was performed:
+22 * Trust radius: 0.97
+22 * Number of negative eigenvalues: 0
+22 * Lowest eigenvalue: 0.00047
+22 * lambda: -0.00112
+22 Quadratic step: RMS: 0.0379, max: 0.124
+22 * Predicted energy change: -0.000749
+22 Total step: RMS: 0.0418, max: 0.137
+22 Perfect transformation to cartesians in 6 iterations
+22 * RMS(dcart): 3.59e-07, RMS(dq): 2.54e-07
+22 Convergence criteria:
+22 * Gradient RMS: 0.000473 > 0.00015 => no
+22 * Gradient maximum: 0.0024 > 0.00045 => no
+22 * Step RMS: 0.0418 > 0.0012 => no
+22 * Step maximum: 0.137 > 0.0018 => no
+23 Energy: -0.233126981066
+23 Hessian update information:
+23 * Change: RMS: 0.000402, max: 0.00731
+23 Trust update: Fletcher's parameter: 0.358
+23 Linear interpolation:
+23 * Energies: -0.23312698, -0.23285836
+23 * Derivatives: -0.000661, 0.00109
+23 * Quartic interpolation was performed: t = 0.336
+23 * Interpolated energy: -0.23323589
+23 Pure RFO step was performed:
+23 * Trust radius: 0.97
+23 * Number of negative eigenvalues: 0
+23 * Lowest eigenvalue: 0.00105
+23 * lambda: -0.000437
+23 Quadratic step: RMS: 0.0175, max: 0.0726
+23 * Predicted energy change: -0.000235
+23 Total step: RMS: 0.014, max: 0.0464
+23 Perfect transformation to cartesians in 4 iterations
+23 * RMS(dcart): 3.86e-07, RMS(dq): 4.21e-07
+23 Convergence criteria:
+23 * Gradient RMS: 0.000403 > 0.00015 => no
+23 * Gradient maximum: 0.00166 > 0.00045 => no
+23 * Step RMS: 0.014 > 0.0012 => no
+23 * Step maximum: 0.0463 > 0.0018 => no
+24 Energy: -0.233522979173
+24 Hessian update information:
+24 * Change: RMS: 0.000266, max: 0.00818
+24 Trust update: Fletcher's parameter: 1.69
+24 Linear interpolation:
+24 * Energies: -0.23352298, -0.23312698
+24 * Derivatives: 9.56e-05, 0.0007
+24 * Quartic interpolation was performed: t = -0.161
+24 * Interpolated energy: -0.23353069
+24 Pure RFO step was performed:
+24 * Trust radius: 0.97
+24 * Number of negative eigenvalues: 0
+24 * Lowest eigenvalue: 0.00102
+24 * lambda: -0.00074
+24 Quadratic step: RMS: 0.0252, max: 0.101
+24 * Predicted energy change: -0.000426
+24 Total step: RMS: 0.0267, max: 0.107
+24 Perfect transformation to cartesians in 5 iterations
+24 * RMS(dcart): 7.48e-07, RMS(dq): 6.52e-07
+24 Convergence criteria:
+24 * Gradient RMS: 0.000289 > 0.00015 => no
+24 * Gradient maximum: 0.00176 > 0.00045 => no
+24 * Step RMS: 0.0267 > 0.0012 => no
+24 * Step maximum: 0.107 > 0.0018 => no
+25 Energy: -0.233748683273
+25 Hessian update information:
+25 * Change: RMS: 0.000342, max: 0.00751
+25 Trust update: Fletcher's parameter: 0.529
+25 Linear interpolation:
+25 * Energies: -0.23374868, -0.23352298
+25 * Derivatives: -0.00031, 0.000749
+25 * Quartic interpolation was performed: t = 0.286
+25 * Interpolated energy: -0.23379283
+25 Pure RFO step was performed:
+25 * Trust radius: 0.97
+25 * Number of negative eigenvalues: 0
+25 * Lowest eigenvalue: 0.00066
+25 * lambda: -0.000764
+25 Quadratic step: RMS: 0.0387, max: 0.179
+25 * Predicted energy change: -0.000519
+25 Total step: RMS: 0.0333, max: 0.149
+25 Perfect transformation to cartesians in 6 iterations
+25 * RMS(dcart): 2.07e-07, RMS(dq): 1.38e-07
+25 Convergence criteria:
+25 * Gradient RMS: 0.000513 > 0.00015 => no
+25 * Gradient maximum: 0.00282 > 0.00045 => no
+25 * Step RMS: 0.0333 > 0.0012 => no
+25 * Step maximum: 0.149 > 0.0018 => no
+26 Energy: -0.23455505392
+26 Hessian update information:
+26 * Change: RMS: 0.00108, max: 0.0496
+26 Trust update: Fletcher's parameter: 1.55
+26 Linear interpolation:
+26 * Energies: -0.23455505, -0.23374868
+26 * Derivatives: 0.000715, 0.000896
+26 * No fit succeeded, staying in new point
+26 Pure RFO step was performed:
+26 * Trust radius: 0.97
+26 * Number of negative eigenvalues: 0
+26 * Lowest eigenvalue: 9.05e-05
+26 * lambda: -0.00162
+26 Quadratic step: RMS: 0.0538, max: 0.264
+26 * Predicted energy change: -0.00137
+26 Total step: RMS: 0.0538, max: 0.264
+26 Perfect transformation to cartesians in 8 iterations
+26 * RMS(dcart): 4.22e-07, RMS(dq): 2.56e-07
+26 Convergence criteria:
+26 * Gradient RMS: 0.000481 > 0.00015 => no
+26 * Gradient maximum: 0.00251 > 0.00045 => no
+26 * Step RMS: 0.0538 > 0.0012 => no
+26 * Step maximum: 0.264 > 0.0018 => no
+27 Energy: -0.23598118256
+27 Hessian update information:
+27 * Change: RMS: 0.00119, max: 0.029
+27 Trust update: Fletcher's parameter: 1.04
+27 Linear interpolation:
+27 * Energies: -0.23598118, -0.23455505
+27 * Derivatives: 0.00118, 0.00162
+27 * No fit succeeded, staying in new point
+27 Pure RFO step was performed:
+27 * Trust radius: 0.97
+27 * Number of negative eigenvalues: 0
+27 * Lowest eigenvalue: 4.7e-05
+27 * lambda: -0.00182
+27 Quadratic step: RMS: 0.0559, max: 0.291
+27 * Predicted energy change: -0.00159
+27 Total step: RMS: 0.0559, max: 0.291
+27 Perfect transformation to cartesians in 9 iterations
+27 * RMS(dcart): 4.11e-07, RMS(dq): 2.85e-07
+27 Convergence criteria:
+27 * Gradient RMS: 0.000685 > 0.00015 => no
+27 * Gradient maximum: 0.00354 > 0.00045 => no
+27 * Step RMS: 0.0559 > 0.0012 => no
+27 * Step maximum: 0.291 > 0.0018 => no
+28 Energy: -0.237757939006
+28 Hessian update information:
+28 * Change: RMS: 0.00173, max: 0.0306
+28 Trust update: Fletcher's parameter: 1.12
+28 Linear interpolation:
+28 * Energies: -0.23775794, -0.23598118
+28 * Derivatives: 0.00162, 0.00182
+28 * No fit succeeded, staying in new point
+28 Pure RFO step was performed:
+28 * Trust radius: 0.97
+28 * Number of negative eigenvalues: 0
+28 * Lowest eigenvalue: 1.52e-05
+28 * lambda: -0.00261
+28 Quadratic step: RMS: 0.0513, max: 0.279
+28 * Predicted energy change: -0.00213
+28 Total step: RMS: 0.0513, max: 0.279
+28 Perfect transformation to cartesians in 10 iterations
+28 * RMS(dcart): 6.07e-07, RMS(dq): 3.15e-07
+28 Convergence criteria:
+28 * Gradient RMS: 0.00111 > 0.00015 => no
+28 * Gradient maximum: 0.00558 > 0.00045 => no
+28 * Step RMS: 0.0513 > 0.0012 => no
+28 * Step maximum: 0.279 > 0.0018 => no
+29 Energy: -0.239621977903
+29 Hessian update information:
+29 * Change: RMS: 0.0013, max: 0.035
+29 Trust update: Fletcher's parameter: 0.876
+29 Linear interpolation:
+29 * Energies: -0.23962198, -0.23775794
+29 * Derivatives: 0.000944, 0.00261
+29 * Quartic interpolation was performed: t = -0.385
+29 * Interpolated energy: -0.23980976
+29 Pure RFO step was performed:
+29 * Trust radius: 0.97
+29 * Number of negative eigenvalues: 0
+29 * Lowest eigenvalue: 2.15e-05
+29 * lambda: -0.00231
+29 Quadratic step: RMS: 0.0395, max: 0.189
+29 * Predicted energy change: -0.00159
+29 Total step: RMS: 0.0564, max: 0.292
+29 Perfect transformation to cartesians in 9 iterations
+29 * RMS(dcart): 5.04e-07, RMS(dq): 2.12e-07
+29 Convergence criteria:
+29 * Gradient RMS: 0.00141 > 0.00015 => no
+29 * Gradient maximum: 0.00723 > 0.00045 => no
+29 * Step RMS: 0.0564 > 0.0012 => no
+29 * Step maximum: 0.292 > 0.0018 => no
+30 Energy: -0.241185906681
+30 Hessian update information:
+30 * Change: RMS: 0.00158, max: 0.0331
+30 Trust update: Fletcher's parameter: 0.986
+30 Linear interpolation:
+30 * Energies: -0.24118591, -0.23962198
+30 * Derivatives: 0.00048, 0.00245
+30 * Quartic interpolation was performed: t = -0.176
+30 * Interpolated energy: -0.24122885
+30 Pure RFO step was performed:
+30 * Trust radius: 0.97
+30 * Number of negative eigenvalues: 0
+30 * Lowest eigenvalue: 0.000378
+30 * lambda: -0.00923
+30 Quadratic step: RMS: 0.0429, max: 0.146
+30 * Predicted energy change: -0.00664
+30 Total step: RMS: 0.0461, max: 0.173
+30 Perfect transformation to cartesians in 7 iterations
+30 * RMS(dcart): 6.67e-07, RMS(dq): 4.51e-07
+30 Convergence criteria:
+30 * Gradient RMS: 0.00175 > 0.00015 => no
+30 * Gradient maximum: 0.00985 > 0.00045 => no
+30 * Step RMS: 0.0461 > 0.0012 => no
+30 * Step maximum: 0.173 > 0.0018 => no
+31 Energy: -0.234617874337
+31 Hessian update information:
+31 * Change: RMS: 0.0012, max: 0.0362
+31 Trust update: Fletcher's parameter: -0.988
+31 Linear interpolation:
+31 * Energies: -0.23461787, -0.24118591
+31 * Derivatives: -0.026, 0.00914
+31 * Quartic interpolation was performed: t = 0.671
+31 * Interpolated energy: -0.2427511
+31 Minimization on sphere was performed:
+31 * Trust radius: 0.17
+31 * Number of negative eigenvalues: 0
+31 * Lowest eigenvalue: 0.000747
+31 * lambda: -0.0356
+31 Quadratic step: RMS: 0.0107, max: 0.0485
+31 * Predicted energy change: -0.00171
+31 Total step: RMS: 0.0318, max: 0.107
+31 Perfect transformation to cartesians in 7 iterations
+31 * RMS(dcart): 2.41e-07, RMS(dq): 2.26e-07
+31 Convergence criteria:
+31 * Gradient RMS: 0.00572 > 0.00015 => no
+31 * Gradient maximum: 0.0327 > 0.00045 => no
+31 * Minimization on sphere: Minimization on sphere => no
+32 Energy: -0.243983168208
+32 Hessian update information:
+32 * Change: RMS: 0.00061, max: 0.0201
+32 Trust update: Fletcher's parameter: 5.48
+32 Linear interpolation:
+32 * Energies: -0.24398317, -0.24118591
+32 * Derivatives: 0.00109, 0.00452
+32 * Quartic interpolation was performed: t = -0.324
+32 * Interpolated energy: -0.2441597
+32 Minimization on sphere was performed:
+32 * Trust radius: 0.33
+32 * Number of negative eigenvalues: 0
+32 * Lowest eigenvalue: 0.000719
+32 * lambda: -0.00602
+32 Quadratic step: RMS: 0.0215, max: 0.0918
+32 * Predicted energy change: -0.00119
+32 Total step: RMS: 0.0252, max: 0.111
+32 Perfect transformation to cartesians in 5 iterations
+32 * RMS(dcart): 8.13e-07, RMS(dq): 6.07e-07
+32 Convergence criteria:
+32 * Gradient RMS: 0.000848 > 0.00015 => no
+32 * Gradient maximum: 0.00417 > 0.00045 => no
+32 * Minimization on sphere: Minimization on sphere => no
+33 Energy: -0.245121218544
+33 Hessian update information:
+33 * Change: RMS: 0.000474, max: 0.0135
+33 Trust update: Fletcher's parameter: 0.956
+33 Linear interpolation:
+33 * Energies: -0.24512122, -0.24398317
+33 * Derivatives: 0.000293, 0.00197
+33 * Quartic interpolation was performed: t = -0.17
+33 * Interpolated energy: -0.24514616
+33 Pure RFO step was performed:
+33 * Trust radius: 0.66
+33 * Number of negative eigenvalues: 0
+33 * Lowest eigenvalue: 0.000804
+33 * lambda: -0.00185
+33 Quadratic step: RMS: 0.0409, max: 0.18
+33 * Predicted energy change: -0.0013
+33 Total step: RMS: 0.0444, max: 0.199
+33 Perfect transformation to cartesians in 8 iterations
+33 * RMS(dcart): 3.29e-07, RMS(dq): 9.1e-08
+33 Convergence criteria:
+33 * Gradient RMS: 0.000491 > 0.00015 => no
+33 * Gradient maximum: 0.00266 > 0.00045 => no
+33 * Step RMS: 0.0444 > 0.0012 => no
+33 * Step maximum: 0.199 > 0.0018 => no
+34 Energy: -0.24597050532
+34 Hessian update information:
+34 * Change: RMS: 0.000286, max: 0.0057
+34 Trust update: Fletcher's parameter: 0.656
+34 Linear interpolation:
+34 * Energies: -0.24597051, -0.24512122
+34 * Derivatives: -0.000176, 0.00184
+34 * Quartic interpolation was performed: t = 0.0835
+34 * Interpolated energy: -0.24597785
+34 Minimization on sphere was performed:
+34 * Trust radius: 0.66
+34 * Number of negative eigenvalues: 0
+34 * Lowest eigenvalue: 0.000462
+34 * lambda: -0.00219
+34 Quadratic step: RMS: 0.0429, max: 0.229
+34 * Predicted energy change: -0.00137
+34 Total step: RMS: 0.0406, max: 0.213
+34 Perfect transformation to cartesians in 7 iterations
+34 * RMS(dcart): 7.87e-07, RMS(dq): 6.82e-07
+34 Convergence criteria:
+34 * Gradient RMS: 0.000531 > 0.00015 => no
+34 * Gradient maximum: 0.00249 > 0.00045 => no
+34 * Minimization on sphere: Minimization on sphere => no
+35 Energy: -0.24655040693
+35 Hessian update information:
+35 * Change: RMS: 0.000462, max: 0.0095
+35 Trust update: Fletcher's parameter: 0.425
+35 Linear interpolation:
+35 * Energies: -0.24655041, -0.24597051
+35 * Derivatives: -0.000722, 0.00184
+35 * Quartic interpolation was performed: t = 0.272
+35 * Interpolated energy: -0.24664797
+35 Pure RFO step was performed:
+35 * Trust radius: 0.66
+35 * Number of negative eigenvalues: 0
+35 * Lowest eigenvalue: 0.00114
+35 * lambda: -0.000865
+35 Quadratic step: RMS: 0.0231, max: 0.13
+35 * Predicted energy change: -0.000488
+35 Total step: RMS: 0.0194, max: 0.131
+35 Perfect transformation to cartesians in 5 iterations
+35 * RMS(dcart): 8.19e-07, RMS(dq): 6.63e-07
+35 Convergence criteria:
+35 * Gradient RMS: 0.000886 > 0.00015 => no
+35 * Gradient maximum: 0.00503 > 0.00045 => no
+35 * Step RMS: 0.0194 > 0.0012 => no
+35 * Step maximum: 0.131 > 0.0018 => no
+36 Energy: -0.247102372419
+36 Hessian update information:
+36 * Change: RMS: 0.000601, max: 0.0149
+36 Trust update: Fletcher's parameter: 1.13
+36 Linear interpolation:
+36 * Energies: -0.24710237, -0.24655041
+36 * Derivatives: 1.94e-05, 0.0011
+36 * Quartic interpolation was performed: t = -0.0187
+36 * Interpolated energy: -0.24710255
+36 Pure RFO step was performed:
+36 * Trust radius: 0.66
+36 * Number of negative eigenvalues: 0
+36 * Lowest eigenvalue: 0.00103
+36 * lambda: -0.00092
+36 Quadratic step: RMS: 0.0293, max: 0.165
+36 * Predicted energy change: -0.000554
+36 Total step: RMS: 0.0294, max: 0.166
+36 Perfect transformation to cartesians in 7 iterations
+36 * RMS(dcart): 1.5e-07, RMS(dq): 2.36e-07
+36 Convergence criteria:
+36 * Gradient RMS: 0.000477 > 0.00015 => no
+36 * Gradient maximum: 0.00255 > 0.00045 => no
+36 * Step RMS: 0.0294 > 0.0012 => no
+36 * Step maximum: 0.166 > 0.0018 => no
+37 Energy: -0.247581238655
+37 Hessian update information:
+37 * Change: RMS: 0.000373, max: 0.00783
+37 Trust update: Fletcher's parameter: 0.865
+37 Linear interpolation:
+37 * Energies: -0.24758124, -0.24710237
+37 * Derivatives: -0.000491, 0.000919
+37 * Quartic interpolation was performed: t = 0.168
+37 * Interpolated energy: -0.2476206
+37 Pure RFO step was performed:
+37 * Trust radius: 0.66
+37 * Number of negative eigenvalues: 0
+37 * Lowest eigenvalue: 0.00109
+37 * lambda: -0.000424
+37 Quadratic step: RMS: 0.0185, max: 0.0798
+37 * Predicted energy change: -0.00023
+37 Total step: RMS: 0.0167, max: 0.0552
+37 Perfect transformation to cartesians in 5 iterations
+37 * RMS(dcart): 1.39e-07, RMS(dq): 1.13e-07
+37 Convergence criteria:
+37 * Gradient RMS: 0.000425 > 0.00015 => no
+37 * Gradient maximum: 0.00233 > 0.00045 => no
+37 * Step RMS: 0.0167 > 0.0012 => no
+37 * Step maximum: 0.0552 > 0.0018 => no
+38 Energy: -0.247794624089
+38 Hessian update information:
+38 * Change: RMS: 0.000309, max: 0.00682
+38 Trust update: Fletcher's parameter: 0.93
+38 Linear interpolation:
+38 * Energies: -0.24779462, -0.24758124
+38 * Derivatives: -0.00011, 0.000554
+38 * Quartic interpolation was performed: t = 0.177
+38 * Interpolated energy: -0.24780442
+38 Pure RFO step was performed:
+38 * Trust radius: 0.66
+38 * Number of negative eigenvalues: 0
+38 * Lowest eigenvalue: 0.00112
+38 * lambda: -0.000348
+38 Quadratic step: RMS: 0.0139, max: 0.048
+38 * Predicted energy change: -0.000182
+38 Total step: RMS: 0.0126, max: 0.0504
+38 Perfect transformation to cartesians in 4 iterations
+38 * RMS(dcart): 1.85e-07, RMS(dq): 1.89e-07
+38 Convergence criteria:
+38 * Gradient RMS: 0.000252 > 0.00015 => no
+38 * Gradient maximum: 0.00134 > 0.00045 => no
+38 * Step RMS: 0.0126 > 0.0012 => no
+38 * Step maximum: 0.0504 > 0.0018 => no
+39 Energy: -0.247786289468
+39 Hessian update information:
+39 * Change: RMS: 0.000271, max: 0.00514
+39 Trust update: Fletcher's parameter: -0.0458
+39 Linear interpolation:
+39 * Energies: -0.24778629, -0.24779462
+39 * Derivatives: -0.000378, 0.000368
+39 * Quartic interpolation was performed: t = 0.514
+39 * Interpolated energy: -0.24788375
+39 Minimization on sphere was performed:
+39 * Trust radius: 0.054
+39 * Number of negative eigenvalues: 0
+39 * Lowest eigenvalue: 0.00113
+39 * lambda: -0.0049
+39 Quadratic step: RMS: 0.00348, max: 0.014
+39 * Predicted energy change: -3.33e-05
+39 Total step: RMS: 0.00637, max: 0.0289
+39 Perfect transformation to cartesians in 4 iterations
+39 * RMS(dcart): 1e-07, RMS(dq): 1.07e-07
+39 Convergence criteria:
+39 * Gradient RMS: 0.000318 > 0.00015 => no
+39 * Gradient maximum: 0.00145 > 0.00045 => no
+39 * Minimization on sphere: Minimization on sphere => no
+40 Energy: -0.247912918345
+40 Hessian update information:
+40 * Change: RMS: 0.000148, max: 0.00306
+40 Trust update: Fletcher's parameter: 3.8
+40 Linear interpolation:
+40 * Energies: -0.24791292, -0.24779462
+40 * Derivatives: 1.43e-05, 0.000227
+40 * Quartic interpolation was performed: t = -0.0721
+40 * Interpolated energy: -0.24791343
+40 Pure RFO step was performed:
+40 * Trust radius: 0.11
+40 * Number of negative eigenvalues: 0
+40 * Lowest eigenvalue: 0.00113
+40 * lambda: -4.24e-05
+40 Quadratic step: RMS: 0.00677, max: 0.0239
+40 * Predicted energy change: -2.15e-05
+40 Total step: RMS: 0.00717, max: 0.0257
+40 Perfect transformation to cartesians in 4 iterations
+40 * RMS(dcart): 6.59e-08, RMS(dq): 7.54e-08
+40 Convergence criteria:
+40 * Gradient RMS: 7.49e-05 < 0.00015 => OK
+40 * Gradient maximum: 0.000457 > 0.00045 => no
+40 * Step RMS: 0.00717 > 0.0012 => no
+40 * Step maximum: 0.0257 > 0.0018 => no
+41 Energy: -0.247927882416
+41 Hessian update information:
+41 * Change: RMS: 0.000294, max: 0.00487
+41 Trust update: Fletcher's parameter: 0.698
+41 Linear interpolation:
+41 * Energies: -0.24792788, -0.24791292
+41 * Derivatives: -1.2e-05, 4.34e-05
+41 * Quartic interpolation was performed: t = 0.231
+41 * Interpolated energy: -0.24792928
+41 Minimization on sphere was performed:
+41 * Trust radius: 0.11
+41 * Number of negative eigenvalues: 0
+41 * Lowest eigenvalue: 0.00113
+41 * lambda: -0.000565
+41 Quadratic step: RMS: 0.00696, max: 0.0298
+41 * Predicted energy change: -2.01e-05
+41 Total step: RMS: 0.00566, max: 0.0244
+41 Perfect transformation to cartesians in 4 iterations
+41 * RMS(dcart): 5.09e-08, RMS(dq): 4.37e-08
+41 Convergence criteria:
+41 * Gradient RMS: 9.47e-05 < 0.00015 => OK
+41 * Gradient maximum: 0.000373 < 0.00045 => OK
+41 * Minimization on sphere: Minimization on sphere => no
+42 Energy: -0.247944615404
+42 Hessian update information:
+42 * Change: RMS: 0.000265, max: 0.00397
+42 Trust update: Fletcher's parameter: 0.832
+42 Linear interpolation:
+42 * Energies: -0.24794462, -0.24792788
+42 * Derivatives: -5.84e-06, 3.76e-05
+42 * Quartic interpolation was performed: t = 0.122
+42 * Interpolated energy: -0.24794497
+42 Pure RFO step was performed:
+42 * Trust radius: 0.22
+42 * Number of negative eigenvalues: 0
+42 * Lowest eigenvalue: 0.00109
+42 * lambda: -2.34e-05
+42 Quadratic step: RMS: 0.00528, max: 0.0322
+42 * Predicted energy change: -1.18e-05
+42 Total step: RMS: 0.00483, max: 0.0292
+42 Perfect transformation to cartesians in 4 iterations
+42 * RMS(dcart): 9.99e-08, RMS(dq): 8.31e-08
+42 Convergence criteria:
+42 * Gradient RMS: 7.09e-05 < 0.00015 => OK
+42 * Gradient maximum: 0.000325 < 0.00045 => OK
+42 * Step RMS: 0.00483 > 0.0012 => no
+42 * Step maximum: 0.0292 > 0.0018 => no
+43 Energy: -0.247950878322
+43 Hessian update information:
+43 * Change: RMS: 0.000405, max: 0.00861
+43 Trust update: Fletcher's parameter: 0.531
+43 Linear interpolation:
+43 * Energies: -0.24795088, -0.24794462
+43 * Derivatives: -1.32e-05, 2.42e-05
+43 * Quartic interpolation was performed: t = 0.326
+43 * Interpolated energy: -0.24795301
+43 Pure RFO step was performed:
+43 * Trust radius: 0.22
+43 * Number of negative eigenvalues: 0
+43 * Lowest eigenvalue: 0.00103
+43 * lambda: -8.89e-06
+43 Quadratic step: RMS: 0.00295, max: 0.0154
+43 * Predicted energy change: -4.46e-06
+43 Total step: RMS: 0.00215, max: 0.00709
+43 Perfect transformation to cartesians in 3 iterations
+43 * RMS(dcart): 6.91e-08, RMS(dq): 3.78e-08
+43 Convergence criteria:
+43 * Gradient RMS: 8.23e-05 < 0.00015 => OK
+43 * Gradient maximum: 0.000425 < 0.00045 => OK
+43 * Step RMS: 0.00215 > 0.0012 => no
+43 * Step maximum: 0.00709 > 0.0018 => no
+44 Energy: -0.24795793805
+44 Hessian update information:
+44 * Change: RMS: 0.000382, max: 0.00694
+44 Trust update: Fletcher's parameter: 1.58
+44 Linear interpolation:
+44 * Energies: -0.24795794, -0.24795088
+44 * Derivatives: 3.68e-07, 1.35e-05
+44 * Quartic interpolation was performed: t = -0.0266
+44 * Interpolated energy: -0.24795794
+44 Pure RFO step was performed:
+44 * Trust radius: 0.22
+44 * Number of negative eigenvalues: 0
+44 * Lowest eigenvalue: 0.00101
+44 * lambda: -2.98e-06
+44 Quadratic step: RMS: 0.00129, max: 0.00582
+44 * Predicted energy change: -1.49e-06
+44 Total step: RMS: 0.00132, max: 0.00597
+44 Perfect transformation to cartesians in 3 iterations
+44 * RMS(dcart): 4.89e-08, RMS(dq): 1.46e-08
+44 Convergence criteria:
+44 * Gradient RMS: 3.84e-05 < 0.00015 => OK
+44 * Gradient maximum: 0.000172 < 0.00045 => OK
+44 * Step RMS: 0.00132 > 0.0012 => no
+44 * Step maximum: 0.00597 > 0.0018 => no
+45 Energy: -0.247959483859
+45 Hessian update information:
+45 * Change: RMS: 0.000615, max: 0.0232
+45 Trust update: Fletcher's parameter: 1.04
+45 Linear interpolation:
+45 * Energies: -0.24795948, -0.24795794
+45 * Derivatives: -3.53e-07, 2.99e-06
+45 * Cubic interpolation was performed: t = 0.0768
+45 * Interpolated energy: -0.2479595
+45 Pure RFO step was performed:
+45 * Trust radius: 0.22
+45 * Number of negative eigenvalues: 0
+45 * Lowest eigenvalue: 0.000879
+45 * lambda: -1.09e-06
+45 Quadratic step: RMS: 0.0014, max: 0.00808
+45 * Predicted energy change: -5.45e-07
+45 Total step: RMS: 0.00132, max: 0.00762
+45 Perfect transformation to cartesians in 3 iterations
+45 * RMS(dcart): 6.45e-08, RMS(dq): 2.24e-08
+45 Convergence criteria:
+45 * Gradient RMS: 2.42e-05 < 0.00015 => OK
+45 * Gradient maximum: 0.000197 < 0.00045 => OK
+45 * Step RMS: 0.00132 > 0.0012 => no
+45 * Step maximum: 0.00762 > 0.0018 => no
+46 Energy: -0.247960424094
+46 Hessian update information:
+46 * Change: RMS: 0.000373, max: 0.0106
+46 Trust update: Fletcher's parameter: 1.73
+46 Linear interpolation:
+46 * Energies: -0.24796042, -0.24795948
+46 * Derivatives: 2.23e-07, 1.12e-06
+46 * No fit succeeded, staying in new point
+46 Pure RFO step was performed:
+46 * Trust radius: 0.22
+46 * Number of negative eigenvalues: 0
+46 * Lowest eigenvalue: 0.000868
+46 * lambda: -6.06e-07
+46 Quadratic step: RMS: 0.000932, max: 0.00539
+46 * Predicted energy change: -3.03e-07
+46 Total step: RMS: 0.000932, max: 0.00539
+46 Perfect transformation to cartesians in 3 iterations
+46 * RMS(dcart): 2.81e-08, RMS(dq): 7.36e-09
+46 Convergence criteria:
+46 * Gradient RMS: 1.01e-05 < 0.00015 => OK
+46 * Gradient maximum: 5.9e-05 < 0.00045 => OK
+46 * Step RMS: 0.000932 < 0.0012 => OK
+46 * Step maximum: 0.00539 > 0.0018 => no
+47 Energy: -0.247960631264
+47 Hessian update information:
+47 * Change: RMS: 0.000335, max: 0.00997
+47 Trust update: Fletcher's parameter: 0.683
+47 Linear interpolation:
+47 * Energies: -0.24796063, -0.24796042
+47 * Derivatives: -4.35e-09, 6.06e-07
+47 * Cubic interpolation was performed: t = 0.055
+47 * Interpolated energy: -0.24796063
+47 Pure RFO step was performed:
+47 * Trust radius: 0.22
+47 * Number of negative eigenvalues: 0
+47 * Lowest eigenvalue: 0.000769
+47 * lambda: -2.93e-07
+47 Quadratic step: RMS: 0.000719, max: 0.00423
+47 * Predicted energy change: -1.47e-07
+47 Total step: RMS: 0.000676, max: 0.00393
+47 Perfect transformation to cartesians in 3 iterations
+47 * RMS(dcart): 9.61e-09, RMS(dq): 3.67e-09
+47 Convergence criteria:
+47 * Gradient RMS: 9.99e-06 < 0.00015 => OK
+47 * Gradient maximum: 7.62e-05 < 0.00045 => OK
+47 * Step RMS: 0.000676 < 0.0012 => OK
+47 * Step maximum: 0.00393 > 0.0018 => no
+48 Energy: -0.247960870307
+48 Hessian update information:
+48 * Change: RMS: 0.000395, max: 0.00765
+48 Trust update: Fletcher's parameter: 1.63
+48 Linear interpolation:
+48 * Energies: -0.24796087, -0.24796063
+48 * Derivatives: 1.09e-07, 2.92e-07
+48 * No fit succeeded, staying in new point
+48 Pure RFO step was performed:
+48 * Trust radius: 0.22
+48 * Number of negative eigenvalues: 0
+48 * Lowest eigenvalue: 0.000715
+48 * lambda: -3.8e-07
+48 Quadratic step: RMS: 0.00109, max: 0.00767
+48 * Predicted energy change: -1.9e-07
+48 Total step: RMS: 0.00109, max: 0.00767
+48 Perfect transformation to cartesians in 3 iterations
+48 * RMS(dcart): 4.94e-08, RMS(dq): 1.69e-08
+48 Convergence criteria:
+48 * Gradient RMS: 7.29e-06 < 0.00015 => OK
+48 * Gradient maximum: 2.89e-05 < 0.00045 => OK
+48 * Step RMS: 0.00109 < 0.0012 => OK
+48 * Step maximum: 0.00767 > 0.0018 => no
+49 Energy: -0.247960886243
+49 Hessian update information:
+49 * Change: RMS: 0.000304, max: 0.00595
+49 Trust update: Fletcher's parameter: 0.0839
+49 Linear interpolation:
+49 * Energies: -0.24796089, -0.24796087
+49 * Derivatives: 4.03e-08, 3.8e-07
+49 * Cubic interpolation was performed: t = 0.656
+49 * Interpolated energy: -0.24796093
+49 Minimization on sphere was performed:
+49 * Trust radius: 0.0042
+49 * Number of negative eigenvalues: 0
+49 * Lowest eigenvalue: 0.000571
+49 * lambda: -0.00344
+49 Quadratic step: RMS: 0.000272, max: 0.00176
+49 * Predicted energy change: -9.03e-08
+49 Total step: RMS: 0.000499, max: 0.00326
+49 Perfect transformation to cartesians in 3 iterations
+49 * RMS(dcart): 3.45e-09, RMS(dq): 1.21e-09
+49 Convergence criteria:
+49 * Gradient RMS: 8.39e-06 < 0.00015 => OK
+49 * Gradient maximum: 4.43e-05 < 0.00045 => OK
+49 * Minimization on sphere: Minimization on sphere => no
+50 Energy: -0.247960965924
+50 Hessian update information:
+50 * Change: RMS: 0.000266, max: 0.00573
+50 Trust update: Fletcher's parameter: 0.882
+50 Linear interpolation:
+50 * Energies: -0.24796097, -0.24796089
+50 * Derivatives: -6.58e-08, 5.81e-08
+50 * Cubic interpolation was performed: t = 0.116
+50 * Interpolated energy: -0.24796097
+50 Minimization on sphere was performed:
+50 * Trust radius: 0.0084
+50 * Number of negative eigenvalues: 0
+50 * Lowest eigenvalue: 0.000562
+50 * lambda: -0.0007
+50 Quadratic step: RMS: 0.000543, max: 0.004
+50 * Predicted energy change: -9.16e-08
+50 Total step: RMS: 0.000592, max: 0.00438
+50 Perfect transformation to cartesians in 3 iterations
+50 * RMS(dcart): 1.08e-08, RMS(dq): 3.59e-09
+50 Convergence criteria:
+50 * Gradient RMS: 2.99e-06 < 0.00015 => OK
+50 * Gradient maximum: 1.2e-05 < 0.00045 => OK
+50 * Minimization on sphere: Minimization on sphere => no
+51 Energy: -0.247961013732
+51 Hessian update information:
+51 * Change: RMS: 0.000146, max: 0.00221
+51 Trust update: Fletcher's parameter: 0.522
+51 Linear interpolation:
+51 * Energies: -0.24796101, -0.24796097
+51 * Derivatives: 9.11e-08, 1.43e-07
+51 * No fit succeeded, staying in new point
+51 Minimization on sphere was performed:
+51 * Trust radius: 0.0084
+51 * Number of negative eigenvalues: 0
+51 * Lowest eigenvalue: 0.000463
+51 * lambda: -0.00084
+51 Quadratic step: RMS: 0.000543, max: 0.00394
+51 * Predicted energy change: -9.17e-08
+51 Total step: RMS: 0.000543, max: 0.00394
+51 Perfect transformation to cartesians in 3 iterations
+51 * RMS(dcart): 1.17e-08, RMS(dq): 3.87e-09
+51 Convergence criteria:
+51 * Gradient RMS: 3.65e-06 < 0.00015 => OK
+51 * Gradient maximum: 1.76e-05 < 0.00045 => OK
+51 * Minimization on sphere: Minimization on sphere => no
+52 Energy: -0.247961109349
+52 Hessian update information:
+52 * Change: RMS: 0.000249, max: 0.00322
+52 Trust update: Fletcher's parameter: 1.04
+52 Linear interpolation:
+52 * Energies: -0.24796111, -0.24796101
+52 * Derivatives: 7.52e-08, 1.24e-07
+52 * No fit succeeded, staying in new point
+52 Minimization on sphere was performed:
+52 * Trust radius: 0.017
+52 * Number of negative eigenvalues: 0
+52 * Lowest eigenvalue: 0.000355
+52 * lambda: -0.000169
+52 Quadratic step: RMS: 0.00109, max: 0.00816
+52 * Predicted energy change: -1.09e-07
+52 Total step: RMS: 0.00109, max: 0.00816
+52 Perfect transformation to cartesians in 3 iterations
+52 * RMS(dcart): 1.17e-07, RMS(dq): 3.86e-08
+52 Convergence criteria:
+52 * Gradient RMS: 2.5e-06 < 0.00015 => OK
+52 * Gradient maximum: 9.43e-06 < 0.00045 => OK
+52 * Minimization on sphere: Minimization on sphere => no
+53 Energy: -0.247961204966
+53 Hessian update information:
+53 * Change: RMS: 0.000129, max: 0.00245
+53 Trust update: Fletcher's parameter: 0.875
+53 Linear interpolation:
+53 * Energies: -0.2479612, -0.24796111
+53 * Derivatives: 5.18e-08, 1.71e-07
+53 * No fit succeeded, staying in new point
+53 Pure RFO step was performed:
+53 * Trust radius: 0.034
+53 * Number of negative eigenvalues: 0
+53 * Lowest eigenvalue: 0.000327
+53 * lambda: -6.72e-08
+53 Quadratic step: RMS: 0.000766, max: 0.00538
+53 * Predicted energy change: -3.36e-08
+53 Total step: RMS: 0.000766, max: 0.00538
+53 Perfect transformation to cartesians in 3 iterations
+53 * RMS(dcart): 4.44e-08, RMS(dq): 1.47e-08
+53 Convergence criteria:
+53 * Gradient RMS: 3.09e-06 < 0.00015 => OK
+53 * Gradient maximum: 1.4e-05 < 0.00045 => OK
+53 * Step RMS: 0.000766 < 0.0012 => OK
+53 * Step maximum: 0.00538 > 0.0018 => no
+54 Energy: -0.247961332456
+54 Hessian update information:
+54 * Change: RMS: 0.000217, max: 0.00341
+54 Trust update: Fletcher's parameter: 3.79
+54 Linear interpolation:
+54 * Energies: -0.24796133, -0.2479612
+54 * Derivatives: -2.23e-09, 6.72e-08
+54 * Cubic interpolation was performed: t = 0.0035
+54 * Interpolated energy: -0.24796133
+54 Pure RFO step was performed:
+54 * Trust radius: 0.034
+54 * Number of negative eigenvalues: 0
+54 * Lowest eigenvalue: 0.00029
+54 * lambda: -1.19e-08
+54 Quadratic step: RMS: 0.000141, max: 0.000984
+54 * Predicted energy change: -5.96e-09
+54 Total step: RMS: 0.000139, max: 0.000966
+54 Perfect transformation to cartesians in 2 iterations
+54 * RMS(dcart): 3.98e-07, RMS(dq): 1.07e-07
+54 Convergence criteria:
+54 * Gradient RMS: 2.84e-06 < 0.00015 => OK
+54 * Gradient maximum: 1.14e-05 < 0.00045 => OK
+54 * Step RMS: 0.000139 < 0.0012 => OK
+54 * Step maximum: 0.000966 < 0.0018 => OK
+54 * All criteria matched

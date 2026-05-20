@@ -1,0 +1,1531 @@
+{
+  "records": [
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "acanil01",
+      "converged": true,
+      "steps": 43,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 12,
+            "count": 1
+          },
+          {
+            "step": 13,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 43
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/acanil01.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "acetone",
+      "converged": true,
+      "steps": 7,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 7
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/acetone.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "acetylene",
+      "converged": true,
+      "steps": 9,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 9
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/acetylene.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "achtar10",
+      "converged": true,
+      "steps": 9,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 9
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/achtar10.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "allene",
+      "converged": true,
+      "steps": 12,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [
+          {
+            "step": 5,
+            "gap": 20000000.0
+          },
+          {
+            "step": 6,
+            "gap": 170000.0
+          },
+          {
+            "step": 7,
+            "gap": 1600.0
+          },
+          {
+            "step": 8,
+            "gap": 640000.0
+          },
+          {
+            "step": 9,
+            "gap": 41000.0
+          },
+          {
+            "step": 11,
+            "gap": 3100000.0
+          },
+          {
+            "step": 12,
+            "gap": 30000000.0
+          }
+        ],
+        "backtransform_warnings": [
+          {
+            "step": 3,
+            "iterations": 20
+          },
+          {
+            "step": 6,
+            "iterations": 20
+          },
+          {
+            "step": 7,
+            "iterations": 20
+          },
+          {
+            "step": 9,
+            "iterations": 20
+          },
+          {
+            "step": 10,
+            "iterations": 20
+          },
+          {
+            "step": 12,
+            "iterations": 20
+          }
+        ],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 12
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/allene.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "ammonia",
+      "converged": true,
+      "steps": 4,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 4
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/ammonia.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "benzaldehyde",
+      "converged": true,
+      "steps": 5,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 5
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/benzaldehyde.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "benzene",
+      "converged": true,
+      "steps": 4,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 4
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/benzene.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "benzidine",
+      "converged": true,
+      "steps": 24,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 12,
+            "count": 1
+          },
+          {
+            "step": 13,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 24
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/benzidine.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "caffeine",
+      "converged": false,
+      "steps": 110,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 27,
+            "count": 1
+          },
+          {
+            "step": 30,
+            "count": 1
+          },
+          {
+            "step": 33,
+            "count": 1
+          },
+          {
+            "step": 35,
+            "count": 1
+          },
+          {
+            "step": 36,
+            "count": 2
+          },
+          {
+            "step": 38,
+            "count": 1
+          },
+          {
+            "step": 39,
+            "count": 1
+          },
+          {
+            "step": 41,
+            "count": 2
+          },
+          {
+            "step": 45,
+            "count": 2
+          },
+          {
+            "step": 47,
+            "count": 1
+          },
+          {
+            "step": 49,
+            "count": 1
+          },
+          {
+            "step": 51,
+            "count": 1
+          },
+          {
+            "step": 52,
+            "count": 1
+          },
+          {
+            "step": 53,
+            "count": 2
+          },
+          {
+            "step": 56,
+            "count": 1
+          },
+          {
+            "step": 57,
+            "count": 2
+          },
+          {
+            "step": 58,
+            "count": 1
+          },
+          {
+            "step": 59,
+            "count": 1
+          },
+          {
+            "step": 62,
+            "count": 1
+          },
+          {
+            "step": 63,
+            "count": 1
+          },
+          {
+            "step": 64,
+            "count": 1
+          },
+          {
+            "step": 65,
+            "count": 1
+          },
+          {
+            "step": 69,
+            "count": 2
+          },
+          {
+            "step": 71,
+            "count": 1
+          },
+          {
+            "step": 74,
+            "count": 1
+          },
+          {
+            "step": 75,
+            "count": 1
+          },
+          {
+            "step": 77,
+            "count": 1
+          },
+          {
+            "step": 78,
+            "count": 1
+          },
+          {
+            "step": 79,
+            "count": 1
+          },
+          {
+            "step": 80,
+            "count": 1
+          },
+          {
+            "step": 81,
+            "count": 2
+          },
+          {
+            "step": 83,
+            "count": 1
+          },
+          {
+            "step": 86,
+            "count": 1
+          },
+          {
+            "step": 87,
+            "count": 1
+          },
+          {
+            "step": 89,
+            "count": 1
+          },
+          {
+            "step": 93,
+            "count": 1
+          },
+          {
+            "step": 95,
+            "count": 1
+          },
+          {
+            "step": 98,
+            "count": 1
+          },
+          {
+            "step": 99,
+            "count": 2
+          },
+          {
+            "step": 101,
+            "count": 1
+          },
+          {
+            "step": 105,
+            "count": 2
+          },
+          {
+            "step": 106,
+            "count": 1
+          },
+          {
+            "step": 107,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": true,
+        "convergence_step": null
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/caffeine.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "difluorobenzene_13",
+      "converged": true,
+      "steps": 5,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 5
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/difluorobenzene_13.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "difluoronaphthalene_15",
+      "converged": true,
+      "steps": 5,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 5
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/difluoronaphthalene_15.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "difuropyrazine",
+      "converged": true,
+      "steps": 7,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 7
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/difuropyrazine.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "dimethylpentane",
+      "converged": true,
+      "steps": 10,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 10
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/dimethylpentane.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "disilyl_ether",
+      "converged": true,
+      "steps": 7,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [
+          {
+            "step": 7,
+            "gap": 940000.0
+          }
+        ],
+        "backtransform_warnings": [
+          {
+            "step": 5,
+            "iterations": 20
+          },
+          {
+            "step": 6,
+            "iterations": 20
+          }
+        ],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [
+          {
+            "step": 6,
+            "dcart": 0.0129,
+            "dq": 1.14
+          }
+        ],
+        "maxsteps_reached": false,
+        "convergence_step": 7
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/disilyl_ether.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "ethane",
+      "converged": true,
+      "steps": 4,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 4
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/ethane.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "ethanol",
+      "converged": true,
+      "steps": 5,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 5
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/ethanol.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "furan",
+      "converged": true,
+      "steps": 5,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 5
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/furan.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "histidine",
+      "converged": true,
+      "steps": 19,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 19
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/histidine.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "hydroxybicyclopentane_2",
+      "converged": true,
+      "steps": 9,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 9
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/hydroxybicyclopentane_2.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "hydroxysulfane",
+      "converged": true,
+      "steps": 6,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 6
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/hydroxysulfane.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "menthone",
+      "converged": true,
+      "steps": 16,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 16
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/menthone.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "mesityl_oxide",
+      "converged": true,
+      "steps": 8,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 8
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/mesityl_oxide.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "methylamine",
+      "converged": true,
+      "steps": 18,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 5,
+            "count": 1
+          },
+          {
+            "step": 7,
+            "count": 1
+          },
+          {
+            "step": 8,
+            "count": 1
+          },
+          {
+            "step": 9,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 18
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/methylamine.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "naphthalene",
+      "converged": true,
+      "steps": 5,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 5
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/naphthalene.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "neopentane",
+      "converged": true,
+      "steps": 4,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 4
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/neopentane.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "pterin",
+      "converged": true,
+      "steps": 8,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 8
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/pterin.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "trifluorobenzene_135",
+      "converged": true,
+      "steps": 4,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 4
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/trifluorobenzene_135.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "trisilacyclohexane_135",
+      "converged": true,
+      "steps": 7,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 7
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/trisilacyclohexane_135.log"
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "water",
+      "converged": true,
+      "steps": 5,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 5
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/baker_shajan_2023/water.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "artemisinin",
+      "converged": true,
+      "steps": 25,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 25
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/artemisinin.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "avobenzone",
+      "converged": true,
+      "steps": 90,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 14,
+            "count": 1
+          },
+          {
+            "step": 17,
+            "count": 1
+          },
+          {
+            "step": 20,
+            "count": 1
+          },
+          {
+            "step": 49,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 90
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/avobenzone.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "azadirachtin",
+      "converged": true,
+      "steps": 61,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 61
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/azadirachtin.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "bisphenol_a",
+      "converged": false,
+      "steps": 110,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 13,
+            "count": 1
+          },
+          {
+            "step": 15,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": true,
+        "convergence_step": null
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/bisphenol_a.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "cetirizine",
+      "converged": true,
+      "steps": 57,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 57
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/cetirizine.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "codeine",
+      "converged": true,
+      "steps": 31,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 15,
+            "count": 1
+          },
+          {
+            "step": 18,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 31
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/codeine.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "diisobutyl_phthalate",
+      "converged": true,
+      "steps": 38,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 38
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/diisobutyl_phthalate.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "easc",
+      "converged": true,
+      "steps": 53,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 53
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/easc.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "estradiol",
+      "converged": true,
+      "steps": 11,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [
+          {
+            "step": 8,
+            "gap": 2700.0
+          },
+          {
+            "step": 9,
+            "gap": 2700.0
+          },
+          {
+            "step": 10,
+            "gap": 2600.0
+          },
+          {
+            "step": 11,
+            "gap": 2600.0
+          }
+        ],
+        "backtransform_warnings": [
+          {
+            "step": 6,
+            "iterations": 20
+          },
+          {
+            "step": 7,
+            "iterations": 20
+          }
+        ],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [
+          {
+            "step": 7,
+            "dcart": 0.0502,
+            "dq": 0.134
+          }
+        ],
+        "maxsteps_reached": false,
+        "convergence_step": 11
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/estradiol.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "inosine_cation",
+      "converged": true,
+      "steps": 47,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [
+          {
+            "step": 11,
+            "iterations": 20
+          }
+        ],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [
+          {
+            "step": 11,
+            "dcart": 0.0651,
+            "dq": 0.091
+          }
+        ],
+        "maxsteps_reached": false,
+        "convergence_step": 47
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/inosine_cation.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "maltose",
+      "converged": true,
+      "steps": 54,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [
+          {
+            "step": 27,
+            "iterations": 20
+          },
+          {
+            "step": 30,
+            "iterations": 20
+          }
+        ],
+        "negative_eigenvalue_events": [
+          {
+            "step": 27,
+            "count": 1
+          },
+          {
+            "step": 30,
+            "count": 1
+          },
+          {
+            "step": 31,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [
+          {
+            "step": 27,
+            "dcart": 0.218,
+            "dq": 0.0821
+          },
+          {
+            "step": 30,
+            "dcart": 0.429,
+            "dq": 0.0902
+          }
+        ],
+        "maxsteps_reached": false,
+        "convergence_step": 54
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/maltose.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "mg_porphin",
+      "converged": true,
+      "steps": 34,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 34
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/mg_porphin.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "ochratoxin_a",
+      "converged": false,
+      "steps": 110,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 41,
+            "count": 1
+          },
+          {
+            "step": 44,
+            "count": 1
+          },
+          {
+            "step": 47,
+            "count": 1
+          },
+          {
+            "step": 51,
+            "count": 1
+          },
+          {
+            "step": 54,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": true,
+        "convergence_step": null
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/ochratoxin_a.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "penicillin_v",
+      "converged": true,
+      "steps": 54,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 54
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/penicillin_v.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "raffinose",
+      "converged": false,
+      "steps": 110,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [
+          {
+            "step": 42,
+            "iterations": 20
+          },
+          {
+            "step": 43,
+            "iterations": 20
+          },
+          {
+            "step": 46,
+            "iterations": 20
+          },
+          {
+            "step": 47,
+            "iterations": 20
+          },
+          {
+            "step": 48,
+            "iterations": 20
+          },
+          {
+            "step": 49,
+            "iterations": 20
+          }
+        ],
+        "negative_eigenvalue_events": [
+          {
+            "step": 42,
+            "count": 1
+          },
+          {
+            "step": 45,
+            "count": 1
+          },
+          {
+            "step": 46,
+            "count": 1
+          },
+          {
+            "step": 47,
+            "count": 1
+          },
+          {
+            "step": 48,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [
+          {
+            "step": 42,
+            "dcart": 0.505,
+            "dq": 0.0891
+          },
+          {
+            "step": 43,
+            "dcart": 0.53,
+            "dq": 0.054
+          },
+          {
+            "step": 46,
+            "dcart": 0.97,
+            "dq": 0.223
+          },
+          {
+            "step": 47,
+            "dcart": 0.889,
+            "dq": 0.119
+          },
+          {
+            "step": 48,
+            "dcart": 0.707,
+            "dq": 0.0741
+          },
+          {
+            "step": 49,
+            "dcart": 0.801,
+            "dq": 0.0745
+          }
+        ],
+        "maxsteps_reached": true,
+        "convergence_step": null
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/raffinose.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "sphingomyelin",
+      "converged": true,
+      "steps": 87,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 11,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 87
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/sphingomyelin.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "tamoxifen",
+      "converged": true,
+      "steps": 72,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 72
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/tamoxifen.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "vitamin_c",
+      "converged": true,
+      "steps": 29,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 29
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/vitamin_c.log"
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "zn_edta",
+      "converged": true,
+      "steps": 99,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 99
+      },
+      "log_path": "experiments/microvariations/benchmark_diag/birkholz_schlegel/zn_edta.log"
+    }
+  ],
+  "ref_steps": {
+    "baker/acanil01": 43,
+    "baker/acetone": 7,
+    "baker/acetylene": 9,
+    "baker/achtar10": 9,
+    "baker/allene": 12,
+    "baker/ammonia": 4,
+    "baker/benzaldehyde": 5,
+    "baker/benzene": 4,
+    "baker/benzidine": 24,
+    "baker/caffeine": null,
+    "baker/difluorobenzene_13": 5,
+    "baker/difluoronaphthalene_15": 5,
+    "baker/difuropyrazine": 7,
+    "baker/dimethylpentane": 10,
+    "baker/disilyl_ether": 7,
+    "baker/ethane": 4,
+    "baker/ethanol": 5,
+    "baker/furan": 5,
+    "baker/histidine": 19,
+    "baker/hydroxybicyclopentane_2": 9,
+    "baker/hydroxysulfane": 6,
+    "baker/menthone": 16,
+    "baker/mesityl_oxide": 8,
+    "baker/methylamine": 18,
+    "baker/naphthalene": 5,
+    "baker/neopentane": 4,
+    "baker/pterin": 8,
+    "baker/trifluorobenzene_135": 4,
+    "baker/trisilacyclohexane_135": 7,
+    "baker/water": 5,
+    "birkholz/artemisinin": 25,
+    "birkholz/avobenzone": 94,
+    "birkholz/azadirachtin": 60,
+    "birkholz/bisphenol_a": null,
+    "birkholz/cetirizine": 58,
+    "birkholz/codeine": 31,
+    "birkholz/diisobutyl_phthalate": 38,
+    "birkholz/easc": 53,
+    "birkholz/estradiol": 11,
+    "birkholz/inosine_cation": 47,
+    "birkholz/maltose": 54,
+    "birkholz/mg_porphin": 34,
+    "birkholz/ochratoxin_a": null,
+    "birkholz/penicillin_v": 54,
+    "birkholz/raffinose": null,
+    "birkholz/sphingomyelin": 95,
+    "birkholz/tamoxifen": 70,
+    "birkholz/vitamin_c": 29,
+    "birkholz/zn_edta": 99
+  }
+}
