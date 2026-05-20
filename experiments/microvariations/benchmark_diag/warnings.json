@@ -1,0 +1,837 @@
+{
+  "records": [
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "acanil01",
+      "converged": true,
+      "steps": 43,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 12,
+            "count": 1
+          },
+          {
+            "step": 13,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 43
+      }
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "allene",
+      "converged": true,
+      "steps": 12,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [
+          {
+            "step": 5,
+            "gap": 20000000.0
+          },
+          {
+            "step": 6,
+            "gap": 170000.0
+          },
+          {
+            "step": 7,
+            "gap": 1600.0
+          },
+          {
+            "step": 8,
+            "gap": 640000.0
+          },
+          {
+            "step": 9,
+            "gap": 41000.0
+          },
+          {
+            "step": 11,
+            "gap": 3100000.0
+          },
+          {
+            "step": 12,
+            "gap": 30000000.0
+          }
+        ],
+        "backtransform_warnings": [
+          {
+            "step": 3,
+            "iterations": 20
+          },
+          {
+            "step": 6,
+            "iterations": 20
+          },
+          {
+            "step": 7,
+            "iterations": 20
+          },
+          {
+            "step": 9,
+            "iterations": 20
+          },
+          {
+            "step": 10,
+            "iterations": 20
+          },
+          {
+            "step": 12,
+            "iterations": 20
+          }
+        ],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 12
+      }
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "benzidine",
+      "converged": true,
+      "steps": 24,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 12,
+            "count": 1
+          },
+          {
+            "step": 13,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 24
+      }
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "caffeine",
+      "converged": false,
+      "steps": 110,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 27,
+            "count": 1
+          },
+          {
+            "step": 30,
+            "count": 1
+          },
+          {
+            "step": 33,
+            "count": 1
+          },
+          {
+            "step": 35,
+            "count": 1
+          },
+          {
+            "step": 36,
+            "count": 2
+          },
+          {
+            "step": 38,
+            "count": 1
+          },
+          {
+            "step": 39,
+            "count": 1
+          },
+          {
+            "step": 41,
+            "count": 2
+          },
+          {
+            "step": 45,
+            "count": 2
+          },
+          {
+            "step": 47,
+            "count": 1
+          },
+          {
+            "step": 49,
+            "count": 1
+          },
+          {
+            "step": 51,
+            "count": 1
+          },
+          {
+            "step": 52,
+            "count": 1
+          },
+          {
+            "step": 53,
+            "count": 2
+          },
+          {
+            "step": 56,
+            "count": 1
+          },
+          {
+            "step": 57,
+            "count": 2
+          },
+          {
+            "step": 58,
+            "count": 1
+          },
+          {
+            "step": 59,
+            "count": 1
+          },
+          {
+            "step": 62,
+            "count": 1
+          },
+          {
+            "step": 63,
+            "count": 1
+          },
+          {
+            "step": 64,
+            "count": 1
+          },
+          {
+            "step": 65,
+            "count": 1
+          },
+          {
+            "step": 69,
+            "count": 2
+          },
+          {
+            "step": 71,
+            "count": 1
+          },
+          {
+            "step": 74,
+            "count": 1
+          },
+          {
+            "step": 75,
+            "count": 1
+          },
+          {
+            "step": 77,
+            "count": 1
+          },
+          {
+            "step": 78,
+            "count": 1
+          },
+          {
+            "step": 79,
+            "count": 1
+          },
+          {
+            "step": 80,
+            "count": 1
+          },
+          {
+            "step": 81,
+            "count": 2
+          },
+          {
+            "step": 83,
+            "count": 1
+          },
+          {
+            "step": 86,
+            "count": 1
+          },
+          {
+            "step": 87,
+            "count": 1
+          },
+          {
+            "step": 89,
+            "count": 1
+          },
+          {
+            "step": 93,
+            "count": 1
+          },
+          {
+            "step": 95,
+            "count": 1
+          },
+          {
+            "step": 98,
+            "count": 1
+          },
+          {
+            "step": 99,
+            "count": 2
+          },
+          {
+            "step": 101,
+            "count": 1
+          },
+          {
+            "step": 105,
+            "count": 2
+          },
+          {
+            "step": 106,
+            "count": 1
+          },
+          {
+            "step": 107,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": true,
+        "convergence_step": null
+      }
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "disilyl_ether",
+      "converged": true,
+      "steps": 7,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [
+          {
+            "step": 7,
+            "gap": 940000.0
+          }
+        ],
+        "backtransform_warnings": [
+          {
+            "step": 5,
+            "iterations": 20
+          },
+          {
+            "step": 6,
+            "iterations": 20
+          }
+        ],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [
+          {
+            "step": 6,
+            "dcart": 0.0129,
+            "dq": 1.14
+          }
+        ],
+        "maxsteps_reached": false,
+        "convergence_step": 7
+      }
+    },
+    {
+      "set": "baker",
+      "set_dir": "baker_shajan_2023",
+      "molecule": "methylamine",
+      "converged": true,
+      "steps": 18,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 5,
+            "count": 1
+          },
+          {
+            "step": 7,
+            "count": 1
+          },
+          {
+            "step": 8,
+            "count": 1
+          },
+          {
+            "step": 9,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 18
+      }
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "avobenzone",
+      "converged": true,
+      "steps": 90,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 14,
+            "count": 1
+          },
+          {
+            "step": 17,
+            "count": 1
+          },
+          {
+            "step": 20,
+            "count": 1
+          },
+          {
+            "step": 49,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 90
+      }
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "bisphenol_a",
+      "converged": false,
+      "steps": 110,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 13,
+            "count": 1
+          },
+          {
+            "step": 15,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": true,
+        "convergence_step": null
+      }
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "codeine",
+      "converged": true,
+      "steps": 31,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 15,
+            "count": 1
+          },
+          {
+            "step": 18,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 31
+      }
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "estradiol",
+      "converged": true,
+      "steps": 11,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [
+          {
+            "step": 8,
+            "gap": 2700.0
+          },
+          {
+            "step": 9,
+            "gap": 2700.0
+          },
+          {
+            "step": 10,
+            "gap": 2600.0
+          },
+          {
+            "step": 11,
+            "gap": 2600.0
+          }
+        ],
+        "backtransform_warnings": [
+          {
+            "step": 6,
+            "iterations": 20
+          },
+          {
+            "step": 7,
+            "iterations": 20
+          }
+        ],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [
+          {
+            "step": 7,
+            "dcart": 0.0502,
+            "dq": 0.134
+          }
+        ],
+        "maxsteps_reached": false,
+        "convergence_step": 11
+      }
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "inosine_cation",
+      "converged": true,
+      "steps": 47,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [
+          {
+            "step": 11,
+            "iterations": 20
+          }
+        ],
+        "negative_eigenvalue_events": [],
+        "severe_backxform_dq": [
+          {
+            "step": 11,
+            "dcart": 0.0651,
+            "dq": 0.091
+          }
+        ],
+        "maxsteps_reached": false,
+        "convergence_step": 47
+      }
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "maltose",
+      "converged": true,
+      "steps": 54,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [
+          {
+            "step": 27,
+            "iterations": 20
+          },
+          {
+            "step": 30,
+            "iterations": 20
+          }
+        ],
+        "negative_eigenvalue_events": [
+          {
+            "step": 27,
+            "count": 1
+          },
+          {
+            "step": 30,
+            "count": 1
+          },
+          {
+            "step": 31,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [
+          {
+            "step": 27,
+            "dcart": 0.218,
+            "dq": 0.0821
+          },
+          {
+            "step": 30,
+            "dcart": 0.429,
+            "dq": 0.0902
+          }
+        ],
+        "maxsteps_reached": false,
+        "convergence_step": 54
+      }
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "ochratoxin_a",
+      "converged": false,
+      "steps": 110,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 41,
+            "count": 1
+          },
+          {
+            "step": 44,
+            "count": 1
+          },
+          {
+            "step": 47,
+            "count": 1
+          },
+          {
+            "step": 51,
+            "count": 1
+          },
+          {
+            "step": 54,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": true,
+        "convergence_step": null
+      }
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "raffinose",
+      "converged": false,
+      "steps": 110,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [
+          {
+            "step": 42,
+            "iterations": 20
+          },
+          {
+            "step": 43,
+            "iterations": 20
+          },
+          {
+            "step": 46,
+            "iterations": 20
+          },
+          {
+            "step": 47,
+            "iterations": 20
+          },
+          {
+            "step": 48,
+            "iterations": 20
+          },
+          {
+            "step": 49,
+            "iterations": 20
+          }
+        ],
+        "negative_eigenvalue_events": [
+          {
+            "step": 42,
+            "count": 1
+          },
+          {
+            "step": 45,
+            "count": 1
+          },
+          {
+            "step": 46,
+            "count": 1
+          },
+          {
+            "step": 47,
+            "count": 1
+          },
+          {
+            "step": 48,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [
+          {
+            "step": 42,
+            "dcart": 0.505,
+            "dq": 0.0891
+          },
+          {
+            "step": 43,
+            "dcart": 0.53,
+            "dq": 0.054
+          },
+          {
+            "step": 46,
+            "dcart": 0.97,
+            "dq": 0.223
+          },
+          {
+            "step": 47,
+            "dcart": 0.889,
+            "dq": 0.119
+          },
+          {
+            "step": 48,
+            "dcart": 0.707,
+            "dq": 0.0741
+          },
+          {
+            "step": 49,
+            "dcart": 0.801,
+            "dq": 0.0745
+          }
+        ],
+        "maxsteps_reached": true,
+        "convergence_step": null
+      }
+    },
+    {
+      "set": "birkholz",
+      "set_dir": "birkholz_schlegel",
+      "molecule": "sphingomyelin",
+      "converged": true,
+      "steps": 87,
+      "energy": null,
+      "wall": null,
+      "error": null,
+      "cached": true,
+      "scan": {
+        "pinv_warnings": [],
+        "backtransform_warnings": [],
+        "negative_eigenvalue_events": [
+          {
+            "step": 11,
+            "count": 1
+          }
+        ],
+        "severe_backxform_dq": [],
+        "maxsteps_reached": false,
+        "convergence_step": 87
+      }
+    }
+  ],
+  "ref_steps": {
+    "baker/acanil01": 43,
+    "baker/acetone": 7,
+    "baker/acetylene": 9,
+    "baker/achtar10": 9,
+    "baker/allene": 12,
+    "baker/ammonia": 4,
+    "baker/benzaldehyde": 5,
+    "baker/benzene": 4,
+    "baker/benzidine": 24,
+    "baker/caffeine": null,
+    "baker/difluorobenzene_13": 5,
+    "baker/difluoronaphthalene_15": 5,
+    "baker/difuropyrazine": 7,
+    "baker/dimethylpentane": 10,
+    "baker/disilyl_ether": 7,
+    "baker/ethane": 4,
+    "baker/ethanol": 5,
+    "baker/furan": 5,
+    "baker/histidine": 19,
+    "baker/hydroxybicyclopentane_2": 9,
+    "baker/hydroxysulfane": 6,
+    "baker/menthone": 16,
+    "baker/mesityl_oxide": 8,
+    "baker/methylamine": 18,
+    "baker/naphthalene": 5,
+    "baker/neopentane": 4,
+    "baker/pterin": 8,
+    "baker/trifluorobenzene_135": 4,
+    "baker/trisilacyclohexane_135": 7,
+    "baker/water": 5,
+    "birkholz/artemisinin": 25,
+    "birkholz/avobenzone": 94,
+    "birkholz/azadirachtin": 60,
+    "birkholz/bisphenol_a": null,
+    "birkholz/cetirizine": 58,
+    "birkholz/codeine": 31,
+    "birkholz/diisobutyl_phthalate": 38,
+    "birkholz/easc": 53,
+    "birkholz/estradiol": 11,
+    "birkholz/inosine_cation": 47,
+    "birkholz/maltose": 54,
+    "birkholz/mg_porphin": 34,
+    "birkholz/ochratoxin_a": null,
+    "birkholz/penicillin_v": 54,
+    "birkholz/raffinose": null,
+    "birkholz/sphingomyelin": 95,
+    "birkholz/tamoxifen": 70,
+    "birkholz/vitamin_c": 29,
+    "birkholz/zn_edta": 99
+  },
+  "note": "Only molecules with non-empty scan signal are committed; rerun benchmark_trajectory_check.py to regenerate the full set."
+}
