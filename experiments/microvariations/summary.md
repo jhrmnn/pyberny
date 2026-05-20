@@ -417,3 +417,180 @@ Healthy minimum-finding trajectories report all-positive BFGS Hessian eigenvalue
 - birkholz/raffinose
 - baker/caffeine
 
+
+# Internal-coordinate triggers along benchmark trajectories
+
+Source: `experiments/microvariations/benchmark_internals_diag.py`
+generalises `estradiol_internals_diag.py` to twelve "case-study"
+molecules selected from the warning sweep above. For each molecule it
+captures, at every optimizer step, both the four warning classes
+(pinv, back-xform, neg-eig, severe-dq) and four geometric "going
+planar / linear" diagnostics:
+
+- maximum `Angle` in `InternalCoords` (linear-angle threshold 175 deg),
+- maximum sum of neighbour-pair angles around any 3-coordinate atom
+  (planar threshold 355 deg; aromatic carbons sit at 360 deg by
+  construction - see caveat below),
+- minimum out-of-plane angle around any 4-coordinate atom
+  (sp3-inversion threshold 5 deg),
+- maximum bond-length / sum-of-covalent-radii ratio (stretch
+  threshold 1.5).
+
+Each warning step is then classified into a *mechanism*:
+`linear-angle-dihedral` | `sp3-inversion` | `bond-stretch` |
+`planar-center` | `unattributed`, in that priority order. The
+artefacts are committed under
+`experiments/microvariations/benchmark_internals_diag/`:
+per-molecule JSON, an aggregate `per_step.json` with the
+co-occurrence rows, per-molecule `trajectory_<mol>.png` figures
+(energy / max-angle / min-pyramidalisation / `sv[0]` of `B B^T` /
+pinv-gap index, with warning steps shaded), and the roll-up
+`triggers.md`. INFO-level logs are not committed (gitignored, like
+`benchmark_diag/`); the scan results are baked into the per-molecule
+JSON so the roll-up regenerates without the logs.
+
+## Roll-up
+
+| set / molecule | class | converged | steps | warning steps | mechanism |
+|---|---|---|---:|---|---|
+| baker/allene | pinv@final | yes | 12 | 3,5,6,7,8... | linear-angle-dihedral |
+| baker/disilyl_ether | pinv@final | yes | 7 | 5,6,7 | linear-angle-dihedral |
+| birkholz/estradiol | pinv@final | yes | 11 | 6,7,8,9,10... | linear-angle-dihedral |
+| birkholz/raffinose | heavy back-xform + saddles | yes | 85 | 42,43,45,46,47 | **unattributed** |
+| baker/caffeine | sustained neg-eig | ERR (FindrootError) | 75 | 27,31,33,37,40... | **unattributed (aromatic)** |
+| birkholz/maltose | severe dq (converges right) | yes | 54 | 27,30,31 | **unattributed** |
+| birkholz/inosine_cation | severe dq (converges right) | yes | 47 | 11 | planar-center (aromatic) |
+| birkholz/ochratoxin_a | hit maxsteps | no | 110 | 41,44,47,51,54 | planar-center (aromatic) |
+| birkholz/bisphenol_a | hit maxsteps | no | 110 | 13,15 | planar-center (aromatic) |
+| birkholz/artemisinin | control | yes | 25 | - | clean |
+| birkholz/vitamin_c | control | yes | 29 | - | clean |
+| baker/benzene | control | yes | 4 | - | clean |
+
+## Findings
+
+### 1. All three `pinv@final` cases reproduce the estradiol mechanism
+
+The diagnostic the experiment was designed to find: **every** molecule
+that the warning sweep flagged with `pinv@final = YES` has an
+`Angle` >= 175 deg at the convergence-declaring step, and the
+top contributors to the truncated singular direction are dihedrals
+containing that angle. The estradiol H37-C36-O40 story is **not**
+an idiosyncrasy of estradiol - it is a generic singular-coordinate
+mechanism:
+
+- **allene**: the central C1-C0-C2 angle is **180.0 deg** at every
+  step (allene is sp-hybridised by definition; this is the published
+  starting geometry, not a perturbation), and the two dihedrals
+  H5-C1-C0-C2 and H6-C1-C0-C2 sit on this central angle. `sv[0]` of
+  `B B^T` is dominated by the affected dihedral rows from step 1 and
+  the pinv gap is at index 0 throughout. The `pinv@final` cell in
+  `warnings.md` is the same mechanism estradiol exhibits at the
+  *terminal* step, except allene starts there.
+- **disilyl_ether**: Si-O-Si starts at 171.7 deg at the warning steps
+  and continues toward 180. Same Dihedral.eval singularity.
+- **estradiol** (sanity, published .xyz): H37-C36-O40 reaches 171.5 deg
+  at step 6 and crosses 175 deg at step 7, exactly the trajectory the
+  bespoke `estradiol_internals_diag.py` recorded for the perturbed
+  seeds.
+
+For these three molecules the implication is unambiguous: a fix at
+the source of the singularity (per-coordinate trust clipping that
+prevents any angle from crossing ~170 deg, or rebuilding the
+internal-coord set when an angle goes near-linear) closes the entire
+`pinv@final` class on both benchmark sets.
+
+### 2. Raffinose and maltose are a *different* failure mode
+
+Both molecules emit a tight cluster of back-xform + neg-eig +
+severe-dq warnings, but none of the four geometric flags fires at
+those steps. Maximum angle stays well below 175 deg, no 3-coord
+atom flattens, no 4-coord atom inverts, no bond stretches. The
+pinv gap is always at a position < 3N - 6 (so the rank-deficient
+projection is happening), but the warnings here are *not* the
+estradiol mechanism. The plan's predicted "BFGS Hessian
+flips / RFO saddle-mode descent on a flat torsional manifold"
+candidate is consistent with the warning pattern (negative
+eigenvalues + severe back-transform `dq`), and is the natural
+next experiment.
+
+Raffinose ultimately **does** converge (85 steps, well under the
+110-step cap - lower than the 110 the previous sweep recorded,
+which most likely reflects a MOPAC version change since
+`warnings.json` was generated). Maltose converges in 54 steps as
+in the original. So this failure mode is *not* a convergence
+killer, only a numerical-stress event.
+
+### 3. The `planar-center` rollup column is mostly an aromatic-π artefact
+
+`inosine_cation`, `ochratoxin_a`, `bisphenol_a`, and `caffeine` all
+get tagged `planar-center` simply because their aromatic-ring
+carbons have neighbour-pair angle sums of ~360 deg *throughout the
+trajectory*, not because of any transient flattening event. The
+mechanism column is not actionable for these molecules; the
+co-occurrence tables in `triggers.md` show the planar-3coord bit is
+"Y" at *every* step of every molecule that contains an aromatic
+ring.
+
+A more discriminating planar metric (e.g. RMSD vs the first-step
+value of the angle sum, or the same metric restricted to non-aromatic
+3-coord atoms) would clean up the rollup, but does not change the
+scientific conclusion: ochratoxin_a, bisphenol_a, and the
+pre-crash 75 steps of caffeine all have only **neg-eig** warnings -
+the same Hessian-flip family as raffinose. None of these has a
+near-linear angle event.
+
+### 4. Caffeine reproducibly crashes with `FindrootError`
+
+Caffeine ran 75 steps under MOPAC PM7 and then the optimizer's
+internal linear-search root finder failed (`FindrootError`). 19
+warning lines fired during those 75 steps - all `neg-eig`, none
+of the other three. This is a third, distinct failure mode (the
+optimizer's *own* linear-interpolation step, not the
+internal-coord projection or back-transform), so it falls outside
+both the singular-coordinate and the Hessian-flip hypotheses
+investigated here.
+
+### 5. Bisphenol_a and ochratoxin_a maxstep-hit is the saddle-mode mode, not the singular-coordinate mode
+
+Both molecules hit the 110-step ceiling with **zero**
+near-linear-angle events and zero `pinv@final` flags. Their warning
+trail is purely `neg-eig`. That rules out option (i) from the plan
+("oscillating across a near-linear configuration without ever
+stopping") and supports option (ii): they are slow for unrelated
+PES-flatness reasons. A "refuse convergence on truncated pinv" fix
+would not have changed their outcome.
+
+## Mechanism summary across all 12 case-study molecules
+
+| mechanism | warning steps with this mechanism | share |
+|---|---:|---:|
+| linear-angle-dihedral | 16 / 53 | 30% |
+| planar-center | 28 / 53 | 53% (mostly aromatic-π false positives) |
+| sp3-inversion | 0 / 53 | 0% |
+| bond-stretch | 0 / 53 | 0% |
+| unattributed | 9 / 53 | 17% |
+
+Removing the four aromatic-ring molecules (whose `planar-center`
+hits are all the aromatic-π false positive) from the denominator
+leaves 25 warning steps over 8 molecules, of which 16 (64%) are
+`linear-angle-dihedral` and 9 (36%) are `unattributed`. The
+estradiol singular-coordinate mechanism therefore accounts for the
+majority of *interpretable* warning steps in the case-study set,
+but a clearly separate failure mode (raffinose / maltose, and by
+proxy the aromatic-ring `neg-eig` molecules) drives the rest.
+
+## Decision points for follow-up
+
+- A geometric-singularity fix - per-coordinate trust clipping on
+  angles > ~170 deg, or rebuilding internals when an angle goes
+  near-linear, or specialising `Dihedral.eval` for containing
+  angles near 180 deg - closes the entire `pinv@final` class on
+  both benchmark sets (estradiol, allene, disilyl_ether).
+- That same fix will *not* help raffinose, maltose, ochratoxin_a,
+  bisphenol_a, or caffeine. Their warnings are driven by something
+  in the BFGS-Hessian / RFO sphere-minimisation path that is
+  independent of the internal-coord singular geometry.
+- "Refuse convergence on truncated pinv" would catch the same three
+  molecules a geometric fix catches; it would *not* unfreeze the
+  maxsteps molecules or save caffeine from its `FindrootError`.
+

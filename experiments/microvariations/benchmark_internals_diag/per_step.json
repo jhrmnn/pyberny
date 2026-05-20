@@ -1,0 +1,5551 @@
+{
+  "records": [
+    {
+      "set_dir": "baker_shajan_2023",
+      "molecule": "allene",
+      "class_label": "pinv@final",
+      "converged": true,
+      "steps": 12,
+      "wall_s": 0.4447924510004668,
+      "error": null,
+      "scan_summary": {
+        "pinv_steps": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          11,
+          12
+        ],
+        "backxform_steps": [
+          3,
+          6,
+          7,
+          9,
+          10,
+          12
+        ],
+        "negeig_steps": [],
+        "severe_dq_steps": [],
+        "convergence_step": 12
+      },
+      "cooccurrence": [
+        {
+          "step": 1,
+          "warnings": [],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 2,
+          "warnings": [],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 3,
+          "warnings": [
+            "back-xform"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 4,
+          "warnings": [],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 5,
+          "warnings": [
+            "pinv"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 6,
+          "warnings": [
+            "pinv",
+            "back-xform"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 7,
+          "warnings": [
+            "pinv",
+            "back-xform"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 8,
+          "warnings": [
+            "pinv"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 9,
+          "warnings": [
+            "pinv",
+            "back-xform"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 10,
+          "warnings": [
+            "back-xform"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 11,
+          "warnings": [
+            "pinv"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 12,
+          "warnings": [
+            "pinv",
+            "back-xform"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        }
+      ]
+    },
+    {
+      "set_dir": "baker_shajan_2023",
+      "molecule": "disilyl_ether",
+      "class_label": "pinv@final",
+      "converged": true,
+      "steps": 7,
+      "wall_s": 0.5059624569985317,
+      "error": null,
+      "scan_summary": {
+        "pinv_steps": [
+          7
+        ],
+        "backxform_steps": [
+          5,
+          6
+        ],
+        "negeig_steps": [],
+        "severe_dq_steps": [
+          6
+        ],
+        "convergence_step": 7
+      },
+      "cooccurrence": [
+        {
+          "step": 1,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 2,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 3,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 4,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 5,
+          "warnings": [
+            "back-xform"
+          ],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 6,
+          "warnings": [
+            "back-xform",
+            "severe-dq"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 7,
+          "warnings": [
+            "pinv"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        }
+      ]
+    },
+    {
+      "set_dir": "birkholz_schlegel",
+      "molecule": "estradiol",
+      "class_label": "pinv@final (cross-validate)",
+      "converged": true,
+      "steps": 11,
+      "wall_s": 2.488853703998757,
+      "error": null,
+      "scan_summary": {
+        "pinv_steps": [
+          8,
+          9,
+          10,
+          11
+        ],
+        "backxform_steps": [
+          6,
+          7
+        ],
+        "negeig_steps": [],
+        "severe_dq_steps": [
+          7
+        ],
+        "convergence_step": 11
+      },
+      "cooccurrence": [
+        {
+          "step": 1,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 2,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 3,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 4,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 5,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 6,
+          "warnings": [
+            "back-xform"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 7,
+          "warnings": [
+            "back-xform",
+            "severe-dq"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 8,
+          "warnings": [
+            "pinv"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 9,
+          "warnings": [
+            "pinv"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 10,
+          "warnings": [
+            "pinv"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 11,
+          "warnings": [
+            "pinv"
+          ],
+          "mechanism": "linear-angle-dihedral",
+          "angle_ge_175": true,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        }
+      ]
+    },
+    {
+      "set_dir": "birkholz_schlegel",
+      "molecule": "raffinose",
+      "class_label": "heavy back-xform + saddles",
+      "converged": true,
+      "steps": 85,
+      "wall_s": 26.224661173999266,
+      "error": null,
+      "scan_summary": {
+        "pinv_steps": [],
+        "backxform_steps": [
+          42,
+          43,
+          46
+        ],
+        "negeig_steps": [
+          42,
+          45,
+          46,
+          47
+        ],
+        "severe_dq_steps": [
+          42,
+          43,
+          46
+        ],
+        "convergence_step": 85
+      },
+      "cooccurrence": [
+        {
+          "step": 1,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 2,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 3,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 4,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 5,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 6,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 7,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 8,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 9,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 10,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 11,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 12,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 13,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 14,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 15,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 16,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 17,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 18,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 19,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 20,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 21,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 22,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 23,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 24,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 25,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 26,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 27,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 28,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 29,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 30,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 31,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 32,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 33,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 34,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 35,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 36,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 37,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 38,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 39,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 40,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 41,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 42,
+          "warnings": [
+            "back-xform",
+            "neg-eig",
+            "severe-dq"
+          ],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 43,
+          "warnings": [
+            "back-xform",
+            "severe-dq"
+          ],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 44,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 45,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 46,
+          "warnings": [
+            "back-xform",
+            "neg-eig",
+            "severe-dq"
+          ],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 47,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 48,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 49,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 50,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 51,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 52,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 53,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 54,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 55,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 56,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 57,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 58,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 59,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 60,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 61,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 62,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 63,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 64,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 65,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 66,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 67,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 68,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 69,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 70,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 71,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 72,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 73,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 74,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 75,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 76,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 77,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 78,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 79,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 80,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 81,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 82,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 83,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 84,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 85,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        }
+      ]
+    },
+    {
+      "set_dir": "baker_shajan_2023",
+      "molecule": "caffeine",
+      "class_label": "sustained neg-eig",
+      "converged": false,
+      "steps": 0,
+      "wall_s": 7.113208509001197,
+      "error": "FindrootError: ",
+      "scan_summary": {
+        "pinv_steps": [],
+        "backxform_steps": [],
+        "negeig_steps": [
+          27,
+          31,
+          33,
+          37,
+          40,
+          43,
+          45,
+          46,
+          50,
+          51,
+          55,
+          58,
+          59,
+          60,
+          62,
+          63,
+          66,
+          67,
+          70
+        ],
+        "severe_dq_steps": [],
+        "convergence_step": null
+      },
+      "cooccurrence": [
+        {
+          "step": 1,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 2,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 3,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 4,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 5,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 6,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 7,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 8,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 9,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 10,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 11,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 12,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 13,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 14,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 15,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 16,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 17,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 18,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 19,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 20,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 21,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 22,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 23,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 24,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 25,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 26,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 27,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 28,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 29,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 30,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 31,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 32,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 33,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 34,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 35,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 36,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 37,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 38,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 39,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 40,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 41,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 42,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 43,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 44,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 45,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 46,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 47,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 48,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 49,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 50,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 51,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 52,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 53,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 54,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 55,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 56,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 57,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 58,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 59,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 60,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 61,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 62,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 63,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 64,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 65,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 66,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 67,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 68,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 69,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 70,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 71,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 72,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 73,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 74,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 75,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        }
+      ]
+    },
+    {
+      "set_dir": "birkholz_schlegel",
+      "molecule": "maltose",
+      "class_label": "severe dq (converges right)",
+      "converged": true,
+      "steps": 54,
+      "wall_s": 11.38656138099941,
+      "error": null,
+      "scan_summary": {
+        "pinv_steps": [],
+        "backxform_steps": [
+          27,
+          30
+        ],
+        "negeig_steps": [
+          27,
+          30,
+          31
+        ],
+        "severe_dq_steps": [
+          27,
+          30
+        ],
+        "convergence_step": 54
+      },
+      "cooccurrence": [
+        {
+          "step": 1,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 2,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 3,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 4,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 5,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 6,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 7,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 8,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 9,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 10,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 11,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 12,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 13,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 14,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 15,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 16,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 17,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 18,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 19,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 20,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 21,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 22,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 23,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 24,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 25,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 26,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 27,
+          "warnings": [
+            "back-xform",
+            "neg-eig",
+            "severe-dq"
+          ],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 28,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 29,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 30,
+          "warnings": [
+            "back-xform",
+            "neg-eig",
+            "severe-dq"
+          ],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 31,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 32,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 33,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 34,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 35,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 36,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 37,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 38,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 39,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 40,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 41,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 42,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 43,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 44,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 45,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 46,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 47,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 48,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 49,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 50,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 51,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 52,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 53,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 54,
+          "warnings": [],
+          "mechanism": "unattributed",
+          "angle_ge_175": false,
+          "planar_3coord": false,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        }
+      ]
+    },
+    {
+      "set_dir": "birkholz_schlegel",
+      "molecule": "inosine_cation",
+      "class_label": "severe dq (converges right)",
+      "converged": true,
+      "steps": 47,
+      "wall_s": 6.491868799001168,
+      "error": null,
+      "scan_summary": {
+        "pinv_steps": [],
+        "backxform_steps": [
+          11
+        ],
+        "negeig_steps": [],
+        "severe_dq_steps": [
+          11
+        ],
+        "convergence_step": 47
+      },
+      "cooccurrence": [
+        {
+          "step": 1,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 2,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 3,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 4,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 5,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 6,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 7,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 8,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 9,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 10,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 11,
+          "warnings": [
+            "back-xform",
+            "severe-dq"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 12,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 13,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 14,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 15,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 16,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 17,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 18,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 19,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 20,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 21,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 22,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 23,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 24,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 25,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 26,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 27,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 28,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 29,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 30,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 31,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 32,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 33,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 34,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 35,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 36,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 37,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 38,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 39,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 40,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 41,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 42,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 43,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 44,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 45,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 46,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 47,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        }
+      ]
+    },
+    {
+      "set_dir": "birkholz_schlegel",
+      "molecule": "ochratoxin_a",
+      "class_label": "hit maxsteps",
+      "converged": false,
+      "steps": 110,
+      "wall_s": 22.318263335000665,
+      "error": null,
+      "scan_summary": {
+        "pinv_steps": [],
+        "backxform_steps": [],
+        "negeig_steps": [
+          41,
+          44,
+          47,
+          51,
+          54
+        ],
+        "severe_dq_steps": [],
+        "convergence_step": null
+      },
+      "cooccurrence": [
+        {
+          "step": 1,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 2,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 3,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 4,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 5,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 6,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 7,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 8,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 9,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 10,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 11,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 12,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 13,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 14,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 15,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 16,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 17,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 18,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 19,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 20,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 21,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 22,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 23,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 24,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 25,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 26,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 27,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 28,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 29,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 30,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 31,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 32,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 33,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 34,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 35,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 36,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 37,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 38,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 39,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 40,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 41,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 42,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 43,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 44,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 45,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 46,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 47,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 48,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 49,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 50,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 51,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 52,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 53,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 54,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 55,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 56,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 57,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 58,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 59,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 60,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 61,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 62,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 63,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 64,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 65,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 66,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 67,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 68,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 69,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 70,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 71,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 72,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 73,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 74,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 75,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 76,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 77,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 78,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 79,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 80,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 81,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 82,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 83,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 84,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 85,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 86,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 87,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 88,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 89,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 90,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 91,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 92,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 93,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 94,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 95,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 96,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 97,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 98,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 99,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 100,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 101,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 102,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 103,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 104,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 105,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 106,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 107,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 108,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 109,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 110,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        }
+      ]
+    },
+    {
+      "set_dir": "birkholz_schlegel",
+      "molecule": "bisphenol_a",
+      "class_label": "hit maxsteps",
+      "converged": false,
+      "steps": 110,
+      "wall_s": 13.816620478000914,
+      "error": null,
+      "scan_summary": {
+        "pinv_steps": [],
+        "backxform_steps": [],
+        "negeig_steps": [
+          13,
+          15
+        ],
+        "severe_dq_steps": [],
+        "convergence_step": null
+      },
+      "cooccurrence": [
+        {
+          "step": 1,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 2,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 3,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 4,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 5,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 6,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 7,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 8,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 9,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 10,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 11,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 12,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 13,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 14,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 15,
+          "warnings": [
+            "neg-eig"
+          ],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 16,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 17,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 18,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 19,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 20,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 21,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 22,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 23,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 24,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 25,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 26,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 27,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 28,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 29,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 30,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 31,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 32,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 33,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 34,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 35,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 36,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 37,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 38,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 39,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 40,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 41,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 42,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 43,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 44,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 45,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 46,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 47,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 48,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 49,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 50,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 51,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 52,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 53,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 54,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 55,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 56,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 57,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 58,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 59,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 60,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 61,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 62,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 63,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 64,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 65,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 66,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 67,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 68,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 69,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 70,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 71,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 72,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 73,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 74,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 75,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 76,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 77,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 78,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 79,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 80,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 81,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 82,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 83,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 84,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 85,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 86,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 87,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 88,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 89,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 90,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 91,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 92,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 93,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 94,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 95,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 96,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 97,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 98,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 99,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 100,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 101,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 102,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 103,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 104,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 105,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 106,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 107,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 108,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 109,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 110,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        }
+      ]
+    },
+    {
+      "set_dir": "birkholz_schlegel",
+      "molecule": "artemisinin",
+      "class_label": "control (clean)",
+      "converged": true,
+      "steps": 25,
+      "wall_s": 5.067330400999708,
+      "error": null,
+      "scan_summary": {
+        "pinv_steps": [],
+        "backxform_steps": [],
+        "negeig_steps": [],
+        "severe_dq_steps": [],
+        "convergence_step": 25
+      },
+      "cooccurrence": [
+        {
+          "step": 1,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 2,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 3,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 4,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 5,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 6,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 7,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 8,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 9,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 10,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 11,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 12,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 13,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 14,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 15,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 16,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 17,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 18,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 19,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 20,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 21,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 22,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 23,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 24,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 25,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        }
+      ]
+    },
+    {
+      "set_dir": "birkholz_schlegel",
+      "molecule": "vitamin_c",
+      "class_label": "control (clean)",
+      "converged": true,
+      "steps": 29,
+      "wall_s": 2.2320270359996357,
+      "error": null,
+      "scan_summary": {
+        "pinv_steps": [],
+        "backxform_steps": [],
+        "negeig_steps": [],
+        "severe_dq_steps": [],
+        "convergence_step": 29
+      },
+      "cooccurrence": [
+        {
+          "step": 1,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 2,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 3,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 4,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 5,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 6,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 7,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 8,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 9,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 10,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 11,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 12,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 13,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 14,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 15,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 16,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 17,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 18,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 19,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 20,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 21,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 22,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 23,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 24,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 25,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 26,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 27,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 28,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 29,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        }
+      ]
+    },
+    {
+      "set_dir": "baker_shajan_2023",
+      "molecule": "benzene",
+      "class_label": "control (clean)",
+      "converged": true,
+      "steps": 4,
+      "wall_s": 0.17049850200055516,
+      "error": null,
+      "scan_summary": {
+        "pinv_steps": [],
+        "backxform_steps": [],
+        "negeig_steps": [],
+        "severe_dq_steps": [],
+        "convergence_step": 4
+      },
+      "cooccurrence": [
+        {
+          "step": 1,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 2,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 3,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        },
+        {
+          "step": 4,
+          "warnings": [],
+          "mechanism": "planar-center",
+          "angle_ge_175": false,
+          "planar_3coord": true,
+          "sp3_inverted": false,
+          "pinv_truncation_pre_chemical": true
+        }
+      ]
+    }
+  ]
+}

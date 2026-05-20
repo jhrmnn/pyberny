@@ -1,0 +1,416 @@
+{
+  "converged": true,
+  "steps": 7,
+  "wall_s": 0.5059624569985317,
+  "error": null,
+  "per_step": [
+    {
+      "step": 1,
+      "energy_ha": -0.1389111765202716,
+      "max_angle_deg": 149.68780808182044,
+      "near_linear_angles": [],
+      "max_3coord_anglesum_deg": 0.0,
+      "planar_3coord_centres": [],
+      "min_pyramidalisation_deg": 89.04192947544561,
+      "sp3_inverted_centres": [],
+      "max_bond_stretch_ratio": 0.9275130581856059,
+      "stretched_bonds": [],
+      "n_internals": 27,
+      "n_cart": 27,
+      "sv_max": 14.144237535222729,
+      "sv_min": 1e-30,
+      "condition_number": 1.4144237535222727e+31,
+      "pinv_gap_index": 20,
+      "pinv_gap_value": 56588959970301.34,
+      "sv_at_gap": 0.06567537074223001,
+      "sv_just_after_gap": 1.1605686122646068e-15,
+      "n_truncated": 6,
+      "top_5_truncated_contribs": [
+        [
+          12,
+          0.29902451467269175,
+          "Angle(3-0-5)"
+        ],
+        [
+          21,
+          0.23748295250479542,
+          "Dihedral(3-0-2-1)"
+        ],
+        [
+          10,
+          0.1445702752635049,
+          "Angle(2-0-5)"
+        ],
+        [
+          23,
+          0.08061909512518206,
+          "Dihedral(5-0-2-1)"
+        ],
+        [
+          8,
+          0.06283434523517067,
+          "Angle(2-0-3)"
+        ]
+      ]
+    },
+    {
+      "step": 2,
+      "energy_ha": -0.15314275788322923,
+      "max_angle_deg": 152.7843025633981,
+      "near_linear_angles": [],
+      "max_3coord_anglesum_deg": 0.0,
+      "planar_3coord_centres": [],
+      "min_pyramidalisation_deg": 88.37570240684119,
+      "sp3_inverted_centres": [],
+      "max_bond_stretch_ratio": 0.9502037475508199,
+      "stretched_bonds": [],
+      "n_internals": 27,
+      "n_cart": 27,
+      "sv_max": 18.0817867533126,
+      "sv_min": 1e-30,
+      "condition_number": 1.8081786753312599e+31,
+      "pinv_gap_index": 20,
+      "pinv_gap_value": 86558359635374.33,
+      "sv_at_gap": 0.0662424518351621,
+      "sv_just_after_gap": 7.652923659159825e-16,
+      "n_truncated": 6,
+      "top_5_truncated_contribs": [
+        [
+          25,
+          0.22418338947807198,
+          "Dihedral(7-1-2-0)"
+        ],
+        [
+          21,
+          0.15960179283116957,
+          "Dihedral(3-0-2-1)"
+        ],
+        [
+          24,
+          0.12873604743899794,
+          "Dihedral(6-1-2-0)"
+        ],
+        [
+          17,
+          0.09924444906551971,
+          "Angle(6-1-7)"
+        ],
+        [
+          19,
+          0.07348756245238476,
+          "Angle(7-1-8)"
+        ]
+      ]
+    },
+    {
+      "step": 3,
+      "energy_ha": -0.1597415311161859,
+      "max_angle_deg": 160.29160120994297,
+      "near_linear_angles": [],
+      "max_3coord_anglesum_deg": 0.0,
+      "planar_3coord_centres": [],
+      "min_pyramidalisation_deg": 87.51627123419335,
+      "sp3_inverted_centres": [],
+      "max_bond_stretch_ratio": 0.9762575928402956,
+      "stretched_bonds": [],
+      "n_internals": 27,
+      "n_cart": 27,
+      "sv_max": 34.993181077710055,
+      "sv_min": 1e-30,
+      "condition_number": 3.4993181077710053e+31,
+      "pinv_gap_index": 20,
+      "pinv_gap_value": 34050990981566.58,
+      "sv_at_gap": 0.06755044194004317,
+      "sv_just_after_gap": 1.983802526528859e-15,
+      "n_truncated": 6,
+      "top_5_truncated_contribs": [
+        [
+          23,
+          0.2646609946121155,
+          "Dihedral(5-0-2-1)"
+        ],
+        [
+          13,
+          0.1859984888489159,
+          "Angle(4-0-5)"
+        ],
+        [
+          22,
+          0.1783926792202803,
+          "Dihedral(4-0-2-1)"
+        ],
+        [
+          25,
+          0.06882662344148034,
+          "Dihedral(7-1-2-0)"
+        ],
+        [
+          19,
+          0.061276411293730515,
+          "Angle(7-1-8)"
+        ]
+      ]
+    },
+    {
+      "step": 4,
+      "energy_ha": -0.16055314476584173,
+      "max_angle_deg": 164.86717584659024,
+      "near_linear_angles": [],
+      "max_3coord_anglesum_deg": 0.0,
+      "planar_3coord_centres": [],
+      "min_pyramidalisation_deg": 87.97910235976434,
+      "sp3_inverted_centres": [],
+      "max_bond_stretch_ratio": 0.9815273526251743,
+      "stretched_bonds": [],
+      "n_internals": 27,
+      "n_cart": 27,
+      "sv_max": 58.5684275497934,
+      "sv_min": 1e-30,
+      "condition_number": 5.85684275497934e+31,
+      "pinv_gap_index": 20,
+      "pinv_gap_value": 73500688912248.0,
+      "sv_at_gap": 0.06847054389487271,
+      "sv_just_after_gap": 9.315632942790408e-16,
+      "n_truncated": 6,
+      "top_5_truncated_contribs": [
+        [
+          25,
+          0.18720260879818867,
+          "Dihedral(7-1-2-0)"
+        ],
+        [
+          22,
+          0.16924478958837072,
+          "Dihedral(4-0-2-1)"
+        ],
+        [
+          11,
+          0.12189367165824122,
+          "Angle(3-0-4)"
+        ],
+        [
+          19,
+          0.07925892300049295,
+          "Angle(7-1-8)"
+        ],
+        [
+          23,
+          0.07622045284590002,
+          "Dihedral(5-0-2-1)"
+        ]
+      ]
+    },
+    {
+      "step": 5,
+      "energy_ha": -0.16119723730404475,
+      "max_angle_deg": 171.6525046469068,
+      "near_linear_angles": [
+        [
+          2,
+          171.6525046469068,
+          "Si0-O2-Si1"
+        ]
+      ],
+      "max_3coord_anglesum_deg": 0.0,
+      "planar_3coord_centres": [],
+      "min_pyramidalisation_deg": 87.88194061284895,
+      "sp3_inverted_centres": [],
+      "max_bond_stretch_ratio": 0.9839246544881147,
+      "stretched_bonds": [],
+      "n_internals": 27,
+      "n_cart": 27,
+      "sv_max": 189.44583168690906,
+      "sv_min": 1e-30,
+      "condition_number": 1.8944583168690904e+32,
+      "pinv_gap_index": 20,
+      "pinv_gap_value": 18123697828019.316,
+      "sv_at_gap": 0.06983201802251991,
+      "sv_just_after_gap": 3.853077814758052e-15,
+      "n_truncated": 6,
+      "top_5_truncated_contribs": [
+        [
+          24,
+          0.3906006714257571,
+          "Dihedral(6-1-2-0)"
+        ],
+        [
+          18,
+          0.15239804332221626,
+          "Angle(6-1-8)"
+        ],
+        [
+          17,
+          0.15212061351217984,
+          "Angle(6-1-7)"
+        ],
+        [
+          26,
+          0.09788743594892205,
+          "Dihedral(8-1-2-0)"
+        ],
+        [
+          25,
+          0.09741318760813582,
+          "Dihedral(7-1-2-0)"
+        ]
+      ]
+    },
+    {
+      "step": 6,
+      "energy_ha": -0.16148472596943758,
+      "max_angle_deg": 177.28293444512582,
+      "near_linear_angles": [
+        [
+          2,
+          177.28293444512582,
+          "Si0-O2-Si1"
+        ]
+      ],
+      "max_3coord_anglesum_deg": 0.0,
+      "planar_3coord_centres": [],
+      "min_pyramidalisation_deg": 88.07937696228156,
+      "sp3_inverted_centres": [],
+      "max_bond_stretch_ratio": 0.9833463280639387,
+      "stretched_bonds": [],
+      "n_internals": 27,
+      "n_cart": 27,
+      "sv_max": 1774.0043902852838,
+      "sv_min": 1e-30,
+      "condition_number": 1.7740043902852836e+33,
+      "pinv_gap_index": 20,
+      "pinv_gap_value": 630584960994.5166,
+      "sv_at_gap": 0.07066294806344882,
+      "sv_just_after_gap": 1.1205936144116714e-13,
+      "n_truncated": 6,
+      "top_5_truncated_contribs": [
+        [
+          26,
+          0.3388095539798173,
+          "Dihedral(8-1-2-0)"
+        ],
+        [
+          25,
+          0.20561290112521707,
+          "Dihedral(7-1-2-0)"
+        ],
+        [
+          19,
+          0.18827049722817268,
+          "Angle(7-1-8)"
+        ],
+        [
+          18,
+          0.08844805601834206,
+          "Angle(6-1-8)"
+        ],
+        [
+          14,
+          0.051840345028257864,
+          "Angle(2-1-6)"
+        ]
+      ]
+    },
+    {
+      "step": 7,
+      "energy_ha": -0.16159298043196604,
+      "max_angle_deg": 179.93753558622092,
+      "near_linear_angles": [
+        [
+          2,
+          179.93753558622092,
+          "Si0-O2-Si1"
+        ]
+      ],
+      "max_3coord_anglesum_deg": 0.0,
+      "planar_3coord_centres": [],
+      "min_pyramidalisation_deg": 88.365272765593,
+      "sp3_inverted_centres": [],
+      "max_bond_stretch_ratio": 0.9813856586608439,
+      "stretched_bonds": [],
+      "n_internals": 27,
+      "n_cart": 27,
+      "sv_max": 3357881.3977039102,
+      "sv_min": 1e-30,
+      "condition_number": 3.35788139770391e+36,
+      "pinv_gap_index": 0,
+      "pinv_gap_value": 940162.3851060956,
+      "sv_at_gap": 3357881.3977039102,
+      "sv_just_after_gap": 3.5715972590468823,
+      "n_truncated": 26,
+      "top_5_truncated_contribs": [
+        [
+          4,
+          0.3836952003649654,
+          "Bond(1-2)"
+        ],
+        [
+          0,
+          0.38364146046583386,
+          "Bond(0-2)"
+        ],
+        [
+          5,
+          0.01809744015930712,
+          "Bond(1-6)"
+        ],
+        [
+          1,
+          0.018087364783376487,
+          "Bond(0-3)"
+        ],
+        [
+          6,
+          0.01781146447334839,
+          "Bond(1-7)"
+        ]
+      ]
+    }
+  ],
+  "scan": {
+    "pinv": {
+      "7": [
+        940000.0
+      ]
+    },
+    "backxform": {
+      "5": [
+        20
+      ],
+      "6": [
+        20
+      ]
+    },
+    "negeig": {},
+    "dq": {
+      "1": [
+        1.69e-07,
+        3.39e-07
+      ],
+      "2": [
+        8.27e-07,
+        1.78e-06
+      ],
+      "3": [
+        8.39e-08,
+        4.88e-07
+      ],
+      "4": [
+        9.86e-07,
+        1.07e-05
+      ],
+      "5": [
+        0.0244,
+        0.0195
+      ],
+      "6": [
+        0.0129,
+        1.14
+      ],
+      "7": [
+        5.99e-11,
+        2.08e-07
+      ]
+    },
+    "convergence_step": 7
+  }
+}

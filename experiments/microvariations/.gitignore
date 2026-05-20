@@ -4,3 +4,4 @@ run.log
 tight_run.log
 benchmark_diag/birkholz_schlegel/
 benchmark_diag/baker_shajan_2023/
+benchmark_internals_diag/log_*.txt
