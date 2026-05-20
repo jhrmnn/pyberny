@@ -18,7 +18,9 @@ pathology in ``summary.md``:
 Outputs (under ``--out``, default ``experiments/microvariations/benchmark_diag/``):
 
 - ``<set>/<molecule>.log`` per molecule (raw INFO log).
-- ``warnings.json`` - structured per-molecule record.
+- ``warnings_full.json`` - structured per-molecule record (filename
+  configurable via ``--out-json``; the default avoids overwriting the
+  curated, committed ``warnings.json`` snapshot).
 - ``warnings.md`` - per-set Markdown summary table + a "Findings" section
   listing molecules with pinv warnings at the convergence-declaring step.
 """
@@ -66,15 +68,21 @@ BENCHMARKS = {
 
 # Pattern emitted by Math.pinv when the singular-value gap is small enough
 # to log but a truncation still happened. Step prefix added by BernyAdapter.
-PINV_RE = re.compile(r'^(\d+)\s+Pseudoinverse gap of only:\s+([0-9.eE+-]+)\s*$')
+PINV_RE = re.compile(
+    r'^(\d+)\s+Pseudoinverse gap of only:\s+([0-9.eE+-]+)\s*$'
+)
 # Pattern from coords.py back-transform when its inner loop hit max_iter.
-BACKXFORM_RE = re.compile(r'^(\d+)\s+Transformation did not converge in (\d+) iterations\s*$')
+BACKXFORM_RE = re.compile(
+    r'^(\d+)\s+Transformation did not converge in (\d+) iterations\s*$'
+)
 # Negative eigenvalues in the BFGS Hessian: a saddle-pass or an ill-conditioned
 # Hessian. Healthy minima trajectories have all-positive eigenvalues at every
 # step; nonzero counts mean the optimizer was using sphere-minimization to
 # descend along an unstable mode (or that the BFGS update produced a spurious
 # negative direction).
-NEGEIG_RE = re.compile(r'^(\d+)\s+\* Number of negative eigenvalues:\s+([1-9]\d*)\s*$')
+NEGEIG_RE = re.compile(
+    r'^(\d+)\s+\* Number of negative eigenvalues:\s+([1-9]\d*)\s*$'
+)
 # RMS(dq) line of the back-transform. We flag entries where dq is large enough
 # to indicate the internal-coord step couldn't faithfully represent the
 # attempted Cartesian step (the disilyl_ether step-6 / maltose step-27 mode).
@@ -150,7 +158,7 @@ def scan_log(log_path):
     - ``backtransform_warnings``: list of ``{step, iterations}`` for every
       back-transform failure.
     - ``maxsteps_reached``: bool.
-    - ``final_step``: int or None - the step number of the line
+    - ``convergence_step``: int or None - the step number of the line
       ``* All criteria matched``. ``None`` if the optimizer never converged.
     """
     pinv = []
@@ -364,6 +372,20 @@ def parse_args(argv=None):
     ap.add_argument('--molecules', nargs='+', default=None)
     ap.add_argument('--maxsteps', type=int, default=110)
     ap.add_argument(
+        '--out-json',
+        default='warnings_full.json',
+        help=(
+            'filename (relative to --out) for the JSON records file. '
+            "Defaults to 'warnings_full.json' so the curated, committed "
+            "'warnings.json' snapshot is not overwritten by a fresh run."
+        ),
+    )
+    ap.add_argument(
+        '--out-md',
+        default='warnings.md',
+        help='filename (relative to --out) for the rendered Markdown report.',
+    )
+    ap.add_argument(
         '--resume',
         action='store_true',
         help='reuse <molecule>.log files that already exist',
@@ -446,14 +468,14 @@ def main(argv=None):
         )
 
         # Incremental persistence so a crash doesn't lose finished cells
-        (args.out / 'warnings.json').write_text(
+        (args.out / args.out_json).write_text(
             json.dumps({'records': records, 'ref_steps': {
                 f'{s}/{m}': v for (s, m), v in ref_steps.items()
             }}, indent=2)
         )
 
     markdown = render_markdown(records, ref_steps)
-    (args.out / 'warnings.md').write_text(markdown)
+    (args.out / args.out_md).write_text(markdown)
     print('\n' + markdown)
     return 0
 
