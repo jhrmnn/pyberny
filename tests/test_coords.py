@@ -127,38 +127,159 @@ def test_angle_grad_near_pi():
     assert all(np.all(np.isfinite(g)) for g in grad)
 
 
-def test_dihedral_grad_near_zero():
-    # Planar geometry → phi ≈ 0 → hits the small-phi gradient branch.
-    d = Dihedral(0, 1, 2, 3)
-    coords = np.array(
-        [
-            [0.0, 1.0, 0.0],
-            [0.0, 0.0, 0.0],
-            [1.0, 0.0, 0.0],
-            [1.0, 1.0, 0.0],
-        ]
-    )
-    phi, grad = d.eval(coords, grad=True)
-    assert abs(phi) < 1e-6
-    assert len(grad) == 4
-    assert all(np.all(np.isfinite(g)) for g in grad)
+def _fd_grad(coord, geom, h, unwrap=False):
+    # 4th-order central-difference gradient of coord.eval w.r.t. atomic
+    # positions in Å. The analytic gradient returned by coord.eval is
+    # d(value)/d(position in Bohr); to compare against an FD computed on
+    # positions in Å, multiply the analytic gradient by `angstrom` (Bohr/Å).
+    out = np.zeros_like(geom)
+    for a in range(geom.shape[0]):
+        for c in range(3):
+
+            def ev(d, _a=a, _c=c):
+                g = geom.copy()
+                g[_a, _c] += d
+                return coord.eval(g)
+
+            f1, fm1, f2, fm2 = ev(h), ev(-h), ev(2 * h), ev(-2 * h)
+            if unwrap:
+                # Dihedrals jump by 2π across the ±π branch cut. Unwrap so
+                # the central difference sees a smooth function.
+                vals = [fm2, fm1, f1, f2]
+                ref = vals[0]
+                for i, v in enumerate(vals):
+                    while v - ref > np.pi:
+                        v -= 2 * np.pi
+                    while ref - v > np.pi:
+                        v += 2 * np.pi
+                    vals[i] = v
+                fm2, fm1, f1, f2 = vals
+            out[a, c] = (-f2 + 8 * f1 - 8 * fm1 + fm2) / (12 * h)
+    return out
 
 
-def test_dihedral_grad_near_pi():
-    # cis vs trans: trans → phi ≈ π.
-    d = Dihedral(0, 1, 2, 3)
-    coords = np.array(
-        [
-            [0.0, 1.0, 0.0],
-            [0.0, 0.0, 0.0],
-            [1.0, 0.0, 0.0],
-            [1.0, -1.0, 0.0],
-        ]
+@pytest.mark.parametrize(
+    'p',
+    [
+        np.array([[0.5, 0.0, 0.0], [0.0, 0.0, 0.0]]),
+        np.array([[1.7, -0.3, 0.6], [0.1, 0.2, -0.4]]),
+        np.array([[0.0, 0.0, 2.5], [0.0, 0.0, 0.0]]),
+    ],
+)
+def test_bond_grad_fd(p):
+    b = Bond(0, 1)
+    _, grad = b.eval(p, grad=True)
+    fd = _fd_grad(b, p, 1e-4)
+    np.testing.assert_allclose(np.array(grad) * angstrom, fd, atol=1e-9)
+
+
+@pytest.mark.parametrize(
+    'theta', [0.3, 0.9, np.pi / 2, 1.92, 110 * np.pi / 180, np.pi - 0.1]
+)
+def test_angle_grad_fd(theta):
+    # Generic branch only. Angles are unsigned (phi ∈ [0, π]), so phi has a
+    # kink at π — the perpendicular direction of the gradient is ambiguous
+    # in that limit and FD does not converge to a unique value. The near-π
+    # special branch (test_angle_grad_near_pi) is therefore not FD-checked.
+    a = Angle(0, 1, 2)
+    p = np.array(
+        [[np.cos(theta), np.sin(theta), 0.0], [0.0, 0.0, 0.0], [1.1, 0.0, 0.0]]
     )
-    phi, grad = d.eval(coords, grad=True)
-    assert abs(abs(phi) - np.pi) < 1e-6
-    assert len(grad) == 4
-    assert all(np.all(np.isfinite(g)) for g in grad)
+    _, grad = a.eval(p, grad=True)
+    fd = _fd_grad(a, p, 1e-4)
+    np.testing.assert_allclose(np.array(grad) * angstrom, fd, atol=1e-8)
+
+
+def _make_dihedral_geom(
+    phi,
+    r1=1.0,
+    r2=1.1,
+    rjk=1.3,
+    th1=110 * np.pi / 180,
+    th2=105 * np.pi / 180,
+):
+    # Build a 4-atom geometry with a controlled dihedral. Bond lengths and
+    # bend angles are deliberately unequal so that the A=v1·ew/|w| and
+    # B=v2·ew/|w| projection factors in the special-branch formulas are
+    # non-zero (a symmetric geometry would mask bugs in the A/B terms).
+    j = np.zeros(3)
+    k = np.array([rjk, 0.0, 0.0])
+    i = j + r1 * np.array([np.cos(th1), np.sin(th1), 0.0])
+    kl = r2 * np.array(
+        [-np.cos(th2), np.sin(th2) * np.cos(phi), np.sin(th2) * np.sin(phi)]
+    )
+    return np.array([i, j, k, k + kl])
+
+
+@pytest.mark.parametrize(
+    'phi', [-2.5, -1.0, -0.3, 0.1, 0.5, 1.2, np.pi / 2, np.pi - 0.2]
+)
+def test_dihedral_grad_fd(phi):
+    # Generic-branch FD check across a representative range of dihedrals.
+    d = Dihedral(0, 1, 2, 3)
+    p = _make_dihedral_geom(phi)
+    _, grad = d.eval(p, grad=True)
+    fd = _fd_grad(d, p, 1e-4, unwrap=True)
+    np.testing.assert_allclose(np.array(grad) * angstrom, fd, atol=1e-8)
+
+
+# Special-branch tests for dihedrals near the planarity detection threshold.
+# The branches are selected at |phi| < 1e-6 (near 0) and |phi| > π - 1e-6
+# (near π) in Dihedral.eval. We sample phi values straddling the threshold
+# on both sides — values just outside still use the generic 1/sin(phi)
+# formula, values just inside use the special formula — and verify that the
+# analytic gradient matches a numerical one in both regimes. The FP precision
+# of arccos near ±1 limits how accurate the computed phi (and hence FD) can
+# be for very small |phi| or |π−phi|, so a relatively loose atol and large
+# FD step are used; this is still tight enough to catch the kind of bug
+# these special branches exist to avoid.
+_NEAR_PLANAR_PHIS = [
+    # Just outside the near-0 threshold (generic branch)
+    -2e-6,
+    1.1e-6,
+    # Just inside (special branch)
+    9e-7,
+    5e-7,
+    1e-7,
+    -1e-7,
+    0.0,
+    # Just outside the near-π threshold (generic branch)
+    np.pi - 2e-6,
+    -(np.pi - 1.1e-6),
+    # Just inside (special branch)
+    np.pi - 9e-7,
+    np.pi - 5e-7,
+    np.pi - 1e-7,
+    -(np.pi - 1e-7),
+    np.pi,
+]
+
+
+@pytest.mark.parametrize('phi', _NEAR_PLANAR_PHIS)
+def test_dihedral_grad_fd_near_planar(phi):
+    d = Dihedral(0, 1, 2, 3)
+    p = _make_dihedral_geom(phi)
+    _, grad = d.eval(p, grad=True)
+    # Larger FD step than test_dihedral_grad_fd because the computed phi
+    # itself has only ~8 significant digits at these scales (arccos near ±1
+    # loses precision); a smaller h would put FD into the noise floor.
+    fd = _fd_grad(d, p, 1e-3, unwrap=True)
+    # The generic 1/sin(phi) formula loses precision just outside the
+    # threshold and the FD itself is noisy when computed phi values are
+    # near the FP precision floor of arccos, so a looser tolerance is
+    # used than in the bulk-phi test above.
+    np.testing.assert_allclose(np.array(grad) * angstrom, fd, atol=5e-4)
+
+
+def test_dihedral_grad_continuous_across_threshold():
+    # The special-branch and generic-branch formulas should agree in the
+    # limit. Compare the analytic gradient at phi values straddling the
+    # detection thresholds on essentially the same geometry.
+    d = Dihedral(0, 1, 2, 3)
+    for phi_gen, phi_spec in [(1.1e-6, 9e-7), (np.pi - 1.1e-6, np.pi - 9e-7)]:
+        _, g_gen = d.eval(_make_dihedral_geom(phi_gen), grad=True)
+        _, g_spec = d.eval(_make_dihedral_geom(phi_spec), grad=True)
+        np.testing.assert_allclose(np.array(g_gen), np.array(g_spec), atol=1e-3)
 
 
 def test_internal_coords_repr_and_str_describe_counts():
