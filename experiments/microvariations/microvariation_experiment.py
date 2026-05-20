@@ -10,8 +10,9 @@ reference structure rather than against `reference.json`'s step count alone.
 
 Usage::
 
-    scripts/microvariation_experiment.py [--out DIR] [--molecules M ...]
-        [--sigmas S ...] [--seeds N] [--maxsteps K]
+    experiments/microvariations/microvariation_experiment.py \
+        [--out DIR] [--molecules M ...] [--sigmas S ...] \
+        [--seeds N] [--maxsteps K]
 
 Writes ``results.json`` and ``summary.md`` to ``--out`` (default
 ``experiments/microvariations``).
@@ -29,7 +30,7 @@ import numpy as np
 from berny import Berny, geomlib
 from berny.solvers import MopacSolver
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA = REPO_ROOT / 'tests' / 'data' / 'birkholz_schlegel'
 
 DEFAULT_MOLECULES = [

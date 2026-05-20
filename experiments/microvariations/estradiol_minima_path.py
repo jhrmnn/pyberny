@@ -32,7 +32,7 @@ import numpy as np  # noqa: E402
 
 from berny import geomlib  # noqa: E402
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA = REPO_ROOT / 'tests' / 'data' / 'birkholz_schlegel'
 OUT_DIR = REPO_ROOT / 'experiments' / 'microvariations'
 KCAL_PER_HA = 627.503

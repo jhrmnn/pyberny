@@ -99,7 +99,7 @@ estradiol and mg_porphin sit ~100x above pyberny's default gradient-implied
 limit (`gradmax = 0.45e-3 a.u.`, `stepmax = 1.8e-3 a.u.`). To test whether
 this is loose-on-soft-modes termination or something else, the four
 suspicious cells were rerun with all four convergence thresholds tightened
-10x (`scripts/microvariation_tight.py`, results in
+10x (`experiments/microvariations/microvariation_tight.py`, results in
 `results_tight.json`).
 
 | Cell | Default spread | Tight spread | Default median steps | Tight median steps | Verdict |
@@ -152,7 +152,7 @@ effect, not MOPAC numerical noise.
 The default-tolerance run found 5 energy-distinct minima for estradiol
 (clustered at 0.5 kcal/mol tolerance): basin 0 at -0.158928 Ha (deepest,
 6 seeds) up to basin 4 at -0.151174 Ha (the published Birkholz-Schlegel
-start, 28 seeds in this cluster). `scripts/estradiol_minima_path.py`
+start, 28 seeds in this cluster). `experiments/microvariations/estradiol_minima_path.py`
 Kabsch-aligns one representative seed per basin and runs MOPAC PM7
 single points along straight-line Cartesian interpolations between
 consecutive basins. Plot: `minima_interpolation.png`.
@@ -183,7 +183,7 @@ kcal/mol above the true PM7 minimum).
 
 ## Why pyberny declares basin 3 and basin 4 as converged
 
-`scripts/estradiol_verbose_diag.py` re-runs the offending seeds with
+`experiments/microvariations/estradiol_verbose_diag.py` re-runs the offending seeds with
 full pyberny logging plus `debug=True` so we can grab the optimizer
 state at termination. The verbose logs land in
 `experiments/microvariations/verbose_diag/log_*.txt`.
@@ -239,7 +239,7 @@ Potential fixes (out of scope here):
 
 ## Which internal coordinate becomes problematic, exactly
 
-`scripts/estradiol_internals_diag.py` tracks the B-matrix's singular
+`experiments/microvariations/estradiol_internals_diag.py` tracks the B-matrix's singular
 value spectrum at every step and identifies which internal coordinates
 contribute to the discarded null direction.
 

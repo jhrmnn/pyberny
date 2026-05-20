@@ -24,7 +24,7 @@ import numpy as np
 from berny import Berny, geomlib
 from berny.solvers import MopacSolver
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA = REPO_ROOT / 'tests' / 'data' / 'birkholz_schlegel'
 
 CELLS = [
