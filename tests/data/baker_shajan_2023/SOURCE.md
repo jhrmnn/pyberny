@@ -48,12 +48,17 @@ therefore drift from the paper's numbers for two independent reasons:
 ``paper_steps`` by up to 7% (with an absolute floor of 2 steps) before
 failing the run -- same rule as the Birkholz-Schlegel benchmark.
 
-``pyberny_steps`` and ``mopac_pm7_steps`` are left ``null`` for every
-molecule until a manual CI dispatch (``Run workflow`` ->
-``mode = baker-mopac`` or ``baker-pyscf``) establishes a baseline; with
-those fields ``null`` the regression gate is no-op for this benchmark,
-matching the behaviour the Birkholz pyscf column had before its baseline
-was seeded.
+``pyberny_steps`` and ``mopac_pm7_steps`` were seeded from the first
+manual workflow_dispatch baseline run (PR #84, baker × both at HF/6-31G\*\*
+through PySCF and PM7 through MOPAC). PySCF reaches the same minimum the
+paper found for every one of the 30 molecules with a total of 208 steps
+vs. the paper's 190 (per-row delta typically ≤1 step, with histidine,
+dimethylpentane, menthone, disilyl\_ether, trisilacyclohexane\_135,
+pterin needing a few extra cycles past ASE/Berny's ``fmax``-only test).
+MOPAC PM7 totals 274 steps over 29 molecules; ``caffeine`` is left
+``null`` because PM7 hits the 110-step ceiling on this molecule, the same
+documented-non-converger convention used by ``bisphenol_a`` in the
+``birkholz_schlegel`` set.
 
 Coordinate data is treated as factual and is redistributed under
 pyberny's MPL-2.0 license, with attribution to Shajan et al. via this
