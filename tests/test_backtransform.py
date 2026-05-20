@@ -19,7 +19,7 @@ import numpy as np
 import pytest
 
 from berny import Math
-from berny.coords import InternalCoords
+from berny.coords import Dihedral, InternalCoords, angstrom
 from berny.geomlib import Geometry
 
 # ---------------------------------------------------------------------------
@@ -92,7 +92,7 @@ def _h2_crystal():
 
 def _b_inv(coords, geom):
     B = coords.B_matrix(geom)
-    return B.T.dot(np.linalg.pinv(B.dot(B.T)))
+    return B.T.dot(Math.pinv(B.dot(B.T)))
 
 
 def _round_trip(coords, geom0, dx):
@@ -243,7 +243,7 @@ def test_backtransform_dihedral_wrap_across_pi():
 
     # The forward dq for the wrapped dihedral must be the *short* way around
     # (|dq| close to the 30° rotation, not 330°).
-    dih_idx = [i for i, c in enumerate(coords) if c.__class__.__name__ == 'Dihedral']
+    dih_idx = [i for i, c in enumerate(coords) if isinstance(c, Dihedral)]
     assert dih_idx, 'expected at least one dihedral in H2O2'
     for i in dih_idx:
         assert abs(dq[i]) < np.pi, f'forward dq[{i}]={dq[i]} not wrapped to short path'
@@ -289,7 +289,7 @@ def test_backtransform_rejects_periodic_geometry():
     B_inv = _b_inv(coords, geom0)
     # An arbitrary in-range dq just to exercise the call.
     dq = np.zeros(len(q0))
-    with pytest.raises(ValueError, match='could not be broadcast'):
+    with pytest.raises(ValueError, match='broadcast'):
         coords.update_geom(geom0, q0, dq, B_inv)
 
 
@@ -317,7 +317,7 @@ def test_backtransform_fallback_on_non_convergence():
     # 20 iterations is the hard cap in update_geom.
     assert _iter_count(log_lines) == 20
     # Fallback returns the *first* iterate, not the diverged final state.
-    expected_first = geom0.coords + B_inv.dot(huge_dq).reshape(-1, 3) * 0.52917721092
+    expected_first = geom0.coords + B_inv.dot(huge_dq).reshape(-1, 3) / angstrom
     assert Math.rms(geom_out.coords - expected_first) < 1e-10
     assert np.all(np.isfinite(q_out))
     assert np.all(np.isfinite(geom_out.coords))
