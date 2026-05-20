@@ -37,7 +37,6 @@ Outputs (under ``--out``, default ``benchmark_internals_diag/``):
 
 - ``<molecule>.json`` per molecule (per-step diagnostics).
 - ``log_<molecule>.txt`` per molecule (raw INFO log from the berny logger).
-- ``trajectory_<molecule>.png`` per molecule (energy / geom flags / SV vs step).
 - ``triggers.md`` (co-occurrence + mechanism classification roll-up table).
 
 Idempotent: per-molecule JSON, log and plot are skipped if they already
@@ -449,86 +448,6 @@ def cooccurrence(per_step, scan):
     return rows
 
 
-def plot_trajectory(per_step, scan, mol, out_path):
-    """One figure per molecule, four stacked panels."""
-    import matplotlib
-
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
-
-    if not per_step:
-        return
-    steps = [d['step'] for d in per_step]
-    E = [d['energy_ha'] for d in per_step]
-    max_a = [d['max_angle_deg'] for d in per_step]
-    min_pyr = [
-        (d['min_pyramidalisation_deg'] if d['min_pyramidalisation_deg'] is not None else np.nan)
-        for d in per_step
-    ]
-    max_3sum = [d['max_3coord_anglesum_deg'] for d in per_step]
-    sv_max = [d['sv_max'] for d in per_step]
-    gap_idx = [
-        (d['pinv_gap_index'] if d['pinv_gap_index'] is not None else np.nan)
-        for d in per_step
-    ]
-
-    warn_steps_pinv = sorted(scan['pinv'])
-    warn_steps_backx = sorted(scan['backxform'])
-    warn_steps_negeig = sorted(scan['negeig'])
-    warn_steps_dq = sorted(
-        s for s, v in scan['dq'].items() if v[1] >= SEVERE_DQ_THRESHOLD
-    )
-
-    fig, axes = plt.subplots(3, 1, figsize=(8, 8), sharex=True)
-    ax = axes[0]
-    ax.plot(steps, E, '-o', color='black', markersize=3)
-    ax.set_ylabel('E (Ha)')
-    ax.set_title(f'{mol}: trajectory diagnostics')
-
-    ax = axes[1]
-    ax.plot(steps, max_a, '-o', color='C0', label='max angle (deg)', markersize=3)
-    ax.axhline(ANGLE_CRIT_DEG, color='C0', ls=':', lw=0.8)
-    ax.set_ylabel('max angle (deg)', color='C0')
-    ax.tick_params(axis='y', labelcolor='C0')
-    ax2 = ax.twinx()
-    ax2.plot(
-        steps, min_pyr, '-s', color='C3',
-        label='min pyramidalisation (deg)', markersize=3
-    )
-    ax2.plot(
-        steps, [s - 320 for s in max_3sum], '-^', color='C2',
-        label='max 3-coord anglesum - 320 (deg)', markersize=3
-    )
-    ax2.axhline(PYRAMID_CRIT_DEG, color='C3', ls=':', lw=0.8)
-    ax2.set_ylabel('pyram. (C3) / sum-320 (C2)', color='C3')
-    ax2.tick_params(axis='y', labelcolor='C3')
-
-    ax = axes[2]
-    ax.semilogy(steps, sv_max, '-o', color='C0', label='sv[0] of B B^T', markersize=3)
-    ax.set_ylabel('sv[0]', color='C0')
-    ax.tick_params(axis='y', labelcolor='C0')
-    ax2 = ax.twinx()
-    ax2.plot(steps, gap_idx, '-s', color='C3', label='pinv gap index', markersize=3)
-    ax2.set_ylabel('pinv gap index', color='C3')
-    ax2.tick_params(axis='y', labelcolor='C3')
-    ax.set_xlabel('step')
-
-    # Shade warning steps on all three panels.
-    for a in axes:
-        for s in warn_steps_pinv:
-            a.axvline(s, color='red', alpha=0.4, lw=1.0)
-        for s in warn_steps_backx:
-            a.axvline(s, color='orange', alpha=0.3, lw=1.0)
-        for s in warn_steps_negeig:
-            a.axvline(s, color='purple', alpha=0.15, lw=1.0)
-        for s in warn_steps_dq:
-            a.axvline(s, color='brown', alpha=0.25, lw=1.0)
-
-    fig.tight_layout()
-    fig.savefig(out_path, dpi=120)
-    plt.close(fig)
-
-
 def cross_validate_estradiol(out_dir):
     """Compare a representative estradiol step against the bespoke ``internals_diag/per_step.json``.
 
@@ -826,10 +745,6 @@ def parse_args(argv=None):
         '--force', action='store_true',
         help='rerun even if per-molecule JSON already exists',
     )
-    ap.add_argument(
-        '--skip-plots', action='store_true',
-        help='skip matplotlib trajectory plots (useful if matplotlib missing)',
-    )
     return ap.parse_args(argv)
 
 
@@ -916,14 +831,6 @@ def main(argv=None):
             f'warnings={n_warn} (total {elapsed:.0f}s)',
             flush=True,
         )
-
-        if not args.skip_plots:
-            plot_path = args.out / f'trajectory_{mol}.png'
-            if not plot_path.exists() or not cached:
-                try:
-                    plot_trajectory(run['per_step'], scan, mol, plot_path)
-                except Exception as e:  # noqa: BLE001
-                    print(f'  plot failed: {e}', flush=True)
 
     aggregate = {
         'records': [

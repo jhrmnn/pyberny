@@ -436,15 +436,12 @@ planar / linear" diagnostics:
 - maximum bond-length / sum-of-covalent-radii ratio (stretch
   threshold 1.5).
 
-Each warning step is then classified into a *mechanism*:
+Each warning step is classified into a *mechanism*:
 `linear-angle-dihedral` | `sp3-inversion` | `bond-stretch` |
-`planar-center` | `unattributed`, in that priority order. The
-artefacts are committed under
-`experiments/microvariations/benchmark_internals_diag/`:
-per-molecule JSON, an aggregate `per_step.json` with the
-co-occurrence rows, per-molecule `trajectory_<mol>.png` figures
-(energy / max-angle / min-pyramidalisation / `sv[0]` of `B B^T` /
-pinv-gap index, with warning steps shaded), and the roll-up
+`planar-center` | `unattributed`, in that priority order. Artefacts
+are committed under `experiments/microvariations/benchmark_internals_diag/`:
+per-molecule JSON (the raw per-step measurements), an aggregate
+`per_step.json` with the co-occurrence rows, and the roll-up
 `triggers.md`. INFO-level logs are not committed (gitignored, like
 `benchmark_diag/`); the scan results are baked into the per-molecule
 JSON so the roll-up regenerates without the logs.
