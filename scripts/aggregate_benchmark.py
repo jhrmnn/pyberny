@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 """Merge per-shard benchmark JSONs into a single markdown summary.
 
-Reads ``<solver>-<batch_id>.json`` files produced by ``benchmark.py --out-json``,
-re-sorts rows to ``sorted(reference)`` order, renders one markdown table per
-solver via ``benchmark.format_table`` / ``format_errors``, appends the result
-to ``$GITHUB_STEP_SUMMARY`` (when set) and writes ``results/summary.md``.
+Reads ``<solver>-<benchmark>-<batch_id>.json`` files produced by
+``benchmark.py --out-json``, re-sorts rows to ``sorted(reference)`` order,
+renders one markdown table per solver via ``benchmark.format_table`` /
+``format_errors``, appends the result to ``$GITHUB_STEP_SUMMARY`` (when set)
+and writes ``results/summary-<benchmark>.md``. ``--benchmark`` selects which
+reference set (and which shard files) the call consumes, so a multi-benchmark
+CI run invokes this script once per benchmark and gets a side-by-side pair
+of summary artifacts.
 
 Exits 1 if any molecule with a non-``null`` reference entry for the active
 solver either failed to converge or drifts from its reference step count
 by more than 7% (with an absolute floor of 2 steps) — same rule as
-``benchmark.py``'s exit-code logic. ``pyberny_steps`` is currently
-``null`` for every entry, so pyscf is in baseline-establishment mode: no
-pyscf run can trip either half of this gate yet. Fill in ``pyberny_steps``
-as pyscf results stabilize to enable the regression check.
+``benchmark.py``'s exit-code logic. Entries with ``null`` reference step
+counts are skipped from the gate (documented non-convergers / unmeasured),
+so seeding ``pyberny_steps`` / ``mopac_pm7_steps`` in ``reference.json``
+is what activates the regression check.
 """
 
 import argparse
