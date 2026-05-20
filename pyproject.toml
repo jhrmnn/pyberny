@@ -59,6 +59,7 @@ pattern = '^(?P<base>\d+\.\d+\.\d+)$'
 [tool.black]
 target-version = ["py39"]
 skip-string-normalization = true
+force-exclude = "experiments/"
 
 [tool.mypy]
 python_version = "3.9"
@@ -70,3 +71,4 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::PendingDeprecationWarning"]
+testpaths = ["tests"]

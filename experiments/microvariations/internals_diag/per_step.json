@@ -1,0 +1,1801 @@
+{
+  "basin 4 (high)": {
+    "sigma": 0.01,
+    "seed": 0,
+    "converged": true,
+    "steps": 8,
+    "per_step": [
+      {
+        "sv_max": 22.439615531238758,
+        "sv_min_nonzero": 0.01794351475819996,
+        "condition_number": 2.2439615531238755e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 8929998177640.06,
+        "sv_at_gap": 0.01794351475819996,
+        "sv_just_after_gap": 2.009352566625261e-15,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            48,
+            0.30569134315474045,
+            "Angle(1-0-5)"
+          ],
+          [
+            49,
+            0.17939331152779278,
+            "Angle(1-0-16)"
+          ],
+          [
+            50,
+            0.1793038180653257,
+            "Angle(5-0-16)"
+          ],
+          [
+            63,
+            0.038914399070289596,
+            "Angle(0-5-4)"
+          ],
+          [
+            61,
+            0.011056204369107508,
+            "Angle(3-4-17)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 20.651677384339635,
+        "sv_min_nonzero": 0.017664443995331118,
+        "condition_number": 2.0651677384339634e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 9042957658073.467,
+        "sv_at_gap": 0.017664443995331118,
+        "sv_just_after_gap": 1.9533923151304894e-15,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            52,
+            0.150359191230206,
+            "Angle(0-1-42)"
+          ],
+          [
+            53,
+            0.15023203067795368,
+            "Angle(2-1-42)"
+          ],
+          [
+            312,
+            0.07677545244163884,
+            "Dihedral(37-36-40-34)"
+          ],
+          [
+            55,
+            0.05194311282052642,
+            "Angle(1-2-6)"
+          ],
+          [
+            265,
+            0.03370647566774604,
+            "Dihedral(10-12-36-37)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 22.2788793639428,
+        "sv_min_nonzero": 0.01743056739342808,
+        "condition_number": 2.2278879363942796e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 5297467131657.49,
+        "sv_at_gap": 0.01743056739342808,
+        "sv_just_after_gap": 3.2903587620701938e-15,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            312,
+            0.40917242807540893,
+            "Dihedral(37-36-40-34)"
+          ],
+          [
+            313,
+            0.32461885591494166,
+            "Dihedral(37-36-40-41)"
+          ],
+          [
+            311,
+            0.03920257609311705,
+            "Dihedral(12-36-40-41)"
+          ],
+          [
+            143,
+            0.03797898657673654,
+            "Angle(34-40-41)"
+          ],
+          [
+            273,
+            0.01743935407558866,
+            "Dihedral(34-12-36-37)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 29.1885061119428,
+        "sv_min_nonzero": 0.016872593541367557,
+        "condition_number": 2.9188506111942797e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 3904548942716.5747,
+        "sv_at_gap": 0.016872593541367557,
+        "sv_just_after_gap": 4.3212657310497215e-15,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            313,
+            0.3707868918203562,
+            "Dihedral(37-36-40-41)"
+          ],
+          [
+            312,
+            0.3568941719592518,
+            "Dihedral(37-36-40-34)"
+          ],
+          [
+            143,
+            0.04755352823889248,
+            "Angle(34-40-41)"
+          ],
+          [
+            311,
+            0.019254156196699075,
+            "Dihedral(12-36-40-41)"
+          ],
+          [
+            315,
+            0.018287945943061774,
+            "Dihedral(38-36-40-41)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 40.47136343919482,
+        "sv_min_nonzero": 0.016702960246775936,
+        "condition_number": 4.0471363439194815e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 3616053161633.125,
+        "sv_at_gap": 0.016702960246775936,
+        "sv_just_after_gap": 4.6191135749874725e-15,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            313,
+            0.13769029376868394,
+            "Dihedral(37-36-40-41)"
+          ],
+          [
+            269,
+            0.08109877485842958,
+            "Dihedral(13-12-36-37)"
+          ],
+          [
+            24,
+            0.04272787646717083,
+            "Bond(10-12)"
+          ],
+          [
+            273,
+            0.04117446091505899,
+            "Dihedral(34-12-36-37)"
+          ],
+          [
+            137,
+            0.030612821796199088,
+            "Angle(37-36-39)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 83.79380148850316,
+        "sv_min_nonzero": 0.016577231006568,
+        "condition_number": 8.379380148850316e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 4264967006402.249,
+        "sv_at_gap": 0.016577231006568,
+        "sv_just_after_gap": 3.886836869238028e-15,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            66,
+            0.06707419246040439,
+            "Angle(2-6-9)"
+          ],
+          [
+            58,
+            0.06018819089065648,
+            "Angle(2-3-7)"
+          ],
+          [
+            24,
+            0.04675748085229769,
+            "Bond(10-12)"
+          ],
+          [
+            59,
+            0.040143050536490185,
+            "Angle(4-3-7)"
+          ],
+          [
+            84,
+            0.029754191583821078,
+            "Angle(6-9-8)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 369.0357383177314,
+        "sv_min_nonzero": 0.01648072266333493,
+        "condition_number": 3.690357383177314e+32,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 598233697408.142,
+        "sv_at_gap": 0.01648072266333493,
+        "sv_just_after_gap": 2.754897080311248e-14,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            313,
+            0.39438304732486895,
+            "Dihedral(37-36-40-41)"
+          ],
+          [
+            312,
+            0.383107883092358,
+            "Dihedral(37-36-40-34)"
+          ],
+          [
+            143,
+            0.03369392060100467,
+            "Angle(34-40-41)"
+          ],
+          [
+            311,
+            0.03233666308828761,
+            "Dihedral(12-36-40-41)"
+          ],
+          [
+            317,
+            0.015902891593903592,
+            "Dihedral(39-36-40-41)"
+          ]
+        ],
+        "near_linear_angles": [
+          [
+            138,
+            176.22818547769643,
+            "Angle(37-36-40)"
+          ]
+        ],
+        "near_linear_dihedrals_count": 2,
+        "near_linear_dihedrals_sample": [
+          [
+            312,
+            176.22818547769643,
+            74.84090155742267,
+            "Dihedral(37-36-40-34)"
+          ],
+          [
+            313,
+            176.22818547769643,
+            87.20917969185224,
+            "Dihedral(37-36-40-41)"
+          ]
+        ]
+      },
+      {
+        "sv_max": 30898.307342472333,
+        "sv_min_nonzero": 30898.307342472333,
+        "condition_number": 3.089830734247233e+34,
+        "pinv_gap_index": 0,
+        "pinv_gap_value": 1927.2830524943631,
+        "sv_at_gap": 30898.307342472333,
+        "sv_just_after_gap": 16.032054711674327,
+        "n_truncated": 317,
+        "top_5_truncated_contribs": [
+          [
+            163,
+            0.09179741579272069,
+            "Dihedral(6-2-3-7)"
+          ],
+          [
+            160,
+            0.08582732439214442,
+            "Dihedral(1-2-3-4)"
+          ],
+          [
+            170,
+            0.06650529774629177,
+            "Dihedral(2-3-4-5)"
+          ],
+          [
+            154,
+            0.06636979973176418,
+            "Dihedral(0-1-2-3)"
+          ],
+          [
+            174,
+            0.05407793106113059,
+            "Dihedral(2-3-7-8)"
+          ]
+        ],
+        "near_linear_angles": [
+          [
+            138,
+            179.59705065285388,
+            "Angle(37-36-40)"
+          ]
+        ],
+        "near_linear_dihedrals_count": 2,
+        "near_linear_dihedrals_sample": [
+          [
+            312,
+            179.59705065285388,
+            73.10095583379254,
+            "Dihedral(37-36-40-34)"
+          ],
+          [
+            313,
+            179.59705065285388,
+            87.95333241550826,
+            "Dihedral(37-36-40-41)"
+          ]
+        ]
+      }
+    ]
+  },
+  "basin 3": {
+    "sigma": 0.01,
+    "seed": 8,
+    "converged": true,
+    "steps": 9,
+    "per_step": [
+      {
+        "sv_max": 24.008701979539552,
+        "sv_min_nonzero": 0.017891448435381707,
+        "condition_number": 2.400870197953955e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 4536334166704.976,
+        "sv_at_gap": 0.017891448435381707,
+        "sv_just_after_gap": 3.944032290808371e-15,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            313,
+            0.3905434168136456,
+            "Dihedral(37-36-40-41)"
+          ],
+          [
+            312,
+            0.36916646476570375,
+            "Dihedral(37-36-40-34)"
+          ],
+          [
+            311,
+            0.05612298381444151,
+            "Dihedral(12-36-40-41)"
+          ],
+          [
+            143,
+            0.02616004004428917,
+            "Angle(34-40-41)"
+          ],
+          [
+            273,
+            0.02221703238875236,
+            "Dihedral(34-12-36-37)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 22.260231867531054,
+        "sv_min_nonzero": 0.017624737565094722,
+        "condition_number": 2.226023186753105e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 8980370544776.47,
+        "sv_at_gap": 0.017624737565094722,
+        "sv_just_after_gap": 1.9625846703337138e-15,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            48,
+            0.20518440324293036,
+            "Angle(1-0-5)"
+          ],
+          [
+            49,
+            0.1569279427756235,
+            "Angle(1-0-16)"
+          ],
+          [
+            50,
+            0.15581945807984324,
+            "Angle(5-0-16)"
+          ],
+          [
+            55,
+            0.09393677067251492,
+            "Angle(1-2-6)"
+          ],
+          [
+            56,
+            0.06599012135995384,
+            "Angle(3-2-6)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 23.801726121193887,
+        "sv_min_nonzero": 0.01746030727532708,
+        "condition_number": 2.3801726121193885e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 8696651981922.621,
+        "sv_at_gap": 0.01746030727532708,
+        "sv_just_after_gap": 2.007704494973596e-15,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            58,
+            0.12354570584182509,
+            "Angle(2-3-7)"
+          ],
+          [
+            63,
+            0.05885792838219254,
+            "Angle(0-5-4)"
+          ],
+          [
+            5,
+            0.05520880957712367,
+            "Bond(2-3)"
+          ],
+          [
+            54,
+            0.048000593663570304,
+            "Angle(1-2-3)"
+          ],
+          [
+            56,
+            0.043344654128851086,
+            "Angle(3-2-6)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 32.46730343065086,
+        "sv_min_nonzero": 0.01686586632954535,
+        "condition_number": 3.2467303430650856e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 6526487233358.78,
+        "sv_at_gap": 0.01686586632954535,
+        "sv_just_after_gap": 2.5842180834031187e-15,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            313,
+            0.26590550513722394,
+            "Dihedral(37-36-40-41)"
+          ],
+          [
+            312,
+            0.1665507108813562,
+            "Dihedral(37-36-40-34)"
+          ],
+          [
+            273,
+            0.04780277600032485,
+            "Dihedral(34-12-36-37)"
+          ],
+          [
+            143,
+            0.0231724808216165,
+            "Angle(34-40-41)"
+          ],
+          [
+            311,
+            0.020898275565188425,
+            "Dihedral(12-36-40-41)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 40.302976426211174,
+        "sv_min_nonzero": 0.016748394624486587,
+        "condition_number": 4.0302976426211172e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 10316001618167.639,
+        "sv_at_gap": 0.016748394624486587,
+        "sv_just_after_gap": 1.623535478609346e-15,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            51,
+            0.1515320555916408,
+            "Angle(0-1-2)"
+          ],
+          [
+            59,
+            0.11622623885847433,
+            "Angle(4-3-7)"
+          ],
+          [
+            55,
+            0.061408767131229856,
+            "Angle(1-2-6)"
+          ],
+          [
+            61,
+            0.054924202799093075,
+            "Angle(3-4-17)"
+          ],
+          [
+            62,
+            0.054641206848526004,
+            "Angle(5-4-17)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 81.15453250355813,
+        "sv_min_nonzero": 0.016693229914855025,
+        "condition_number": 8.115453250355813e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 5545208378956.91,
+        "sv_at_gap": 0.016693229914855025,
+        "sv_just_after_gap": 3.0103882079892424e-15,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            60,
+            0.13502693879883515,
+            "Angle(3-4-5)"
+          ],
+          [
+            50,
+            0.06729978111283423,
+            "Angle(5-0-16)"
+          ],
+          [
+            49,
+            0.06728796963371375,
+            "Angle(1-0-16)"
+          ],
+          [
+            61,
+            0.03887439218181973,
+            "Angle(3-4-17)"
+          ],
+          [
+            62,
+            0.038862498902864875,
+            "Angle(5-4-17)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 371.82148943418946,
+        "sv_min_nonzero": 0.016561804213015206,
+        "condition_number": 3.718214894341894e+32,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 603490931374.4297,
+        "sv_at_gap": 0.016561804213015206,
+        "sv_just_after_gap": 2.744333568575135e-14,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            313,
+            0.333776083824675,
+            "Dihedral(37-36-40-41)"
+          ],
+          [
+            312,
+            0.32629893389069786,
+            "Dihedral(37-36-40-34)"
+          ],
+          [
+            143,
+            0.03998019797465671,
+            "Angle(34-40-41)"
+          ],
+          [
+            311,
+            0.02074908143572579,
+            "Dihedral(12-36-40-41)"
+          ],
+          [
+            315,
+            0.014189198499193591,
+            "Dihedral(38-36-40-41)"
+          ]
+        ],
+        "near_linear_angles": [
+          [
+            138,
+            176.23071531282085,
+            "Angle(37-36-40)"
+          ]
+        ],
+        "near_linear_dihedrals_count": 2,
+        "near_linear_dihedrals_sample": [
+          [
+            312,
+            176.23071531282085,
+            75.4025581244339,
+            "Dihedral(37-36-40-34)"
+          ],
+          [
+            313,
+            176.23071531282085,
+            87.92626926686526,
+            "Dihedral(37-36-40-41)"
+          ]
+        ]
+      },
+      {
+        "sv_max": 15351.467834930692,
+        "sv_min_nonzero": 0.016306741575167445,
+        "condition_number": 1.535146783493069e+34,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 29855611589.17471,
+        "sv_at_gap": 0.016306741575167445,
+        "sv_just_after_gap": 5.461868207409315e-13,
+        "n_truncated": 192,
+        "top_5_truncated_contribs": [
+          [
+            24,
+            0.12102356016333618,
+            "Bond(10-12)"
+          ],
+          [
+            15,
+            0.1006538798762208,
+            "Bond(7-8)"
+          ],
+          [
+            16,
+            0.047231423340603464,
+            "Bond(7-14)"
+          ],
+          [
+            5,
+            0.02903638795996325,
+            "Bond(2-3)"
+          ],
+          [
+            55,
+            0.027670547714288365,
+            "Angle(1-2-6)"
+          ]
+        ],
+        "near_linear_angles": [
+          [
+            138,
+            179.4280068795644,
+            "Angle(37-36-40)"
+          ]
+        ],
+        "near_linear_dihedrals_count": 2,
+        "near_linear_dihedrals_sample": [
+          [
+            312,
+            179.4280068795644,
+            72.99918621820544,
+            "Dihedral(37-36-40-34)"
+          ],
+          [
+            313,
+            179.4280068795644,
+            88.31571482213442,
+            "Dihedral(37-36-40-41)"
+          ]
+        ]
+      },
+      {
+        "sv_max": 2494948.0159706837,
+        "sv_min_nonzero": 2494948.0159706837,
+        "condition_number": 2.4949480159706835e+36,
+        "pinv_gap_index": 0,
+        "pinv_gap_value": 155387.2021373642,
+        "sv_at_gap": 2494948.0159706837,
+        "sv_just_after_gap": 16.05632884595682,
+        "n_truncated": 317,
+        "top_5_truncated_contribs": [
+          [
+            163,
+            0.09200272375230784,
+            "Dihedral(6-2-3-7)"
+          ],
+          [
+            160,
+            0.08576982799429958,
+            "Dihedral(1-2-3-4)"
+          ],
+          [
+            170,
+            0.06667293162570728,
+            "Dihedral(2-3-4-5)"
+          ],
+          [
+            154,
+            0.06613190997391652,
+            "Dihedral(0-1-2-3)"
+          ],
+          [
+            174,
+            0.053986380073523674,
+            "Dihedral(2-3-7-8)"
+          ]
+        ],
+        "near_linear_angles": [
+          [
+            138,
+            179.9553799718697,
+            "Angle(37-36-40)"
+          ]
+        ],
+        "near_linear_dihedrals_count": 2,
+        "near_linear_dihedrals_sample": [
+          [
+            312,
+            179.9553799718697,
+            72.9852075729782,
+            "Dihedral(37-36-40-34)"
+          ],
+          [
+            313,
+            179.9553799718697,
+            87.83161831399914,
+            "Dihedral(37-36-40-41)"
+          ]
+        ]
+      }
+    ]
+  },
+  "basin 0 (deepest, sanity)": {
+    "sigma": 0.05,
+    "seed": 6,
+    "converged": true,
+    "steps": 25,
+    "per_step": [
+      {
+        "sv_max": 16.413096931415723,
+        "sv_min_nonzero": 0.017254177537700945,
+        "condition_number": 1.6413096931415721e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 10966416067103.502,
+        "sv_at_gap": 0.017254177537700945,
+        "sv_just_after_gap": 1.573365211763135e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            53,
+            0.2734215684415301,
+            "Angle(1-2-3)"
+          ],
+          [
+            55,
+            0.08513305842894985,
+            "Angle(3-2-6)"
+          ],
+          [
+            50,
+            0.08174975038235739,
+            "Angle(0-1-2)"
+          ],
+          [
+            176,
+            0.040958032781117856,
+            "Dihedral(17-4-5-18)"
+          ],
+          [
+            47,
+            0.037855775896811175,
+            "Angle(1-0-5)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.135377868445214,
+        "sv_min_nonzero": 0.01699368812943857,
+        "condition_number": 1.6135377868445212e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 11507441772791.312,
+        "sv_at_gap": 0.01699368812943857,
+        "sv_just_after_gap": 1.4767563864297948e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            59,
+            0.1413736458551614,
+            "Angle(3-4-5)"
+          ],
+          [
+            60,
+            0.08050732662738659,
+            "Angle(3-4-17)"
+          ],
+          [
+            53,
+            0.07984390602283813,
+            "Angle(1-2-3)"
+          ],
+          [
+            61,
+            0.07962493052766302,
+            "Angle(5-4-17)"
+          ],
+          [
+            73,
+            0.06218644050194021,
+            "Angle(3-7-25)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 15.963203458893767,
+        "sv_min_nonzero": 0.016946069264927734,
+        "condition_number": 1.5963203458893766e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 9897993354024.979,
+        "sv_at_gap": 0.016946069264927734,
+        "sv_just_after_gap": 1.7120711904738431e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            15,
+            0.08984729598236901,
+            "Bond(7-8)"
+          ],
+          [
+            77,
+            0.05970062930092794,
+            "Angle(7-8-9)"
+          ],
+          [
+            59,
+            0.05941529215089773,
+            "Angle(3-4-5)"
+          ],
+          [
+            71,
+            0.04869868164514511,
+            "Angle(3-7-8)"
+          ],
+          [
+            55,
+            0.04285267407307475,
+            "Angle(3-2-6)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 15.823417133546474,
+        "sv_min_nonzero": 0.016437328662235916,
+        "condition_number": 1.5823417133546473e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 8111788829373.727,
+        "sv_at_gap": 0.016437328662235916,
+        "sv_just_after_gap": 2.02635066173252e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            50,
+            0.19170115374050042,
+            "Angle(0-1-2)"
+          ],
+          [
+            51,
+            0.17400846527397607,
+            "Angle(0-1-42)"
+          ],
+          [
+            52,
+            0.1723545316208113,
+            "Angle(2-1-42)"
+          ],
+          [
+            55,
+            0.0858126208379017,
+            "Angle(3-2-6)"
+          ],
+          [
+            65,
+            0.02284364275384385,
+            "Angle(2-6-9)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 15.982693547024878,
+        "sv_min_nonzero": 0.01645488549988309,
+        "condition_number": 1.5982693547024877e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 10180277707730.535,
+        "sv_at_gap": 0.01645488549988309,
+        "sv_just_after_gap": 1.6163493739849398e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            62,
+            0.11566142507204957,
+            "Angle(0-5-4)"
+          ],
+          [
+            65,
+            0.09590962457615247,
+            "Angle(2-6-9)"
+          ],
+          [
+            55,
+            0.06623413228947303,
+            "Angle(3-2-6)"
+          ],
+          [
+            63,
+            0.04638008855060514,
+            "Angle(0-5-18)"
+          ],
+          [
+            64,
+            0.038178371870160675,
+            "Angle(4-5-18)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.062732119896094,
+        "sv_min_nonzero": 0.016218741896323538,
+        "condition_number": 1.6062732119896093e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 7533997482207.761,
+        "sv_at_gap": 0.016218741896323538,
+        "sv_just_after_gap": 2.1527405516959108e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            47,
+            0.20460993503349048,
+            "Angle(1-0-5)"
+          ],
+          [
+            59,
+            0.11543754755186597,
+            "Angle(3-4-5)"
+          ],
+          [
+            50,
+            0.06002439804599462,
+            "Angle(0-1-2)"
+          ],
+          [
+            62,
+            0.04357926229826857,
+            "Angle(0-5-4)"
+          ],
+          [
+            58,
+            0.04286299093857051,
+            "Angle(4-3-7)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.02542914025706,
+        "sv_min_nonzero": 0.016060008459582015,
+        "condition_number": 1.602542914025706e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 7986944464775.8955,
+        "sv_at_gap": 0.016060008459582015,
+        "sv_just_after_gap": 2.0107825377289186e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            62,
+            0.2522695596708042,
+            "Angle(0-5-4)"
+          ],
+          [
+            59,
+            0.19730939683196022,
+            "Angle(3-4-5)"
+          ],
+          [
+            47,
+            0.1824332333763876,
+            "Angle(1-0-5)"
+          ],
+          [
+            50,
+            0.05095197438396821,
+            "Angle(0-1-2)"
+          ],
+          [
+            57,
+            0.045766209469914956,
+            "Angle(2-3-7)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.159200466503883,
+        "sv_min_nonzero": 0.01596850427543115,
+        "condition_number": 1.6159200466503882e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 9971610902875.55,
+        "sv_at_gap": 0.01596850427543115,
+        "sv_just_after_gap": 1.6013966480407146e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            64,
+            0.18274963626429583,
+            "Angle(4-5-18)"
+          ],
+          [
+            63,
+            0.18260615058863938,
+            "Angle(0-5-18)"
+          ],
+          [
+            47,
+            0.16297902200377576,
+            "Angle(1-0-5)"
+          ],
+          [
+            60,
+            0.03725789204081408,
+            "Angle(3-4-17)"
+          ],
+          [
+            61,
+            0.03721554145552156,
+            "Angle(5-4-17)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.07226775169186,
+        "sv_min_nonzero": 0.01578830936992532,
+        "condition_number": 1.607226775169186e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 7406281877481.66,
+        "sv_at_gap": 0.01578830936992532,
+        "sv_just_after_gap": 2.1317456763195434e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            48,
+            0.18164093300934925,
+            "Angle(1-0-16)"
+          ],
+          [
+            49,
+            0.18130719030241332,
+            "Angle(5-0-16)"
+          ],
+          [
+            47,
+            0.1363613396869291,
+            "Angle(1-0-5)"
+          ],
+          [
+            56,
+            0.050468248541101,
+            "Angle(2-3-4)"
+          ],
+          [
+            53,
+            0.04257187567078844,
+            "Angle(1-2-3)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.067009393885662,
+        "sv_min_nonzero": 0.015655069779275846,
+        "condition_number": 1.6067009393885662e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 10648049390823.932,
+        "sv_at_gap": 0.015655069779275846,
+        "sv_just_after_gap": 1.4702288846224518e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            58,
+            0.07957421678163028,
+            "Angle(4-3-7)"
+          ],
+          [
+            50,
+            0.07680897641401375,
+            "Angle(0-1-2)"
+          ],
+          [
+            54,
+            0.07341830047286084,
+            "Angle(1-2-6)"
+          ],
+          [
+            59,
+            0.05091919863595747,
+            "Angle(3-4-5)"
+          ],
+          [
+            61,
+            0.050125445206196204,
+            "Angle(5-4-17)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.094484661524753,
+        "sv_min_nonzero": 0.01563671047513281,
+        "condition_number": 1.609448466152475e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 10109954202625.494,
+        "sv_at_gap": 0.01563671047513281,
+        "sv_just_after_gap": 1.5466648178358762e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            75,
+            0.22931291576233787,
+            "Angle(8-7-25)"
+          ],
+          [
+            79,
+            0.10075305889243834,
+            "Angle(7-8-24)"
+          ],
+          [
+            169,
+            0.04457075261116596,
+            "Dihedral(2-3-7-25)"
+          ],
+          [
+            56,
+            0.04393494958620065,
+            "Angle(2-3-4)"
+          ],
+          [
+            74,
+            0.032110369331818836,
+            "Angle(8-7-14)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.099980851111177,
+        "sv_min_nonzero": 0.015585323474233085,
+        "condition_number": 1.6099980851111174e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 11209326692873.256,
+        "sv_at_gap": 0.015585323474233085,
+        "sv_just_after_gap": 1.3903889057084964e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            65,
+            0.16231719768812866,
+            "Angle(2-6-9)"
+          ],
+          [
+            67,
+            0.05848067612943022,
+            "Angle(2-6-22)"
+          ],
+          [
+            79,
+            0.03926888189980789,
+            "Angle(7-8-24)"
+          ],
+          [
+            69,
+            0.03663283745383161,
+            "Angle(9-6-22)"
+          ],
+          [
+            55,
+            0.03591113235191349,
+            "Angle(3-2-6)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.08431302559159,
+        "sv_min_nonzero": 0.015505088264819793,
+        "condition_number": 1.608431302559159e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 9554927181121.836,
+        "sv_at_gap": 0.015505088264819793,
+        "sv_just_after_gap": 1.6227322271439179e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            57,
+            0.15274472079601722,
+            "Angle(2-3-7)"
+          ],
+          [
+            79,
+            0.06586748687276568,
+            "Angle(7-8-24)"
+          ],
+          [
+            52,
+            0.05742745213506947,
+            "Angle(2-1-42)"
+          ],
+          [
+            51,
+            0.05661996739083863,
+            "Angle(0-1-42)"
+          ],
+          [
+            60,
+            0.031571043629453115,
+            "Angle(3-4-17)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.080577167107855,
+        "sv_min_nonzero": 0.015543670282983525,
+        "condition_number": 1.6080577167107854e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 9364807821354.203,
+        "sv_at_gap": 0.015543670282983525,
+        "sv_just_after_gap": 1.659795970136184e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            150,
+            0.15515616017729114,
+            "Dihedral(42-1-2-6)"
+          ],
+          [
+            142,
+            0.1014600898922923,
+            "Dihedral(16-0-1-42)"
+          ],
+          [
+            56,
+            0.044781845556640366,
+            "Angle(2-3-4)"
+          ],
+          [
+            54,
+            0.02676737010946517,
+            "Angle(1-2-6)"
+          ],
+          [
+            53,
+            0.024654078342504625,
+            "Angle(1-2-3)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.103036537380227,
+        "sv_min_nonzero": 0.015537404584807285,
+        "condition_number": 1.6103036537380226e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 10587824144613.78,
+        "sv_at_gap": 0.015537404584807285,
+        "sv_just_after_gap": 1.4674785274660468e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            59,
+            0.21626439071382728,
+            "Angle(3-4-5)"
+          ],
+          [
+            60,
+            0.10122086442330949,
+            "Angle(3-4-17)"
+          ],
+          [
+            61,
+            0.10100216627693412,
+            "Angle(5-4-17)"
+          ],
+          [
+            53,
+            0.06272270074160996,
+            "Angle(1-2-3)"
+          ],
+          [
+            55,
+            0.05661660661890782,
+            "Angle(3-2-6)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.10671302631841,
+        "sv_min_nonzero": 0.015503112391019272,
+        "condition_number": 1.610671302631841e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 10665009549333.078,
+        "sv_at_gap": 0.015503112391019272,
+        "sv_just_after_gap": 1.4536426169434362e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            160,
+            0.07275644144314788,
+            "Dihedral(3-2-6-9)"
+          ],
+          [
+            185,
+            0.07168410324428248,
+            "Dihedral(22-6-9-23)"
+          ],
+          [
+            147,
+            0.06819630945316528,
+            "Dihedral(0-1-2-3)"
+          ],
+          [
+            179,
+            0.05943600836563133,
+            "Dihedral(2-6-9-23)"
+          ],
+          [
+            150,
+            0.034228707114982534,
+            "Dihedral(42-1-2-6)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.093940877685156,
+        "sv_min_nonzero": 0.015530570699408226,
+        "condition_number": 1.6093940877685156e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 12289285224935.271,
+        "sv_at_gap": 0.015530570699408226,
+        "sv_just_after_gap": 1.2637489011888424e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            153,
+            0.17189587648186838,
+            "Dihedral(1-2-3-4)"
+          ],
+          [
+            147,
+            0.12505294178509854,
+            "Dihedral(0-1-2-3)"
+          ],
+          [
+            160,
+            0.11866716083276378,
+            "Dihedral(3-2-6-9)"
+          ],
+          [
+            163,
+            0.04399582685361497,
+            "Dihedral(2-3-4-5)"
+          ],
+          [
+            159,
+            0.033359115882536365,
+            "Dihedral(1-2-6-22)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.092130635844477,
+        "sv_min_nonzero": 0.015546580760761064,
+        "condition_number": 1.6092130635844476e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 11388910137570.197,
+        "sv_at_gap": 0.015546580760761064,
+        "sv_just_after_gap": 1.3650630809242558e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            54,
+            0.09518038857132602,
+            "Angle(1-2-6)"
+          ],
+          [
+            50,
+            0.0891439480450414,
+            "Angle(0-1-2)"
+          ],
+          [
+            62,
+            0.08843146430009395,
+            "Angle(0-5-4)"
+          ],
+          [
+            59,
+            0.044159181524550055,
+            "Angle(3-4-5)"
+          ],
+          [
+            55,
+            0.03206055034664611,
+            "Angle(3-2-6)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.09980085726999,
+        "sv_min_nonzero": 0.01553166991751192,
+        "condition_number": 1.6099800857269989e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 8450024938965.943,
+        "sv_at_gap": 0.01553166991751192,
+        "sv_just_after_gap": 1.8380620210823402e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            59,
+            0.14797469142392866,
+            "Angle(3-4-5)"
+          ],
+          [
+            47,
+            0.13362305699407093,
+            "Angle(1-0-5)"
+          ],
+          [
+            50,
+            0.1291550808152898,
+            "Angle(0-1-2)"
+          ],
+          [
+            56,
+            0.1164844597908886,
+            "Angle(2-3-4)"
+          ],
+          [
+            0,
+            0.06081102759661828,
+            "Bond(0-1)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.097555853768228,
+        "sv_min_nonzero": 0.015540234418800284,
+        "condition_number": 1.6097555853768227e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 8516309360916.156,
+        "sv_at_gap": 0.015540234418800284,
+        "sv_just_after_gap": 1.8247616144757473e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            52,
+            0.1462615247309271,
+            "Angle(2-1-42)"
+          ],
+          [
+            51,
+            0.14625780363367,
+            "Angle(0-1-42)"
+          ],
+          [
+            57,
+            0.11284975923509569,
+            "Angle(2-3-7)"
+          ],
+          [
+            50,
+            0.10157914065063901,
+            "Angle(0-1-2)"
+          ],
+          [
+            58,
+            0.0365041861452267,
+            "Angle(4-3-7)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.09564837718851,
+        "sv_min_nonzero": 0.015541597608141298,
+        "condition_number": 1.609564837718851e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 8799594806852.53,
+        "sv_at_gap": 0.015541597608141298,
+        "sv_just_after_gap": 1.7661719601041804e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            5,
+            0.06582253944327617,
+            "Bond(2-3)"
+          ],
+          [
+            55,
+            0.06070034032562716,
+            "Angle(3-2-6)"
+          ],
+          [
+            18,
+            0.04184478059342402,
+            "Bond(8-9)"
+          ],
+          [
+            74,
+            0.0390580810021734,
+            "Angle(8-7-14)"
+          ],
+          [
+            83,
+            0.03765492993901535,
+            "Angle(6-9-8)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.097119584807146,
+        "sv_min_nonzero": 0.0155405381121713,
+        "condition_number": 1.6097119584807145e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 10467834889623.2,
+        "sv_at_gap": 0.0155405381121713,
+        "sv_just_after_gap": 1.4845990862519898e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            62,
+            0.23981079335143182,
+            "Angle(0-5-4)"
+          ],
+          [
+            55,
+            0.05475670158833018,
+            "Angle(3-2-6)"
+          ],
+          [
+            67,
+            0.05440850716281628,
+            "Angle(2-6-22)"
+          ],
+          [
+            58,
+            0.05260494698658908,
+            "Angle(4-3-7)"
+          ],
+          [
+            47,
+            0.046958998055466154,
+            "Angle(1-0-5)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.09745072215813,
+        "sv_min_nonzero": 0.01554587851487917,
+        "condition_number": 1.6097450722158128e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 10854900581196.291,
+        "sv_at_gap": 0.01554587851487917,
+        "sv_just_after_gap": 1.4321530076294719e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            59,
+            0.12357801201855577,
+            "Angle(3-4-5)"
+          ],
+          [
+            52,
+            0.07944235631291571,
+            "Angle(2-1-42)"
+          ],
+          [
+            51,
+            0.07943800948362352,
+            "Angle(0-1-42)"
+          ],
+          [
+            58,
+            0.06459494837269218,
+            "Angle(4-3-7)"
+          ],
+          [
+            61,
+            0.052312936536864404,
+            "Angle(5-4-17)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.09685246414103,
+        "sv_min_nonzero": 0.015547738896173875,
+        "condition_number": 1.609685246414103e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 9661323920988.396,
+        "sv_at_gap": 0.015547738896173875,
+        "sv_just_after_gap": 1.6092762258387537e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            55,
+            0.20327644281884943,
+            "Angle(3-2-6)"
+          ],
+          [
+            65,
+            0.17294441251465226,
+            "Angle(2-6-9)"
+          ],
+          [
+            53,
+            0.04330764034901015,
+            "Angle(1-2-3)"
+          ],
+          [
+            57,
+            0.03573961067160448,
+            "Angle(2-3-7)"
+          ],
+          [
+            56,
+            0.031156688488029997,
+            "Angle(2-3-4)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      },
+      {
+        "sv_max": 16.09685584083268,
+        "sv_min_nonzero": 0.015549251085224335,
+        "condition_number": 1.609685584083268e+31,
+        "pinv_gap_index": 125,
+        "pinv_gap_value": 10377471057661.266,
+        "sv_at_gap": 0.015549251085224335,
+        "sv_just_after_gap": 1.4983661239647548e-15,
+        "n_truncated": 171,
+        "top_5_truncated_contribs": [
+          [
+            57,
+            0.28042781221627755,
+            "Angle(2-3-7)"
+          ],
+          [
+            55,
+            0.2110166667523222,
+            "Angle(3-2-6)"
+          ],
+          [
+            65,
+            0.043482239588152956,
+            "Angle(2-6-9)"
+          ],
+          [
+            5,
+            0.020191738138181398,
+            "Bond(2-3)"
+          ],
+          [
+            107,
+            0.017364192519056718,
+            "Angle(7-14-13)"
+          ]
+        ],
+        "near_linear_angles": [],
+        "near_linear_dihedrals_count": 0,
+        "near_linear_dihedrals_sample": []
+      }
+    ]
+  }
+}

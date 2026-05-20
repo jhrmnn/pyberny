@@ -1,0 +1,525 @@
+{
+  "cells": [
+    [
+      "vitamin_c",
+      0.001
+    ],
+    [
+      "estradiol",
+      0.001
+    ],
+    [
+      "mg_porphin",
+      0.001
+    ],
+    [
+      "mg_porphin",
+      0.005
+    ]
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "maxsteps": 200,
+  "params": {
+    "gradientmax": 4.5e-05,
+    "gradientrms": 1.5e-05,
+    "stepmax": 0.00018,
+    "steprms": 0.00012
+  },
+  "rows": [
+    {
+      "molecule": "vitamin_c",
+      "sigma": 0.0,
+      "seed": 0,
+      "converged": true,
+      "steps": 34,
+      "energy": -0.36575235496882086,
+      "rmsd_vs_baseline": null,
+      "wall": 6.304561831000001,
+      "error": null
+    },
+    {
+      "molecule": "vitamin_c",
+      "sigma": 0.001,
+      "seed": 0,
+      "converged": true,
+      "steps": 33,
+      "energy": -0.36575235496882086,
+      "rmsd_vs_baseline": 2.6388863304358782e-05,
+      "wall": 4.889974229000018,
+      "error": null
+    },
+    {
+      "molecule": "vitamin_c",
+      "sigma": 0.001,
+      "seed": 1,
+      "converged": true,
+      "steps": 34,
+      "energy": -0.36575235496882086,
+      "rmsd_vs_baseline": 4.576925006251356e-06,
+      "wall": 5.32700305000003,
+      "error": null
+    },
+    {
+      "molecule": "vitamin_c",
+      "sigma": 0.001,
+      "seed": 2,
+      "converged": true,
+      "steps": 34,
+      "energy": -0.36575235496882086,
+      "rmsd_vs_baseline": 3.4698450044415007e-06,
+      "wall": 5.252416932000074,
+      "error": null
+    },
+    {
+      "molecule": "vitamin_c",
+      "sigma": 0.001,
+      "seed": 3,
+      "converged": true,
+      "steps": 34,
+      "energy": -0.36575235496882086,
+      "rmsd_vs_baseline": 4.723447471615757e-06,
+      "wall": 5.133315601000049,
+      "error": null
+    },
+    {
+      "molecule": "vitamin_c",
+      "sigma": 0.001,
+      "seed": 4,
+      "converged": true,
+      "steps": 33,
+      "energy": -0.36575235496882086,
+      "rmsd_vs_baseline": 2.5528109274374543e-05,
+      "wall": 4.960845876999997,
+      "error": null
+    },
+    {
+      "molecule": "vitamin_c",
+      "sigma": 0.001,
+      "seed": 5,
+      "converged": true,
+      "steps": 34,
+      "energy": -0.36575235496882086,
+      "rmsd_vs_baseline": 6.5549516976300506e-06,
+      "wall": 5.224236278000035,
+      "error": null
+    },
+    {
+      "molecule": "vitamin_c",
+      "sigma": 0.001,
+      "seed": 6,
+      "converged": true,
+      "steps": 34,
+      "energy": -0.36575235496882086,
+      "rmsd_vs_baseline": 1.0722384289917345e-06,
+      "wall": 5.124466815000005,
+      "error": null
+    },
+    {
+      "molecule": "vitamin_c",
+      "sigma": 0.001,
+      "seed": 7,
+      "converged": true,
+      "steps": 34,
+      "energy": -0.36575235496882086,
+      "rmsd_vs_baseline": 1.360042504010084e-05,
+      "wall": 5.146505241,
+      "error": null
+    },
+    {
+      "molecule": "vitamin_c",
+      "sigma": 0.001,
+      "seed": 8,
+      "converged": true,
+      "steps": 34,
+      "energy": -0.36575235496882086,
+      "rmsd_vs_baseline": 3.4242327238420905e-06,
+      "wall": 5.115256764000037,
+      "error": null
+    },
+    {
+      "molecule": "vitamin_c",
+      "sigma": 0.001,
+      "seed": 9,
+      "converged": true,
+      "steps": 34,
+      "energy": -0.36575235496882086,
+      "rmsd_vs_baseline": 2.8148825051365657e-06,
+      "wall": 5.310558029000049,
+      "error": null
+    },
+    {
+      "molecule": "estradiol",
+      "sigma": 0.0,
+      "seed": 0,
+      "converged": true,
+      "steps": 11,
+      "energy": -0.15081951799433627,
+      "rmsd_vs_baseline": null,
+      "wall": 2.4298032780000085,
+      "error": null
+    },
+    {
+      "molecule": "estradiol",
+      "sigma": 0.001,
+      "seed": 0,
+      "converged": true,
+      "steps": 11,
+      "energy": -0.15085513535393455,
+      "rmsd_vs_baseline": 0.0009034335683423463,
+      "wall": 2.30315250700005,
+      "error": null
+    },
+    {
+      "molecule": "estradiol",
+      "sigma": 0.001,
+      "seed": 1,
+      "converged": true,
+      "steps": 11,
+      "energy": -0.1508353585560547,
+      "rmsd_vs_baseline": 0.0008049242673980645,
+      "wall": 2.3014391550000255,
+      "error": null
+    },
+    {
+      "molecule": "estradiol",
+      "sigma": 0.001,
+      "seed": 2,
+      "converged": true,
+      "steps": 11,
+      "energy": -0.15071465793789032,
+      "rmsd_vs_baseline": 0.0010075256565556592,
+      "wall": 2.3265459500000816,
+      "error": null
+    },
+    {
+      "molecule": "estradiol",
+      "sigma": 0.001,
+      "seed": 3,
+      "converged": true,
+      "steps": 11,
+      "energy": -0.1507847771245715,
+      "rmsd_vs_baseline": 0.0007044083959020032,
+      "wall": 2.6763955679999754,
+      "error": null
+    },
+    {
+      "molecule": "estradiol",
+      "sigma": 0.001,
+      "seed": 4,
+      "converged": true,
+      "steps": 11,
+      "energy": -0.15084472902918392,
+      "rmsd_vs_baseline": 0.0005555550958458266,
+      "wall": 2.631306102000053,
+      "error": null
+    },
+    {
+      "molecule": "estradiol",
+      "sigma": 0.001,
+      "seed": 5,
+      "converged": true,
+      "steps": 11,
+      "energy": -0.1508582747811564,
+      "rmsd_vs_baseline": 0.0007654224255938732,
+      "wall": 2.381653329999949,
+      "error": null
+    },
+    {
+      "molecule": "estradiol",
+      "sigma": 0.001,
+      "seed": 6,
+      "converged": true,
+      "steps": 11,
+      "energy": -0.15086880859533738,
+      "rmsd_vs_baseline": 0.0006796656889163666,
+      "wall": 2.298066059000007,
+      "error": null
+    },
+    {
+      "molecule": "estradiol",
+      "sigma": 0.001,
+      "seed": 7,
+      "converged": true,
+      "steps": 11,
+      "energy": -0.1507952471940373,
+      "rmsd_vs_baseline": 0.000816238149851993,
+      "wall": 2.3275701119999894,
+      "error": null
+    },
+    {
+      "molecule": "estradiol",
+      "sigma": 0.001,
+      "seed": 8,
+      "converged": true,
+      "steps": 11,
+      "energy": -0.15076047445191496,
+      "rmsd_vs_baseline": 0.0016861620137986774,
+      "wall": 2.370294528000045,
+      "error": null
+    },
+    {
+      "molecule": "estradiol",
+      "sigma": 0.001,
+      "seed": 9,
+      "converged": true,
+      "steps": 11,
+      "energy": -0.1508226892939157,
+      "rmsd_vs_baseline": 0.0006036818251072642,
+      "wall": 2.369690576000039,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.0,
+      "seed": 0,
+      "converged": true,
+      "steps": 41,
+      "energy": 0.37870859581547817,
+      "rmsd_vs_baseline": null,
+      "wall": 8.351231883000082,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.001,
+      "seed": 0,
+      "converged": true,
+      "steps": 45,
+      "energy": 0.37870859581547817,
+      "rmsd_vs_baseline": 5.017423781233446e-05,
+      "wall": 9.279117872000029,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.001,
+      "seed": 1,
+      "converged": true,
+      "steps": 44,
+      "energy": 0.3787086436240145,
+      "rmsd_vs_baseline": 0.036335606672425726,
+      "wall": 9.658457424999938,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.001,
+      "seed": 2,
+      "converged": true,
+      "steps": 41,
+      "energy": 0.37870861175165693,
+      "rmsd_vs_baseline": 0.03638702981713751,
+      "wall": 8.72663624200004,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.001,
+      "seed": 3,
+      "converged": true,
+      "steps": 39,
+      "energy": 0.37870862768783575,
+      "rmsd_vs_baseline": 0.036351653129804276,
+      "wall": 8.378674166999986,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.001,
+      "seed": 4,
+      "converged": true,
+      "steps": 42,
+      "energy": 0.3787086436240145,
+      "rmsd_vs_baseline": 0.042876777358038326,
+      "wall": 8.600443816999928,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.001,
+      "seed": 5,
+      "converged": true,
+      "steps": 42,
+      "energy": 0.37870862768783575,
+      "rmsd_vs_baseline": 0.03636148326164105,
+      "wall": 8.585961855999926,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.001,
+      "seed": 6,
+      "converged": true,
+      "steps": 42,
+      "energy": 0.37870862768783575,
+      "rmsd_vs_baseline": 0.04288001531569012,
+      "wall": 8.61144182399994,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.001,
+      "seed": 7,
+      "converged": true,
+      "steps": 59,
+      "energy": 0.37870861175165693,
+      "rmsd_vs_baseline": 0.03635301497248007,
+      "wall": 12.52501630200004,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.001,
+      "seed": 8,
+      "converged": true,
+      "steps": 43,
+      "energy": 0.37870862768783575,
+      "rmsd_vs_baseline": 0.036340338628295325,
+      "wall": 9.049303360999943,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.001,
+      "seed": 9,
+      "converged": true,
+      "steps": 38,
+      "energy": 0.37870861175165693,
+      "rmsd_vs_baseline": 0.00013905735340102025,
+      "wall": 7.716230762999999,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.0,
+      "seed": 0,
+      "converged": true,
+      "steps": 41,
+      "energy": 0.37870859581547817,
+      "rmsd_vs_baseline": null,
+      "wall": 8.50198267799999,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.005,
+      "seed": 0,
+      "converged": true,
+      "steps": 51,
+      "energy": 0.37870862768783575,
+      "rmsd_vs_baseline": 0.036375194228926384,
+      "wall": 10.757759434999912,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.005,
+      "seed": 1,
+      "converged": true,
+      "steps": 51,
+      "energy": 0.37870862768783575,
+      "rmsd_vs_baseline": 0.0363448671775207,
+      "wall": 10.287789664999991,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.005,
+      "seed": 2,
+      "converged": true,
+      "steps": 46,
+      "energy": 0.37870861175165693,
+      "rmsd_vs_baseline": 0.036371850688968345,
+      "wall": 9.559594781999976,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.005,
+      "seed": 3,
+      "converged": true,
+      "steps": 53,
+      "energy": 0.37870862768783575,
+      "rmsd_vs_baseline": 0.036332224798725936,
+      "wall": 10.748053301000027,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.005,
+      "seed": 4,
+      "converged": true,
+      "steps": 41,
+      "energy": 0.37870862768783575,
+      "rmsd_vs_baseline": 0.04288128173564624,
+      "wall": 8.314380065999899,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.005,
+      "seed": 5,
+      "converged": true,
+      "steps": 43,
+      "energy": 0.37870861175165693,
+      "rmsd_vs_baseline": 0.03640295249237883,
+      "wall": 8.75517314000001,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.005,
+      "seed": 6,
+      "converged": true,
+      "steps": 39,
+      "energy": 0.37870861175165693,
+      "rmsd_vs_baseline": 0.042873647007841846,
+      "wall": 7.903361203999907,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.005,
+      "seed": 7,
+      "converged": true,
+      "steps": 52,
+      "energy": 0.37870862768783575,
+      "rmsd_vs_baseline": 0.036337156302693935,
+      "wall": 10.590460009999902,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.005,
+      "seed": 8,
+      "converged": true,
+      "steps": 41,
+      "energy": 0.3787086436240145,
+      "rmsd_vs_baseline": 0.03636049456958315,
+      "wall": 8.367961960000002,
+      "error": null
+    },
+    {
+      "molecule": "mg_porphin",
+      "sigma": 0.005,
+      "seed": 9,
+      "converged": true,
+      "steps": 47,
+      "energy": 0.37870859581547817,
+      "rmsd_vs_baseline": 4.634774008038348e-05,
+      "wall": 9.456983529000013,
+      "error": null
+    }
+  ]
+}
