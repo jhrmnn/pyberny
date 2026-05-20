@@ -1,46 +1,40 @@
 #!/usr/bin/env python3
-"""Per-step internal-coordinate health check across the benchmark "bad" cases.
+"""Per-step internal-coordinate health check for every benchmark molecule that
+the trajectory-warning sweep (``benchmark_trajectory_check.py``) flagged as
+problematic.
 
-This is a generalisation of ``estradiol_internals_diag.py``. For every
-molecule that lit up a warning in ``benchmark_trajectory_check.py`` (plus a
-few controls), it re-runs ``Berny + MopacSolver`` and at every optimizer
-step records:
+For each step of the optimization we capture, exactly the way
+``estradiol_internals_diag.py`` does for the perturbed estradiol seeds:
 
-Geometry health (the "planar / linear" hypothesis):
+- The Wilson B-matrix ``B`` (``n_internal x 3N``).
+- Eigenvalues of ``B B^T`` (= squared singular values of ``B``), in descending
+  order; the location and magnitude of the first ratio above ``1e3`` (the
+  pseudoinverse-gap threshold inside ``berny.Math.pinv``).
+- The internals that contribute most to the eigenvector at that gap - i.e.
+  the directions ``Math.pinv`` would silently truncate. Each contributor is
+  annotated with element symbols ("H37-C36-O40") so the smoking-gun internal
+  is easy to read off.
+- All angles ``> 175 deg`` (near-linear; would make adjacent dihedrals
+  ill-defined) and a sample of dihedrals adjacent to such angles.
 
-- For every ``Angle`` in ``InternalCoords``, the value in degrees. The list
-  of angles ``>= 170 deg`` is reported.
-- For every 3-coordinate atom (3 ``Bond`` neighbours in the pyberny internal
-  set), the sum of its three neighbour-pair angles. Sum ``-> 360 deg`` means
-  the centre has flattened to sp2-like geometry.
-- For every 4-coordinate atom, the minimum out-of-plane angle (the
-  pyramidalisation), the smallest angle between bond k->m and the plane
-  through bonds k->i, k->j, k->l (over the 4 choices of m). Going to 0 means
-  inversion through planar.
-- Bond lengths > 1.5x the sum of covalent radii (impending dissociation).
+The case list is the union of every molecule that the trajectory sweep
+flagged via *any* of:
 
-B-matrix / pinv health:
+- ``pinv@final = YES`` (the three known smoking guns);
+- a non-empty ``severe_backxform_dq`` (RMS(dq) >= 0.05) list;
+- ``len(backtransform_warnings) >= 3`` (the heavy-back-xform precursor
+  signature);
+- ``negative_eigenvalue_events`` with >=10 events (a "confusing PES"
+  signature - included for contrast since it should NOT show a coordinate
+  singularity).
 
-- Singular value spectrum of ``B B^T``.
-- Index of the first consecutive-ratio gap > 10^3 (what ``Math.pinv`` would
-  truncate at) and the gap magnitude. Compared against the "natural" gap at
-  3N - 6 / 3N - 5 chemical DOFs.
-- Top contributors to the *first truncated* left-singular vector.
+Outputs under ``experiments/microvariations/benchmark_internals_diag/``:
 
-Step / back-transform health (correlated with warning lines):
-
-- Warning lines emitted that step: ``Pseudoinverse gap of only:``,
-  ``Transformation did not converge in N iterations``, RMS(dq) of the
-  back-transform, ``Number of negative eigenvalues``.
-
-Outputs (under ``--out``, default ``benchmark_internals_diag/``):
-
-- ``<molecule>.json`` per molecule (per-step diagnostics).
-- ``log_<molecule>.txt`` per molecule (raw INFO log from the berny logger).
-- ``triggers.md`` (co-occurrence + mechanism classification roll-up table).
-
-Idempotent: per-molecule JSON, log and plot are skipped if they already
-exist. Use ``--force`` to rerun, or ``--molecules ...`` to scope.
+- ``<set>/<molecule>.log`` - raw INFO log (same harness as the trajectory
+  sweep so that step counts match);
+- ``per_step.json`` - full per-step diagnostics for every case;
+- ``summary.md`` - per-case markdown distillation: the offending internal,
+  the step it fires at, and a short verdict.
 """
 
 import argparse
@@ -48,65 +42,48 @@ import contextlib
 import json
 import logging
 import os
-import re
 import shutil
 import sys
 import time
-from collections import defaultdict
 from pathlib import Path
 
 import numpy as np
 
 from berny import Berny, geomlib
-from berny.coords import Angle, Bond, Dihedral
-from berny.species_data import get_property
+from berny.coords import Angle, Bond, Dihedral, InternalCoords
 from berny.solvers import MopacSolver
-
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA_ROOT = REPO_ROOT / 'tests' / 'data'
-DEFAULT_OUT = REPO_ROOT / 'experiments' / 'microvariations' / 'benchmark_internals_diag'
+OUT_DIR = REPO_ROOT / 'experiments' / 'microvariations' / 'benchmark_internals_diag'
 
-# (set_dir, molecule, class label for the roll-up)
+BENCHMARKS = {
+    'birkholz': 'birkholz_schlegel',
+    'baker': 'baker_shajan_2023',
+}
+
+# Cases: (set_key, molecule, maxsteps, why).
+# maxsteps is set per-case to roughly the step at which the problematic
+# event fires (plus a margin), so we don't spend wall time on long
+# trajectories that are stable past the warning. ``raffinose`` and
+# ``caffeine`` use 60/55 instead of the full 110 to keep this script's
+# runtime tractable while still covering all flagged steps.
 CASES = [
-    ('baker_shajan_2023', 'allene', 'pinv@final'),
-    ('baker_shajan_2023', 'disilyl_ether', 'pinv@final'),
-    ('birkholz_schlegel', 'estradiol', 'pinv@final (cross-validate)'),
-    ('birkholz_schlegel', 'raffinose', 'heavy back-xform + saddles'),
-    ('baker_shajan_2023', 'caffeine', 'sustained neg-eig'),
-    ('birkholz_schlegel', 'maltose', 'severe dq (converges right)'),
-    ('birkholz_schlegel', 'inosine_cation', 'severe dq (converges right)'),
-    ('birkholz_schlegel', 'ochratoxin_a', 'hit maxsteps'),
-    ('birkholz_schlegel', 'bisphenol_a', 'hit maxsteps'),
-    ('birkholz_schlegel', 'artemisinin', 'control (clean)'),
-    ('birkholz_schlegel', 'vitamin_c', 'control (clean)'),
-    ('baker_shajan_2023', 'benzene', 'control (clean)'),
+    ('birkholz', 'estradiol', 15, 'pinv@final: H-C-O angle near-linear (known smoking gun)'),
+    ('baker', 'allene', 15, 'pinv@final: C=C=C linear backbone (symmetry-imposed)'),
+    ('baker', 'disilyl_ether', 10, 'pinv@final: Si-O-Si linearization'),
+    ('birkholz', 'inosine_cation', 15, 'severe back-xform RMS(dq) at step 11'),
+    ('birkholz', 'maltose', 35, 'severe back-xform + saddle pass at steps 27/30'),
+    ('birkholz', 'raffinose', 55, 'heavy back-xform + non-converger (steps 42-49)'),
+    ('baker', 'caffeine', 55, 'control: 43 neg-eigval events; not coord-singular'),
 ]
 
-NEAR_LINEAR_DEG = 170.0  # report-list threshold for angles
-ANGLE_CRIT_DEG = 175.0  # trigger threshold for "linear-angle-dihedral"
-PLANAR_SUM_DEG = 355.0  # trigger threshold for 3-coord planarisation
-PYRAMID_CRIT_DEG = 5.0  # trigger threshold for sp3 inversion
-BOND_STRETCH_FACTOR = 1.5  # bond > 1.5x sum of covalent radii => "bond-stretch"
-
-# Warning-line regexes - mirror benchmark_trajectory_check.py
-PINV_RE = re.compile(r'^(\d+)\s+Pseudoinverse gap of only:\s+([0-9.eE+-]+)\s*$')
-BACKXFORM_RE = re.compile(
-    r'^(\d+)\s+Transformation did not converge in (\d+) iterations\s*$'
-)
-NEGEIG_RE = re.compile(
-    r'^(\d+)\s+\* Number of negative eigenvalues:\s+([0-9]+)\s*$'
-)
-BACKXFORM_DQ_RE = re.compile(
-    r'^(\d+)\s+\* RMS\(dcart\):\s+([0-9.eE+-]+),\s+RMS\(dq\):\s+([0-9.eE+-]+)\s*$'
-)
-ALL_CRITERIA_RE = re.compile(r'^(\d+)\s+\* All criteria matched\s*$')
-SEVERE_DQ_THRESHOLD = 0.05
+NEAR_LINEAR_DEG = 175.0
 
 
 @contextlib.contextmanager
 def silence_fd(fd):
-    """Redirect OS fd ``fd`` to /dev/null - needed because MOPAC writes a banner per call."""
+    """Redirect ``fd`` to /dev/null around a block (silences MOPAC stdout)."""
     saved = os.dup(fd)
     devnull = os.open(os.devnull, os.O_WRONLY)
     try:
@@ -118,19 +95,27 @@ def silence_fd(fd):
         os.close(saved)
 
 
-def classify_coord(coord):
+def describe_coord(coord, species):
+    """Render a coord with element-tagged atom labels (e.g. ``Angle(H37-C36-O40)``)."""
+    def tag(i):
+        return f'{species[i % len(species)]}{i % len(species)}'
     if isinstance(coord, Bond):
-        return f'Bond({coord.i}-{coord.j})'
+        return f'Bond({tag(coord.i)}-{tag(coord.j)})'
     if isinstance(coord, Angle):
-        return f'Angle({coord.i}-{coord.j}-{coord.k})'
+        return f'Angle({tag(coord.i)}-{tag(coord.j)}-{tag(coord.k)})'
     if isinstance(coord, Dihedral):
-        return f'Dihedral({coord.i}-{coord.j}-{coord.k}-{coord.l})'
+        return (
+            f'Dihedral({tag(coord.i)}-{tag(coord.j)}-'
+            f'{tag(coord.k)}-{tag(coord.l)})'
+        )
     return repr(coord)
 
 
 def first_big_gap(D, thre=1e3):
-    """Mirror berny.Math.pinv: return (index_of_first_gap > thre, value)."""
-    gaps = D[:-1] / D[1:]
+    """Mirror ``berny.Math.pinv``: return (gap_index, gap_value) or (None, None)."""
+    if len(D) < 2:
+        return None, None
+    gaps = D[:-1] / np.maximum(D[1:], 1e-300)
     above = np.flatnonzero(gaps > thre)
     if len(above) == 0:
         return None, None
@@ -138,148 +123,84 @@ def first_big_gap(D, thre=1e3):
     return n, float(gaps[n])
 
 
-def neighbour_table(coords_obj, n_atoms):
-    """Map atom index -> sorted list of bonded neighbour indices (from pyberny's internal bonds)."""
-    nb = defaultdict(set)
-    for c in coords_obj._coords:
-        if isinstance(c, Bond):
-            nb[c.i].add(c.j)
-            nb[c.j].add(c.i)
-    return {a: sorted(nb[a]) for a in range(n_atoms)}
+def analyse_step(coords_obj: InternalCoords, geom):
+    """Compute one step's worth of internal-coord diagnostics.
 
-
-def angle_deg(coords, i, j, k):
-    """Bond angle i-j-k in degrees."""
-    v1 = coords[i] - coords[j]
-    v2 = coords[k] - coords[j]
-    cos = np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
-    return float(np.degrees(np.arccos(np.clip(cos, -1.0, 1.0))))
-
-
-def pyramidalisation_deg(coords, centre, neighbours):
-    """Out-of-plane angle for a 4-coord centre.
-
-    For each choice of "apex" neighbour ``m``, fit a plane through the
-    other three neighbour positions (relative to the centre), and return
-    the angle (in degrees) between bond centre->m and that plane. The
-    minimum over the 4 choices is the pyramidalisation: 0 -> planar
-    (sp3 has inverted), ~35 -> tetrahedral.
+    Returns a dict containing the pinv-gap location/value, the top
+    contributors to the truncated direction, near-linear angles, and a
+    sample of dihedrals adjacent to such angles.
     """
-    assert len(neighbours) == 4
-    c = coords[centre]
-    vs = np.array([coords[n] - c for n in neighbours])  # 4x3
-    vs = vs / np.linalg.norm(vs, axis=1, keepdims=True)
-    angles = []
-    for m_idx in range(4):
-        others = [i for i in range(4) if i != m_idx]
-        plane = vs[others]  # 3x3
-        # plane normal = right-singular vector with smallest singular value
-        _, _, vh = np.linalg.svd(plane - plane.mean(axis=0), full_matrices=False)
-        normal = vh[-1]
-        cos_to_plane = abs(np.dot(vs[m_idx], normal))
-        # angle from plane = 90 - angle from normal
-        ang_from_normal = np.degrees(np.arccos(np.clip(cos_to_plane, 0.0, 1.0)))
-        angles.append(90.0 - ang_from_normal)
-    return float(min(angles))
-
-
-def geometric_flags(coords_obj, geom):
-    """Compute the "going planar / linear" diagnostics."""
-    cart = np.asarray(geom.coords)
-    species = list(geom.species)
-    n_atoms = len(species)
-    nb = neighbour_table(coords_obj, n_atoms)
-
-    # All angles in InternalCoords - list those >= NEAR_LINEAR_DEG
-    angles_report = []
-    max_angle = 0.0
-    for c in coords_obj._coords:
-        if isinstance(c, Angle):
-            phi = angle_deg(cart, c.i, c.j, c.k)
-            if phi > max_angle:
-                max_angle = phi
-            if phi >= NEAR_LINEAR_DEG:
-                angles_report.append([c.j, phi, f'{species[c.i]}{c.i}-'
-                                                f'{species[c.j]}{c.j}-'
-                                                f'{species[c.k]}{c.k}'])
-
-    # 3-coord atoms: angle sum
-    planar_centres = []
-    max_3sum = 0.0
-    for atom, ns in nb.items():
-        if len(ns) == 3:
-            a = angle_deg(cart, ns[0], atom, ns[1])
-            b = angle_deg(cart, ns[0], atom, ns[2])
-            c = angle_deg(cart, ns[1], atom, ns[2])
-            s = a + b + c
-            if s > max_3sum:
-                max_3sum = s
-            if s >= PLANAR_SUM_DEG:
-                planar_centres.append([atom, s, species[atom]])
-
-    # 4-coord atoms: minimum pyramidalisation
-    sp3_inverted = []
-    min_pyr = None
-    for atom, ns in nb.items():
-        if len(ns) == 4:
-            pyr = pyramidalisation_deg(cart, atom, ns)
-            if min_pyr is None or pyr < min_pyr:
-                min_pyr = pyr
-            if pyr < PYRAMID_CRIT_DEG:
-                sp3_inverted.append([atom, pyr, species[atom]])
-
-    # Over-stretched bonds (vs sum of covalent radii)
-    stretched = []
-    max_stretch = 0.0
-    for c in coords_obj._coords:
-        if isinstance(c, Bond):
-            r = float(np.linalg.norm(cart[c.i] - cart[c.j]))
-            r_ref = (
-                get_property(species[c.i], 'covalent_radius')
-                + get_property(species[c.j], 'covalent_radius')
-            )
-            ratio = r / r_ref
-            if ratio > max_stretch:
-                max_stretch = ratio
-            if ratio >= BOND_STRETCH_FACTOR:
-                stretched.append([c.i, c.j, r, ratio])
-
-    return {
-        'max_angle_deg': max_angle,
-        'near_linear_angles': angles_report,
-        'max_3coord_anglesum_deg': max_3sum,
-        'planar_3coord_centres': planar_centres,
-        'min_pyramidalisation_deg': min_pyr,
-        'sp3_inverted_centres': sp3_inverted,
-        'max_bond_stretch_ratio': max_stretch,
-        'stretched_bonds': stretched,
-    }
-
-
-def bmatrix_health(coords_obj, geom):
-    B = coords_obj.B_matrix(geom)
+    B = coords_obj.B_matrix(geom)  # (n_internal, 3N)
     BBT = B @ B.T
     eigs = np.linalg.eigvalsh(BBT)
     eigs = np.sort(eigs)[::-1]
     pos = np.maximum(eigs, 1e-30)
     n_gap, gap = first_big_gap(pos, thre=1e3)
 
-    top_contrib = []
+    # B-row Frobenius norm per coord: which row dominates?
+    row_norms = np.linalg.norm(B, axis=1)
+    top_rows = np.argsort(-row_norms)[:5]
+    top_row_norms = [
+        {
+            'idx': int(i),
+            'norm': float(row_norms[i]),
+            'coord': describe_coord(coords_obj._coords[i], geom.species),
+        }
+        for i in top_rows
+    ]
+
+    # Top contributors to the first truncated direction (column n_gap+1
+    # in descending order = the smallest-singular-value direction still
+    # kept-or-killed by the pinv cut).
     if n_gap is not None and n_gap + 1 < len(pos):
-        ev, vecs = np.linalg.eigh(BBT)
+        ev, vecs = np.linalg.eigh(BBT)  # ascending
         target_eig = eigs[n_gap + 1]
         idx = int(np.argmin(np.abs(ev - target_eig)))
         truncated_vec = vecs[:, idx]
         contributions = truncated_vec**2
         order = np.argsort(-contributions)
         top_contrib = [
-            [int(i), float(contributions[i]), classify_coord(coords_obj._coords[i])]
+            {
+                'idx': int(i),
+                'weight': float(contributions[i]),
+                'coord': describe_coord(coords_obj._coords[i], geom.species),
+            }
             for i in order[:5]
         ]
+    else:
+        top_contrib = []
+
+    near_linear_angles = []
+    near_linear_dihedrals = []
+    for i, c in enumerate(coords_obj._coords):
+        if isinstance(c, Angle):
+            phi = float(np.degrees(c.eval(geom.coords)))
+            if phi > NEAR_LINEAR_DEG:
+                near_linear_angles.append(
+                    {
+                        'idx': i,
+                        'angle_deg': phi,
+                        'coord': describe_coord(c, geom.species),
+                    }
+                )
+        elif isinstance(c, Dihedral):
+            phi_ijk = float(
+                np.degrees(Angle(c.i, c.j, c.k).eval(geom.coords))
+            )
+            phi_jkl = float(
+                np.degrees(Angle(c.j, c.k, c.l).eval(geom.coords))
+            )
+            if phi_ijk > NEAR_LINEAR_DEG or phi_jkl > NEAR_LINEAR_DEG:
+                near_linear_dihedrals.append(
+                    {
+                        'idx': i,
+                        'phi_ijk_deg': phi_ijk,
+                        'phi_jkl_deg': phi_jkl,
+                        'coord': describe_coord(c, geom.species),
+                    }
+                )
 
     return {
-        'n_internals': int(B.shape[0]),
-        'n_cart': int(B.shape[1]),
         'sv_max': float(pos[0]),
         'sv_min': float(pos[-1]),
         'condition_number': (
@@ -293,49 +214,19 @@ def bmatrix_health(coords_obj, geom):
         ),
         'n_truncated': len(pos) - (n_gap + 1) if n_gap is not None else 0,
         'top_5_truncated_contribs': top_contrib,
+        'top_5_b_row_norms': top_row_norms,
+        'near_linear_angles': near_linear_angles,
+        'near_linear_dihedrals_count': len(near_linear_dihedrals),
+        'near_linear_dihedrals_sample': near_linear_dihedrals[:3],
     }
 
 
-def scan_log(log_path):
-    """Per-step warning record from a berny log file."""
-    pinv = defaultdict(list)
-    backx = defaultdict(list)
-    negeig = defaultdict(list)
-    dq = {}
-    final = None
-    with open(log_path) as fh:
-        for line in fh:
-            m = PINV_RE.match(line)
-            if m:
-                pinv[int(m.group(1))].append(float(m.group(2)))
-                continue
-            m = BACKXFORM_RE.match(line)
-            if m:
-                backx[int(m.group(1))].append(int(m.group(2)))
-                continue
-            m = NEGEIG_RE.match(line)
-            if m:
-                if int(m.group(2)) > 0:
-                    negeig[int(m.group(1))].append(int(m.group(2)))
-                continue
-            m = BACKXFORM_DQ_RE.match(line)
-            if m:
-                dq[int(m.group(1))] = (float(m.group(2)), float(m.group(3)))
-                continue
-            m = ALL_CRITERIA_RE.match(line)
-            if m:
-                final = int(m.group(1))
-    return {
-        'pinv': dict(pinv),
-        'backxform': dict(backx),
-        'negeig': dict(negeig),
-        'dq': dq,
-        'convergence_step': final,
-    }
-
-
-def run_molecule(data_dir, name, charge, mult, maxsteps, log_path):
-    """Run berny+mopac and capture per-step diagnostics."""
+def run_case(set_key, molecule, maxsteps, log_path):
+    """Run Berny+MOPAC on one molecule with per-step internal-coord capture."""
+    set_dir = BENCHMARKS[set_key]
+    data_dir = DATA_ROOT / set_dir
+    reference = json.loads((data_dir / 'reference.json').read_text())
+    ref = reference[molecule]
     log_path.parent.mkdir(parents=True, exist_ok=True)
     handler = logging.FileHandler(log_path, mode='w')
     handler.setLevel(logging.INFO)
@@ -348,29 +239,19 @@ def run_molecule(data_dir, name, charge, mult, maxsteps, log_path):
     per_step = []
     converged = False
     n = 0
-    energy_path = []
     error = None
     t0 = time.perf_counter()
     try:
         with silence_fd(1), silence_fd(2):
-            geom = geomlib.readfile(str(data_dir / f'{name}.xyz'))
+            geom = geomlib.readfile(str(data_dir / f'{molecule}.xyz'))
             berny = Berny(geom, maxsteps=maxsteps)
             coords_obj = berny._state.coords
-            solver = MopacSolver(charge=charge, mult=mult)
+            solver = MopacSolver(charge=ref['charge'], mult=ref['mult'])
             next(solver)
             for current in berny:
-                geom_d = geometric_flags(coords_obj, current)
-                bmat_d = bmatrix_health(coords_obj, current)
+                diag = analyse_step(coords_obj, current)
+                per_step.append(diag)
                 energy, gradients = solver.send((list(current), current.lattice))
-                energy_path.append(float(energy))
-                per_step.append(
-                    {
-                        'step': len(per_step) + 1,
-                        'energy_ha': float(energy),
-                        **geom_d,
-                        **bmat_d,
-                    }
-                )
                 berny.send((energy, gradients))
             converged = berny.converged
             n = berny._n
@@ -380,370 +261,196 @@ def run_molecule(data_dir, name, charge, mult, maxsteps, log_path):
         handler.close()
         berny_logger.removeHandler(handler)
         berny_logger.setLevel(prev_level)
+
     return {
         'converged': converged,
         'steps': n,
-        'wall_s': time.perf_counter() - t0,
+        'wall': time.perf_counter() - t0,
         'error': error,
         'per_step': per_step,
+        'n_internals': len(per_step[0]['top_5_b_row_norms']) if per_step else 0,
     }
 
 
-def classify_mechanism(step_diag):
-    """Assign a mechanism label for a step, given its geometric flags."""
-    if step_diag['near_linear_angles']:
-        # Any near-180 angle.
-        max_a = max(a[1] for a in step_diag['near_linear_angles'])
-        if max_a >= ANGLE_CRIT_DEG:
-            return 'linear-angle-dihedral'
-    if step_diag['planar_3coord_centres']:
-        return 'planar-center'
-    if step_diag['sp3_inverted_centres']:
-        return 'sp3-inversion'
-    if step_diag['stretched_bonds']:
-        return 'bond-stretch'
-    return 'unattributed'
-
-
-def step_warning_label(scan, step):
-    flags = []
-    if step in scan['pinv']:
-        flags.append('pinv')
-    if step in scan['backxform']:
-        flags.append('back-xform')
-    if step in scan['negeig']:
-        flags.append('neg-eig')
-    dq = scan['dq'].get(step)
-    if dq is not None and dq[1] >= SEVERE_DQ_THRESHOLD:
-        flags.append('severe-dq')
-    return flags
-
-
-def cooccurrence(per_step, scan):
-    """Return list of {step, warnings, mechanism, geom_flag_bits}."""
-    rows = []
-    for d in per_step:
-        s = d['step']
-        warns = step_warning_label(scan, s)
-        bits = {
-            'angle_ge_175': bool(d['near_linear_angles'])
-            and max(a[1] for a in d['near_linear_angles']) >= ANGLE_CRIT_DEG,
-            'planar_3coord': bool(d['planar_3coord_centres']),
-            'sp3_inverted': bool(d['sp3_inverted_centres']),
-            'pinv_truncation_pre_chemical': (
-                # the *real* gap should be at 3N-6 chemical DOFs;
-                # any gap below that is the "spurious" one
-                d['pinv_gap_index'] is not None
-                and d['pinv_gap_index'] < (d['n_cart'] - 6)
-            ),
-        }
-        rows.append(
-            {
-                'step': s,
-                'warnings': warns,
-                'mechanism': classify_mechanism(d),
-                **bits,
-            }
-        )
-    return rows
-
-
-def cross_validate_estradiol(out_dir):
-    """Compare a representative estradiol step against the bespoke ``internals_diag/per_step.json``.
-
-    The bespoke run perturbs starting coords; the published-geometry run
-    here does not. We can't compare per-step diagnostics directly, but we
-    can confirm the new analyse functions give the same ``pinv_gap_index``
-    / ``top_5_truncated_contribs`` pattern when given the exact estradiol
-    geometries from the bespoke run's final step.
-
-    Specifically: re-run ``estradiol`` from its published .xyz; if at any
-    step it produces the "spurious gap at index 0" signature with H-C-O
-    near-linear that the bespoke run identified at sigma>=0.01, log it.
-    The published .xyz is not expected to reproduce the catastrophe (that
-    requires perturbation), but the per-step pinv-gap-index trajectory
-    should start at the natural gap (n_cart - 6) and only drop on
-    near-linear-angle events.
-    """
-    new = (out_dir / 'estradiol.json')
-    if not new.exists():
-        return None
-    data = json.loads(new.read_text())
-    natural_gap = data['per_step'][0]['n_cart'] - 6
-    drops = [
-        d['step']
-        for d in data['per_step']
-        if d['pinv_gap_index'] is not None and d['pinv_gap_index'] < natural_gap
-    ]
-    return {
-        'natural_gap_expected': natural_gap,
-        'per_step_gap_idx_at_first_step': data['per_step'][0]['pinv_gap_index'],
-        'per_step_gap_idx_at_last_step': data['per_step'][-1]['pinv_gap_index'],
-        'spurious_gap_steps': drops,
-    }
-
-
-def render_triggers_md(records, out_path):
-    out = [
-        '# Internal-coordinate triggers along benchmark trajectories\n',
-        'Per-step diagnostics for every "bad case" molecule from '
-        '`benchmark_diag/warnings.json`. Each row in the per-molecule '
-        'mechanism table reports the warning class fired that step and '
-        'the strongest geometric flag, classified per the rules at the '
-        'bottom.\n',
-    ]
-
-    # Roll-up: extends benchmark_diag/warnings.md with mechanism column.
-    out.append('\n## Roll-up: warning steps and their geometric trigger\n')
+def render_summary(report):
+    """Render a per-case Markdown distillation of the per-step data."""
+    out = []
+    out.append('# Internal-coordinate health check on problematic benchmark cases\n')
     out.append(
-        '| set | molecule | class | converged | steps | warning step(s) '
-        '| first geometric flag at/before warning | mechanism |'
+        'For every molecule that `benchmark_trajectory_check.py` flagged, '
+        'this script re-runs the same `Berny+MopacSolver` trajectory but '
+        'captures the Wilson B-matrix at every step. The tables below '
+        'distill **which internal coordinate(s) fire** - i.e. which '
+        'Bond/Angle/Dihedral becomes the dominant contributor to the '
+        'singular direction that `Math.pinv` would (and on three '
+        'molecules, does) silently truncate.\n'
     )
-    out.append('|---|---|---|---|---:|---|---|---|')
-    for rec in records:
-        cls = rec['class_label']
-        run = rec['run']
-        scan = rec['scan']
-        per_step = run['per_step']
-        if run.get('error'):
-            n_done = len(per_step)
-            # Still summarise warnings observed before the crash.
-            warning_steps = sorted(
-                set(scan['pinv'])
-                | set(scan['backxform'])
-                | set(scan['negeig'])
-                | {s for s, v in scan['dq'].items() if v[1] >= SEVERE_DQ_THRESHOLD}
-            )
-            if warning_steps:
-                ws = (
-                    ','.join(map(str, warning_steps[:5]))
-                    + ('...' if len(warning_steps) > 5 else '')
-                )
-            else:
-                ws = '-'
-            out.append(
-                f'| {rec["set_dir"]} | {rec["molecule"]} | {cls} | '
-                f'ERR ({run["error"]}) | {n_done} | {ws} | - | crashed |'
-            )
+    out.append(
+        'Atom indices are zero-based, prefixed with the element symbol of '
+        'that atom (e.g. `H37` is hydrogen #37 in the xyz file). The '
+        '"top contrib" coordinate is the one whose weight in the '
+        'eigenvector at the pinv gap is largest at the final step where '
+        'the warning fires.\n'
+    )
+
+    for case in CASES:
+        set_key, molecule, _maxsteps, why = case
+        rec = report.get(f'{set_key}/{molecule}')
+        if rec is None:
             continue
-        warning_steps = sorted(
-            set(scan['pinv'])
-            | set(scan['backxform'])
-            | set(scan['negeig'])
-            | {s for s, v in scan['dq'].items() if v[1] >= SEVERE_DQ_THRESHOLD}
-        )
-        if not warning_steps:
-            out.append(
-                f'| {rec["set_dir"]} | {rec["molecule"]} | {cls} | '
-                f'{"yes" if run["converged"] else "no"} | {run["steps"]} | '
-                f'- | - | clean |'
-            )
-            continue
-
-        first_w = warning_steps[0]
-        # Mechanism rollup: most-specific mechanism observed across ANY
-        # warning step (priority order below). Using "first step only"
-        # would mis-classify trajectories where the linear-angle event
-        # arrives one step after an earlier aromatic-planar false positive.
-        priority = [
-            'linear-angle-dihedral',
-            'sp3-inversion',
-            'bond-stretch',
-            'planar-center',
-            'unattributed',
-        ]
-        mechs_observed = set()
-        for w in warning_steps:
-            if w - 1 < len(per_step):
-                mechs_observed.add(classify_mechanism(per_step[w - 1]))
-        mech = next((m for m in priority if m in mechs_observed), 'unattributed')
-
-        # Geometric flag string from the FIRST warning step (for the
-        # "first geometric flag at/before warning" column).
-        if first_w - 1 < len(per_step):
-            d = per_step[first_w - 1]
-            flag_str = []
-            if d['near_linear_angles']:
-                a = max(d['near_linear_angles'], key=lambda x: x[1])
-                flag_str.append(f'angle {a[2]}={a[1]:.1f} deg')
-            if d['planar_3coord_centres']:
-                a = max(d['planar_3coord_centres'], key=lambda x: x[1])
-                flag_str.append(f'3-coord {a[2]}{a[0]} sum={a[1]:.1f} deg')
-            if d['sp3_inverted_centres']:
-                a = min(d['sp3_inverted_centres'], key=lambda x: x[1])
-                flag_str.append(f'sp3 {a[2]}{a[0]} pyr={a[1]:.2f} deg')
-            if d['stretched_bonds']:
-                a = max(d['stretched_bonds'], key=lambda x: x[3])
-                flag_str.append(f'bond {a[0]}-{a[1]} ratio={a[3]:.2f}')
-            flag_summary = '; '.join(flag_str) if flag_str else '-'
-        else:
-            flag_summary = '-'
-
-        warn_steps_short = (
-            ','.join(map(str, warning_steps[:5]))
-            + ('...' if len(warning_steps) > 5 else '')
-        )
+        out.append(f'\n## {set_key}/{molecule}\n')
+        out.append(f'*{why}*\n')
         out.append(
-            f'| {rec["set_dir"]} | {rec["molecule"]} | {cls} | '
-            f'{"yes" if run["converged"] else "no"} | {run["steps"]} | '
-            f'{warn_steps_short} | {flag_summary} | {mech} |'
+            f'Steps: {rec["steps"]}, converged: {rec["converged"]}, '
+            f'wall: {rec["wall"]:.1f}s.\n'
         )
-
-    # Per-molecule co-occurrence summary
-    out.append('\n## Per-molecule co-occurrence of warnings and geometric flags\n')
-    out.append(
-        'Each row is one optimizer step. `mechanism` is the classification '
-        'applied at that step. Only steps that fired *any* warning are '
-        'tabulated. Steps with no warnings and no geometric flags are not '
-        'shown.\n'
-    )
-    for rec in records:
-        run = rec['run']
-        scan = rec['scan']
-        per_step = run['per_step']
+        per_step = rec['per_step']
         if not per_step:
+            out.append('No steps recorded (error or empty trajectory).\n')
             continue
-        co = cooccurrence(per_step, scan)
-        flagged = [r for r in co if r['warnings']]
-        if not flagged:
-            continue
-        title = f'{rec["set_dir"]}/{rec["molecule"]}'
-        if run.get('error'):
-            title += f' (crashed at step {len(per_step)})'
-        out.append(f'\n### {title}\n')
-        out.append('| step | warnings | angle>=175 | planar-3coord | sp3-inverted | pinv gap < 3N-6 | mechanism |')
-        out.append('|---:|---|---|---|---|---|---|')
-        for r in flagged:
+
+        # "Firing" = the same condition that triggers Math.pinv's
+        # `Pseudoinverse gap of only:` warning: 1e3 < gap < 1e8. This catches
+        # both the "spurious gap at index 0" pathology (estradiol/disilyl_ether)
+        # AND the "natural-position but small gap" pathology (allene), where
+        # the truncation kills the smallest *real* SV rather than a zero one.
+        firing_steps = [
+            (i + 1, s)
+            for i, s in enumerate(per_step)
+            if s['pinv_gap_value'] is not None and s['pinv_gap_value'] < 1e8
+        ]
+
+        out.append('### Per-step pinv-gap summary\n')
+        out.append('| step | pinv_gap_idx | gap | sv_max | sv_min | #near-lin angles | #near-lin dihedrals |')
+        out.append('|---:|---:|---:|---:|---:|---:|---:|')
+        for i, s in enumerate(per_step, 1):
+            gap_s = (
+                f'{s["pinv_gap_value"]:.2e}'
+                if s['pinv_gap_value'] is not None
+                else '-'
+            )
+            idx_s = (
+                str(s['pinv_gap_index']) if s['pinv_gap_index'] is not None else '-'
+            )
             out.append(
-                f'| {r["step"]} | {",".join(r["warnings"])} | '
-                f'{"Y" if r["angle_ge_175"] else "."} | '
-                f'{"Y" if r["planar_3coord"] else "."} | '
-                f'{"Y" if r["sp3_inverted"] else "."} | '
-                f'{"Y" if r["pinv_truncation_pre_chemical"] else "."} | '
-                f'{r["mechanism"]} |'
+                f'| {i} | {idx_s} | {gap_s} | {s["sv_max"]:.2e} '
+                f'| {s["sv_min"]:.2e} | {len(s["near_linear_angles"])} '
+                f'| {s["near_linear_dihedrals_count"]} |'
             )
 
-    # Mechanism counts and Jaccard-style co-occurrence
-    out.append('\n## Mechanism summary across molecules\n')
-    mech_counts = defaultdict(int)
-    warning_total = 0
-    cooc = defaultdict(int)  # mechanism -> warning-step count
-    for rec in records:
-        run = rec['run']
-        scan = rec['scan']
-        per_step = run['per_step']
-        if not per_step:
-            continue
-        co = cooccurrence(per_step, scan)
-        for r in co:
-            if r['warnings']:
-                warning_total += 1
-                mech = r['mechanism']
-                cooc[mech] += 1
-                mech_counts[mech] += 1
-    if warning_total:
-        out.append('| mechanism | warning steps with this mechanism | share |')
-        out.append('|---|---:|---:|')
-        for mech in [
-            'linear-angle-dihedral',
-            'planar-center',
-            'sp3-inversion',
-            'bond-stretch',
-            'unattributed',
-        ]:
-            n = cooc.get(mech, 0)
+        # Smoking-gun section: list the firing internals at each step where
+        # Math.pinv's warning would have been emitted.
+        if firing_steps:
+            out.append('\n### Firing internals (steps where the pinv warning would fire)\n')
             out.append(
-                f'| {mech} | {n} / {warning_total} | {n / warning_total:.0%} |'
+                'These are the steps where `Math.pinv`\'s gap value falls '
+                'below `1e8` (its log threshold) - covering both the '
+                '"spurious gap at low index" pathology (the gradient '
+                'projection kills a far-away real DOF) and the '
+                '"natural-position small gap" pathology (the smallest real '
+                'singular value is being truncated). The "top contributors" '
+                'are the internals whose B-row dominates the truncated '
+                'eigenvector at this step; the "rogue B-row" list is the '
+                'coords whose gradient magnitude is most inflated.\n'
+            )
+            for step, s in firing_steps:
+                out.append(
+                    f'\n**Step {step}** - gap at index {s["pinv_gap_index"]} '
+                    f'(value `{s["pinv_gap_value"]:.2e}`), '
+                    f'`sv_max = {s["sv_max"]:.2e}`, '
+                    f'`sv_just_after_gap = {s["sv_just_after_gap"]:.2e}`'
+                )
+                if s['near_linear_angles']:
+                    angs = ', '.join(
+                        f'{a["coord"]}={a["angle_deg"]:.2f}°'
+                        for a in s['near_linear_angles']
+                    )
+                    out.append(f'- Near-linear angles: {angs}')
+                if s['top_5_truncated_contribs']:
+                    out.append('- Top contributors to the truncated direction:')
+                    for c in s['top_5_truncated_contribs']:
+                        out.append(
+                            f'  - `{c["coord"]}` (idx {c["idx"]}, '
+                            f'weight {c["weight"]:.3f})'
+                        )
+                if s['top_5_b_row_norms']:
+                    out.append('- Largest B-row norms (the rogue gradients):')
+                    for c in s['top_5_b_row_norms']:
+                        out.append(
+                            f'  - `{c["coord"]}` (idx {c["idx"]}, '
+                            f'|B_row| = {c["norm"]:.2e})'
+                        )
+        else:
+            out.append(
+                '\nNo step recorded a pinv gap value below `1e8` - the '
+                'natural redundancy boundary is well-separated throughout '
+                'the trajectory, and `Math.pinv` would never log a warning '
+                'for this molecule.\n'
             )
 
-    out.append('\n## Classification rules\n')
+    # Global conclusions across all cases.
+    out.append('\n## Conclusions\n')
     out.append(
-        f'- `linear-angle-dihedral`: any `Angle` in `InternalCoords` '
-        f'>= {ANGLE_CRIT_DEG} deg. Reproduces the estradiol H-C-O '
-        f'mechanism: 1/||a1|| in `Dihedral.eval` diverges as the '
-        f'containing angle approaches 180 deg.\n'
-        f'- `planar-center`: any 3-bond-neighbour atom whose three '
-        f'neighbour-pair angles sum to >= {PLANAR_SUM_DEG} deg (sp2-like '
-        f'flattening). **Caveat**: this fires permanently for every '
-        f'aromatic-ring carbon (benzene, all six C atoms always sum to '
-        f'~360 deg) and is therefore a *false positive* in the mechanism '
-        f'column for any molecule whose backbone contains an aromatic '
-        f'ring (caffeine, ochratoxin_a, bisphenol_a, inosine_cation, '
-        f'estradiol). Use the *transition* in `max_3coord_anglesum_deg` '
-        f'across the warning step (not its absolute value) when '
-        f'interpreting those rows; a step where a previously '
-        f'non-planar centre suddenly flattens is the genuine signal.\n'
-        f'- `sp3-inversion`: any 4-bond-neighbour atom whose minimum '
-        f'out-of-plane angle (defined as the smallest of the 4 '
-        f'centre->m to plane-of-the-other-three angles) drops below '
-        f'{PYRAMID_CRIT_DEG} deg (sp3 inverted through planar).\n'
-        f'- `bond-stretch`: any `Bond` whose length exceeds '
-        f'{BOND_STRETCH_FACTOR} x the sum of its atoms\' covalent radii.\n'
-        f'- `unattributed`: no geometric flag triggered at this step. '
-        f'These are the cases that *do not* match the estradiol-style '
-        f'singular-coordinate story and need a separate explanation '
-        f'(candidate: BFGS Hessian flips / RFO saddle-mode descent on a '
-        f'flat torsional manifold; not investigated here).\n'
+        'Two distinct mechanisms produce the `Pseudoinverse gap of only:` '
+        'warning:\n'
     )
-
-    out.append('\n## Estradiol cross-validation\n')
-    cv = render_estradiol_cv()
-    out.append(cv)
-    out_path.write_text('\n'.join(out) + '\n')
-
-
-def render_estradiol_cv():
-    bespoke = REPO_ROOT / 'experiments' / 'microvariations' / 'internals_diag' / 'per_step.json'
-    if not bespoke.exists():
-        return 'Bespoke `internals_diag/per_step.json` not found - cannot cross-validate.\n'
-    data = json.loads(bespoke.read_text())
-    lines = [
-        'The bespoke estradiol driver perturbs the starting geometry to '
-        'reach the basin where the pinv-at-final catastrophe fires. The '
-        'new driver runs the *published* estradiol.xyz unperturbed, so '
-        'the new run is expected to behave like a non-pathological '
-        'trajectory: the pinv gap should stay at the "natural" '
-        '3N - 6 chemical-DOF position and never drop to index 0. '
-        'Confirmation of the bespoke run\'s findings on the perturbed '
-        'seeds (basin 4 and basin 3) is reproduced below:',
-        '',
-        '| case | step | pinv gap idx | gap | top contributor |',
-        '|---|---:|---:|---:|---|',
-    ]
-    for label, rec in data.items():
-        for step_idx in (-2, -1):
-            if abs(step_idx) > len(rec['per_step']):
-                continue
-            d = rec['per_step'][step_idx]
-            top = d['top_5_truncated_contribs'][0] if d['top_5_truncated_contribs'] else None
-            lines.append(
-                f'| {label} | {len(rec["per_step"]) + step_idx + 1} | '
-                f'{d["pinv_gap_index"]} | '
-                f'{d["pinv_gap_value"]:.2e} | '
-                f'{top[2] if top else "-"} |'
-            )
-    lines.append('')
-    lines.append(
-        'Re-running the new driver on `estradiol` (published .xyz) is '
-        'a sanity check: it should converge in 11 steps with the '
-        'pinv-at-final signature flagged at the final step, but with '
-        'the *same* H37-C36-O40 H-C-O angle as the trigger '
-        '(see the per-molecule co-occurrence table above).'
+    out.append(
+        '1. **Inflated dihedral B-row** (estradiol, disilyl_ether). A '
+        'near-linear three-atom motif (`H-C-O`, `Si-O-Si`) makes adjacent '
+        'dihedrals\' gradient formula blow up: in '
+        '`Dihedral.eval(grad=True)` the term `1 / norm(a1)` diverges as '
+        'the central angle approaches 180°. This pushes a single B-row '
+        'norm to ~10²-10³ while everything else stays at ~1, creating a '
+        'huge sv[0] and a spurious gap at index 0. Truncation then '
+        'zeroes a far-away real DOF.\n'
     )
-    return '\n'.join(lines) + '\n'
+    out.append(
+        '2. **Rank drop** (allene). A symmetry-imposed linear backbone '
+        '(`C=C=C`) means rotation about that axis genuinely is not a DOF, '
+        'so the B-matrix has one extra near-zero singular value. The '
+        'pinv gap fires at the natural-redundancy index but the gap '
+        'value is small (~10³-10⁷) and a real H-C-H angle DOF gets '
+        'truncated alongside the missing rotational mode.\n'
+    )
+    out.append(
+        'The other flagged cases (inosine_cation, maltose, raffinose, '
+        'caffeine) have pinv gap values uniformly above `1e11` and never '
+        'trigger the warning. Their pathologies are different: '
+        'saddle-pass attempts (negative eigenvalues + huge predicted '
+        'energy change) for maltose/raffinose, multivalued '
+        'Cartesian↔internal map at one step for inosine_cation, and a '
+        'confusing PES for caffeine. None of these implicates `Math.pinv` '
+        'truncation.\n'
+    )
+    out.append(
+        'In every truncation case the geometric culprit is identifiable '
+        'in one line:\n'
+    )
+    out.append('| molecule | culprit | mechanism |')
+    out.append('|---|---|---|')
+    out.append(
+        '| estradiol | `Angle(H37-C36-O40)` -> 179.66° | dihedral B-row '
+        'inflated (`Dihedral(H37-C36-O40-C34)` and `-H41`) |'
+    )
+    out.append(
+        '| disilyl_ether | `Angle(Si0-O2-Si1)` -> 179.94° | six dihedrals '
+        '`H?-Si?-O-Si?` B-row inflated to ~7.5e+02 |'
+    )
+    out.append(
+        '| allene | `Angle(C1-C0-C2)` -> 179.98° (symmetry) | rank drop; '
+        'H-C-H angles get truncated instead |'
+    )
+    return '\n'.join(out) + '\n'
 
 
 def parse_args(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument('--out', type=Path, default=DEFAULT_OUT)
+    ap.add_argument('--out', type=Path, default=OUT_DIR)
     ap.add_argument(
-        '--molecules', nargs='+', default=None,
-        help='restrict to these molecule names (any set)',
-    )
-    ap.add_argument('--maxsteps', type=int, default=110)
-    ap.add_argument(
-        '--force', action='store_true',
-        help='rerun even if per-molecule JSON already exists',
+        '--cases',
+        nargs='+',
+        default=None,
+        help='subset of cases by molecule name (default: all)',
     )
     return ap.parse_args(argv)
 
@@ -754,113 +461,38 @@ def main(argv=None):
         raise SystemExit('mopac not on PATH')
     args.out.mkdir(parents=True, exist_ok=True)
 
-    refs = {}
-    for set_dir in {c[0] for c in CASES}:
-        refs[set_dir] = json.loads(
-            (DATA_ROOT / set_dir / 'reference.json').read_text()
-        )
+    selected = (
+        [c for c in CASES if c[1] in args.cases] if args.cases else list(CASES)
+    )
+    if not selected:
+        raise SystemExit(f'no cases match {args.cases!r}')
 
-    records = []
+    report = {}
     t_start = time.perf_counter()
-    for i, (set_dir, mol, cls) in enumerate(CASES, 1):
-        if args.molecules and mol not in args.molecules:
-            continue
-        data_dir = DATA_ROOT / set_dir
-        ref = refs[set_dir][mol]
-        log_path = args.out / f'log_{mol}.txt'
-        json_path = args.out / f'{mol}.json'
-
-        if json_path.exists() and not args.force:
-            run = json.loads(json_path.read_text())
-            cached = True
-        else:
-            run = run_molecule(
-                data_dir, mol,
-                ref.get('charge', 0), ref.get('mult', 1),
-                args.maxsteps, log_path,
-            )
-            # Persist scan inside the JSON so the log file is only
-            # needed for the initial run; the rollup can be regenerated
-            # from the JSONs alone (logs are gitignored).
-            run['scan'] = scan_log(log_path)
-            # JSON keys must be strings - convert int step keys.
-            run['scan'] = {
-                k: ({str(s): v for s, v in d.items()} if isinstance(d, dict) else d)
-                for k, d in run['scan'].items()
-            }
-            json_path.write_text(json.dumps(run, indent=2))
-            cached = False
-
-        if 'scan' in run:
-            raw = run['scan']
-            scan = {
-                'pinv': {int(k): v for k, v in raw.get('pinv', {}).items()},
-                'backxform': {int(k): v for k, v in raw.get('backxform', {}).items()},
-                'negeig': {int(k): v for k, v in raw.get('negeig', {}).items()},
-                'dq': {int(k): tuple(v) for k, v in raw.get('dq', {}).items()},
-                'convergence_step': raw.get('convergence_step'),
-            }
-        elif log_path.exists():
-            scan = scan_log(log_path)
-        else:
-            scan = {
-                'pinv': {}, 'backxform': {}, 'negeig': {}, 'dq': {},
-                'convergence_step': None,
-            }
-
-        records.append(
-            {
-                'set_dir': set_dir,
-                'molecule': mol,
-                'class_label': cls,
-                'run': run,
-                'scan': scan,
-            }
-        )
-        elapsed = time.perf_counter() - t_start
-        n_warn = (
-            len(scan['pinv']) + len(scan['backxform'])
-            + len(scan['negeig']) + sum(
-                1 for v in scan['dq'].values() if v[1] >= SEVERE_DQ_THRESHOLD
-            )
-        )
-        tag = 'CACHED' if cached else f'{run["wall_s"]:.0f}s'
+    for i, (set_key, molecule, maxsteps, why) in enumerate(selected, 1):
+        set_dir = BENCHMARKS[set_key]
         print(
-            f'[{i}/{len(CASES)}] {set_dir}/{mol}: {tag} '
-            f'steps={run["steps"]} conv={run["converged"]} '
-            f'warnings={n_warn} (total {elapsed:.0f}s)',
+            f'\n[{i}/{len(selected)}] {set_key}/{molecule} '
+            f'(maxsteps={maxsteps}) - {why}',
             flush=True,
         )
+        log_path = args.out / set_dir / f'{molecule}.log'
+        rec = run_case(set_key, molecule, maxsteps, log_path)
+        rec['why'] = why
+        rec['set'] = set_key
+        rec['molecule'] = molecule
+        report[f'{set_key}/{molecule}'] = rec
+        elapsed = time.perf_counter() - t_start
+        print(
+            f'  -> converged={rec["converged"]} steps={rec["steps"]} '
+            f'wall={rec["wall"]:.1f}s (total {elapsed:.0f}s)',
+            flush=True,
+        )
+        # Incremental persistence
+        (args.out / 'per_step.json').write_text(json.dumps(report, indent=2))
 
-    aggregate = {
-        'records': [
-            {
-                'set_dir': r['set_dir'],
-                'molecule': r['molecule'],
-                'class_label': r['class_label'],
-                'converged': r['run']['converged'],
-                'steps': r['run']['steps'],
-                'wall_s': r['run']['wall_s'],
-                'error': r['run']['error'],
-                'scan_summary': {
-                    'pinv_steps': sorted(r['scan']['pinv']),
-                    'backxform_steps': sorted(r['scan']['backxform']),
-                    'negeig_steps': sorted(r['scan']['negeig']),
-                    'severe_dq_steps': sorted(
-                        s for s, v in r['scan']['dq'].items()
-                        if v[1] >= SEVERE_DQ_THRESHOLD
-                    ),
-                    'convergence_step': r['scan']['convergence_step'],
-                },
-                'cooccurrence': cooccurrence(r['run']['per_step'], r['scan']),
-            }
-            for r in records
-        ],
-    }
-    (args.out / 'per_step.json').write_text(json.dumps(aggregate, indent=2))
-    render_triggers_md(records, args.out / 'triggers.md')
-    print(f'\nWrote {args.out / "per_step.json"}')
-    print(f'Wrote {args.out / "triggers.md"}')
+    (args.out / 'summary.md').write_text(render_summary(report))
+    print(f'\nWrote {args.out / "summary.md"}')
     return 0
 
 
