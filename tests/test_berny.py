@@ -54,6 +54,94 @@ def test_berny_debug_restart_roundtrip():
     assert b2.trust == b._state.trust
 
 
+def _co2_geom(angle_deg, bond=1.16):
+    half = np.deg2rad(angle_deg) / 2
+    return Geometry(
+        ['O', 'C', 'O'],
+        [
+            [-bond * np.sin(half), -bond * np.cos(half), 0.0],
+            [0.0, 0.0, 0.0],
+            [bond * np.sin(half), -bond * np.cos(half), 0.0],
+        ],
+    )
+
+
+def _co2_harmonic(geom, *, k_bond=1.0, k_ang=0.5, r0=1.16):
+    """Quadratic potential for CO2 with equilibrium at linear (180°) and
+    C-O bonds at ``r0``. Returns ``(energy, gradient_NX3)``.
+
+    Energy is in atomic-style units; the absolute scale is irrelevant for
+    convergence-shape testing. The angle term is a quadratic restraint on
+    ``cos(angle) + 1`` rather than ``angle - pi`` so the gradient stays
+    finite at the linear configuration (the singularity that linear bends
+    are meant to neutralise lives in the *internal-coordinate* description,
+    not in this Cartesian potential).
+    """
+    coords = geom.coords
+    rO1 = coords[0] - coords[1]
+    rO2 = coords[2] - coords[1]
+    d1 = np.linalg.norm(rO1)
+    d2 = np.linalg.norm(rO2)
+    e_bond = 0.5 * k_bond * ((d1 - r0) ** 2 + (d2 - r0) ** 2)
+    u1 = rO1 / d1
+    u2 = rO2 / d2
+    cos_th = float(np.dot(u1, u2))
+    cos_th = max(-1.0, min(1.0, cos_th))
+    # Linear at cos_th = -1: penalise (cos_th + 1).
+    e_ang = 0.5 * k_ang * (cos_th + 1.0) ** 2
+    g = np.zeros_like(coords)
+    # Bond gradients
+    g[0] += k_bond * (d1 - r0) * u1
+    g[1] -= k_bond * (d1 - r0) * u1
+    g[2] += k_bond * (d2 - r0) * u2
+    g[1] -= k_bond * (d2 - r0) * u2
+    # Angle gradient via dE/dcos_th * d(cos_th)/d(coords).
+    dE_dc = k_ang * (cos_th + 1.0)
+    # d(cos_th)/d(rO1) = (u2 - cos_th * u1) / d1, similarly for rO2.
+    dC_drO1 = (u2 - cos_th * u1) / d1
+    dC_drO2 = (u1 - cos_th * u2) / d2
+    g[0] += dE_dc * dC_drO1
+    g[1] -= dE_dc * dC_drO1
+    g[2] += dE_dc * dC_drO2
+    g[1] -= dE_dc * dC_drO2
+    return e_bond + e_ang, g
+
+
+def test_berny_rebuilds_internal_coords_when_co2_straightens():
+    # C2 regression test (also exercises #53's linear-bend builder mid-run).
+    # Start CO2 bent at 160° — below the 175° linear threshold, so the
+    # initial InternalCoords contains a regular Angle and zero dummies. The
+    # harmonic potential drives the molecule toward 180°; once the bend
+    # crosses 175° during the optimization, Berny.send must detect it and
+    # rebuild InternalCoords with two dummies, then continue to converge.
+    # Without C2, the singular-angle gradient takes over once the bend is
+    # past 175° and the trust radius collapses (see #23). With C2, dummies
+    # are introduced on the fly and convergence proceeds normally.
+    geom = _co2_geom(160)
+    berny = Berny(geom, maxsteps=60)
+    assert berny._state.coords.dummy_atoms.shape == (0, 3)
+    assert berny._state.coords._linear_set == set()
+
+    rebuilt = False
+    for step_geom in berny:
+        e, g = _co2_harmonic(step_geom)
+        berny.send((e, g))
+        if not rebuilt and berny._state.coords.dummy_atoms.shape[0] > 0:
+            rebuilt = True
+    assert berny.converged, f'did not converge in {berny._n} steps'
+    assert rebuilt, 'expected an adaptive rebuild as CO2 straightened past 175°'
+    # Final configuration: linear and at the equilibrium bond length.
+    final = berny._state.geom.coords
+    d1 = np.linalg.norm(final[0] - final[1])
+    d2 = np.linalg.norm(final[2] - final[1])
+    assert d1 == pytest.approx(1.16, abs=5e-3)
+    assert d2 == pytest.approx(1.16, abs=5e-3)
+    u1 = (final[0] - final[1]) / d1
+    u2 = (final[2] - final[1]) / d2
+    # cos(angle) ≈ -1 ⇒ linear.
+    assert float(np.dot(u1, u2)) < -0.999
+
+
 class TestUpdateHessian:
     def test_bfgs_simple(self):
         # H = I, dq = [1, 0, 0], dg = [2, 0, 0]:

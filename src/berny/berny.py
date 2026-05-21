@@ -158,6 +158,34 @@ class Berny(Generator):
         energy, gradients = energy_and_gradients
         gradients = np.array(gradients)
         log(f'Energy: {energy:.12}')
+        # C2: adaptive coordinate rebuild. If an sp-like triple has crossed
+        # the linear-bend threshold (175° / 170° hysteresis) since the coord
+        # set was last built, rebuild now — *before* computing B and the
+        # current q — so that this iteration runs entirely in the new
+        # q-space. The BFGS history is dropped because the Hessian was
+        # accumulated in a different (and possibly differently-sized)
+        # coordinate system; ``first=True`` short-circuits the next
+        # iteration's update_hessian/linear_search/update_trust calls and
+        # restarts them from a guess Hessian. We skip the check on the
+        # first iteration since coords were just built from this geometry.
+        if not s.first and s.coords.needs_rebuild(s.geom):
+            log('Linear-bend topology changed; rebuilding internal coordinates')
+            new_coords = InternalCoords(
+                s.geom,
+                dihedral=s.params.dihedral,
+                superweakdih=s.params.superweakdih,
+            )
+            for line in str(new_coords).split('\n'):
+                log(line)
+            s.coords = new_coords
+            s.H = new_coords.hessian_guess(s.geom)
+            s.weights = new_coords.weights(s.geom)
+            s.future = OptPoint(new_coords.eval_geom(s.geom), None, None)
+            s.first = True
+            s.interpolated = None
+            s.predicted = None
+            s.previous = None
+            s.best = None
         B = s.coords.B_matrix(s.geom)
         B_inv = B.T.dot(Math.pinv(np.dot(B, B.T), log=log))
         current = OptPoint(s.future.q, energy, dot(B_inv.T, gradients.reshape(-1)))
