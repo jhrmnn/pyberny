@@ -317,6 +317,17 @@ def test_needs_rebuild_periodic_returns_false():
     assert not coords.needs_rebuild(geom)
 
 
+def test_needs_rebuild_returns_false_on_atom_count_mismatch():
+    # Defensive: if the caller passes a geometry with a different atom
+    # count from the one used to build the coord set (e.g. a stale geom
+    # left over from a previous step), needs_rebuild must bail out
+    # gracefully rather than indexing past the stored bond matrix.
+    bent = _co2(angle_deg=160)
+    coords = InternalCoords(bent)
+    longer = Geometry(['O', 'C', 'O', 'H'], _co2_coords(160) + [[3.0, 0.0, 0.0]])
+    assert not coords.needs_rebuild(longer)
+
+
 def _co2_coords(angle_deg):
     # CO2 with the C at origin, both C-O bonds 1.16 Å, opening angle ``angle_deg``.
     half = np.deg2rad(angle_deg) / 2
