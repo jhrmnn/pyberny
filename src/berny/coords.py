@@ -2,6 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import math
 from collections import OrderedDict
 from itertools import combinations, product
 
@@ -18,8 +19,10 @@ angstrom = 1 / 0.52917721092  #:
 
 
 class InternalCoord:
-    def __init__(self, C=None):
-        if C is not None:
+    def __init__(self, C=None, weak=None):
+        if weak is not None:
+            self.weak = weak
+        elif C is not None:
             self.weak = sum(
                 not C[self.idx[i], self.idx[i + 1]] for i in range(len(self.idx) - 1)
             )
@@ -204,6 +207,138 @@ class Dihedral(InternalCoord):
         return phi, grad
 
 
+# Linear-bend handling --------------------------------------------------------
+# Angles above this threshold trigger introduction of dummy ("ghost") atoms;
+# below it, the regular angle gradient (with 1/sin(phi) terms) is well behaved.
+# Computed via math.radians (rather than `pi - 5 * pi / 180`) so that the
+# expression survives Sphinx's autodoc dynamic-import mocking, which replaces
+# `pi` with a type stub at module scope.
+_LIN_THRE = math.radians(175)
+
+# Distance (angstrom) from host atom j to its dummy. Choice is arbitrary as
+# long as it is comparable to typical bond lengths; the angle-through-dummy
+# coordinate only depends on the dummy's direction.
+_DUMMY_OFFSET = 1.0
+
+
+def _perp_from_ref(ref, axis):
+    """Project ``ref`` onto the plane perpendicular to ``axis`` and normalise.
+
+    ``ref`` and ``axis`` are 3-vectors. Returns ``None`` if ``ref`` is parallel
+    to ``axis``.
+    """
+    perp = ref - np.dot(ref, axis) * axis
+    n = norm(perp)
+    if n < 1e-8:
+        return None
+    return perp / n
+
+
+def _pick_perp(axis):
+    """Return a unit vector perpendicular to ``axis``, chosen deterministically.
+
+    Picks the cartesian basis vector least parallel to ``axis`` and projects
+    out the parallel component. Always succeeds for a unit ``axis``.
+    """
+    e = np.zeros(3)
+    e[int(np.argmin(np.abs(axis)))] = 1.0
+    return _perp_from_ref(e, axis)
+
+
+class _DummySpec(object):
+    """Recipe for placing a dummy atom for a (near-)linear ``i-j-k`` triple.
+
+    The dummy sits at ``r_j + _DUMMY_OFFSET * p``, where ``p`` is a unit
+    vector perpendicular to the ``i-k`` axis. ``ref`` is the initial
+    perpendicular direction; at each step we re-project it onto the current
+    plane perpendicular to ``r_k - r_i`` and renormalise, giving continuity
+    of dummy placement as the host atoms move.
+    """
+
+    def __init__(self, i, j, k, ref):
+        self.i = i
+        self.j = j
+        self.k = k
+        self.ref = ref
+
+    def place(self, coords):
+        axis = coords[self.k] - coords[self.i]
+        n_axis = norm(axis)
+        if n_axis < 1e-8:
+            # Hosts coincide; degenerate, place at j and bail.
+            return coords[self.j].copy()
+        axis = axis / n_axis
+        perp = _perp_from_ref(self.ref, axis)
+        if perp is None:
+            perp = _pick_perp(axis)
+        return coords[self.j] + _DUMMY_OFFSET * perp
+
+    def place_and_jacobians(self, coords):
+        """Place the dummy and return its Jacobians w.r.t. the three host atoms.
+
+        Returns ``(d, J_i, J_j, J_k)`` where each ``J_*`` is the 3×3 matrix
+        ``∂d/∂r_*`` evaluated at the current ``coords``. ``J_j`` is always
+        the identity (the dummy is anchored to ``r_j``); ``J_i = -J_k``
+        (sign change from ``w = r_k - r_i``). Used by ``B_matrix`` to
+        propagate gradient contributions on the dummy back onto the host
+        atoms via the chain rule, in place of the older frozen-dummy
+        approximation.
+
+        In the degenerate fallback paths (coincident hosts, reference
+        parallel to the axis) we report the dummy as rigidly attached to
+        ``r_j`` (zero Jacobians on ``i`` and ``k``). Those branches only
+        fire on pathological inputs and the discontinuity is preferable to
+        propagating a near-singular Jacobian.
+        """
+        ri = coords[self.i]
+        rj = coords[self.j]
+        rk = coords[self.k]
+        I3 = np.eye(3)
+        Z3 = np.zeros((3, 3))
+        w = rk - ri
+        n_w = norm(w)
+        if n_w < 1e-8:
+            return rj.copy(), Z3, I3, Z3
+        ahat = w / n_w
+        a_dot_ref = float(np.dot(ahat, self.ref))
+        q = self.ref - a_dot_ref * ahat
+        n_q = norm(q)
+        if n_q < 1e-8:
+            return rj + _DUMMY_OFFSET * _pick_perp(ahat), Z3, I3, Z3
+        phat = q / n_q
+        d = rj + _DUMMY_OFFSET * phat
+        P_a = I3 - np.outer(ahat, ahat)
+        P_p = I3 - np.outer(phat, phat)
+        # ∂q/∂r_k = -(â qᵀ + (â·ref) P_a) / |w|
+        dq_drk = -(np.outer(ahat, q) + a_dot_ref * P_a) / n_w
+        # ∂p̂/∂q = P_p / |q|; chain to r_k
+        dp_drk = (P_p / n_q) @ dq_drk
+        J_k = _DUMMY_OFFSET * dp_drk
+        J_i = -J_k
+        return d, J_i, I3, J_k
+
+
+def _find_linear_triples(bondmatrix, coords):
+    """Yield (j, i, k) for every sp-like near-linear triple ``i-j-k``.
+
+    Restricted to central atoms with exactly two covalent neighbours so the
+    treatment fires on genuine sp-hybridised geometries (alkynes, nitriles,
+    cumulenes, CO₂) and not on coincidentally-linear trans angles in
+    higher-coordination centres (square-planar / octahedral metals, T-shaped
+    halides). Those latter cases are chemically stiff and converge fine under
+    the regular singular-angle handling; introducing dummies there
+    over-parameterises the problem and prevents convergence
+    (e.g. mg_porphin, zn_edta in the Birkholz-Schlegel benchmark).
+    """
+    for j in range(len(bondmatrix)):
+        neighbors = list(np.flatnonzero(bondmatrix[j, :]))
+        if len(neighbors) != 2:
+            continue
+        i, k = neighbors
+        if Angle(i, j, k).eval(coords) > _LIN_THRE:
+            yield j, i, k
+
+
 def get_clusters(C):
     nonassigned = list(range(len(C)))
     clusters = []
@@ -225,8 +360,14 @@ def get_clusters(C):
 class InternalCoords:
     def __init__(self, geom, allowed=None, dihedral=True, superweakdih=False):
         self._coords = []
+        # Dummy ("ghost") atoms used to handle near-linear angles. Coordinates
+        # are stored in angstrom to match Geometry.coords. The array is
+        # recomputed from the real atoms before every eval/B_matrix call.
+        self.dummy_atoms = np.zeros((0, 3))
+        self._dummy_specs = []
         n = len(geom)
         geom = geom.supercell()
+        self._n_real = len(geom)
         dist = geom.dist(geom)
         radii = np.array([get_property(sp, 'covalent_radius') for sp in geom.species])
         bondmatrix = dist < 1.3 * (radii[None, :] + radii[:, None])
@@ -242,11 +383,20 @@ class InternalCoords:
             if bondmatrix[i, j]:
                 bond = Bond(i, j, C=C)
                 self.append(bond)
-        for j in range(len(geom)):
-            for i, k in combinations(np.flatnonzero(bondmatrix[j, :]), 2):
-                ang = Angle(i, j, k, C=C)
-                if ang.eval(geom.coords) > pi / 4:
-                    self.append(ang)
+        # Identify near-linear triples up front; for each, we place two
+        # mutually orthogonal dummies that span the plane perpendicular to the
+        # i-k axis. The four resulting Angle(i,j,d_*) / Angle(k,j,d_*)
+        # coordinates replace the singular Angle(i,j,k) with well-behaved
+        # bends through ~90 degrees. Skipped for periodic geometries because
+        # the dummy chain rule and the lattice-folding logic in _reduce don't
+        # interact cleanly; periodic systems fall back to legacy behaviour.
+        if geom.lattice is None:
+            linear_set = set(_find_linear_triples(bondmatrix, geom.coords))
+        else:
+            linear_set = set()
+        self._build_angles(geom.coords, bondmatrix, C, linear_set)
+        for j, i, k in sorted(linear_set):
+            self._add_linear_bend(geom.coords, i, j, k)
         if dihedral:
             for bond in self.bonds:
                 self.extend(
@@ -260,6 +410,83 @@ class InternalCoords:
                 )
         if geom.lattice is not None:
             self._reduce(n)
+
+    def _build_angles(self, coords, bondmatrix, C, linear_set):
+        """Append regular Angle coordinates, skipping near-linear triples that
+        are handled separately by ``_add_linear_bend``."""
+        for j in range(len(bondmatrix)):
+            for i, k in combinations(np.flatnonzero(bondmatrix[j, :]), 2):
+                if (j, i, k) in linear_set:
+                    continue
+                ang = Angle(i, j, k, C=C)
+                if ang.eval(coords) > pi / 4:
+                    self.append(ang)
+
+    def _add_linear_bend(self, coords, i, j, k):
+        """Place two dummies for a near-linear ``i-j-k`` triple and emit the
+        replacement angle coordinates.
+
+        ``coords`` is the real-atom coordinate array (angstrom) used to derive
+        the initial perpendicular reference directions.
+        """
+        axis = coords[k] - coords[i]
+        n_axis = norm(axis)
+        axis = axis / n_axis
+        ref1 = _pick_perp(axis)
+        ref2 = np.cross(axis, ref1)
+        ref2 = ref2 / norm(ref2)
+        d1 = self._n_real + len(self._dummy_specs)
+        self._dummy_specs.append(_DummySpec(i, j, k, ref1))
+        d2 = self._n_real + len(self._dummy_specs)
+        self._dummy_specs.append(_DummySpec(i, j, k, ref2))
+        # Dummy positions are appended below, after the loop, in one shot;
+        # but we also want them available for evaluating the new angles in
+        # case any caller inspects them immediately. Refresh now.
+        self._refresh_dummies_from_coords(coords)
+        # All four new angles are evaluated through dummies; near linear
+        # geometry, each is approximately pi/2, well away from the singular
+        # branch. weak=0 marks them as "strong" coordinates for weighting
+        # purposes (analogous to bonded angles).
+        for ai in (i, k):
+            for ad in (d1, d2):
+                self.append(Angle(ai, j, ad, weak=0))
+
+    def _refresh_dummies_from_coords(self, real_coords):
+        """Recompute every dummy position from the given (supercell-shaped)
+        real coordinates. Must only be called when ``_dummy_specs`` is
+        non-empty; callers that may have no dummies should short-circuit.
+        """
+        self.dummy_atoms = np.array(
+            [spec.place(real_coords) for spec in self._dummy_specs]
+        )
+
+    def _all_coords(self, geom_super):
+        """Return the combined (real + dummy) coordinate array for the given
+        already-expanded supercell geometry.
+
+        Side effect: refreshes ``self.dummy_atoms`` so subsequent gradient
+        evaluations see the same positions.
+        """
+        if not self._dummy_specs:
+            return geom_super.coords
+        self._refresh_dummies_from_coords(geom_super.coords)
+        return np.vstack([geom_super.coords, self.dummy_atoms])
+
+    def _rho_extended(self, geom_super):
+        """Build a rho matrix sized for real + dummy centers.
+
+        Entries involving dummies default to 1.0; this turns into a nominal
+        contribution to ``hessian`` and ``weight`` for angles through
+        dummies, comparable in magnitude to a bonded pair.
+        """
+        rho_real = geom_super.rho()
+        nd = len(self._dummy_specs)
+        if nd == 0:
+            return rho_real
+        n = self._n_real + nd
+        rho = np.ones((n, n))
+        rho[: self._n_real, : self._n_real] = rho_real
+        return rho
 
     def append(self, coord):
         self._coords.append(coord)
@@ -315,7 +542,8 @@ class InternalCoords:
 
     def eval_geom(self, geom, template=None):
         geom = geom.supercell()
-        q = np.array([coord.eval(geom.coords) for coord in self])
+        coords = self._all_coords(geom)
+        q = np.array([coord.eval(coords) for coord in self])
         if template is None:
             return q
         swapped = []  # dihedrals swapped by pi
@@ -359,23 +587,42 @@ class InternalCoords:
 
     def hessian_guess(self, geom):
         geom = geom.supercell()
-        rho = geom.rho()
+        rho = self._rho_extended(geom)
         return np.diag([coord.hessian(rho) for coord in self])
 
     def weights(self, geom):
         geom = geom.supercell()
-        rho = geom.rho()
-        return np.array([coord.weight(rho, geom.coords) for coord in self])
+        rho = self._rho_extended(geom)
+        coords = self._all_coords(geom)
+        return np.array([coord.weight(rho, coords) for coord in self])
 
     def B_matrix(self, geom):
         geom = geom.supercell()
-        B = np.zeros((len(self), len(geom), 3))
+        n_real = len(geom)
+        coords = self._all_coords(geom)
+        # Pre-compute Jacobians of each dummy w.r.t. its three host atoms
+        # so we can chain gradient contributions on dummy indices back onto
+        # real atoms. ``J_j`` is always identity (the dummy is anchored to
+        # ``r_j``); ``J_i`` and ``J_k`` carry the axis-bending sensitivity.
+        # Without this chain-rule term, small steps in linear-bend angle
+        # coordinates can amplify into huge Cartesian displacements via
+        # the pseudoinverse (see issue #23 large molecule).
+        jac = [
+            (spec.i, spec.j, spec.k) + spec.place_and_jacobians(coords[:n_real])[1:]
+            for spec in self._dummy_specs
+        ]
+        B = np.zeros((len(self), n_real, 3))
         for i, coord in enumerate(self):
-            _, grads = coord.eval(geom.coords, grad=True)
-            idx = [k % len(geom) for k in coord.idx]
-            for j, grad in zip(idx, grads):
-                B[i, j] += grad
-        return B.reshape(len(self), 3 * len(geom))
+            _, grads = coord.eval(coords, grad=True)
+            for k, grad in zip(coord.idx, grads):
+                if k < n_real:
+                    B[i, k % n_real] += grad
+                else:
+                    hi, hj, hk, J_i, J_j, J_k = jac[k - n_real]
+                    B[i, hi] += J_i.T @ grad
+                    B[i, hj] += J_j.T @ grad
+                    B[i, hk] += J_k.T @ grad
+        return B.reshape(len(self), 3 * n_real)
 
     def update_geom(self, geom, q, dq, B_inv, log=lambda _: None):
         geom = geom.copy()
