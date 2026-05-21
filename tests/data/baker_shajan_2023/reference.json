@@ -156,7 +156,7 @@
   "disilyl_ether": {
     "atoms": 9,
     "charge": 0,
-    "mopac_pm7_steps": 7,
+    "mopac_pm7_steps": 10,
     "mult": 1,
     "name": "Disilyl ether",
     "paper_steps": 9,
