@@ -118,20 +118,35 @@ class Berny(Generator):
             self._state = BernyState(**restart)
             return
         bparams = BernyParams(**params)
-        coords = InternalCoords(
-            geom, dihedral=bparams.dihedral, superweakdih=bparams.superweakdih
-        )
+        coords, H, weights, future = self._build_coord_state(geom, bparams)
         self._state = BernyState(
             geom=geom,
             params=bparams,
             trust=bparams.trust,
             coords=coords,
-            H=coords.hessian_guess(geom),
-            weights=coords.weights(geom),
-            future=OptPoint(coords.eval_geom(geom), None, None),
+            H=H,
+            weights=weights,
+            future=future,
+        )
+
+    def _build_coord_state(
+        self, geom: Geometry, params: BernyParams
+    ) -> tuple[InternalCoords, np.ndarray, np.ndarray, OptPoint]:
+        """Build ``InternalCoords`` and the coord-derived state for ``geom``.
+
+        Returns ``(coords, H, weights, future)`` and logs ``str(coords)``.
+        """
+        coords = InternalCoords(
+            geom, dihedral=params.dihedral, superweakdih=params.superweakdih
         )
         for line in str(coords).split('\n'):
             self._log.info(line)
+        return (
+            coords,
+            coords.hessian_guess(geom),
+            coords.weights(geom),
+            OptPoint(coords.eval_geom(geom), None, None),
+        )
 
     def __next__(self) -> Geometry:
         assert self._n <= self._maxsteps
@@ -170,17 +185,9 @@ class Berny(Generator):
         # first iteration since coords were just built from this geometry.
         if not s.first and s.coords.needs_rebuild(s.geom):
             log('Linear-bend topology changed; rebuilding internal coordinates')
-            new_coords = InternalCoords(
-                s.geom,
-                dihedral=s.params.dihedral,
-                superweakdih=s.params.superweakdih,
+            s.coords, s.H, s.weights, s.future = self._build_coord_state(
+                s.geom, s.params
             )
-            for line in str(new_coords).split('\n'):
-                log(line)
-            s.coords = new_coords
-            s.H = new_coords.hessian_guess(s.geom)
-            s.weights = new_coords.weights(s.geom)
-            s.future = OptPoint(new_coords.eval_geom(s.geom), None, None)
             s.first = True
             s.interpolated = None
             s.predicted = None
