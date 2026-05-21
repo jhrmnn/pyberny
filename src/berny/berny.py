@@ -118,20 +118,35 @@ class Berny(Generator):
             self._state = BernyState(**restart)
             return
         bparams = BernyParams(**params)
-        coords = InternalCoords(
-            geom, dihedral=bparams.dihedral, superweakdih=bparams.superweakdih
-        )
+        coords, H, weights, future = self._build_coord_state(geom, bparams)
         self._state = BernyState(
             geom=geom,
             params=bparams,
             trust=bparams.trust,
             coords=coords,
-            H=coords.hessian_guess(geom),
-            weights=coords.weights(geom),
-            future=OptPoint(coords.eval_geom(geom), None, None),
+            H=H,
+            weights=weights,
+            future=future,
+        )
+
+    def _build_coord_state(
+        self, geom: Geometry, params: BernyParams
+    ) -> tuple[InternalCoords, np.ndarray, np.ndarray, OptPoint]:
+        """Build ``InternalCoords`` and the coord-derived state for ``geom``.
+
+        Returns ``(coords, H, weights, future)`` and logs ``str(coords)``.
+        """
+        coords = InternalCoords(
+            geom, dihedral=params.dihedral, superweakdih=params.superweakdih
         )
         for line in str(coords).split('\n'):
             self._log.info(line)
+        return (
+            coords,
+            coords.hessian_guess(geom),
+            coords.weights(geom),
+            OptPoint(coords.eval_geom(geom), None, None),
+        )
 
     def __next__(self) -> Geometry:
         assert self._n <= self._maxsteps
@@ -158,6 +173,26 @@ class Berny(Generator):
         energy, gradients = energy_and_gradients
         gradients = np.array(gradients)
         log(f'Energy: {energy:.12}')
+        # C2: adaptive coordinate rebuild. If an sp-like triple has crossed
+        # the linear-bend threshold (175° / 170° hysteresis) since the coord
+        # set was last built, rebuild now — *before* computing B and the
+        # current q — so that this iteration runs entirely in the new
+        # q-space. The BFGS history is dropped because the Hessian was
+        # accumulated in a different (and possibly differently-sized)
+        # coordinate system; ``first=True`` short-circuits the next
+        # iteration's update_hessian/linear_search/update_trust calls and
+        # restarts them from a guess Hessian. We skip the check on the
+        # first iteration since coords were just built from this geometry.
+        if not s.first and s.coords.needs_rebuild(s.geom):
+            log('Linear-bend topology changed; rebuilding internal coordinates')
+            s.coords, s.H, s.weights, s.future = self._build_coord_state(
+                s.geom, s.params
+            )
+            s.first = True
+            s.interpolated = None
+            s.predicted = None
+            s.previous = None
+            s.best = None
         B = s.coords.B_matrix(s.geom)
         B_inv = B.T.dot(Math.pinv(np.dot(B, B.T), log=log))
         current = OptPoint(s.future.q, energy, dot(B_inv.T, gradients.reshape(-1)))

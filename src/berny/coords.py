@@ -215,6 +215,14 @@ class Dihedral(InternalCoord):
 # `pi` with a type stub at module scope.
 _LIN_THRE = math.radians(175)
 
+# Hysteresis exit threshold for adaptive rebuild: an sp-like triple is treated
+# as linear from the moment its angle first exceeds ``_LIN_THRE`` and stays
+# linear until the angle drops below ``_LIN_EXIT``. The 5 deg gap absorbs
+# the small oscillations a freshly-rebuilt coord set typically exhibits and
+# prevents a runaway rebuild loop on geometries that hover near the
+# threshold.
+_LIN_EXIT = math.radians(170)
+
 # Distance (angstrom) from host atom j to its dummy. Choice is arbitrary as
 # long as it is comparable to typical bond lengths; the angle-through-dummy
 # coordinate only depends on the dummy's direction.
@@ -330,13 +338,25 @@ def _find_linear_triples(bondmatrix, coords):
     over-parameterises the problem and prevents convergence
     (e.g. mg_porphin, zn_edta in the Birkholz-Schlegel benchmark).
     """
+    for j, i, k in _iter_sp_like_triples(bondmatrix):
+        if Angle(i, j, k).eval(coords) > _LIN_THRE:
+            yield j, i, k
+
+
+def _iter_sp_like_triples(bondmatrix):
+    """Yield (j, i, k) for every sp-like central atom regardless of geometry.
+
+    Used by :meth:`InternalCoords.needs_rebuild` to evaluate, with hysteresis,
+    which triples are *currently* linear without re-deriving the connectivity
+    (which is treated as fixed for the duration of an optimization, matching
+    the existing convention of building ``bondmatrix`` once in ``__init__``).
+    """
     for j in range(len(bondmatrix)):
         neighbors = list(np.flatnonzero(bondmatrix[j, :]))
         if len(neighbors) != 2:
             continue
         i, k = neighbors
-        if Angle(i, j, k).eval(coords) > _LIN_THRE:
-            yield j, i, k
+        yield j, i, k
 
 
 def get_clusters(C):
@@ -397,6 +417,17 @@ class InternalCoords:
         self._build_angles(geom.coords, bondmatrix, C, linear_set)
         for j, i, k in sorted(linear_set):
             self._add_linear_bend(geom.coords, i, j, k)
+        # Snapshot inputs needed by ``needs_rebuild`` so the optimizer can
+        # detect mid-run linearity changes (angles crossing 175°) and request
+        # a fresh InternalCoords instance. ``_bondmatrix`` is the real-atom
+        # connectivity; we treat connectivity as fixed for the duration of an
+        # optimization (matching the longstanding convention in this class)
+        # and only revisit which sp-like triples are currently linear.
+        # ``_linear_set`` is the set of triples we *are* treating as linear
+        # right now, including any that were introduced by hysteresis on a
+        # previous rebuild.
+        self._bondmatrix = bondmatrix if geom.lattice is None else None
+        self._linear_set = set(linear_set)
         if dihedral:
             for bond in self.bonds:
                 self.extend(
@@ -450,6 +481,44 @@ class InternalCoords:
         for ai in (i, k):
             for ad in (d1, d2):
                 self.append(Angle(ai, j, ad, weak=0))
+
+    def needs_rebuild(self, geom):
+        """Return ``True`` if the linear-bend topology should be rebuilt.
+
+        Compares the set of sp-like triples currently treated as linear
+        (``self._linear_set``) against the set that *would* be flagged for
+        the given geometry under the same hysteresis rule used during
+        construction:
+
+        * a triple already in ``_linear_set`` stays linear while its angle
+          is above ``_LIN_EXIT`` (170°);
+        * a new triple is flagged once its angle exceeds ``_LIN_THRE``
+          (175°).
+
+        Returns ``False`` for periodic geometries, where linear-bend
+        handling is disabled (no ``bondmatrix`` is stored). Connectivity is
+        treated as fixed: only the geometry-dependent linearity flag is
+        re-evaluated, so the check is ``O(n_atoms)``.
+
+        Used by :class:`berny.Berny` to react to mid-run linearity changes
+        — typically a triple bond straightening past 175° during the run,
+        or a previously-linear bend bending back below 170°.
+        """
+        if self._bondmatrix is None:
+            return False
+        geom_super = geom.supercell()
+        if len(geom_super) != self._n_real:
+            return False
+        coords = geom_super.coords
+        candidate = set()
+        for j, i, k in _iter_sp_like_triples(self._bondmatrix):
+            ang = Angle(i, j, k).eval(coords)
+            if (j, i, k) in self._linear_set:
+                if ang > _LIN_EXIT:
+                    candidate.add((j, i, k))
+            elif ang > _LIN_THRE:
+                candidate.add((j, i, k))
+        return candidate != self._linear_set
 
     def _refresh_dummies_from_coords(self, real_coords):
         """Recompute every dummy position from the given (supercell-shaped)

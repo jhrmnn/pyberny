@@ -2,7 +2,7 @@
   "acanil01": {
     "atoms": 19,
     "charge": 0,
-    "mopac_pm7_steps": 43,
+    "mopac_pm7_steps": 44,
     "mult": 1,
     "name": "ACANIL01",
     "paper_steps": 7,
@@ -46,7 +46,7 @@
   "allene": {
     "atoms": 7,
     "charge": 0,
-    "mopac_pm7_steps": 12,
+    "mopac_pm7_steps": 14,
     "mult": 1,
     "name": "Allene",
     "paper_steps": 5,
@@ -156,7 +156,7 @@
   "disilyl_ether": {
     "atoms": 9,
     "charge": 0,
-    "mopac_pm7_steps": 7,
+    "mopac_pm7_steps": 10,
     "mult": 1,
     "name": "Disilyl ether",
     "paper_steps": 9,
