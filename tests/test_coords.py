@@ -251,6 +251,98 @@ def test_linear_bends_skipped_for_multi_coord_centre():
     assert coords.dummy_atoms.shape == (0, 3)
 
 
+def test_needs_rebuild_triggers_when_co2_straightens():
+    # Bent CO2 (160°) is below the 175° linear threshold, so InternalCoords
+    # builds a regular Angle without dummies. As soon as the molecule
+    # straightens past 175° during optimization, needs_rebuild must fire so
+    # the optimizer can switch to a dummy-atom coord set before the
+    # singular-angle gradient destabilises the next step.
+    bent = _co2(angle_deg=160)
+    coords = InternalCoords(bent)
+    assert coords.dummy_atoms.shape == (0, 3)
+    assert coords._linear_set == set()
+    assert not coords.needs_rebuild(bent)
+    # Just below the enter threshold: still no rebuild.
+    assert not coords.needs_rebuild(_co2(angle_deg=174))
+    # Crossed 175° → rebuild.
+    assert coords.needs_rebuild(_co2(angle_deg=176))
+    # And the rebuilt coords should now contain dummies covering the triple.
+    rebuilt = InternalCoords(_co2(angle_deg=176))
+    assert rebuilt.dummy_atoms.shape == (2, 3)
+    assert len(rebuilt._linear_set) == 1
+
+
+def test_needs_rebuild_hysteresis_on_exit():
+    # If a triple is currently treated as linear, it must remain linear
+    # while its angle is between the exit (170°) and enter (175°) thresholds.
+    # Without this band, an angle hovering near 175° on a flat PES would
+    # cause the optimizer to rebuild on every step.
+    geom = _co2(angle_deg=178)
+    coords = InternalCoords(geom)
+    assert len(coords._linear_set) == 1
+    # Inside the hysteresis band, do not rebuild.
+    assert not coords.needs_rebuild(_co2(angle_deg=172))
+    # Below the exit threshold, do rebuild (drop the linear flag).
+    assert coords.needs_rebuild(_co2(angle_deg=168))
+
+
+def test_needs_rebuild_skips_non_sp_centres():
+    # Square-planar Mg(N)4: the trans angles are exactly 180° but the
+    # central atom has four neighbours, so #53's sp-like filter rules out
+    # dummy placement. needs_rebuild must respect the same filter,
+    # otherwise the optimizer would keep trying to rebuild a coord set
+    # that the construction logic refuses to modify (livelock).
+    geom = Geometry(
+        ['Mg', 'N', 'N', 'N', 'N'],
+        [
+            [0.0, 0.0, 0.0],
+            [2.0, 0.0, 0.0],
+            [-2.0, 0.0, 0.0],
+            [0.0, 2.0, 0.0],
+            [0.0, -2.0, 0.0],
+        ],
+    )
+    coords = InternalCoords(geom)
+    assert not coords.needs_rebuild(geom)
+
+
+def test_needs_rebuild_periodic_returns_false():
+    # Linear-bend handling is disabled for periodic geometries (see
+    # InternalCoords.__init__). needs_rebuild must mirror that and never
+    # request a rebuild, otherwise Berny would crash trying to rebuild on
+    # a geometry the constructor handles via the legacy path.
+    geom = Geometry(['O', 'C', 'O'], _co2_coords(180))
+    coords = InternalCoords(geom)
+    coords._bondmatrix = None  # simulate periodic-skip state
+    assert not coords.needs_rebuild(geom)
+
+
+def test_needs_rebuild_returns_false_on_atom_count_mismatch():
+    # Defensive: if the caller passes a geometry with a different atom
+    # count from the one used to build the coord set (e.g. a stale geom
+    # left over from a previous step), needs_rebuild must bail out
+    # gracefully rather than indexing past the stored bond matrix.
+    bent = _co2(angle_deg=160)
+    coords = InternalCoords(bent)
+    longer = Geometry(['O', 'C', 'O', 'H'], _co2_coords(160) + [[3.0, 0.0, 0.0]])
+    assert not coords.needs_rebuild(longer)
+
+
+def _co2_coords(angle_deg):
+    # CO2 with the C at origin, both C-O bonds 1.16 Å, opening angle ``angle_deg``.
+    half = np.deg2rad(angle_deg) / 2
+    r = 1.16
+    return [
+        [-r * np.sin(half), -r * np.cos(half), 0.0],
+        [0.0, 0.0, 0.0],
+        [r * np.sin(half), -r * np.cos(half), 0.0],
+    ]
+
+
+def _co2(angle_deg):
+    return Geometry(['O', 'C', 'O'], _co2_coords(angle_deg))
+
+
 def test_ghost_atom_in_geometry_does_not_crash():
     # Issue #9: previously, a "Ghost" species in the input geometry raised
     # KeyError deep inside InternalCoords. Now it should build without
