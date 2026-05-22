@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New `berny.BernyParams` dataclass listing every tunable optimizer parameter; useful for discovery and type-checked construction.
 - `berny.solvers.MopacSolver` now accepts `charge` and `mult` keyword arguments so charged or open-shell systems no longer have to be patched in by hand.
 - Opt-in benchmark suite (`scripts/benchmark.py`) reproducing 19 of the 20 molecules from Birkholz & Schlegel, *Theor. Chem. Acc.* **135**, 84 (2016); PySCF runs are driven through PySCF's own `pyscf.geomopt.berny_solver` bridge.
+- Linear-bend internal coordinates via dummy ("ghost") atoms (issue #30). Near-linear triples `i-j-k` (angle > 175°) now place two mutually orthogonal dummy atoms perpendicular to the `i-k` axis and replace the singular `Angle(i,j,k)` with four well-behaved bends through ≈90°. This fixes optimization failures for molecules containing triple bonds (acetylenes, nitriles, CO₂) reported in issue #23. Dummy positions live in `InternalCoords.dummy_atoms` and are refreshed from the real-atom coordinates on every step; the `Geometry` yielded by `Berny` should be treated as immutable by callers.
+- `Ghost`, `X`, and `Bq` species (and any name with a leading `-`) are now recognised as basis-function-only centres with zero covalent radius (issue #9). Geometries containing such atoms — common in PySCF/ASE workflows — no longer crash `InternalCoords`.
 
 ### Changed
 

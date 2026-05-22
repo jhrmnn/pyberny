@@ -1,7 +1,15 @@
 import numpy as np
 import pytest
 
-from berny.coords import Angle, Bond, Dihedral, InternalCoords, angstrom
+from berny.coords import (
+    Angle,
+    Bond,
+    Dihedral,
+    InternalCoords,
+    _DummySpec,
+    _perp_from_ref,
+    angstrom,
+)
 from berny.geomlib import Geometry
 from berny.species_data import get_property, species_data
 
@@ -56,6 +64,204 @@ def test_internal_coords_with_previously_missing_radius():
     )
     coords = InternalCoords(geom)
     assert len(coords.bonds) == 1
+
+
+def _no_singular_angle(coords, geom):
+    """Assert that no Angle coordinate is near the singular branch (~180 deg)."""
+    all_coords = coords._all_coords(geom.supercell())
+    for c in coords.angles:
+        phi = c.eval(all_coords)
+        assert phi < np.pi - 5 * np.pi / 180, (c, phi)
+
+
+def test_linear_bends_replace_singular_angle_co2():
+    # CO2 is linear; the O-C-O angle should not appear as a regular angle
+    # coordinate. Instead two dummies should be placed and four angles
+    # routed through them.
+    geom = Geometry(
+        ['O', 'C', 'O'],
+        [[0.0, 0.0, -1.16], [0.0, 0.0, 0.0], [0.0, 0.0, 1.16]],
+    )
+    coords = InternalCoords(geom)
+    assert coords.dummy_atoms.shape == (2, 3)
+    assert len(coords.angles) == 4
+    _no_singular_angle(coords, geom)
+
+
+def test_linear_bends_acetylene():
+    # H-C#C-H: two linear triples (H-C-C and C-C-H), four dummies, eight angles.
+    geom = Geometry(
+        ['H', 'C', 'C', 'H'],
+        [[0, 0, -1.7], [0, 0, -0.6], [0, 0, 0.6], [0, 0, 1.7]],
+    )
+    coords = InternalCoords(geom)
+    assert coords.dummy_atoms.shape == (4, 3)
+    assert len(coords.angles) == 8
+    _no_singular_angle(coords, geom)
+
+
+def test_dummyspec_analytical_jacobian_matches_finite_diff():
+    # The analytical 3×3 ``∂d/∂r_a`` matrices (a ∈ {i, j, k}) returned by
+    # _DummySpec.place_and_jacobians must agree with central finite
+    # differences of place(), to within FD precision. Without this, the
+    # chain-rule propagation in B_matrix would project gradients onto the
+    # wrong directions and explode the Cartesian step in update_geom
+    # (regression observed on the issue-23 large molecule).
+    rng = np.random.default_rng(7)
+    h = 1e-6
+    for _ in range(5):
+        ri = rng.normal(size=3)
+        rj = rng.normal(size=3)
+        # roughly along the i-j axis through j, plus noise (near-linear triple)
+        rk = 2 * rj - ri + 0.1 * rng.normal(size=3)
+        ref = rng.normal(size=3)
+        ref /= np.linalg.norm(ref)
+        spec = _DummySpec(0, 1, 2, ref)
+        coords = np.array([ri, rj, rk])
+        _, J_i, J_j, J_k = spec.place_and_jacobians(coords)
+        for atom_id, J in [(0, J_i), (1, J_j), (2, J_k)]:
+            for alpha in range(3):
+                c_plus = coords.copy()
+                c_plus[atom_id, alpha] += h
+                c_minus = coords.copy()
+                c_minus[atom_id, alpha] -= h
+                num = (spec.place(c_plus) - spec.place(c_minus)) / (2 * h)
+                assert np.allclose(J[:, alpha], num, atol=1e-7)
+
+
+def test_b_matrix_chain_rule_matches_finite_diff():
+    # End-to-end check: for a linear molecule with dummies, the analytical
+    # B-matrix row must equal the finite-differenced gradient of the
+    # composite function q(r_real) = c(r_real, D(r_real)), where the
+    # dummy position D is refreshed from the real atoms. Without the
+    # chain-rule term in B_matrix, small dq → huge dcart amplification in
+    # the pseudoinverse projection.
+    from berny.coords import angstrom as _ang
+
+    geom = Geometry(['O', 'C', 'O'], [[0, 0, -1.16], [0, 0, 0], [0, 0, 1.16]])
+    geom.coords[1, 0] += 0.05  # slight bend so angles are away from exactly 90°
+    coords = InternalCoords(geom)
+    B = coords.B_matrix(geom)
+    h = 1e-6
+    B_num = np.zeros_like(B)
+    for atom in range(len(geom)):
+        for alpha in range(3):
+            g_plus = geom.copy()
+            g_plus.coords[atom, alpha] += h
+            g_minus = geom.copy()
+            g_minus.coords[atom, alpha] -= h
+            B_num[:, atom * 3 + alpha] = (
+                coords.eval_geom(g_plus) - coords.eval_geom(g_minus)
+            ) / (2 * h * _ang)
+    assert np.allclose(B, B_num, atol=1e-7)
+
+
+def test_linear_bends_dummies_perpendicular_to_axis():
+    # Each dummy should sit perpendicular to the host i-k axis, displaced
+    # from the host j atom.
+    geom = Geometry(
+        ['O', 'C', 'O'],
+        [[0.0, 0.0, -1.16], [0.0, 0.0, 0.0], [0.0, 0.0, 1.16]],
+    )
+    coords = InternalCoords(geom)
+    for spec, d in zip(coords._dummy_specs, coords.dummy_atoms):
+        offset = d - geom.coords[spec.j]
+        axis = geom.coords[spec.k] - geom.coords[spec.i]
+        axis = axis / np.linalg.norm(axis)
+        assert abs(np.dot(offset, axis)) < 1e-10
+        assert abs(np.linalg.norm(offset) - 1.0) < 1e-10  # _DUMMY_OFFSET
+
+
+def test_b_matrix_shape_excludes_dummies():
+    # The B-matrix should be sized over real atoms only; dummies are
+    # handled implicitly through the frozen-dummy approximation.
+    geom = Geometry(
+        ['O', 'C', 'O'],
+        [[0.0, 0.0, -1.16], [0.0, 0.0, 0.0], [0.0, 0.0, 1.16]],
+    )
+    coords = InternalCoords(geom)
+    B = coords.B_matrix(geom)
+    assert B.shape == (len(coords), 3 * len(geom))
+
+
+def test_perp_from_ref_returns_none_when_parallel():
+    # Defensive branch: if the reference vector is exactly parallel to the
+    # axis, the projection onto the perpendicular plane vanishes and we
+    # must signal failure so callers can pick a different reference.
+    axis = np.array([1.0, 0.0, 0.0])
+    assert _perp_from_ref(axis, axis) is None
+
+
+def test_dummyspec_place_coincident_hosts():
+    # Defensive branch: if i and k happen to coincide (degenerate input,
+    # not produced by the normal builder), placing the dummy falls back
+    # to the host j position rather than dividing by zero on the axis norm.
+    # ``place_and_jacobians`` mirrors that behaviour and returns the rigid-
+    # attachment Jacobian (∂d/∂r_j = I, others zero).
+    spec = _DummySpec(0, 1, 2, np.array([1.0, 0.0, 0.0]))
+    coords = np.array(
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 1.0], [0.0, 0.0, 0.0]]
+    )  # i and k coincide
+    placed = spec.place(coords)
+    assert np.allclose(placed, coords[1])
+    d, J_i, J_j, J_k = spec.place_and_jacobians(coords)
+    assert np.allclose(d, coords[1])
+    assert np.allclose(J_i, 0)
+    assert np.allclose(J_j, np.eye(3))
+    assert np.allclose(J_k, 0)
+
+
+def test_dummyspec_place_falls_back_when_ref_parallel():
+    # If the stored ref ends up parallel to the i-k axis (e.g. after large
+    # rotations of the host triple), _perp_from_ref returns None and
+    # _DummySpec.place falls back to a deterministically picked perp. The
+    # Jacobian path in that branch snaps to the rigid-attachment-to-j
+    # approximation, avoiding a discontinuous derivative.
+    spec = _DummySpec(0, 1, 2, np.array([0.0, 0.0, 1.0]))
+    coords = np.array([[0.0, 0.0, -1.0], [0.0, 0.0, 0.0], [0.0, 0.0, 1.0]])
+    placed = spec.place(coords)
+    offset = placed - coords[1]
+    # Result must be unit length perpendicular to the z-axis.
+    assert abs(np.linalg.norm(offset) - 1.0) < 1e-10
+    assert abs(offset[2]) < 1e-10
+    _, J_i, J_j, J_k = spec.place_and_jacobians(coords)
+    assert np.allclose(J_i, 0)
+    assert np.allclose(J_j, np.eye(3))
+    assert np.allclose(J_k, 0)
+
+
+def test_linear_bends_skipped_for_multi_coord_centre():
+    # Trans angles in a square-planar or octahedral metal centre are
+    # geometrically near 180° but chemically stiff (the cis neighbours hold
+    # the geometry). Introducing dummies here over-parameterises the
+    # problem and prevents convergence (regression observed for mg_porphin
+    # and zn_edta in the Birkholz-Schlegel benchmark). The detector must
+    # only fire when the central atom has exactly two covalent neighbours.
+    geom = Geometry(
+        ['Mg', 'N', 'N', 'N', 'N'],
+        [
+            [0.0, 0.0, 0.0],
+            [2.0, 0.0, 0.0],
+            [-2.0, 0.0, 0.0],
+            [0.0, 2.0, 0.0],
+            [0.0, -2.0, 0.0],
+        ],
+    )
+    coords = InternalCoords(geom)
+    assert coords.dummy_atoms.shape == (0, 3)
+
+
+def test_ghost_atom_in_geometry_does_not_crash():
+    # Issue #9: previously, a "Ghost" species in the input geometry raised
+    # KeyError deep inside InternalCoords. Now it should build without
+    # raising and the ghost should not enter any covalent bond.
+    geom = Geometry(
+        ['H', 'H', 'Ghost'],
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 1.0], [0.0, 0.5, 0.5]],
+    )
+    coords = InternalCoords(geom)
+    # No bond should connect a ghost atom (index 2) covalently.
+    assert all(b.weak >= 1 for b in coords.bonds if 2 in b.idx)
 
 
 def test_get_property_missing_data_raises_keyerror():
