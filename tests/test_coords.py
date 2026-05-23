@@ -580,6 +580,68 @@ def test_dihedral_grad_continuous_across_threshold():
         np.testing.assert_allclose(np.array(g_gen), np.array(g_spec), atol=1e-3)
 
 
+def test_dihedral_brow_suppressed_when_supporting_angle_near_linear():
+    # When the supporting angle i-j-k approaches 180°, norm(a1) → 0 and
+    # the B-row gradient formula would diverge, inflating the B-matrix
+    # singular values and triggering spurious pinv truncation.  The fix
+    # zeros out the gradient once the supporting angle is within 5° of
+    # linear (matching the construction-time filter in get_dihedrals).
+    d = Dihedral(0, 1, 2, 3)
+    # th1 ≈ 178° (within 5° of 180°): gradient must be zero.
+    p_near_linear = _make_dihedral_geom(phi=1.0, th1=np.pi - 0.035)
+    _, grad_near = d.eval(p_near_linear, grad=True)
+    assert all(
+        np.all(g == 0.0) for g in grad_near
+    ), 'B-row should be zeroed when supporting angle is near-linear'
+    # th1 ≈ 174° (more than 5° from 180°): gradient must be non-zero.
+    p_normal = _make_dihedral_geom(phi=1.0, th1=np.pi - 0.105)
+    _, grad_normal = d.eval(p_normal, grad=True)
+    assert any(
+        np.any(g != 0.0) for g in grad_normal
+    ), 'B-row should be non-zero when supporting angle is not near-linear'
+
+
+def test_dihedral_brow_suppressed_check_both_sides():
+    # The near-linear suppression applies to both supporting angles: the
+    # i-j-k angle (left side, via norm_a1) and the j-k-l angle (right
+    # side, via norm_a2).  Verify the right side independently.
+    d = Dihedral(0, 1, 2, 3)
+    # th2 ≈ 178° makes the j-k-l angle near-linear (right side).
+    p_near_linear_r = _make_dihedral_geom(phi=1.0, th2=np.pi - 0.035)
+    _, grad_near_r = d.eval(p_near_linear_r, grad=True)
+    assert all(
+        np.all(g == 0.0) for g in grad_near_r
+    ), 'B-row should be zeroed when right supporting angle is near-linear'
+
+
+def test_bmatrix_brow_zero_for_near_linear_dihedral():
+    # End-to-end: in a geometry where a dihedral's supporting angle is
+    # near-linear (> 175°), its B-matrix row should be all zeros.  Without
+    # the fix the row norm would blow up to ~100, creating a spurious
+    # singular-value gap in pinv(B·Bᵀ) (estradiol / disilyl_ether
+    # regression from issue #92).
+    # Geometry: 4 atoms where i-j-k angle is ≈ 178°.  Atoms are placed in
+    # Bohr units (InternalCoords works in Bohr internally).
+    th1_near = np.pi - 0.035  # ≈ 178°
+    p = _make_dihedral_geom(phi=1.0, th1=th1_near)
+    # Build a Geometry directly from the Bohr-scaled coordinates.
+    geom = Geometry(['H', 'C', 'O', 'H'], p / angstrom)
+    coords = InternalCoords(geom)
+    # Find any dihedral whose i-j-k angle is near-linear.
+    B = coords.B_matrix(geom)
+    for idx, c in enumerate(coords):
+        if not isinstance(c, Dihedral):
+            continue
+        all_coords = coords._all_coords(geom.supercell())
+        th_ijk = Angle(c.i, c.j, c.k).eval(all_coords)
+        th_jkl = Angle(c.j, c.k, c.l).eval(all_coords)
+        if th_ijk > np.pi - np.deg2rad(5) or th_jkl > np.pi - np.deg2rad(5):
+            assert np.allclose(B[idx], 0.0), (
+                f'B-row for {c} (th_ijk={np.degrees(th_ijk):.1f}°, '
+                f'th_jkl={np.degrees(th_jkl):.1f}°) should be zero'
+            )
+
+
 def test_internal_coords_repr_and_str_describe_counts():
     geom = Geometry(
         ['O', 'H', 'H'],

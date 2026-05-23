@@ -157,7 +157,15 @@ class Dihedral(InternalCoord):
         a2 = v2 - dot(v2, ew) * ew
         sgn = np.sign(np.linalg.det(np.array([v2, v1, w])))
         sgn = sgn or 1
-        dot_product = dot(a1, a2) / (norm(a1) * norm(a2))
+        norm_a1 = norm(a1)
+        norm_a2 = norm(a2)
+        if norm_a1 == 0.0 or norm_a2 == 0.0:
+            # Exactly degenerate (supporting angle is precisely 0° or 180°):
+            # the dihedral is undefined; return a neutral value and zero grad.
+            if not grad:
+                return 0.0
+            return 0.0, [np.zeros(3), np.zeros(3), np.zeros(3), np.zeros(3)]
+        dot_product = dot(a1, a2) / (norm_a1 * norm_a2)
         if dot_product < -1:
             dot_product = -1
         elif dot_product > 1:
@@ -165,6 +173,18 @@ class Dihedral(InternalCoord):
         phi = np.arccos(dot_product) * sgn
         if not grad:
             return phi
+        # Suppress the B-row when a supporting angle is near-linear.  The
+        # perpendicular projection norm(a1) (or norm(a2)) vanishes as the
+        # i-j-k (or j-k-l) angle approaches 0° or 180°, which would make
+        # the 1/norm(...) terms in the gradient formula diverge, inflating
+        # the B-row norm to ~10²–10³ and creating a spurious singular-value
+        # gap in pinv(B·Bᵀ).  The 5° threshold matches the lin_thre filter
+        # in get_dihedrals: any dihedral whose supporting angle would have
+        # been excluded at construction time is also suppressed here.
+        if norm_a1 < _DIHEDRAL_LIN_SIN * norm(v1) or norm_a2 < _DIHEDRAL_LIN_SIN * norm(
+            v2
+        ):
+            return phi, [np.zeros(3), np.zeros(3), np.zeros(3), np.zeros(3)]
         if abs(phi) > pi - 1e-6:
             g = Math.cross(w, a1)
             g = g / norm(g)
@@ -214,6 +234,15 @@ class Dihedral(InternalCoord):
 # expression survives Sphinx's autodoc dynamic-import mocking, which replaces
 # `pi` with a type stub at module scope.
 _LIN_THRE = math.radians(175)
+
+# Sine of 5°, matching the ``lin_thre`` used in ``get_dihedrals``.  When a
+# dihedral's supporting angle (i-j-k or j-k-l) approaches 0° or 180°, the
+# perpendicular projection a1 = v1 − (v1·ê)ê vanishes, causing the
+# 1/‖a1‖ terms in the B-row gradient formula to diverge.  At evaluation time
+# we suppress the B-row if ‖a1‖/‖v1‖ < _DIHEDRAL_LIN_SIN (equivalently, the
+# supporting angle is within 5° of linear), consistent with the construction-
+# time filter in ``get_dihedrals``.
+_DIHEDRAL_LIN_SIN = math.sin(math.radians(5))
 
 # Hysteresis exit threshold for adaptive rebuild: an sp-like triple is treated
 # as linear from the moment its angle first exceeds ``_LIN_THRE`` and stays
