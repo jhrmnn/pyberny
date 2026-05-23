@@ -580,68 +580,6 @@ def test_dihedral_grad_continuous_across_threshold():
         np.testing.assert_allclose(np.array(g_gen), np.array(g_spec), atol=1e-3)
 
 
-def test_dihedral_brow_suppressed_when_supporting_angle_near_linear():
-    # When the supporting angle i-j-k approaches 180°, norm(a1) → 0 and
-    # the B-row gradient formula would diverge, inflating the B-matrix
-    # singular values and triggering spurious pinv truncation.  The fix
-    # zeros out the gradient once the supporting angle is within 5° of
-    # linear (matching the construction-time filter in get_dihedrals).
-    d = Dihedral(0, 1, 2, 3)
-    # th1 ≈ 178° (within 5° of 180°): gradient must be zero.
-    p_near_linear = _make_dihedral_geom(phi=1.0, th1=np.pi - 0.035)
-    _, grad_near = d.eval(p_near_linear, grad=True)
-    assert all(
-        np.all(g == 0.0) for g in grad_near
-    ), 'B-row should be zeroed when supporting angle is near-linear'
-    # th1 ≈ 174° (more than 5° from 180°): gradient must be non-zero.
-    p_normal = _make_dihedral_geom(phi=1.0, th1=np.pi - 0.105)
-    _, grad_normal = d.eval(p_normal, grad=True)
-    assert any(
-        np.any(g != 0.0) for g in grad_normal
-    ), 'B-row should be non-zero when supporting angle is not near-linear'
-
-
-def test_dihedral_brow_suppressed_check_both_sides():
-    # The near-linear suppression applies to both supporting angles: the
-    # i-j-k angle (left side, via norm_a1) and the j-k-l angle (right
-    # side, via norm_a2).  Verify the right side independently.
-    d = Dihedral(0, 1, 2, 3)
-    # th2 ≈ 178° makes the j-k-l angle near-linear (right side).
-    p_near_linear_r = _make_dihedral_geom(phi=1.0, th2=np.pi - 0.035)
-    _, grad_near_r = d.eval(p_near_linear_r, grad=True)
-    assert all(
-        np.all(g == 0.0) for g in grad_near_r
-    ), 'B-row should be zeroed when right supporting angle is near-linear'
-
-
-def test_bmatrix_brow_zero_for_near_linear_dihedral():
-    # End-to-end: in a geometry where a dihedral's supporting angle is
-    # near-linear (> 175°), its B-matrix row should be all zeros.  Without
-    # the fix the row norm would blow up to ~100, creating a spurious
-    # singular-value gap in pinv(B·Bᵀ) (estradiol / disilyl_ether
-    # regression from issue #92).
-    # Geometry: 4 atoms where i-j-k angle is ≈ 178°.  Atoms are placed in
-    # Bohr units (InternalCoords works in Bohr internally).
-    th1_near = np.pi - 0.035  # ≈ 178°
-    p = _make_dihedral_geom(phi=1.0, th1=th1_near)
-    # Build a Geometry directly from the Bohr-scaled coordinates.
-    geom = Geometry(['H', 'C', 'O', 'H'], p / angstrom)
-    coords = InternalCoords(geom)
-    # Find any dihedral whose i-j-k angle is near-linear.
-    B = coords.B_matrix(geom)
-    for idx, c in enumerate(coords):
-        if not isinstance(c, Dihedral):
-            continue
-        all_coords = coords._all_coords(geom.supercell())
-        th_ijk = Angle(c.i, c.j, c.k).eval(all_coords)
-        th_jkl = Angle(c.j, c.k, c.l).eval(all_coords)
-        if th_ijk > np.pi - np.deg2rad(5) or th_jkl > np.pi - np.deg2rad(5):
-            assert np.allclose(B[idx], 0.0), (
-                f'B-row for {c} (th_ijk={np.degrees(th_ijk):.1f}°, '
-                f'th_jkl={np.degrees(th_jkl):.1f}°) should be zero'
-            )
-
-
 def test_internal_coords_repr_and_str_describe_counts():
     geom = Geometry(
         ['O', 'H', 'H'],
@@ -680,3 +618,85 @@ def test_internal_coords_on_crystal_prunes_via_reduce():
     # Reduce keeps at least one bond between the two atoms.
     assert len(coords.bonds) >= 1
     assert len(coords) > 0
+
+
+def _make_non_sp_angle_geom(hco_angle):
+    """Return a Geometry with a 3-coordinate carbon C and an H-C-O angle of
+    *hco_angle* (radians).  C is at the origin bonded to O, H2, and H3.
+    H3 is placed at [0, -1.5, 0] (always ~90° from O) so no spurious bonds
+    form for any hco_angle in (45°, 179°).  Bond length is 1.5 Å throughout.
+
+    Atom indices: C=0, O=1, H2=2, H3=3.  The controlled angle is
+    Angle(1, 0, 2).idx = (1, 0, 2).
+    """
+    bl = 1.5
+    c = np.array([0.0, 0.0, 0.0])
+    o = c + bl * np.array([1.0, 0.0, 0.0])
+    h2 = c + bl * np.array([np.cos(hco_angle), np.sin(hco_angle), 0.0])
+    h3 = c + bl * np.array([0.0, -1.0, 0.0])
+    return Geometry(['C', 'O', 'H', 'H'], [c, o, h2, h3])
+
+
+def test_angles_excludes_near_linear_non_sp_angle():
+    # A 3-coordinate C with an H-C-O angle near 178° should NOT produce an
+    # Angle(H,C,O) in the coordinate set: _build_angles must drop it at build
+    # time (issue #92 — estradiol regression).
+    geom = _make_non_sp_angle_geom(np.radians(178))
+    coords = InternalCoords(geom)
+    angle_idxs = {a.idx for a in coords.angles}
+    # Angle(O=1, C=0, H2=2) normalises to idx=(1, 0, 2) since 1 < 2.
+    assert (
+        1,
+        0,
+        2,
+    ) not in angle_idxs, (
+        'Near-linear H-C-O angle (178°) should be excluded from the build'
+    )
+
+
+def test_angles_includes_normal_non_sp_angle():
+    # A 3-coordinate C with an H-C-O angle at 110° (well below 175°) should
+    # still produce an Angle in the coordinate set.
+    geom = _make_non_sp_angle_geom(np.radians(110))
+    coords = InternalCoords(geom)
+    angle_idxs = {a.idx for a in coords.angles}
+    assert (
+        1,
+        0,
+        2,
+    ) in angle_idxs, 'Normal H-C-O angle (110°) should be present in the build'
+
+
+def test_needs_rebuild_fires_when_non_sp_angle_becomes_near_linear():
+    # Build a coordinate set with a normal H-C-O angle (110°), then ask
+    # needs_rebuild with a geometry where that angle has drifted to 176°.
+    # The rebuild flag should fire so the coord set can drop the now-linear
+    # angle at the next build.
+    geom_start = _make_non_sp_angle_geom(np.radians(110))
+    coords = InternalCoords(geom_start)
+    geom_linear = _make_non_sp_angle_geom(np.radians(176))
+    assert coords.needs_rebuild(
+        geom_linear
+    ), 'needs_rebuild should fire when a non-sp angle drifts past 175°'
+
+
+def test_needs_rebuild_fires_when_excluded_non_sp_angle_recovers():
+    # Build with an excluded near-linear angle (178°), then drop back to 168°
+    # (below _LIN_EXIT = 170°). needs_rebuild should fire so the angle can be
+    # re-included in the fresh coord set.
+    geom_linear = _make_non_sp_angle_geom(np.radians(178))
+    coords = InternalCoords(geom_linear)
+    geom_recover = _make_non_sp_angle_geom(np.radians(168))
+    assert coords.needs_rebuild(
+        geom_recover
+    ), 'needs_rebuild should fire when an excluded non-sp angle drops below 170°'
+
+
+def test_needs_rebuild_no_false_positive_for_normal_non_sp_angle():
+    # A normal H-C-O angle that stays at 110° throughout should never trigger
+    # a rebuild from the non-sp path.
+    geom = _make_non_sp_angle_geom(np.radians(110))
+    coords = InternalCoords(geom)
+    assert not coords.needs_rebuild(
+        geom
+    ), 'needs_rebuild should not fire for a non-sp angle that is not near-linear'

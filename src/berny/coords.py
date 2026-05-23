@@ -173,18 +173,6 @@ class Dihedral(InternalCoord):
         phi = np.arccos(dot_product) * sgn
         if not grad:
             return phi
-        # Suppress the B-row when a supporting angle is near-linear.  The
-        # perpendicular projection norm(a1) (or norm(a2)) vanishes as the
-        # i-j-k (or j-k-l) angle approaches 0° or 180°, which would make
-        # the 1/norm(...) terms in the gradient formula diverge, inflating
-        # the B-row norm to ~10²–10³ and creating a spurious singular-value
-        # gap in pinv(B·Bᵀ).  The 5° threshold matches the lin_thre filter
-        # in get_dihedrals: any dihedral whose supporting angle would have
-        # been excluded at construction time is also suppressed here.
-        if norm_a1 < _DIHEDRAL_LIN_SIN * norm(v1) or norm_a2 < _DIHEDRAL_LIN_SIN * norm(
-            v2
-        ):
-            return phi, [np.zeros(3), np.zeros(3), np.zeros(3), np.zeros(3)]
         if abs(phi) > pi - 1e-6:
             g = Math.cross(w, a1)
             g = g / norm(g)
@@ -234,15 +222,6 @@ class Dihedral(InternalCoord):
 # expression survives Sphinx's autodoc dynamic-import mocking, which replaces
 # `pi` with a type stub at module scope.
 _LIN_THRE = math.radians(175)
-
-# Sine of 5°, matching the ``lin_thre`` used in ``get_dihedrals``.  When a
-# dihedral's supporting angle (i-j-k or j-k-l) approaches 0° or 180°, the
-# perpendicular projection a1 = v1 − (v1·ê)ê vanishes, causing the
-# 1/‖a1‖ terms in the B-row gradient formula to diverge.  At evaluation time
-# we suppress the B-row if ‖a1‖/‖v1‖ < _DIHEDRAL_LIN_SIN (equivalently, the
-# supporting angle is within 5° of linear), consistent with the construction-
-# time filter in ``get_dihedrals``.
-_DIHEDRAL_LIN_SIN = math.sin(math.radians(5))
 
 # Hysteresis exit threshold for adaptive rebuild: an sp-like triple is treated
 # as linear from the moment its angle first exceeds ``_LIN_THRE`` and stays
@@ -457,6 +436,19 @@ class InternalCoords:
         # previous rebuild.
         self._bondmatrix = bondmatrix if geom.lattice is None else None
         self._linear_set = set(linear_set)
+        # Track non-sp near-linear angles excluded from _build_angles so that
+        # needs_rebuild can detect when they drift in or out of the linear band
+        # and request a fresh coordinate build.
+        if geom.lattice is None:
+            self._excluded_non_sp = frozenset(
+                Angle(i, j, k).idx
+                for j in range(len(bondmatrix))
+                if len(np.flatnonzero(bondmatrix[j, :])) != 2
+                for i, k in combinations(np.flatnonzero(bondmatrix[j, :]), 2)
+                if Angle(i, j, k).eval(geom.coords) >= _LIN_THRE
+            )
+        else:
+            self._excluded_non_sp = frozenset()
         if dihedral:
             for bond in self.bonds:
                 self.extend(
@@ -473,13 +465,16 @@ class InternalCoords:
 
     def _build_angles(self, coords, bondmatrix, C, linear_set):
         """Append regular Angle coordinates, skipping near-linear triples that
-        are handled separately by ``_add_linear_bend``."""
+        are handled separately by ``_add_linear_bend``, and also skipping
+        near-linear angles on non-sp centres (those with more than two
+        neighbours) where dummy-bend replacement is not used."""
         for j in range(len(bondmatrix)):
             for i, k in combinations(np.flatnonzero(bondmatrix[j, :]), 2):
                 if (j, i, k) in linear_set:
                     continue
                 ang = Angle(i, j, k, C=C)
-                if ang.eval(coords) > pi / 4:
+                val = ang.eval(coords)
+                if pi / 4 < val < _LIN_THRE:
                     self.append(ang)
 
     def _add_linear_bend(self, coords, i, j, k):
@@ -511,6 +506,22 @@ class InternalCoords:
             for ad in (d1, d2):
                 self.append(Angle(ai, j, ad, weak=0))
 
+    def _non_sp_linear_status_changed(self, coords):
+        """Return True if any non-sp angle has crossed the near-linear band."""
+        for j in range(len(self._bondmatrix)):
+            neighbors = np.flatnonzero(self._bondmatrix[j, :])
+            if len(neighbors) == 2:
+                continue
+            for i, k in combinations(neighbors, 2):
+                ang = Angle(i, j, k).eval(coords)
+                idx = Angle(i, j, k).idx
+                if idx in self._excluded_non_sp:
+                    if ang < _LIN_EXIT:
+                        return True
+                elif ang >= _LIN_THRE:
+                    return True
+        return False
+
     def needs_rebuild(self, geom):
         """Return ``True`` if the linear-bend topology should be rebuilt.
 
@@ -523,6 +534,12 @@ class InternalCoords:
           is above ``_LIN_EXIT`` (170°);
         * a new triple is flagged once its angle exceeds ``_LIN_THRE``
           (175°).
+
+        Additionally checks non-sp centres (those with more than two
+        neighbours) for angles that have crossed into or out of the
+        near-linear band since the last build, because ``_build_angles``
+        excludes such angles and they must be dropped or re-added when their
+        linearity status changes.
 
         Returns ``False`` for periodic geometries, where linear-bend
         handling is disabled (no ``bondmatrix`` is stored). Connectivity is
@@ -547,7 +564,12 @@ class InternalCoords:
                     candidate.add((j, i, k))
             elif ang > _LIN_THRE:
                 candidate.add((j, i, k))
-        return candidate != self._linear_set
+        if candidate != self._linear_set:
+            return True
+        # Check non-sp centres for angles that have crossed the near-linear
+        # threshold since the last build so _build_angles can drop or
+        # re-include them.
+        return self._non_sp_linear_status_changed(coords)
 
     def _refresh_dummies_from_coords(self, real_coords):
         """Recompute every dummy position from the given (supercell-shaped)
