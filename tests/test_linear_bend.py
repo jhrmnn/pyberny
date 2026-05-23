@@ -11,11 +11,12 @@ to the dummy-atom bend representation.
 import logging
 
 import numpy as np
+import pytest
 
 from berny import Berny, optimize
 from berny.coords import Dihedral, InternalCoords, angstrom
 from berny.geomlib import Geometry
-from berny.tests import LinearBendCrossover, run_and_check
+from berny.tests import LinearBendCrossover, ModelPotential, run_and_check
 
 
 def _solver(energy, gradient):
@@ -33,6 +34,27 @@ class _RebuildCatcher(logging.Handler):
     def emit(self, record):
         if 'rebuilding internal coordinates' in record.getMessage():
             self.sink.append(record.getMessage())
+
+
+def test_model_potential_base_is_abstract():
+    base = ModelPotential()
+    arr = np.zeros((4, 3))
+    with pytest.raises(NotImplementedError):
+        base.start()
+    with pytest.raises(NotImplementedError):
+        base.energy(arr)
+    with pytest.raises(NotImplementedError):
+        base.gradient(arr)
+    with pytest.raises(NotImplementedError):
+        base.assert_at_minimum(arr)
+
+
+def test_assert_at_minimum_rejects_wrong_geometry():
+    pot = LinearBendCrossover()
+    # The start geometry is deliberately far from the minimum (a-b-c at 150 deg),
+    # so the check must reject it -- guarding against a vacuous assertion.
+    with pytest.raises(AssertionError, match='not at minimum'):
+        pot.assert_at_minimum(pot.start())
 
 
 def test_linear_bend_potential_gradient_matches_numeric():
