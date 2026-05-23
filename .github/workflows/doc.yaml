@@ -39,6 +39,9 @@ jobs:
           <!doctype html>
           <meta http-equiv="refresh" content="0; url=master/">
           EOF
+      - name: Build molecule gallery
+        if: github.event_name == 'push'
+        run: python scripts/molecule_gallery.py -o doc/build/molecules.html
       - uses: actions/upload-artifact@v4
         if: github.event_name == 'push'
         with:
