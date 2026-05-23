@@ -235,8 +235,10 @@ def test_linear_bends_skipped_for_multi_coord_centre():
     # geometrically near 180° but chemically stiff (the cis neighbours hold
     # the geometry). Introducing dummies here over-parameterises the
     # problem and prevents convergence (regression observed for mg_porphin
-    # and zn_edta in the Birkholz-Schlegel benchmark). The detector must
-    # only fire when the central atom has exactly two covalent neighbours.
+    # and zn_edta in the Birkholz-Schlegel benchmark). The detector flags
+    # the near-linear trans triples (so they are dropped from the angle
+    # set), but the dummy-placement step is gated separately on the
+    # 2-neighbour predicate and must not fire for these centres.
     geom = Geometry(
         ['Mg', 'N', 'N', 'N', 'N'],
         [
@@ -286,12 +288,14 @@ def test_needs_rebuild_hysteresis_on_exit():
     assert coords.needs_rebuild(_co2(angle_deg=168))
 
 
-def test_needs_rebuild_skips_non_sp_centres():
-    # Square-planar Mg(N)4: the trans angles are exactly 180° but the
-    # central atom has four neighbours, so #53's sp-like filter rules out
-    # dummy placement. needs_rebuild must respect the same filter,
-    # otherwise the optimizer would keep trying to rebuild a coord set
-    # that the construction logic refuses to modify (livelock).
+def test_needs_rebuild_stable_on_square_planar_centre():
+    # Square-planar Mg(N)4: the trans angles are exactly 180°, so they are
+    # flagged by the detector and dropped from the angle set at build time.
+    # On the next ``needs_rebuild`` call against the same geometry the
+    # candidate set equals ``_linear_set`` exactly, so no rebuild is
+    # requested — i.e. the state is a fixed point and the optimizer doesn't
+    # livelock on the geometry that built it. Dummy placement is
+    # independently gated and must stay off for this 4-coordinate centre.
     geom = Geometry(
         ['Mg', 'N', 'N', 'N', 'N'],
         [
@@ -303,6 +307,8 @@ def test_needs_rebuild_skips_non_sp_centres():
         ],
     )
     coords = InternalCoords(geom)
+    assert len(coords._linear_set) > 0
+    assert coords.dummy_atoms.shape == (0, 3)
     assert not coords.needs_rebuild(geom)
 
 
@@ -341,6 +347,126 @@ def _co2_coords(angle_deg):
 
 def _co2(angle_deg):
     return Geometry(['O', 'C', 'O'], _co2_coords(angle_deg))
+
+
+def _methoxy_h_coords(hco_angle_deg):
+    """Methoxy fragment H-C(H)(H)-O-H with a configurable H-C-O angle.
+
+    Layout: C at origin, O along +z at 1.43 Å, the tracked H along the
+    z-axis offset away from O by an angle of ``180 - hco_angle_deg`` from
+    the +z direction (so ``hco_angle_deg=180`` puts H, C, O collinear).
+    Two filler H atoms sit out of the H-C-O plane so the carbon has the
+    required 4 covalent neighbours, plus one H on the oxygen.
+    """
+    # Place O on +z, tracked H on -z (so H-C-O is exactly linear at 180°).
+    theta = np.deg2rad(180.0 - hco_angle_deg)
+    r_ch = 1.09
+    r_co = 1.43
+    r_oh = 0.96
+    # Tracked H: tilt by `theta` in the x-z plane.
+    h_track = [r_ch * np.sin(theta), 0.0, -r_ch * np.cos(theta)]
+    # Two filler Hs symmetrically placed in the y-z plane, off-axis enough
+    # that the C-H-filler angles are well away from 180° regardless of theta.
+    h_fill1 = [0.0, r_ch * np.sin(np.deg2rad(70)), -r_ch * np.cos(np.deg2rad(70))]
+    h_fill2 = [0.0, -r_ch * np.sin(np.deg2rad(70)), -r_ch * np.cos(np.deg2rad(70))]
+    o = [0.0, 0.0, r_co]
+    # Terminal H on O, bent off-axis so the C-O-H angle is ~109° (not linear).
+    h_oxy = [
+        r_oh * np.sin(np.deg2rad(70)),
+        0.0,
+        r_co + r_oh * np.cos(np.deg2rad(70)),
+    ]
+    return [h_track, [0.0, 0.0, 0.0], h_fill1, h_fill2, o, h_oxy]
+
+
+def _methoxy_h(hco_angle_deg):
+    return Geometry(['H', 'C', 'H', 'H', 'O', 'H'], _methoxy_h_coords(hco_angle_deg))
+
+
+def test_near_linear_angle_dropped_on_non_sp_centre():
+    # 4-coordinate carbon with one near-linear H-C-O angle (estradiol class):
+    # the build-time detector must flag the triple, omit ``Angle(0, 1, 4)``
+    # from the coordinate set, and refrain from placing any dummies (the
+    # carbon has 4 covalent neighbours, not 2). Dihedrals around the
+    # near-linear central bond C-O must not include the tracked H either,
+    # because ``get_dihedrals`` routes near-linear neighbours through its
+    # chain-extension branch rather than emitting them directly.
+    geom = _methoxy_h(hco_angle_deg=178)
+    coords = InternalCoords(geom)
+    # The bond connectivity should still have H-C and C-O bonded.
+    assert any(b.idx == (0, 1) for b in coords.bonds)
+    assert any(b.idx == (1, 4) for b in coords.bonds)
+    # The singular H-C-O angle must not appear in the coord set.
+    angles = [c for c in coords._coords if isinstance(c, Angle)]
+    assert Angle(0, 1, 4) not in angles
+    # No dummies for the non-sp centre.
+    assert coords.dummy_atoms.shape == (0, 3)
+    # No dihedral spanning the near-linear H-C-O triple (i.e. starting at
+    # tracked H, through C-O).
+    bad_dihedrals = [
+        c
+        for c in coords._coords
+        if isinstance(c, Dihedral) and c.idx[0] == 0 and c.idx[1:3] in {(1, 4), (4, 1)}
+    ]
+    assert bad_dihedrals == []
+    # The triple must be registered so ``needs_rebuild`` is a fixed point here.
+    assert (1, 0, 4) in coords._linear_set
+    assert not coords.needs_rebuild(geom)
+
+
+def test_needs_rebuild_fires_on_non_sp_straightening():
+    # Same molecule built bent (160°): the angle is present and the linear
+    # set is empty. As the H-C-O angle straightens past 175° during
+    # optimization, ``needs_rebuild`` must fire so the rebuilt coord set
+    # drops the singular angle.
+    bent = _methoxy_h(hco_angle_deg=160)
+    coords = InternalCoords(bent)
+    assert (1, 0, 4) not in coords._linear_set
+    assert Angle(0, 1, 4) in [c for c in coords._coords if isinstance(c, Angle)]
+    # Below the enter threshold: no rebuild.
+    assert not coords.needs_rebuild(_methoxy_h(hco_angle_deg=174))
+    # Crossed 175°: rebuild required.
+    assert coords.needs_rebuild(_methoxy_h(hco_angle_deg=176))
+    # After rebuild, the singular angle is gone and no dummies appear.
+    rebuilt = InternalCoords(_methoxy_h(hco_angle_deg=176))
+    assert Angle(0, 1, 4) not in [c for c in rebuilt._coords if isinstance(c, Angle)]
+    assert rebuilt.dummy_atoms.shape == (0, 3)
+
+
+def test_rebuild_hysteresis_on_non_sp_centre():
+    # Hysteresis behaviour on a 4-coordinate centre mirrors the sp case:
+    # once a triple is in ``_linear_set`` it stays linear until its angle
+    # drops below ``_LIN_EXIT`` (170°).
+    coords = InternalCoords(_methoxy_h(hco_angle_deg=178))
+    assert (1, 0, 4) in coords._linear_set
+    # Inside the hysteresis band: stay linear, no rebuild.
+    assert not coords.needs_rebuild(_methoxy_h(hco_angle_deg=172))
+    # Below the exit threshold: rebuild (drop the linear flag and
+    # reintroduce the angle).
+    assert coords.needs_rebuild(_methoxy_h(hco_angle_deg=168))
+
+
+def test_sp_centre_still_gets_dummies():
+    # Sanity check that the generalised trigger does not affect the
+    # original sp-centre treatment (CO2 / disilyl_ether class): a linear
+    # 2-coordinate centre still receives two dummies and the four
+    # through-dummy replacement angles.
+    rebuilt = InternalCoords(_co2(angle_deg=178))
+    assert rebuilt.dummy_atoms.shape == (2, 3)
+    # Two dummies × two real neighbours (i, k) = four new replacement angles
+    # with the dummy as the third index, all flagged weak=0.
+    n_real = rebuilt._n_real
+    replacement = [
+        c for c in rebuilt._coords if isinstance(c, Angle) and c.idx[2] >= n_real
+    ]
+    assert len(replacement) == 4
+    # The singular real angle is omitted.
+    real_angles = [
+        c
+        for c in rebuilt._coords
+        if isinstance(c, Angle) and all(i < n_real for i in c.idx)
+    ]
+    assert Angle(0, 1, 2) not in real_angles
 
 
 def test_ghost_atom_in_geometry_does_not_crash():

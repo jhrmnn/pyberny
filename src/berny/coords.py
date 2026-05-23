@@ -327,36 +327,51 @@ class _DummySpec(object):
 
 
 def _find_linear_triples(bondmatrix, coords):
-    """Yield (j, i, k) for every sp-like near-linear triple ``i-j-k``.
+    """Yield (j, i, k) for every near-linear triple ``i-j-k``.
 
-    Restricted to central atoms with exactly two covalent neighbours so the
-    treatment fires on genuine sp-hybridised geometries (alkynes, nitriles,
-    cumulenes, CO₂) and not on coincidentally-linear trans angles in
-    higher-coordination centres (square-planar / octahedral metals, T-shaped
-    halides). Those latter cases are chemically stiff and converge fine under
-    the regular singular-angle handling; introducing dummies there
-    over-parameterises the problem and prevents convergence
-    (e.g. mg_porphin, zn_edta in the Birkholz-Schlegel benchmark).
+    Iterates over *all* connectivity-allowed triples (every unordered pair of
+    bonded neighbours of every atom) and keeps those whose angle exceeds
+    ``_LIN_THRE``. The two-neighbour (sp-like) restriction that gates *dummy*
+    placement lives on the treatment side in
+    :meth:`InternalCoords.__init__` (see ``_is_sp_like_centre``), not on
+    detection: a near-linear angle at a higher-coordination centre still has
+    to be *dropped* from the coordinate set to keep the B-matrix from going
+    singular, it just doesn't get a dummy replacement.
     """
-    for j, i, k in _iter_sp_like_triples(bondmatrix):
+    for j, i, k in _iter_candidate_triples(bondmatrix):
         if Angle(i, j, k).eval(coords) > _LIN_THRE:
             yield j, i, k
 
 
-def _iter_sp_like_triples(bondmatrix):
-    """Yield (j, i, k) for every sp-like central atom regardless of geometry.
+def _iter_candidate_triples(bondmatrix):
+    """Yield (j, i, k) for every triple ``i-j-k`` of distinct bonded neighbours.
 
-    Used by :meth:`InternalCoords.needs_rebuild` to evaluate, with hysteresis,
-    which triples are *currently* linear without re-deriving the connectivity
-    (which is treated as fixed for the duration of an optimization, matching
-    the existing convention of building ``bondmatrix`` once in ``__init__``).
+    Each unordered ``{i, k}`` pair is yielded once per central atom ``j``.
+    Used by both :func:`_find_linear_triples` at build time and
+    :meth:`InternalCoords.needs_rebuild` at run time so the trigger and the
+    builder scan the same candidate set. Connectivity is treated as fixed
+    for the duration of an optimization (the longstanding convention in this
+    class), so only the geometry-dependent linearity flag is re-evaluated.
     """
     for j in range(len(bondmatrix)):
-        neighbors = list(np.flatnonzero(bondmatrix[j, :]))
-        if len(neighbors) != 2:
-            continue
-        i, k = neighbors
-        yield j, i, k
+        neighbors = np.flatnonzero(bondmatrix[j, :])
+        for i, k in combinations(neighbors, 2):
+            yield j, i, k
+
+
+def _is_sp_like_centre(bondmatrix, j):
+    """Return ``True`` if atom ``j`` has exactly two covalent neighbours.
+
+    Gates dummy-atom placement for near-linear bends: the dummy machinery
+    targets genuine sp-hybridised geometries (alkynes, nitriles, cumulenes,
+    CO₂). Placing dummies on higher-coordination centres
+    (square-planar / octahedral metals, T-shaped halides) over-parameterises
+    the problem and prevents convergence (e.g. mg_porphin, zn_edta in the
+    Birkholz-Schlegel benchmark). For those centres the near-linear angle is
+    instead simply omitted from the coordinate set; the remaining cis angles
+    plus the bonds keep the centre well constrained.
+    """
+    return int(np.count_nonzero(bondmatrix[j, :])) == 2
 
 
 def get_clusters(C):
@@ -403,20 +418,39 @@ class InternalCoords:
             if bondmatrix[i, j]:
                 bond = Bond(i, j, C=C)
                 self.append(bond)
-        # Identify near-linear triples up front; for each, we place two
-        # mutually orthogonal dummies that span the plane perpendicular to the
-        # i-k axis. The four resulting Angle(i,j,d_*) / Angle(k,j,d_*)
-        # coordinates replace the singular Angle(i,j,k) with well-behaved
-        # bends through ~90 degrees. Skipped for periodic geometries because
-        # the dummy chain rule and the lattice-folding logic in _reduce don't
-        # interact cleanly; periodic systems fall back to legacy behaviour.
+        # Identify near-linear triples up front. Two branches handle them:
+        #
+        # * If the central atom has exactly two covalent neighbours
+        #   (``_is_sp_like_centre``), we place two mutually orthogonal
+        #   dummies spanning the plane perpendicular to the i-k axis. The
+        #   four resulting Angle(i,j,d_*) / Angle(k,j,d_*) coordinates
+        #   replace the singular Angle(i,j,k) with well-behaved bends
+        #   through ~90 degrees.
+        # * Otherwise (higher-coordination centre: methyl-like carbons,
+        #   square-planar / octahedral metals, T-shaped halides) we simply
+        #   drop the singular angle from the coordinate set with no
+        #   replacement. The remaining cis angles plus bonds keep the
+        #   centre constrained; introducing dummies here over-parameterises
+        #   the problem and prevents convergence (mg_porphin, zn_edta).
+        #   A centre with *only* near-linear angles is geometrically
+        #   impossible (you cannot have ≥3 collinear neighbours in 3D), so
+        #   dropping never leaves the centre unconstrained.
+        #
+        # Either way, dihedrals spanning a near-linear angle are filtered
+        # out automatically by ``get_dihedrals`` below (its own ``lin_thre``
+        # branch).
+        #
+        # Skipped for periodic geometries because the dummy chain rule and
+        # the lattice-folding logic in ``_reduce`` don't interact cleanly;
+        # periodic systems fall back to legacy behaviour.
         if geom.lattice is None:
             linear_set = set(_find_linear_triples(bondmatrix, geom.coords))
         else:
             linear_set = set()
         self._build_angles(geom.coords, bondmatrix, C, linear_set)
         for j, i, k in sorted(linear_set):
-            self._add_linear_bend(geom.coords, i, j, k)
+            if _is_sp_like_centre(bondmatrix, j):
+                self._add_linear_bend(geom.coords, i, j, k)
         # Snapshot inputs needed by ``needs_rebuild`` so the optimizer can
         # detect mid-run linearity changes (angles crossing 175°) and request
         # a fresh InternalCoords instance. ``_bondmatrix`` is the real-atom
@@ -485,7 +519,7 @@ class InternalCoords:
     def needs_rebuild(self, geom):
         """Return ``True`` if the linear-bend topology should be rebuilt.
 
-        Compares the set of sp-like triples currently treated as linear
+        Compares the set of near-linear triples currently tracked
         (``self._linear_set``) against the set that *would* be flagged for
         the given geometry under the same hysteresis rule used during
         construction:
@@ -495,10 +529,19 @@ class InternalCoords:
         * a new triple is flagged once its angle exceeds ``_LIN_THRE``
           (175°).
 
+        All connectivity-allowed triples are scanned — not just sp-like
+        (2-coordinate) centres — so a methyl-hydrogen / alkoxy angle on a
+        4-coordinate carbon that drifts to ~180° during the run is
+        detected. On rebuild, a 2-coordinate centre receives dummy-atom
+        replacement angles, while a higher-coordination centre has the
+        singular angle simply omitted; either way the rebuilt B-matrix is
+        free of the ``1/sin(180°)`` singularity.
+
         Returns ``False`` for periodic geometries, where linear-bend
         handling is disabled (no ``bondmatrix`` is stored). Connectivity is
         treated as fixed: only the geometry-dependent linearity flag is
-        re-evaluated, so the check is ``O(n_atoms)``.
+        re-evaluated, so the check is ``O(n_atoms)`` for organic molecules
+        (bounded by typical coordination numbers).
 
         Used by :class:`berny.Berny` to react to mid-run linearity changes
         — typically a triple bond straightening past 175° during the run,
@@ -511,7 +554,7 @@ class InternalCoords:
             return False
         coords = geom_super.coords
         candidate = set()
-        for j, i, k in _iter_sp_like_triples(self._bondmatrix):
+        for j, i, k in _iter_candidate_triples(self._bondmatrix):
             ang = Angle(i, j, k).eval(coords)
             if (j, i, k) in self._linear_set:
                 if ang > _LIN_EXIT:
