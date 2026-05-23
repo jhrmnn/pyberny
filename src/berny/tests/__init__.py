@@ -8,18 +8,20 @@ This subpackage ships with :mod:`berny` so that *any* geometry optimizer --
 not only :class:`berny.Berny` -- can be exercised against model potential
 energy surfaces whose minima are known in closed form. Each potential exposes
 
-* :meth:`~base.ModelPotential.start` -- a deliberately awkward starting
-  geometry,
-* :meth:`~base.ModelPotential.energy` / :meth:`~base.ModelPotential.gradient`
-  -- the energy surface and its analytic gradient (energy in arbitrary but
-  consistent units, length in angstrom, gradient per angstrom),
-* :meth:`~base.ModelPotential.assert_at_minimum` -- a check that a converged
-  geometry sits at the known minimum, up to rigid motion and any soft
-  (zero-curvature) modes.
+* :meth:`~berny.tests.base.ModelPotential.start` -- a deliberately awkward
+  starting geometry,
+* :meth:`~berny.tests.base.ModelPotential.energy` /
+  :meth:`~berny.tests.base.ModelPotential.gradient` -- the energy surface and
+  its analytic gradient (energy in arbitrary but consistent units, length in
+  angstrom, gradient per angstrom),
+* :meth:`~berny.tests.base.ModelPotential.assert_at_minimum` -- a check that a
+  converged geometry sits at the known minimum, up to rigid motion and any
+  soft (zero-curvature) modes.
 
 The framework lives in :mod:`berny.tests.base`; each model potential has its
-own module (e.g. :mod:`berny.tests.linear_bend`). All public names are
-re-exported here.
+own module (e.g. :mod:`berny.tests.linear_bend`,
+:mod:`berny.tests.dihedral_from_linear`). All public names are re-exported
+here.
 
 A third-party optimizer is tested by supplying a ``minimize`` adapter::
 
@@ -37,6 +39,12 @@ reach the minimum, so it drops straight into any test runner.
 """
 
 from .base import ModelPotential, run_and_check
+from .dihedral_from_linear import DihedralFromLinear
 from .linear_bend import LinearBendCrossover
 
-__all__ = ['ModelPotential', 'LinearBendCrossover', 'run_and_check']
+__all__ = [
+    'ModelPotential',
+    'LinearBendCrossover',
+    'DihedralFromLinear',
+    'run_and_check',
+]

@@ -86,12 +86,17 @@ def run_and_check(potential, minimize, **tols):
     keyword arguments are forwarded to
     :meth:`ModelPotential.assert_at_minimum` as tolerances.
     """
-    final = minimize(
-        list(potential.species),
-        potential.start(),
-        potential.energy,
-        potential.gradient,
-    )
-    final = np.asarray(final, dtype=float)
+    species = list(potential.species)
+    expected = (len(species), 3)
+    final = minimize(species, potential.start(), potential.energy, potential.gradient)
+    try:
+        final = np.asarray(final, dtype=float)
+    except (TypeError, ValueError) as e:
+        raise AssertionError(
+            f'minimize must return a float-convertible array, got {final!r}'
+        ) from e
+    assert (
+        final.shape == expected
+    ), f'minimize must return coordinates of shape {expected}, got {final.shape}'
     potential.assert_at_minimum(final, **tols)
     return final
