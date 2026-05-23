@@ -1,11 +1,14 @@
-"""End-to-end test of the linear-bend / dihedral handoff during optimization.
+"""End-to-end optimizer tests built on the :mod:`berny.tests` model potentials.
 
-Drives :class:`berny.Berny` on the :class:`berny.tests.LinearBendCrossover`
-model potential from a start where *both* bond angles are non-linear. The
-optimizer therefore begins with a dihedral and no dummy atoms, must cross the
-175 deg linear-bend threshold on the way to the linear minimum, and at that
-point rebuilds its internal coordinates -- dropping the dihedral and switching
-to the dummy-atom bend representation.
+This is the designated home for tests that drive :class:`berny.Berny` against
+the analytic model potentials shipped in :mod:`berny.tests`; add a new block
+here as further potentials are introduced.
+
+The :class:`~berny.tests.LinearBendCrossover` case starts from a geometry where
+*both* bond angles are non-linear, so the optimizer begins with a dihedral and
+no dummy atoms, must cross the 175 deg linear-bend threshold on the way to the
+linear minimum, and at that point rebuilds its internal coordinates -- dropping
+the dihedral and switching to the dummy-atom bend representation.
 """
 
 import logging
