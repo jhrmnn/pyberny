@@ -221,6 +221,14 @@ jobs:
     if: always() && needs.benchmark.result != 'cancelled' && needs.benchmark.result != 'skipped'
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    # The publish step force-updates a single-commit orphan `ci-assets` branch;
+    # serialize aggregate across runs so concurrent force-updates can't clobber
+    # each other's per-branch directory.
+    permissions:
+      contents: write
+    concurrency:
+      group: ci-assets-publish
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -252,7 +260,9 @@ jobs:
           done
       - name: Plot energy convergence
         # One combined figure per benchmark (mopac is the auto-trigger solver;
-        # plot_convergence.py skips a benchmark with no mopac shards).
+        # plot_convergence.py skips a benchmark with no mopac shards). always()
+        # so a regression exit-1 from the Aggregate step still yields plots.
+        if: always()
         run: |
           for bench in birkholz baker; do
             python scripts/plot_convergence.py \
@@ -260,6 +270,141 @@ jobs:
               --solver mopac \
               --results-dir all-results
           done
+      - name: Publish plots and embed in run summary
+        # Inline images in a job summary need a public URL (GitHub strips
+        # local/relative/data: srcs), so commit the PNGs to a single-commit
+        # orphan `ci-assets` branch under <source-branch>/ and reference them
+        # by raw.githubusercontent URL, cache-busted by run id. Pull requests
+        # from forks get a read-only token, so there we skip the push and point
+        # at the artifact instead. Best-effort: a publish error must not fail
+        # the Benchmark workflow (doc-deploy gates on it for master pushes).
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          SRC_BRANCH: ${{ github.head_ref || github.ref_name }}
+          IS_FORK: ${{ github.event.pull_request.head.repo.fork || false }}
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const { owner, repo } = context.repo;
+            const branch = 'ci-assets';
+            const src = process.env.SRC_BRANCH;
+            const isFork = process.env.IS_FORK === 'true';
+            let files = [];
+            try {
+              files = fs.readdirSync('results')
+                .filter((f) => /^convergence-.*\.png$/.test(f))
+                .sort();
+            } catch (e) {
+              core.info('no results directory; nothing to publish');
+              return;
+            }
+            if (files.length === 0) {
+              core.info('no convergence plots produced');
+              return;
+            }
+            const artifactNote =
+              'Plots are in the **benchmark-summary** artifact below.';
+            if (isFork) {
+              await core.summary
+                .addHeading('Energy convergence', 2)
+                .addRaw(
+                  artifactNote +
+                    ' (Inline rendering is skipped for pull requests from forks, ' +
+                    'whose token is read-only.)'
+                )
+                .write();
+              return;
+            }
+            let published = false;
+            try {
+              let baseTree;
+              let exists = true;
+              try {
+                const ref = await github.rest.git.getRef({
+                  owner,
+                  repo,
+                  ref: `heads/${branch}`,
+                });
+                const commit = await github.rest.git.getCommit({
+                  owner,
+                  repo,
+                  commit_sha: ref.data.object.sha,
+                });
+                baseTree = commit.data.tree.sha;
+              } catch (e) {
+                if (e.status === 404) exists = false;
+                else throw e;
+              }
+              // base_tree preserves other branches' directories; parents: []
+              // keeps the branch at a single commit so binary blobs don't pile
+              // up in history.
+              const tree = [];
+              for (const f of files) {
+                const content = fs
+                  .readFileSync(path.join('results', f))
+                  .toString('base64');
+                const blob = await github.rest.git.createBlob({
+                  owner,
+                  repo,
+                  content,
+                  encoding: 'base64',
+                });
+                tree.push({
+                  path: `${src}/${f}`,
+                  mode: '100644',
+                  type: 'blob',
+                  sha: blob.data.sha,
+                });
+              }
+              const newTree = await github.rest.git.createTree({
+                owner,
+                repo,
+                base_tree: baseTree,
+                tree,
+              });
+              const commit = await github.rest.git.createCommit({
+                owner,
+                repo,
+                message: `benchmark plots: ${src} @ ${context.sha.slice(0, 7)}`,
+                tree: newTree.data.sha,
+                parents: [],
+              });
+              if (exists) {
+                await github.rest.git.updateRef({
+                  owner,
+                  repo,
+                  ref: `heads/${branch}`,
+                  sha: commit.data.sha,
+                  force: true,
+                });
+              } else {
+                await github.rest.git.createRef({
+                  owner,
+                  repo,
+                  ref: `refs/heads/${branch}`,
+                  sha: commit.data.sha,
+                });
+              }
+              published = true;
+            } catch (e) {
+              core.warning(`could not publish plots to ${branch}: ${e.message}`);
+            }
+            core.summary.addHeading('Energy convergence', 2);
+            if (published) {
+              const enc = src.split('/').map(encodeURIComponent).join('/');
+              for (const f of files) {
+                const bench = f.replace(/^convergence-/, '').replace(/\.png$/, '');
+                const url =
+                  `https://raw.githubusercontent.com/${owner}/${repo}/` +
+                  `${branch}/${enc}/${f}?${context.runId}`;
+                core.summary.addRaw(`\n![${bench}](${url})\n`);
+              }
+            } else {
+              core.summary.addRaw(artifactNote);
+            }
+            await core.summary.write();
       - name: Upload summary
         if: always()
         uses: actions/upload-artifact@v4
