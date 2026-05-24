@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+"""Plot energy-convergence curves for one benchmark's molecules.
+
+Reads the per-shard ``<solver>-<benchmark>-<batch_id>.json`` files written by
+``benchmark.py --out-json`` and draws a single combined figure: one curve per
+molecule of the energy above the run's minimum, ``E_n - min(E)``, in kcal/mol
+on a log axis against the optimization step.
+"""
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+import matplotlib
+
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt  # noqa: E402
+import numpy as np  # noqa: E402
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from benchmark import BENCHMARKS  # noqa: E402
+
+HARTREE_TO_KCAL = 627.503
+
+
+def load_trajectories(results_dir, benchmark, solver):
+    """Return ``{molecule: [energy, ...]}`` for one (benchmark, solver) axis."""
+    trajectories = {}
+    for path in sorted(results_dir.glob(f'{solver}-{benchmark}-*.json')):
+        data = json.loads(path.read_text())
+        for row in data['rows']:
+            energies = row.get('energies')
+            if energies:
+                trajectories[row['name']] = energies
+    return trajectories
+
+
+def plot(benchmark, solver, trajectories, out):
+    fig, ax = plt.subplots(figsize=(9, 6))
+    for name, energies in sorted(trajectories.items()):
+        energies = np.array(energies, dtype=float)
+        delta = (energies - energies.min()) * HARTREE_TO_KCAL
+        steps = np.arange(len(energies))
+        mask = delta > 0
+        ax.semilogy(steps[mask], delta[mask], marker='.', ms=3, lw=1, label=name)
+    ax.set_xlabel('optimization step')
+    ax.set_ylabel(r'$E - E_\mathrm{min}$  (kcal/mol)')
+    ax.set_title(f'{benchmark} energy convergence ({solver})')
+    ax.grid(True, which='both', ls=':', lw=0.5, alpha=0.5)
+    ax.legend(
+        loc='center left',
+        bbox_to_anchor=(1.0, 0.5),
+        fontsize='small',
+        ncol=1 if len(trajectories) <= 20 else 2,
+    )
+    fig.tight_layout()
+    out.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(out, dpi=150, bbox_inches='tight')
+    plt.close(fig)
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument('--results-dir', type=Path, required=True)
+    ap.add_argument(
+        '--benchmark',
+        choices=sorted(BENCHMARKS),
+        default='birkholz',
+        help='which benchmark these shards belong to (default: birkholz)',
+    )
+    ap.add_argument(
+        '--solver',
+        choices=['mopac', 'pyscf'],
+        default='mopac',
+        help='which solver the shards were run with (default: mopac)',
+    )
+    ap.add_argument(
+        '--out',
+        type=Path,
+        default=None,
+        help='output PNG path (default: results/convergence-<benchmark>.png)',
+    )
+    args = ap.parse_args(argv)
+    if args.out is None:
+        args.out = Path(f'results/convergence-{args.benchmark}.png')
+
+    trajectories = load_trajectories(args.results_dir, args.benchmark, args.solver)
+    if not trajectories:
+        return 0
+    plot(args.benchmark, args.solver, trajectories, args.out)
+    print(f'wrote {args.out} ({len(trajectories)} molecules)')
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
