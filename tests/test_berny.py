@@ -21,6 +21,7 @@ def test_berny_params_defaults():
     p = BernyParams()
     assert p.gradientmax == 0.45e-3
     assert p.trust == 0.3
+    assert p.energy_noise == 2e-8
     assert p.dihedral is True
 
 
@@ -165,6 +166,18 @@ class TestUpdateHessian:
 
 
 class TestUpdateTrust:
+    def test_predicted_energy_below_noise_holds(self):
+        new_trust = update_trust(
+            0.3, 0.2, 1e-9, np.array([0.1, 0.0]), energy_noise=2e-8
+        )
+        assert new_trust == 0.3
+
+    def test_predicted_energy_below_noise_expands_on_boundary(self):
+        new_trust = update_trust(
+            0.3, -0.2, 1e-9, np.array([0.3, 0.0]), energy_noise=2e-8
+        )
+        assert new_trust == pytest.approx(0.6)
+
     def test_zero_de_treated_as_perfect(self):
         # dE == 0 → r = 1.0. r > 0.75 but |norm(dq) - trust| != 0,
         # so the trust radius shouldn't change.
