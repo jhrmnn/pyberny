@@ -16,12 +16,10 @@ run() {
     fi
 }
 
-run flake8     flake8
-run black      black . --check
-run isort      isort . --check
-run pydocstyle pydocstyle src
-run pytest     python -m pytest -q
-run sphinx     sphinx-build -W -E doc doc/_check
+run ruff   ruff check .
+run black  black . --check
+run pytest python -m pytest -q
+run sphinx sphinx-build -W -E doc doc/_check
 
 if [ "$fail" -ne 0 ]; then
     echo "One or more checks failed."

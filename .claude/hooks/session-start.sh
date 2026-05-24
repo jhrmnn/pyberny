@@ -26,16 +26,4 @@ cd "$CLAUDE_PROJECT_DIR"
 # extra install is required here.
 pip install -e ".[test,doc]"
 
-# `flake8` on PATH comes from a uv-managed tool environment that is
-# isolated from system site-packages, so `pip install flake8-bugbear ...`
-# would silently no-op (the plugins go to system Python, the uv-isolated
-# flake8 can't see them, and pre-push `flake8` misses B-codes that CI's
-# fresh `pip install flake8 ...` would catch). Install plugins into the
-# same tool env via `uv tool install --with`.
-if command -v uv >/dev/null; then
-  uv tool install --quiet --with flake8-bugbear --with flake8-comprehensions \
-    --with pep8-naming flake8
-else
-  pip install flake8 flake8-bugbear flake8-comprehensions pep8-naming
-fi
-pip install black isort pydocstyle
+pip install ruff black
