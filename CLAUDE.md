@@ -16,6 +16,16 @@ CI results before closing the task. When CI events arrive, investigate failures
 and push fixes. Only mark CI checklist items as done once CI actually passes —
 do not leave them unchecked at end of turn.
 
+Do not chase inconsequential, non-deterministic CI slips. A sub-percent
+`codecov/project` dip from a single flaky line flipping hit/miss — especially
+when the diff adds no measured `berny` source and `codecov/patch` is clean — is
+noise, not a regression. Likewise, MOPAC PM7 benchmark step counts are not
+bitwise-reproducible across runners (see
+`tests/data/birkholz_schlegel/SOURCE.md`), so an occasional `birkholz mopac`
+batch drifting past tolerance is flaky. Report these and move on; do not add
+coverage-gate config, loosen tolerances, or rewrite reference values to make
+them green.
+
 ## CHANGELOG
 
 `CHANGELOG.md` is reserved for important user-facing changes — new features,
