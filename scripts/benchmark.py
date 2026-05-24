@@ -63,7 +63,7 @@ import sys  # noqa: E402
 import time  # noqa: E402
 from pathlib import Path  # noqa: E402
 
-from berny import Berny, geomlib, optimize  # noqa: E402
+from berny import Berny, geomlib  # noqa: E402
 
 _DATA_ROOT = Path(__file__).resolve().parents[1] / 'tests' / 'data'
 BENCHMARKS = {
@@ -94,11 +94,28 @@ def run_pyscf(name, ref, data_dir):
         mf.xc = 'b3lyp'
     else:
         raise ValueError(f'unsupported paper method {method!r}')
-    state = {'n': 0}
-    converged, _ = berny_solver.kernel(
-        mf, callback=lambda loc: state.update(n=loc['cycle'] + 1)
-    )
-    return converged, state['n']
+    state = {'n': 0, 'energies': []}
+
+    def callback(loc):
+        state['n'] = loc['cycle'] + 1
+        energy = loc.get('energy')
+        if energy is not None:
+            state['energies'].append(float(energy))
+
+    converged, _ = berny_solver.kernel(mf, callback=callback)
+    return converged, state['n'], state['energies']
+
+
+def _optimize_recording_energies(berny, solver):
+    """Drive ``berny`` with ``solver`` (like ``berny.optimize``) and collect
+    the per-step energies, returning them as a list in step order."""
+    next(solver)
+    energies = []
+    for geom in berny:
+        energy, gradients = solver.send((list(geom), geom.lattice))
+        energies.append(energy)
+        berny.send((energy, gradients))
+    return energies
 
 
 def run_mopac(name, ref, data_dir):
@@ -111,21 +128,23 @@ def run_mopac(name, ref, data_dir):
     # documented non-convergers in reference.json (mopac_pm7_steps=null)
     # so the regression gate ignores them either way.
     berny = Berny(geom, maxsteps=110)
-    optimize(berny, MopacSolver(charge=ref['charge'], mult=ref['mult']))
-    return berny.converged, berny._n
+    solver = MopacSolver(charge=ref['charge'], mult=ref['mult'])
+    energies = _optimize_recording_energies(berny, solver)
+    return berny.converged, berny._n, energies
 
 
 def run_one(name, ref, kind, data_dir):
     runner = run_pyscf if kind == 'pyscf' else run_mopac
     t0 = time.perf_counter()
     try:
-        converged, n = runner(name, ref, data_dir)
+        converged, n, energies = runner(name, ref, data_dir)
     except Exception as e:  # noqa: BLE001
         return {
             'name': name,
             'converged': False,
             'steps': None,
             'wall': time.perf_counter() - t0,
+            'energies': [],
             'error': f'{type(e).__name__}: {e}',
         }
     return {
@@ -133,6 +152,7 @@ def run_one(name, ref, kind, data_dir):
         'converged': converged,
         'steps': n,
         'wall': time.perf_counter() - t0,
+        'energies': energies,
         'error': None,
     }
 
