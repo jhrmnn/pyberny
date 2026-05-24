@@ -13,6 +13,9 @@ internal coordinates, iterative Hessian estimate, trust region, line
 search, and coordinate weighting, mostly inspired by the optimizer in
 the `Gaussian <http://gaussian.com>`_ program.
 
+The `Birkholz benchmark molecules <../molecules.html>`_ used to test the
+optimizer can be browsed in an interactive 3D viewer.
+
 .. toctree::
 
    getting-started
