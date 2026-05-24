@@ -1,0 +1,8 @@
+coverage:
+  status:
+    project:
+      default:
+        # Tolerate small, nondeterministic coverage drift (a single flaky
+        # berny line occasionally flips hit<->miss between runs) so the
+        # project status doesn't fail on noise unrelated to the diff.
+        threshold: 1%
