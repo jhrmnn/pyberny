@@ -75,7 +75,7 @@ BENCHMARKS = {
 DATA = BENCHMARKS['birkholz']
 
 
-def run_pyscf(name, ref, data_dir):
+def run_pyscf(name, ref, data_dir, trace=None):
     from pyscf import dft, gto, scf
     from pyscf.geomopt import berny_solver
 
@@ -102,7 +102,10 @@ def run_pyscf(name, ref, data_dir):
         if energy is not None:
             state['energies'].append(float(energy))
 
-    converged, _ = berny_solver.kernel(mf, callback=callback)
+    # pyscf's berny_solver.kernel forwards unknown kwargs to the underlying
+    # Berny constructor, so ``trace=`` is propagated straight through.
+    kwargs = {'trace': str(trace)} if trace is not None else {}
+    converged, _ = berny_solver.kernel(mf, callback=callback, **kwargs)
     return converged, state['n'], state['energies']
 
 
@@ -118,7 +121,7 @@ def _optimize_recording_energies(berny, solver):
     return energies
 
 
-def run_mopac(name, ref, data_dir):
+def run_mopac(name, ref, data_dir, trace=None):
     from berny.solvers import MopacSolver
 
     geom = geomlib.readfile(str(data_dir / f'{name}.xyz'))
@@ -127,17 +130,24 @@ def run_mopac(name, ref, data_dir):
     # so they still have a chance to converge and be reported. Both are
     # documented non-convergers in reference.json (mopac_pm7_steps=null)
     # so the regression gate ignores them either way.
-    berny = Berny(geom, maxsteps=110)
+    berny = Berny(geom, maxsteps=110, trace=trace)
     solver = MopacSolver(charge=ref['charge'], mult=ref['mult'])
     energies = _optimize_recording_energies(berny, solver)
     return berny.converged, berny._n, energies
 
 
-def run_one(name, ref, kind, data_dir):
+def run_one(name, ref, kind, data_dir, trace_dir=None, benchmark=None):
     runner = run_pyscf if kind == 'pyscf' else run_mopac
+    trace_path = None
+    if trace_dir is not None:
+        trace_dir.mkdir(parents=True, exist_ok=True)
+        # Use the --benchmark CLI value rather than data_dir.name so the
+        # filename matches the documented schema and is stable across
+        # dataset-directory renames.
+        trace_path = trace_dir / f'{kind}-{benchmark}-{name}.trace.json'
     t0 = time.perf_counter()
     try:
-        converged, n, energies = runner(name, ref, data_dir)
+        converged, n, energies = runner(name, ref, data_dir, trace=trace_path)
     except Exception as e:  # noqa: BLE001
         return {
             'name': name,
@@ -247,6 +257,17 @@ def main(argv=None):
     ap.add_argument(
         '--out-json', type=Path, default=None, help='write per-row results as JSON'
     )
+    ap.add_argument(
+        '--out-trace-dir',
+        type=Path,
+        default=None,
+        help=(
+            'write a per-molecule structured trace JSON into this directory '
+            '(file name: <solver>-<benchmark>-<molecule>.trace.json); '
+            'created if missing. For pyscf this requires a version whose '
+            'berny_solver.kernel forwards kwargs to Berny.'
+        ),
+    )
     args = ap.parse_args(argv)
 
     if args.solver == 'mopac' and not shutil.which('mopac'):
@@ -262,7 +283,16 @@ def main(argv=None):
     rows = []
     for name in names:
         print(f'==> {name}', flush=True)
-        rows.append(run_one(name, reference[name], args.solver, data_dir))
+        rows.append(
+            run_one(
+                name,
+                reference[name],
+                args.solver,
+                data_dir,
+                trace_dir=args.out_trace_dir,
+                benchmark=args.benchmark,
+            )
+        )
 
     table = format_table(rows, args.solver, reference)
     errors = format_errors(rows)

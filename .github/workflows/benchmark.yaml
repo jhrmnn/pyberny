@@ -206,7 +206,8 @@ jobs:
           python scripts/benchmark.py --benchmark "$BENCHMARK" \
             --solver "$SOLVER" \
             --molecules "${mols[@]}" \
-            --out-json "results/${SOLVER}-${BENCHMARK}-${BATCH}.json"
+            --out-json "results/${SOLVER}-${BENCHMARK}-${BATCH}.json" \
+            --out-trace-dir "results"
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v4

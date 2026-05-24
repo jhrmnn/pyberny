@@ -271,3 +271,116 @@ class TestIsConverged:
         forces = np.zeros(6)
         step = np.zeros(6)
         assert not is_converged(forces, step, on_sphere=True, params=BernyParams())
+
+
+class TestTrace:
+    """Structured per-step JSON trace recording.
+
+    When ``trace=<path>`` is passed to ``Berny``, every ``send()`` appends
+    a dict-like record (mirroring the textual log output) to a list and
+    the full list is rewritten to the JSON file. Tests below verify the
+    file exists, parses as JSON, has one entry per send, contains the
+    expected keys, and is JSON-serialisable (no numpy scalars).
+    """
+
+    def _run_co2_with_trace(self, tmp_path):
+        path = tmp_path / 'trace.json'
+        geom = _co2_geom(160)
+        b = Berny(geom, trace=str(path), maxsteps=60)
+        n_sends = 0
+        for step_geom in b:
+            e, g = _co2_harmonic(step_geom)
+            b.send((e, g))
+            n_sends += 1
+        return path, b, n_sends
+
+    def test_trace_file_created_with_one_record_per_step(self, tmp_path):
+        import json
+
+        path, b, n_sends = self._run_co2_with_trace(tmp_path)
+        assert b.converged
+        assert path.exists()
+        data = json.loads(path.read_text())
+        assert isinstance(data, list)
+        assert len(data) == n_sends
+        assert [r['step'] for r in data] == list(range(1, n_sends + 1))
+
+    def test_trace_records_have_expected_step1_keys(self, tmp_path):
+        import json
+
+        path, _, _ = self._run_co2_with_trace(tmp_path)
+        data = json.loads(path.read_text())
+        # Step 1 (the first send()) has no Hessian/trust/linear-search update yet.
+        first = data[0]
+        assert first['step'] == 1
+        for key in (
+            'step',
+            'energy',
+            'coord_rebuild',
+            'quadratic_step',
+            'total_step',
+            'convergence',
+            'converged',
+            'max_steps_reached',
+        ):
+            assert key in first, key
+        assert 'hessian_update' not in first
+        assert 'linear_search' not in first
+        assert 'trust_update' not in first
+        # Step 2+ have the BFGS / trust / interpolation updates.
+        second = data[1]
+        assert second['step'] == 2
+        for key in ('hessian_update', 'trust_update', 'linear_search'):
+            assert key in second, key
+        # Final record reports convergence.
+        assert data[-1]['converged'] is True
+        # The CO2-straightening path triggers an adaptive rebuild.
+        assert any(r['coord_rebuild'] for r in data)
+
+    def test_trace_record_values_are_json_serialisable(self, tmp_path):
+        # No numpy scalars / arrays should leak in: json.loads on the file
+        # must round-trip and every leaf must be a plain Python type.
+        import json
+
+        path, _, _ = self._run_co2_with_trace(tmp_path)
+        data = json.loads(path.read_text())
+
+        def assert_plain(obj):
+            if isinstance(obj, dict):
+                for v in obj.values():
+                    assert_plain(v)
+            elif isinstance(obj, list):
+                for v in obj:
+                    assert_plain(v)
+            else:
+                assert isinstance(obj, (str, int, float, bool, type(None))), type(obj)
+
+        assert_plain(data)
+
+    def test_trace_file_is_rewritten_after_each_step(self, tmp_path):
+        # The trace file must be readable mid-run, not just at the end,
+        # so a CI shard killed by a timeout still ships partial data.
+        import json
+
+        path = tmp_path / 'trace.json'
+        geom = _co2_geom(160)
+        b = Berny(geom, trace=str(path), maxsteps=60)
+        sizes_seen = []
+        for step_geom in b:
+            e, g = _co2_harmonic(step_geom)
+            b.send((e, g))
+            assert path.exists()
+            data = json.loads(path.read_text())
+            sizes_seen.append(len(data))
+            if len(sizes_seen) >= 3:
+                break
+        assert sizes_seen == [1, 2, 3]
+
+    def test_no_trace_means_no_file(self, tmp_path):
+        # The default path is unchanged: no trace param → no file written.
+        path = tmp_path / 'trace.json'
+        geom = _co2_geom(160)
+        b = Berny(geom, maxsteps=5)
+        next(b)
+        b.send((0.0, np.zeros((3, 3))))
+        assert not path.exists()
