@@ -213,8 +213,8 @@ class Berny(Generator):
                 current.E - s.previous.E,  # or should it be s.interpolated.E?
                 s.predicted.E - s.interpolated.E,
                 s.predicted.q - s.interpolated.q,
-                s.params.energy_noise,
                 log=log,
+                energy_noise=s.params.energy_noise,
             )
             dq = s.best.q - current.q
             t, E = linear_search(
@@ -269,7 +269,7 @@ def update_hessian(H, dq, dg, log=no_log):
     return H + dH
 
 
-def update_trust(trust, dE, dE_predicted, dq, energy_noise=2e-8, log=no_log):
+def update_trust(trust, dE, dE_predicted, dq, log=no_log, *, energy_noise=2e-8):
     if abs(dE_predicted) < 10 * energy_noise:
         if abs(norm(dq) - trust) < 1e-10:
             return 2 * trust

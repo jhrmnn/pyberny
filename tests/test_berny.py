@@ -166,6 +166,16 @@ class TestUpdateHessian:
 
 
 class TestUpdateTrust:
+    def test_fifth_positional_argument_remains_log(self):
+        messages = []
+
+        def log(msg, **kwargs):
+            messages.append(msg)
+
+        new_trust = update_trust(0.3, 0.5, 1.0, np.array([0.1, 0.0]), log)
+        assert new_trust == 0.3
+        assert messages
+
     def test_predicted_energy_below_noise_holds(self):
         new_trust = update_trust(
             0.3, 0.2, 1e-9, np.array([0.1, 0.0]), energy_noise=2e-8
