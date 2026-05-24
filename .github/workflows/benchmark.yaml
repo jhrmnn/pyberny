@@ -233,8 +233,10 @@ jobs:
           merge-multiple: true
       - name: Install pyberny
         # aggregate_benchmark.py imports format_table from scripts/benchmark.py,
-        # which top-level-imports `berny`. Plain install (no benchmark extra).
-        run: pip install -e .
+        # which top-level-imports `berny`. The plot extra adds matplotlib for
+        # plot_convergence.py; still no benchmark extra (pyscf is heavy and
+        # unused here).
+        run: pip install -e '.[plot]'
       - name: Aggregate
         # aggregate_benchmark.py silently skips solvers / benchmarks with no
         # shard files, so iterating over both reference sets is safe across
@@ -248,9 +250,21 @@ jobs:
               --results-dir all-results \
               --solvers mopac pyscf
           done
+      - name: Plot energy convergence
+        # One combined figure per benchmark (mopac is the auto-trigger solver;
+        # plot_convergence.py skips a benchmark with no mopac shards).
+        run: |
+          for bench in birkholz baker; do
+            python scripts/plot_convergence.py \
+              --benchmark "$bench" \
+              --solver mopac \
+              --results-dir all-results
+          done
       - name: Upload summary
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-summary
-          path: results/summary-*.md
+          path: |
+            results/summary-*.md
+            results/convergence-*.png
