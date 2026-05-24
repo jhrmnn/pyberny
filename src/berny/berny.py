@@ -31,6 +31,9 @@ class BernyParams:
             assuming radian units for angles).
         trust: initial trust radius in atomic units; the maximum RMS of the
             quadratic step.
+        energy_noise: estimated absolute precision (a.u.) of one energy
+            evaluation; used to suppress trust-region updates from noisy
+            ``dE/dE_predicted`` ratios.
         dihedral: whether to form dihedral angles.
         superweakdih: whether to form dihedral angles containing two or more
             noncovalent bonds.
@@ -41,6 +44,7 @@ class BernyParams:
     stepmax: float = 1.8e-3
     steprms: float = 1.2e-3
     trust: float = 0.3
+    energy_noise: float = 2e-8
     dihedral: bool = True
     superweakdih: bool = False
 
@@ -210,6 +214,7 @@ class Berny(Generator):
                 s.predicted.E - s.interpolated.E,
                 s.predicted.q - s.interpolated.q,
                 log=log,
+                energy_noise=s.params.energy_noise,
             )
             dq = s.best.q - current.q
             t, E = linear_search(
@@ -264,7 +269,11 @@ def update_hessian(H, dq, dg, log=no_log):
     return H + dH
 
 
-def update_trust(trust, dE, dE_predicted, dq, log=no_log):
+def update_trust(trust, dE, dE_predicted, dq, log=no_log, *, energy_noise=2e-8):
+    if abs(dE_predicted) < 10 * energy_noise:
+        if abs(norm(dq) - trust) < 1e-10:
+            return 2 * trust
+        return trust
     if dE != 0:
         r = dE / dE_predicted  # Fletcher's parameter
     else:
