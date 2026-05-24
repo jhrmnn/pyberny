@@ -310,7 +310,7 @@ class Berny(Generator):
         """
         assert self._trace_path is not None
         tmp = self._trace_path.with_suffix(self._trace_path.suffix + '.tmp')
-        tmp.write_text(json.dumps(self._trace, indent=2))
+        tmp.write_text(json.dumps(self._trace, indent=2) + '\n', encoding='utf-8')
         os.replace(tmp, self._trace_path)
 
     def throw(self, *args, **kwargs):  # noqa: D102

@@ -310,8 +310,9 @@ class TestTrace:
 
         path, _, _ = self._run_co2_with_trace(tmp_path)
         data = json.loads(path.read_text())
-        # Step 0 (first call) has no Hessian/trust/linear-search update yet.
+        # Step 1 (the first send()) has no Hessian/trust/linear-search update yet.
         first = data[0]
+        assert first['step'] == 1
         for key in (
             'step',
             'energy',
@@ -326,8 +327,9 @@ class TestTrace:
         assert 'hessian_update' not in first
         assert 'linear_search' not in first
         assert 'trust_update' not in first
-        # Step 1+ have the BFGS / trust / interpolation updates.
+        # Step 2+ have the BFGS / trust / interpolation updates.
         second = data[1]
+        assert second['step'] == 2
         for key in ('hessian_update', 'trust_update', 'linear_search'):
             assert key in second, key
         # Final record reports convergence.

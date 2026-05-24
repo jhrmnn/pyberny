@@ -103,17 +103,9 @@ def run_pyscf(name, ref, data_dir, trace=None):
             state['energies'].append(float(energy))
 
     # pyscf's berny_solver.kernel forwards unknown kwargs to the underlying
-    # Berny constructor. Try to pass ``trace=`` through; if the installed
-    # pyscf version does not forward kwargs (or rejects ``trace``), fall
-    # back to a run without the structured trace rather than fail the
-    # benchmark.
-    try:
-        if trace is not None:
-            converged, _ = berny_solver.kernel(mf, callback=callback, trace=str(trace))
-        else:
-            converged, _ = berny_solver.kernel(mf, callback=callback)
-    except TypeError:
-        converged, _ = berny_solver.kernel(mf, callback=callback)
+    # Berny constructor, so ``trace=`` is propagated straight through.
+    kwargs = {'trace': str(trace)} if trace is not None else {}
+    converged, _ = berny_solver.kernel(mf, callback=callback, **kwargs)
     return converged, state['n'], state['energies']
 
 
@@ -144,12 +136,15 @@ def run_mopac(name, ref, data_dir, trace=None):
     return berny.converged, berny._n, energies
 
 
-def run_one(name, ref, kind, data_dir, trace_dir=None):
+def run_one(name, ref, kind, data_dir, trace_dir=None, benchmark=None):
     runner = run_pyscf if kind == 'pyscf' else run_mopac
     trace_path = None
     if trace_dir is not None:
         trace_dir.mkdir(parents=True, exist_ok=True)
-        trace_path = trace_dir / f'{kind}-{data_dir.name}-{name}.trace.json'
+        # Use the --benchmark CLI value rather than data_dir.name so the
+        # filename matches the documented schema and is stable across
+        # dataset-directory renames.
+        trace_path = trace_dir / f'{kind}-{benchmark}-{name}.trace.json'
     t0 = time.perf_counter()
     try:
         converged, n, energies = runner(name, ref, data_dir, trace=trace_path)
@@ -269,8 +264,8 @@ def main(argv=None):
         help=(
             'write a per-molecule structured trace JSON into this directory '
             '(file name: <solver>-<benchmark>-<molecule>.trace.json); '
-            'created if missing. Best-effort for pyscf — requires a pyscf '
-            'version whose berny_solver.kernel forwards kwargs to Berny.'
+            'created if missing. For pyscf this requires a version whose '
+            'berny_solver.kernel forwards kwargs to Berny.'
         ),
     )
     args = ap.parse_args(argv)
@@ -295,6 +290,7 @@ def main(argv=None):
                 args.solver,
                 data_dir,
                 trace_dir=args.out_trace_dir,
+                benchmark=args.benchmark,
             )
         )
 
