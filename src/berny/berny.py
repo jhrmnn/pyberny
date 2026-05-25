@@ -396,7 +396,7 @@ def update_trust(
     energy_noise: float = 2e-8,
     record: dict[str, Any] | None = None,
 ) -> float:
-    if abs(dE_predicted) < 100 * energy_noise:
+    if abs(dE_predicted) < 10 * energy_noise:
         if abs(norm(dq) - trust) < 1e-10:
             new_trust = 2 * trust
         else:

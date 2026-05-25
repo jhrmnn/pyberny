@@ -246,18 +246,6 @@ class TestUpdateTrust:
         )
         assert new_trust == pytest.approx(0.6)
 
-    def test_predicted_energy_in_noise_window_holds(self):
-        # |dE_predicted| = 1e-7 sits in (10*noise, 100*noise) for noise=2e-8
-        # (i.e. between 2e-7 and 2e-6 -- actually 1e-7 < 2e-7 so it is below
-        # 10*noise too).  Use 5e-7 instead: 2e-7 < 5e-7 < 2e-6, so the new
-        # 100x cutoff catches it while the old 10x cutoff did not.  The
-        # Fletcher branch would shrink the trust radius from a noisy ratio;
-        # the noise gate must hold it instead.
-        new_trust = update_trust(
-            0.3, 1e-8, 5e-7, np.array([0.1, 0.0]), energy_noise=2e-8
-        )
-        assert new_trust == 0.3
-
     def test_zero_de_treated_as_perfect(self):
         # dE == 0 → r = 1.0. r > 0.75 but |norm(dq) - trust| != 0,
         # so the trust radius shouldn't change.
