@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `berny.Math.FindrootException` renamed to `berny.Math.FindrootError`.
 - Dropped the runtime dependency on `setuptools` (`pkg_resources`).
 - Unknown keyword arguments to `Berny()` now raise `TypeError` instead of being silently absorbed.
+- Mid-run internal-coordinate rebuilds now preserve accumulated Hessian curvature for surviving coordinates instead of restarting entirely from a diagonal guess.
 
 ### Removed
 
