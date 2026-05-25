@@ -127,7 +127,14 @@ def run_mopac(name, ref, data_dir, trace=None):
     # so they still have a chance to converge and be reported. Both are
     # documented non-convergers in reference.json (mopac_pm7_steps=null)
     # so the regression gate ignores them either way.
-    berny = Berny(geom, maxsteps=110, trace=trace)
+    # MOPAC PM7 SCF is converged to ~10^-7 Hartree, an order of magnitude
+    # noisier than the BernyParams default (2e-8 a.u.) which targets DFT
+    # precision. Widen the trust-region noise gate accordingly so the
+    # late-iteration |dE_predicted| ~ a few * 10^-7 are correctly treated
+    # as noise (otherwise Fletcher's ratio dE/dE_predicted collapses the
+    # trust radius and the optimizer locks onto the trust-region sphere
+    # at the minimum; see PR #104 azadirachtin residual).
+    berny = Berny(geom, maxsteps=110, trace=trace, energy_noise=2e-7)
     solver = MopacSolver(charge=ref['charge'], mult=ref['mult'])
     energies = _optimize_recording_energies(berny, solver)
     return berny.converged, berny._n, energies
