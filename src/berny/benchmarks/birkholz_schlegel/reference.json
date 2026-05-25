@@ -19,7 +19,7 @@
     "paper_steps": 43,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 77
+    "pyberny_steps": 83
   },
   "azadirachtin": {
     "atoms": 95,
@@ -140,7 +140,7 @@
     "paper_steps": 31,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": null
+    "pyberny_steps": 87
   },
   "penicillin_v": {
     "atoms": 42,
@@ -184,7 +184,7 @@
     "paper_steps": 35,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 73
+    "pyberny_steps": 43
   },
   "vitamin_c": {
     "atoms": 20,
