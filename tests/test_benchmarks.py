@@ -16,7 +16,7 @@ def test_benchmarks_mapping_has_known_keys():
 
 
 @pytest.mark.parametrize(
-    'name, n_molecules',
+    ('name', 'n_molecules'),
     [('birkholz', 19), ('baker', 30)],
 )
 def test_load_reference_returns_expected_set(name, n_molecules):
