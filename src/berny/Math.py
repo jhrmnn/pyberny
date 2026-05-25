@@ -3,7 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 import numpy as np
 
-__all__ = ['fit_cubic', 'fit_quartic', 'findroot']
+__all__ = ['findroot', 'fit_cubic', 'fit_quartic']
 
 
 def rms(A):
@@ -94,18 +94,16 @@ def fit_quartic(y0, y1, g0, g1):
     D = -((g0 + g1) ** 2) - 2 * g0 * g1 + 6 * (y1 - y0) * (g0 + g1) - 6 * (y1 - y0) ** 2
     if D < 1e-11:
         return None, None
-    else:
-        m = -5 * g0 - g1 - 6 * y0 + 6 * y1
-        p1 = g(y0, y1, g0, g1, 0.5 * (m + np.sqrt(2 * D)))
-        p2 = g(y0, y1, g0, g1, 0.5 * (m - np.sqrt(2 * D)))
-        if p1[0] < 0 and p2[0] < 0:
-            return None, None
-        [minim1, minval1] = quart_min(p1)
-        [minim2, minval2] = quart_min(p2)
-        if minval1 < minval2:
-            return minim1, minval1
-        else:
-            return minim2, minval2
+    m = -5 * g0 - g1 - 6 * y0 + 6 * y1
+    p1 = g(y0, y1, g0, g1, 0.5 * (m + np.sqrt(2 * D)))
+    p2 = g(y0, y1, g0, g1, 0.5 * (m - np.sqrt(2 * D)))
+    if p1[0] < 0 and p2[0] < 0:
+        return None, None
+    [minim1, minval1] = quart_min(p1)
+    [minim2, minval2] = quart_min(p2)
+    if minval1 < minval2:
+        return minim1, minval1
+    return minim2, minval2
 
 
 class FindrootError(Exception):

@@ -18,8 +18,7 @@ from pathlib import Path
 def slugify(name):
     """Lowercase ASCII slug with underscores: ``Mg Porphin`` -> ``mg_porphin``."""
     s = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore').decode()
-    s = re.sub(r'[^A-Za-z0-9]+', '_', s).strip('_').lower()
-    return s
+    return re.sub(r'[^A-Za-z0-9]+', '_', s).strip('_').lower()
 
 
 def parse_si(text):

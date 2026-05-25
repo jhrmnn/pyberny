@@ -36,12 +36,8 @@ def test_berny_param_override():
 def test_berny_unknown_param_rejected():
     # BernyParams has fixed fields; typos no longer silently end up in a
     # params dict that nobody reads.
-    try:
+    with pytest.raises(TypeError, match='gradeintrms'):
         Berny(water(), trust=0.5, gradeintrms=1e-4)
-    except TypeError as e:
-        assert 'gradeintrms' in str(e)
-    else:
-        raise AssertionError('expected TypeError for unknown param')
 
 
 def test_berny_debug_restart_roundtrip():
@@ -216,7 +212,7 @@ class TestLinearSearch:
         # y(x) = (x - 0.5)^2: minimum at 0.5, value 0.
         t, E = linear_search(0.25, 0.25, -1.0, 1.0)
         assert t == pytest.approx(0.5)
-        assert E == pytest.approx(0.0, abs=1e-10)
+        assert pytest.approx(0.0, abs=1e-10) == E
 
     def test_cubic_fallback(self):
         # Quartic fit fails (discriminant just barely negative) for these
@@ -237,7 +233,7 @@ class TestQuadraticStep:
         g = np.array([0.01, 0.0])
         H = np.eye(2)
         w = np.array([1.0, 1.0])
-        dq, dE, on_sphere = quadratic_step(g, H, w, trust=1.0)
+        _dq, dE, on_sphere = quadratic_step(g, H, w, trust=1.0)
         assert on_sphere is False
         # Predicted dE for a quadratic with positive-def H and step pulling
         # downhill is negative.
@@ -249,7 +245,7 @@ class TestQuadraticStep:
         g = np.array([10.0, 0.0])
         H = np.eye(2)
         w = np.array([1.0, 1.0])
-        dq, dE, on_sphere = quadratic_step(g, H, w, trust=0.1)
+        dq, _dE, on_sphere = quadratic_step(g, H, w, trust=0.1)
         assert on_sphere is True
         assert np.linalg.norm(dq) == pytest.approx(0.1, rel=1e-3)
 

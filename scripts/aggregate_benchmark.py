@@ -27,7 +27,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from benchmark import (  # noqa: E402
+from benchmark import (
     BENCHMARKS,
     REF_STEPS_KEY,
     format_errors,

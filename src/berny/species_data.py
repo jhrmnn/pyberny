@@ -48,8 +48,7 @@ def get_property(idx, name):
 def _get_species_data():
     csv_text = files(__package__).joinpath('species-data.csv').read_text()
     reader = csv.DictReader(csv_text.splitlines(), quoting=csv.QUOTE_NONNUMERIC)
-    species_data = {row['symbol']: row for row in reader}
-    return species_data
+    return {row['symbol']: row for row in reader}
 
 
 species_data = _get_species_data()

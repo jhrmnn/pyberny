@@ -156,7 +156,7 @@ class Geometry:
         Returns :data:`None` when geometry is not a crystal.
         """
         if self.lattice is None:
-            return
+            return None
         rec_lattice = 2 * pi * inv(self.lattice.T)
         layer_sep = np.array(
             [

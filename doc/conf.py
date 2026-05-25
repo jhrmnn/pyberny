@@ -89,6 +89,7 @@ napoleon_use_ivar = True
 def skip_namedtuples(app, what, name, obj, skip, options):
     if hasattr(obj, '_source'):
         return True
+    return None
 
 
 def _callout_role(css_class):

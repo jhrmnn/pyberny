@@ -101,4 +101,4 @@ def iter_molecules(benchmark, names=None):
         yield name, geomlib.loads(xyz_text, 'xyz'), reference[name]
 
 
-__all__ = ['BENCHMARKS', 'data_dir', 'load_reference', 'iter_molecules']
+__all__ = ['BENCHMARKS', 'data_dir', 'iter_molecules', 'load_reference']

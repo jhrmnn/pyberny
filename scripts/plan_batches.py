@@ -49,7 +49,7 @@ from pathlib import Path
 # ``_measure_pyscf`` rely on the same path for their late imports.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 
-from berny.benchmarks import data_dir as _bench_data_dir  # noqa: E402
+from berny.benchmarks import data_dir as _bench_data_dir
 
 DATA = _bench_data_dir('birkholz')
 
