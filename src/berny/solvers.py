@@ -7,7 +7,7 @@ import shutil
 import subprocess
 import tempfile
 from collections.abc import Callable, Generator
-from typing import Any
+from typing import Any, Optional
 
 import numpy as np
 from numpy.typing import NDArray
@@ -18,13 +18,16 @@ __all__ = ['MopacSolver']
 
 FloatArray = NDArray[np.floating[Any]]
 
+# NB: ``Optional[X]`` is used instead of ``X | None`` because these aliases
+# are evaluated at import time, and Sphinx's autodoc mocks numpy (see
+# ``doc/conf.py``), making ``FloatArray`` a Mock whose ``__or__`` raises.
 #: Geometry sent to a solver: per-atom ``(symbol, xyz)`` pairs and optional
 #: lattice vectors (``None`` for a molecule).
-SolverInput = tuple[list[tuple[str, FloatArray]], FloatArray | None]
+SolverInput = tuple[list[tuple[str, FloatArray]], Optional[FloatArray]]  # noqa: UP045
 #: Energy and gradients yielded by a solver (gradients in atomic units).
 SolverOutput = tuple[float, FloatArray]
 #: Generator type of a solver — yields ``None`` once before the first send.
-Solver = Generator[SolverOutput | None, SolverInput, None]
+Solver = Generator[Optional[SolverOutput], SolverInput, None]  # noqa: UP045
 
 
 _MOPAC_MULT_KEYWORDS = {
