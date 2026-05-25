@@ -31,7 +31,7 @@ from berny import Berny, geomlib
 from berny.coords import Angle, Bond, Dihedral, InternalCoords, angstrom
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DATA = REPO_ROOT / 'tests' / 'data' / 'birkholz_schlegel'
+DATA = REPO_ROOT / 'src' / 'berny' / 'benchmarks' / 'birkholz_schlegel'
 OUT_DIR = REPO_ROOT / 'experiments' / 'microvariations' / 'internals_diag'
 
 CASES = [

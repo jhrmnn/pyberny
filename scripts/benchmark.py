@@ -7,9 +7,10 @@ Usage::
                          [--molecules NAME ...] [--out PATH]
     scripts/benchmark.py --solver mopac
 
-``--benchmark`` selects the molecule set under ``tests/data/`` -- either
-``birkholz`` (the Birkholz-Schlegel 2016 19-molecule set, the default) or
-``baker`` (the 30-molecule Baker set from Shajan et al., chemrxiv 2023).
+``--benchmark`` selects which molecule set to run -- either ``birkholz``
+(the Birkholz-Schlegel 2016 19-molecule set, the default) or ``baker``
+(the 30-molecule Baker set from Shajan et al., chemrxiv 2023). Both sets
+ship with the package under :mod:`berny.benchmarks`.
 PySCF mode drives the optimization through ``pyscf.geomopt.berny_solver``
 and requires ``pip install pyberny[benchmark]``; MOPAC mode uses
 :func:`berny.solvers.MopacSolver` (charge and multiplicity from
@@ -64,12 +65,8 @@ import time  # noqa: E402
 from pathlib import Path  # noqa: E402
 
 from berny import Berny, geomlib  # noqa: E402
+from berny.benchmarks import BENCHMARKS  # noqa: E402
 
-_DATA_ROOT = Path(__file__).resolve().parents[1] / 'tests' / 'data'
-BENCHMARKS = {
-    'birkholz': _DATA_ROOT / 'birkholz_schlegel',
-    'baker': _DATA_ROOT / 'baker_shajan_2023',
-}
 # Default exposed for backward compatibility: external callers (and
 # aggregate_benchmark.py) used to import ``DATA`` directly.
 DATA = BENCHMARKS['birkholz']
