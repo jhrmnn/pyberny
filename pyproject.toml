@@ -76,7 +76,23 @@ extend-exclude = ["experiments"]
 target-version = "py39"
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "C90", "N", "B", "C4", "I"]
+select = [
+    "E",
+    "F",
+    "W",
+    "C90",
+    "N",
+    "B",
+    "C4",
+    "I",
+    "UP",
+    "SIM",
+    "PIE",
+    "RET",
+    "PT",
+    "RUF",
+    "NPY",
+]
 ignore = [
     "E501",  # line length handled by black
     "E741",  # ambiguous variable name
