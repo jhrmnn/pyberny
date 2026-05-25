@@ -11,7 +11,7 @@ from argparse import ArgumentParser
 from collections.abc import Iterator
 from contextlib import contextmanager
 from socket import AF_INET, SOCK_STREAM, socket
-from typing import IO, Optional
+from typing import IO
 
 from berny import Berny, geomlib
 
@@ -19,7 +19,7 @@ __all__ = ()
 
 
 @contextmanager
-def berny_unpickled(berny: Optional[Berny] = None) -> Iterator[Berny]:
+def berny_unpickled(berny: Berny | None = None) -> Iterator[Berny]:
     picklefile = 'berny.pickle'
     if not berny:
         with open(picklefile, 'rb') as f:
@@ -32,7 +32,7 @@ def berny_unpickled(berny: Optional[Berny] = None) -> Iterator[Berny]:
         pickle.dump(berny, f)
 
 
-def handler(berny: Berny, f: IO[str]) -> Optional[geomlib.Geometry]:
+def handler(berny: Berny, f: IO[str]) -> geomlib.Geometry | None:
     energy = float(next(f))
     gradients = [[float(x) for x in l.split()] for l in f if l.strip()]
     import numpy as np

@@ -2,7 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from collections.abc import Callable
-from typing import Any, Optional
+from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
@@ -12,7 +12,7 @@ __all__ = ['findroot', 'fit_cubic', 'fit_quartic']
 FloatArray = NDArray[np.floating[Any]]
 
 
-def rms(A: FloatArray) -> Optional[float]:
+def rms(A: FloatArray) -> float | None:
     if A.size == 0:
         return None
     return float(np.sqrt(np.sum(A**2) / A.size))
@@ -48,7 +48,7 @@ def cross(a: FloatArray, b: FloatArray) -> FloatArray:
 
 def fit_cubic(
     y0: float, y1: float, g0: float, g1: float
-) -> tuple[Optional[float], Optional[float]]:
+) -> tuple[float | None, float | None]:
     """Fit cubic polynomial to function values and derivatives at x = 0, 1.
 
     Returns position and function value of minimum if fit succeeds. Fit does
@@ -76,7 +76,7 @@ def fit_cubic(
 
 def fit_quartic(
     y0: float, y1: float, g0: float, g1: float
-) -> tuple[Optional[float], Optional[float]]:
+) -> tuple[float | None, float | None]:
     """Fit constrained quartic polynomial to function values and erivatives at x = 0,1.
 
     Returns position and function value of minimum or None if fit fails or has

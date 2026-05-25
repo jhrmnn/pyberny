@@ -35,7 +35,7 @@ packed environments as well as ordinary on-disk installs.
 import json
 from collections.abc import Iterable, Iterator
 from importlib.resources import files
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     # ``importlib.resources.abc.Traversable`` is the canonical home as of
@@ -95,7 +95,7 @@ def load_reference(benchmark: str) -> dict[str, Any]:
 
 
 def iter_molecules(
-    benchmark: str, names: Optional[Iterable[str]] = None
+    benchmark: str, names: Iterable[str] | None = None
 ) -> Iterator[tuple[str, 'Geometry', Any]]:
     """Yield ``(name, Geometry, ref)`` triples for ``benchmark``.
 

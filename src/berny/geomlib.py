@@ -7,15 +7,20 @@ import os
 from collections.abc import Iterable, Iterator
 from io import StringIO
 from itertools import chain, groupby, product, repeat
-from typing import Any
+from typing import IO, Any
 
 import numpy as np
 from numpy import pi
 from numpy.linalg import inv, norm
+from numpy.typing import ArrayLike, NDArray
 
 from .species_data import get_property
 
 __all__ = ['Geometry', 'loads', 'readfile']
+
+FloatArray = NDArray[np.floating[Any]]
+IntArray = NDArray[np.integer[Any]]
+BoolArray = NDArray[np.bool_]
 
 
 class Geometry:
@@ -35,18 +40,20 @@ class Geometry:
     def __init__(
         self,
         species: list[str],
-        coords: Any,
-        lattice: Any = None,
+        coords: ArrayLike,
+        lattice: ArrayLike | None = None,
     ) -> None:
         self.species = species
-        self.coords = np.array(coords, dtype=float)
-        self.lattice = np.array(lattice, dtype=float) if lattice is not None else None
+        self.coords: FloatArray = np.array(coords, dtype=float)
+        self.lattice: FloatArray | None = (
+            np.array(lattice, dtype=float) if lattice is not None else None
+        )
 
     @classmethod
     def from_atoms(
         cls,
-        atoms: Iterable[tuple[str, Any]],
-        lattice: Any = None,
+        atoms: Iterable[tuple[str, ArrayLike]],
+        lattice: ArrayLike | None = None,
         unit: float = 1.0,
     ) -> Geometry:
         """Alternative constructor.
@@ -67,7 +74,7 @@ class Geometry:
             s += ' in a lattice'
         return f'<{self.__class__.__name__} {s}>'
 
-    def __iter__(self) -> Iterator[tuple[str, np.ndarray]]:
+    def __iter__(self) -> Iterator[tuple[str, FloatArray]]:
         yield from zip(self.species, self.coords)
 
     def __len__(self) -> int:
@@ -89,7 +96,7 @@ class Geometry:
 
     dumps = __format__
 
-    def dump(self, f: Any, fmt: str) -> None:
+    def dump(self, f: IO[str], fmt: str) -> None:
         """Save the geometry into a file.
 
         :param file f: file object
@@ -147,7 +154,7 @@ class Geometry:
         with open(filename, 'w') as f:
             self.dump(f, fmt)
 
-    def super_circum(self, radius):
+    def super_circum(self, radius: float) -> IntArray | None:
         """
         Supercell dimensions such that the supercell circumsribes a sphere.
 
@@ -166,7 +173,11 @@ class Geometry:
         )
         return np.array(np.ceil(radius / layer_sep + 0.5), dtype=int)
 
-    def supercell(self, ranges=((-1, 1), (-1, 1), (-1, 1)), cutoff=None):
+    def supercell(
+        self,
+        ranges: Iterable[tuple[int, int]] = ((-1, 1), (-1, 1), (-1, 1)),
+        cutoff: float | None = None,
+    ) -> Geometry:
         """
         Create a crystal supercell.
 
@@ -180,7 +191,10 @@ class Geometry:
         if self.lattice is None:
             return self.copy()
         if cutoff:
-            ranges = [(-r, r) for r in self.super_circum(cutoff)]
+            circum = self.super_circum(cutoff)
+            assert circum is not None
+            ranges = [(-r, r) for r in circum]
+        ranges = list(ranges)
         latt_vectors = np.array(
             [(0, 0, 0)]
             + [
@@ -194,7 +208,7 @@ class Geometry:
         lattice = self.lattice * np.array([b - a for a, b in ranges])[:, None]
         return Geometry(species, coords, lattice)
 
-    def dist_diff(self, other=None):
+    def dist_diff(self, other: Geometry | None = None) -> tuple[FloatArray, FloatArray]:
         r"""
         Calculate distances and vectors between atoms.
 
@@ -213,11 +227,11 @@ class Geometry:
         dist[np.diag_indices(len(self))] = np.inf
         return dist, diff
 
-    def dist(self, other=None):
+    def dist(self, other: Geometry | None = None) -> FloatArray:
         """Alias for the first element of :meth:`dist_diff`."""
         return self.dist_diff(other)[0]
 
-    def bondmatrix(self, scale=1.3):
+    def bondmatrix(self, scale: float = 1.3) -> BoolArray:
         r"""
         Calculate the covalent connectedness matrix.
 
@@ -228,9 +242,10 @@ class Geometry:
         """
         dist = self.dist(self)
         radii = np.array([get_property(sp, 'covalent_radius') for sp in self.species])
-        return dist < scale * (radii[None, :] + radii[:, None])
+        result: BoolArray = dist < scale * (radii[None, :] + radii[:, None])
+        return result
 
-    def rho(self):
+    def rho(self) -> FloatArray:
         r"""
         Calculate a measure of covalentness.
 
@@ -240,21 +255,23 @@ class Geometry:
         geom = self.supercell()
         dist = geom.dist(geom)
         radii = np.array([get_property(sp, 'covalent_radius') for sp in geom.species])
-        return np.exp(-dist / (radii[None, :] + radii[:, None]) + 1)
+        result: FloatArray = np.exp(-dist / (radii[None, :] + radii[:, None]) + 1)
+        return result
 
     @property
-    def masses(self):
+    def masses(self) -> FloatArray:
         """Numpy array of atomic masses."""
         return np.array([get_property(sp, 'mass') for sp in self.species])
 
     @property
-    def cms(self):
+    def cms(self) -> FloatArray:
         r"""Calculate the center of mass, :math:`\mathbf R_\text{CMS}`."""
         masses = self.masses
-        return np.sum(masses[:, None] * self.coords, 0) / masses.sum()
+        result: FloatArray = np.sum(masses[:, None] * self.coords, 0) / masses.sum()
+        return result
 
     @property
-    def inertia(self):
+    def inertia(self) -> FloatArray:
         r"""Calculate the moment of inertia.
 
         .. math::
@@ -266,10 +283,11 @@ class Geometry:
         coords_w = np.sqrt(self.masses)[:, None] * (self.coords - self.cms)
         A = np.array([np.diag(np.full(3, r)) for r in np.sum(coords_w**2, 1)])
         B = coords_w[:, :, None] * coords_w[:, None, :]
-        return np.sum(A - B, 0)
+        result: FloatArray = np.sum(A - B, 0)
+        return result
 
 
-def load(fp: Any, fmt: str) -> Geometry:
+def load(fp: IO[str], fmt: str) -> Geometry:
     """Read a geometry from a file object.
 
     Args:
@@ -279,8 +297,8 @@ def load(fp: Any, fmt: str) -> Geometry:
     if fmt == 'xyz':
         n = int(fp.readline())
         fp.readline()
-        species = []
-        coords = []
+        species: list[str] = []
+        coords: list[list[float]] = []
         for _ in range(n):
             l = fp.readline().split()
             species.append(l[0])
@@ -289,21 +307,21 @@ def load(fp: Any, fmt: str) -> Geometry:
     if fmt == 'aims':
         species = []
         coords = []
-        lattice = []
+        lattice: list[list[float]] = []
         while True:
-            l = fp.readline()
-            if l == '':
+            line = fp.readline()
+            if line == '':
                 break
-            l = l.strip()
-            if not l or l.startswith('#'):
+            line = line.strip()
+            if not line or line.startswith('#'):
                 continue
-            l = l.split()
-            what = l[0]
+            tokens = line.split()
+            what = tokens[0]
             if what == 'atom':
-                species.append(l[4])
-                coords.append([float(x) for x in l[1:4]])
+                species.append(tokens[4])
+                coords.append([float(x) for x in tokens[1:4]])
             elif what == 'lattice_vector':
-                lattice.append([float(x) for x in l[1:4]])
+                lattice.append([float(x) for x in tokens[1:4]])
         if lattice:
             assert len(lattice) == 3
             return Geometry(species, coords, lattice)

@@ -18,6 +18,7 @@ run() {
 
 run ruff   ruff check .
 run black  black . --check
+run mypy   python -m mypy
 run pytest python -m pytest -q
 run sphinx sphinx-build -W -E doc doc/_check
 

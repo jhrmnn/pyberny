@@ -104,6 +104,7 @@ select = [
     "PT",
     "RUF",
     "NPY",
+    "ANN",
 ]
 ignore = [
     "E501",  # line length handled by black
@@ -119,6 +120,7 @@ ignore = [
     "RUF003",  # ambiguous unicode in comments (intentional math typography)
     "SIM108",  # use ternary; hurts readability in numeric branches
     "PT018",  # composite assertions are often clearer as one line
+    "ANN401",  # Any in annotations (kept consistent with mypy not disallowing Any)
 ]
 
 [tool.ruff.lint.mccabe]
@@ -138,6 +140,14 @@ combine-as-imports = true
 
 [tool.ruff.lint.isort.sections]
 typing = ["typing", "typing_extensions"]
+
+[tool.ruff.lint.per-file-ignores]
+# ANN (flake8-annotations) is only enforced on the importable library;
+# tests, scripts, and the docs config aren't subject to mypy --strict and
+# are kept annotation-light.
+"tests/**" = ["ANN"]
+"scripts/**" = ["ANN"]
+"doc/**" = ["ANN"]
 
 [tool.coverage.run]
 branch = true

@@ -3,15 +3,17 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from __future__ import annotations
 
+from collections.abc import Generator
 from contextlib import ExitStack
-from typing import Any
 
+from .berny import Berny
 from .geomlib import Geometry
+from .solvers import SolverInput, SolverOutput
 
 
 def optimize(
-    optimizer: Any,
-    solver: Any,
+    optimizer: Berny,
+    solver: Generator[SolverOutput, SolverInput, None],
     trajectory: str | None = None,
 ) -> Geometry:
     """Optimize a geometry with respect to a solver.
@@ -45,4 +47,5 @@ def optimize(
             if traj_fp is not None:
                 geom.dump(traj_fp, 'xyz')
             optimizer.send((energy, gradients))
-    return geom
+    result: Geometry = geom
+    return result

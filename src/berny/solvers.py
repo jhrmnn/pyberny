@@ -7,7 +7,7 @@ import shutil
 import subprocess
 import tempfile
 from collections.abc import Callable, Generator
-from typing import Any, Optional
+from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
@@ -20,11 +20,11 @@ FloatArray = NDArray[np.floating[Any]]
 
 #: Geometry sent to a solver: per-atom ``(symbol, xyz)`` pairs and optional
 #: lattice vectors (``None`` for a molecule).
-SolverInput = tuple[list[tuple[str, FloatArray]], Optional[FloatArray]]
+SolverInput = tuple[list[tuple[str, FloatArray]], FloatArray | None]
 #: Energy and gradients yielded by a solver (gradients in atomic units).
 SolverOutput = tuple[float, FloatArray]
 #: Generator type of a solver — yields ``None`` once before the first send.
-Solver = Generator[Optional[SolverOutput], SolverInput, None]
+Solver = Generator[SolverOutput | None, SolverInput, None]
 
 
 _MOPAC_MULT_KEYWORDS = {
@@ -55,7 +55,7 @@ def _mopac_keyword_line(method: str, charge: int, mult: int) -> str:
 def MopacSolver(
     cmd: str = 'mopac',
     method: str = 'PM7',
-    workdir: Optional[str] = None,
+    workdir: str | None = None,
     *,
     charge: int = 0,
     mult: int = 1,
@@ -108,9 +108,7 @@ def MopacSolver(
             shutil.rmtree(tmpdir)
 
 
-def GenericSolver(
-    f: Callable[..., float], *args: Any, **kwargs: Any
-) -> Solver:
+def GenericSolver(f: Callable[..., float], *args: Any, **kwargs: Any) -> Solver:
     delta: float = kwargs.pop('delta', 1e-3)
     atoms, lattice = yield None
     while True:
