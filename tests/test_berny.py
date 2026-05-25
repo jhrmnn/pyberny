@@ -3,12 +3,14 @@ import pytest
 
 from berny import Berny, BernyParams, Geometry
 from berny.berny import (
+    _carry_over_hessian,
     is_converged,
     linear_search,
     quadratic_step,
     update_hessian,
     update_trust,
 )
+from berny.coords import Angle, Bond
 
 
 def water():
@@ -115,18 +117,48 @@ def test_berny_rebuilds_internal_coords_when_co2_straightens():
     # past 175° and the trust radius collapses (see #23). With C2, dummies
     # are introduced on the fly and convergence proceeds normally.
     geom = _co2_geom(160)
-    berny = Berny(geom, maxsteps=60)
+    berny = Berny(geom, maxsteps=60, debug=True)
     assert berny._state.coords.dummy_atoms.shape == (0, 3)
     assert berny._state.coords._linear_set == set()
 
     rebuilt = False
+    rebuild_snapshot = None
     for step_geom in berny:
         e, g = _co2_harmonic(step_geom)
-        berny.send((e, g))
+        state = berny._state
+        will_rebuild = not state.first and state.coords.needs_rebuild(state.geom)
+        if will_rebuild:
+            rebuild_snapshot = {
+                'old_coords': tuple(state.coords),
+                'old_H': state.H.copy(),
+            }
+        debug_state = berny.send((e, g))
+        assert isinstance(debug_state, dict)
+        if will_rebuild and rebuild_snapshot is not None:
+            rebuild_snapshot['new_coords'] = tuple(berny._state.coords)
+            rebuild_snapshot['new_H'] = berny._state.H.copy()
         if not rebuilt and berny._state.coords.dummy_atoms.shape[0] > 0:
             rebuilt = True
     assert berny.converged, f'did not converge in {berny._n} steps'
     assert rebuilt, 'expected an adaptive rebuild as CO2 straightened past 175°'
+    assert rebuild_snapshot is not None
+    old_bond_diag = {
+        coord: rebuild_snapshot['old_H'][i, i]
+        for i, coord in enumerate(rebuild_snapshot['old_coords'])
+        if isinstance(coord, Bond)
+    }
+    assert len(old_bond_diag) == 2
+    new_bond_idxs = [
+        i
+        for i, coord in enumerate(rebuild_snapshot['new_coords'])
+        if isinstance(coord, Bond) and coord in old_bond_diag
+    ]
+    assert len(new_bond_idxs) == 2
+    for idx in new_bond_idxs:
+        coord = rebuild_snapshot['new_coords'][idx]
+        assert rebuild_snapshot['new_H'][idx, idx] == pytest.approx(
+            old_bond_diag[coord]
+        )
     # Final configuration: linear and at the equilibrium bond length.
     final = berny._state.geom.coords
     d1 = np.linalg.norm(final[0] - final[1])
@@ -159,6 +191,36 @@ class TestUpdateHessian:
         dg = rng.standard_normal(4) + dq  # ensure dq.dg != 0
         new_H = update_hessian(H, dq, dg)
         np.testing.assert_allclose(new_H, new_H.T, atol=1e-9)
+
+
+class TestCarryOverHessian:
+    def test_copies_survivor_block_and_keeps_new_coord_guess(self):
+        old_coords = [Bond(0, 1), Angle(0, 1, 2), Bond(1, 2)]
+        old_H = np.array(
+            [
+                [11.0, 1.0, 2.0],
+                [1.0, 22.0, 3.5],
+                [2.0, 3.5, 33.0],
+            ]
+        )
+        new_coords = [Angle(0, 1, 2), Bond(1, 2), Angle(0, 2, 3)]
+        guess_H = np.diag([100.0, 200.0, 300.0])
+        H = _carry_over_hessian(old_coords, old_H, new_coords, guess_H)
+        assert H[0, 0] == pytest.approx(old_H[1, 1])
+        assert H[1, 1] == pytest.approx(old_H[2, 2])
+        assert H[0, 1] == pytest.approx(old_H[1, 2])
+        assert H[1, 0] == pytest.approx(old_H[2, 1])
+        assert H[2, 2] == pytest.approx(guess_H[2, 2])
+        assert H[2, 0] == pytest.approx(0.0)
+        assert H[2, 1] == pytest.approx(0.0)
+
+    def test_empty_overlap_returns_guess_unchanged(self):
+        old_coords = [Bond(0, 1)]
+        old_H = np.array([[7.0]])
+        new_coords = [Angle(0, 1, 2)]
+        guess_H = np.array([[9.0]])
+        H = _carry_over_hessian(old_coords, old_H, new_coords, guess_H)
+        np.testing.assert_array_equal(H, guess_H)
 
 
 class TestUpdateTrust:

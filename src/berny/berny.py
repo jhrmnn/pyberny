@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 import logging
 import os
-from collections.abc import Generator
+from collections.abc import Generator, Iterable
 from dataclasses import dataclass, fields
 from pathlib import Path
 from typing import Any, NamedTuple
@@ -202,18 +202,22 @@ class Berny(Generator):  # type: ignore[type-arg]
         # the linear-bend threshold (175° / 170° hysteresis) since the coord
         # set was last built, rebuild now — *before* computing B and the
         # current q — so that this iteration runs entirely in the new
-        # q-space. The BFGS history is dropped because the Hessian was
-        # accumulated in a different (and possibly differently-sized)
-        # coordinate system; ``first=True`` short-circuits the next
-        # iteration's update_hessian/linear_search/update_trust calls and
-        # restarts them from a guess Hessian. We skip the check on the
-        # first iteration since coords were just built from this geometry.
+        # q-space. We carry over the old Hessian block for coordinates that
+        # survive the rebuild (same coord type + atom indices) and keep the
+        # diagonal guess for genuinely new coordinates. ``first=True`` still
+        # short-circuits the next iteration's
+        # update_hessian/linear_search/update_trust calls, and the q-space
+        # history (best/previous/predicted/interpolated) is dropped because
+        # those points live in the old coordinate space. We skip the check on
+        # the first iteration since coords were just built from this geometry.
         coord_rebuild = False
         if not s.first and s.coords.needs_rebuild(s.geom):
             log('Linear-bend topology changed; rebuilding internal coordinates')
+            old_coords, old_H = s.coords, s.H
             s.coords, s.H, s.weights, s.future = self._build_coord_state(
                 s.geom, s.params
             )
+            s.H = _carry_over_hessian(old_coords, old_H, s.coords, s.H)
             s.first = True
             s.interpolated = None
             s.predicted = None
@@ -356,6 +360,29 @@ def update_hessian(
             'max_change': float(abs(dH).max()),
         }
     result: FloatArray = H + dH
+    return result
+
+
+def _carry_over_hessian(
+    old_coords: Iterable[object],
+    old_H: FloatArray,
+    new_coords: Iterable[object],
+    guess_H: FloatArray,
+) -> FloatArray:
+    """Seed a rebuilt Hessian from the previous one."""
+    old_pos = {coord: i for i, coord in enumerate(old_coords)}
+    pairs = [
+        (new_i, old_pos[coord])
+        for new_i, coord in enumerate(new_coords)
+        if coord in old_pos
+    ]
+    H = guess_H.copy()
+    if pairs:
+        new_idx, old_idx = zip(*pairs)
+        new_idx_arr = np.array(new_idx, dtype=np.int64)
+        old_idx_arr = np.array(old_idx, dtype=np.int64)
+        H[np.ix_(new_idx_arr, new_idx_arr)] = old_H[np.ix_(old_idx_arr, old_idx_arr)]
+    result: FloatArray = H
     return result
 
 

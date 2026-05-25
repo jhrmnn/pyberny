@@ -145,7 +145,7 @@
   "dimethylpentane": {
     "atoms": 23,
     "charge": 0,
-    "mopac_pm7_steps": 10,
+    "mopac_pm7_steps": 8,
     "mult": 1,
     "name": "Dimethylpentane",
     "paper_steps": 6,
