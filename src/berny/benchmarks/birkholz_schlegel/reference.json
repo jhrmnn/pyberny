@@ -156,7 +156,7 @@
   "raffinose": {
     "atoms": 66,
     "charge": 0,
-    "mopac_pm7_steps": 99,
+    "mopac_pm7_steps": null,
     "mult": 1,
     "name": "Raffinose",
     "paper_steps": 53,
