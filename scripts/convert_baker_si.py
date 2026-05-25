@@ -2,10 +2,10 @@
 """Convert the Shajan-2023 SI ZIP into per-molecule .xyz files + reference.json.
 
 Run once by a maintainer; the resulting files in
-``tests/data/baker_shajan_2023/`` are committed and the SI ZIP itself is not.
-The SI is the electronic supplementary material of Shajan, Manathunga, Goetz
-& Merz, *Geometry Optimization: A Comparison of Different Open-Source Geometry
-Optimizers*, chemrxiv 2023, doi:10.26434/chemrxiv-2023-7r7qn-v4.
+``src/berny/benchmarks/baker_shajan_2023/`` are committed and the SI ZIP
+itself is not. The SI is the electronic supplementary material of Shajan,
+Manathunga, Goetz & Merz, *Geometry Optimization: A Comparison of Different
+Open-Source Geometry Optimizers*, chemrxiv 2023, doi:10.26434/chemrxiv-2023-7r7qn-v4.
 """
 
 import argparse
@@ -127,10 +127,11 @@ def main(argv=None):
         '--out',
         type=Path,
         default=Path(__file__).resolve().parents[1]
-        / 'tests'
-        / 'data'
+        / 'src'
+        / 'berny'
+        / 'benchmarks'
         / 'baker_shajan_2023',
-        help='output directory (default: tests/data/baker_shajan_2023)',
+        help='output directory (default: src/berny/benchmarks/baker_shajan_2023)',
     )
     args = ap.parse_args(argv)
 

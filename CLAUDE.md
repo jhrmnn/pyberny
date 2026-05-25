@@ -1,5 +1,12 @@
 # Project conventions
 
+## `experiments/`
+
+Ignore the `experiments/` directory unless the task explicitly asks you to
+work in it. It is research scratch space, force-excluded from `black` and
+`ruff`, and not covered by tests or docs. Do not read, lint, reformat,
+refactor, or take cues from it when working on anything else.
+
 ## Pre-push checks
 
 Before `git push`, run `scripts/check.sh`. It runs the same lint, test, and
@@ -21,7 +28,7 @@ Do not chase inconsequential, non-deterministic CI slips. A sub-percent
 when the diff adds no measured `berny` source and `codecov/patch` is clean — is
 noise, not a regression. Likewise, MOPAC PM7 benchmark step counts are not
 bitwise-reproducible across runners (see
-`tests/data/birkholz_schlegel/SOURCE.md`), so an occasional `birkholz mopac`
+`src/berny/benchmarks/birkholz_schlegel/SOURCE.md`), so an occasional `birkholz mopac`
 batch drifting past tolerance is flaky. Report these and move on; do not add
 coverage-gate config, loosen tolerances, or rewrite reference values to make
 them green.

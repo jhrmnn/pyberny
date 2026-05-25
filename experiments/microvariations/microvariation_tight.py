@@ -25,7 +25,7 @@ from berny import Berny, geomlib
 from berny.solvers import MopacSolver
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DATA = REPO_ROOT / 'tests' / 'data' / 'birkholz_schlegel'
+DATA = REPO_ROOT / 'src' / 'berny' / 'benchmarks' / 'birkholz_schlegel'
 
 CELLS = [
     ('vitamin_c', 0.001),
