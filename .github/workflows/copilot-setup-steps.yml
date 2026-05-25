@@ -50,8 +50,7 @@ jobs:
       - name: Install project with test and doc extras
         run: pip install -e ".[test,doc]"
 
-      # Lint tools used by .github/workflows/lint.yaml so `flake8`, `black`,
-      # `isort`, `pydocstyle` and `mypy` are available without a network
-      # round-trip.
+      # Lint tools used by .github/workflows/lint.yaml so `ruff`, `black`,
+      # and `mypy` are available without a network round-trip.
       - name: Install lint tools
-        run: pip install flake8 flake8-bugbear flake8-comprehensions pep8-naming black isort pydocstyle mypy
+        run: pip install ruff black mypy

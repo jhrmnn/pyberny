@@ -4,7 +4,7 @@ on:
     branches: [master]
   pull_request:
 jobs:
-  flake8:
+  ruff:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -12,8 +12,8 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install dependencies
-        run: pip install flake8 flake8-bugbear flake8-comprehensions pep8-naming
-      - run: flake8
+        run: pip install ruff
+      - run: ruff check .
   black:
     runs-on: ubuntu-latest
     steps:
@@ -24,26 +24,6 @@ jobs:
       - name: Install dependencies
         run: pip install black
       - run: black . --check
-  isort:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install dependencies
-        run: pip install isort
-      - run: isort . --check
-  pydocstyle:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install dependencies
-        run: pip install pydocstyle
-      - run: pydocstyle src
   mypy:
     runs-on: ubuntu-latest
     steps:

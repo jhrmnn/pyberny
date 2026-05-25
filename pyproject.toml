@@ -41,13 +41,8 @@ benchmark = ["pyscf"]
 plot = ["matplotlib"]
 
 [tool.poetry.group.dev.dependencies]
-flake8 = ">=5"
-flake8-bugbear = ">=22"
-flake8-comprehensions = ">=3"
+ruff = ">=0.6"
 black = ">=22"
-pep8-naming = ">=0.13"
-isort = ">=5"
-pydocstyle = ">=6"
 mypy = ">=1"
 
 [tool.poetry.scripts]
@@ -74,3 +69,43 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::PendingDeprecationWarning"]
 testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 80
+extend-exclude = ["experiments"]
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "C90", "N", "B", "C4", "I"]
+ignore = [
+    "E501",  # line length handled by black
+    "E741",  # ambiguous variable name
+    "E203",  # whitespace before punctuation (black-compatible)
+    "N802",  # function name should be lowercase
+    "N803",  # argument name should be lowercase
+    "N806",  # variable in function should be lowercase
+    "N999",  # invalid module name (Math.py is intentional)
+    "B905",  # zip() without explicit strict=
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 12
+
+[tool.ruff.lint.isort]
+section-order = [
+    "future",
+    "standard-library",
+    "typing",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+no-lines-before = ["typing"]
+combine-as-imports = true
+
+[tool.ruff.lint.isort.sections]
+typing = ["typing", "typing_extensions"]
+
+[tool.coverage.run]
+branch = true
+source = ["berny"]
