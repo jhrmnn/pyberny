@@ -126,7 +126,10 @@ def run_mopac(name, ref, data_dir, trace=None):
     # pyberny's default 100-step ceiling under MOPAC PM7 on CI; raise it
     # so they still have a chance to converge and be reported. Both are
     # documented non-convergers in reference.json (mopac_pm7_steps=null)
-    # so the regression gate ignores them either way.
+    # so the regression gate ignores them either way. zn_edta also needs
+    # ~119 steps to converge once the generalised linear-bend trigger
+    # (PR #104) rebuilds around the Zn centre several times; keep the
+    # ceiling above that.
     # MOPAC PM7 SCF is converged to ~10^-7 Hartree, an order of magnitude
     # noisier than the BernyParams default (2e-8 a.u.) which targets DFT
     # precision. Widen the trust-region noise gate accordingly so the
@@ -134,7 +137,7 @@ def run_mopac(name, ref, data_dir, trace=None):
     # as noise (otherwise Fletcher's ratio dE/dE_predicted collapses the
     # trust radius and the optimizer locks onto the trust-region sphere
     # at the minimum; see PR #104 azadirachtin residual).
-    berny = Berny(geom, maxsteps=110, trace=trace, energy_noise=2e-7)
+    berny = Berny(geom, maxsteps=130, trace=trace, energy_noise=2e-7)
     solver = MopacSolver(charge=ref['charge'], mult=ref['mult'])
     energies = _optimize_recording_energies(berny, solver)
     return berny.converged, berny._n, energies

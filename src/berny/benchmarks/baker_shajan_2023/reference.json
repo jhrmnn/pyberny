@@ -2,7 +2,7 @@
   "acanil01": {
     "atoms": 19,
     "charge": 0,
-    "mopac_pm7_steps": 44,
+    "mopac_pm7_steps": 40,
     "mult": 1,
     "name": "ACANIL01",
     "paper_steps": 7,
@@ -244,7 +244,7 @@
   "mesityl_oxide": {
     "atoms": 17,
     "charge": 0,
-    "mopac_pm7_steps": 8,
+    "mopac_pm7_steps": 12,
     "mult": 1,
     "name": "Mesityl oxide",
     "paper_steps": 7,

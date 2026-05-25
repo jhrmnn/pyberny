@@ -24,7 +24,7 @@
   "azadirachtin": {
     "atoms": 95,
     "charge": 0,
-    "mopac_pm7_steps": 60,
+    "mopac_pm7_steps": 66,
     "mult": 1,
     "name": "Azadirachtin",
     "paper_steps": 77,
@@ -90,7 +90,7 @@
   "estradiol": {
     "atoms": 44,
     "charge": 0,
-    "mopac_pm7_steps": 11,
+    "mopac_pm7_steps": 27,
     "mult": 1,
     "name": "Estradiol",
     "paper_steps": 21,
@@ -200,7 +200,7 @@
   "zn_edta": {
     "atoms": 33,
     "charge": -2,
-    "mopac_pm7_steps": 100,
+    "mopac_pm7_steps": 119,
     "mult": 1,
     "name": "Zn EDTA",
     "paper_steps": 29,
