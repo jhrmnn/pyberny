@@ -154,7 +154,7 @@ _CASES = [
 
 
 @pytest.mark.parametrize(
-    'name,factory,dx_factory,tol_q,max_iters',
+    ('name', 'factory', 'dx_factory', 'tol_q', 'max_iters'),
     _CASES,
     ids=[c[0] for c in _CASES],
 )

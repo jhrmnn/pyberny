@@ -17,10 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Linear-bend internal coordinates via dummy ("ghost") atoms (issue #30). Near-linear triples `i-j-k` (angle > 175°) now place two mutually orthogonal dummy atoms perpendicular to the `i-k` axis and replace the singular `Angle(i,j,k)` with four well-behaved bends through ≈90°. This fixes optimization failures for molecules containing triple bonds (acetylenes, nitriles, CO₂) reported in issue #23. Dummy positions live in `InternalCoords.dummy_atoms` and are refreshed from the real-atom coordinates on every step; the `Geometry` yielded by `Berny` should be treated as immutable by callers. The optimizer additionally rebuilds the internal-coordinate set on the fly when an sp-like triple crosses the linear threshold mid-run (175° to enter, 170° to exit), so molecules that *become* linear during optimization (e.g. a bent CO₂ relaxing toward 180°) get the same dummy-atom treatment as molecules that start linear.
 - `Ghost`, `X`, and `Bq` species (and any name with a leading `-`) are now recognised as basis-function-only centres with zero covalent radius (issue #9). Geometries containing such atoms — common in PySCF/ASE workflows — no longer crash `InternalCoords`.
 - New `berny.tests` subpackage shipping reusable, optimizer-agnostic end-to-end tests built on analytic model potentials whose minima are known in closed form, so any optimizer (not just `Berny`) can install pyberny and check itself via `run_and_check(potential, minimize)`. The bundled `LinearBendCrossover` and `DihedralFromLinear` potentials exercise the linear-bend / dihedral coordinate handoff in both directions.
+- New `berny.benchmarks` subpackage shipping the Birkholz–Schlegel and Baker (Shajan-2023) benchmark sets — starting geometries plus `reference.json` metadata — directly inside the wheel, with a small discovery API (`BENCHMARKS`, `data_dir`, `load_reference`, `iter_molecules`) so downstream optimizers can drive themselves through the same standard sets that `scripts/benchmark.py` uses.
+- Interactive 3D viewer of the Birkholz & Schlegel benchmark molecules, published with the documentation, showing each starting geometry with atoms labelled by their 0-based index.
+- PEP 561 `py.typed` marker — pyberny now ships type information, and the codebase is fully annotated and checked under `mypy --strict`.
 
 ### Changed
 
-- Minimum supported Python version raised to 3.9.
+- Minimum supported Python version raised to 3.10.
 - `berny.Math.FindrootException` renamed to `berny.Math.FindrootError`.
 - Dropped the runtime dependency on `setuptools` (`pkg_resources`).
 - Unknown keyword arguments to `Berny()` now raise `TypeError` instead of being silently absorbed.

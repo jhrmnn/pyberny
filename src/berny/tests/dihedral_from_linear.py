@@ -5,11 +5,15 @@
 """Reverse-direction model potential: a bent dihedral reached from linear."""
 
 import math
+from typing import Any, ClassVar
 
 import numpy as np
 from numpy.linalg import norm
+from numpy.typing import NDArray
 
 from .base import ModelPotential, _angle, _cos_with_grads
+
+FloatArray = NDArray[np.floating[Any]]
 
 
 class DihedralFromLinear(ModelPotential):
@@ -31,7 +35,7 @@ class DihedralFromLinear(ModelPotential):
     checks only the bond lengths and the two angles.
     """
 
-    species = ['C', 'C', 'C', 'C']
+    species: ClassVar[list[str]] = ['C', 'C', 'C', 'C']
     r_ab = 1.45
     r_bc = 1.50
     r_cd = 1.45
@@ -41,13 +45,13 @@ class DihedralFromLinear(ModelPotential):
     k_bend = 0.25
 
     @property
-    def _bends(self):
+    def _bends(self) -> list[tuple[int, int, int, float]]:
         return [
             (0, 1, 2, math.cos(self.theta_abc)),
             (1, 2, 3, math.cos(self.theta_bcd)),
         ]
 
-    def start(self):
+    def start(self) -> FloatArray:
         """Return a starting geometry with ``a-b-c`` near-linear (178 deg)."""
         a = np.zeros(3)
         b = a + np.array([self.r_ab, 0.0, 0.0])
@@ -61,7 +65,7 @@ class DihedralFromLinear(ModelPotential):
         d = c + self.r_cd * cd
         return np.array([a, b, c, d])
 
-    def energy(self, coords):
+    def energy(self, coords: FloatArray) -> float:
         """Return the model energy at ``coords`` (``(4, 3)`` array, angstrom)."""
         coords = np.asarray(coords, dtype=float)
         e = 0.0
@@ -72,7 +76,7 @@ class DihedralFromLinear(ModelPotential):
             e += 0.5 * self.k_bend * (cos - cos0) ** 2
         return float(e)
 
-    def gradient(self, coords):
+    def gradient(self, coords: FloatArray) -> FloatArray:
         """Return the analytic gradient ``dE/dr`` (``(4, 3)``, per angstrom)."""
         coords = np.asarray(coords, dtype=float)
         g = np.zeros((4, 3))
@@ -90,7 +94,9 @@ class DihedralFromLinear(ModelPotential):
             g[k] += coef * dq
         return g
 
-    def assert_at_minimum(self, coords, tol_dist=1e-2, tol_angle_deg=1.0):
+    def assert_at_minimum(  # type: ignore[override]
+        self, coords: FloatArray, tol_dist: float = 1e-2, tol_angle_deg: float = 1.0
+    ) -> None:
         """Assert ``coords`` match the known minimum (bond lengths and angles)."""
         coords = np.asarray(coords, dtype=float)
         a, b, c, d = coords

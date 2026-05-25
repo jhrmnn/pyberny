@@ -4,4 +4,4 @@ from .coords import angstrom
 from .geomlib import Geometry
 from .optimize import optimize
 
-__all__ = ['optimize', 'Berny', 'BernyParams', 'geomlib', 'Geometry', 'angstrom']
+__all__ = ['Berny', 'BernyParams', 'Geometry', 'angstrom', 'geomlib', 'optimize']

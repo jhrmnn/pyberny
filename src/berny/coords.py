@@ -1,114 +1,161 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+from __future__ import annotations
 
 import math
 from collections import OrderedDict
+from collections.abc import Callable, Iterable, Iterator
 from itertools import combinations, product
+from typing import Any
 
 import numpy as np
 from numpy import dot, pi
 from numpy.linalg import norm
+from numpy.typing import NDArray
 
 from . import Math
+from .geomlib import Geometry
 from .species_data import get_property
 
 __all__ = ()
 
 angstrom = 1 / 0.52917721092  #:
 
+FloatArray = NDArray[np.floating[Any]]
+BoolArray = NDArray[np.bool_]
+IntArray = NDArray[np.integer[Any]]
+
+#: Return type of :meth:`InternalCoord.eval`: ``phi`` alone if ``grad=False``,
+#: ``(phi, [dphi/dr_i, ...])`` if ``grad=True``.
+EvalReturn = float | tuple[float, list[FloatArray]]
+
 
 class InternalCoord:
-    def __init__(self, C=None, weak=None):
+    #: 0-based atom indices that define this coordinate. Set by each
+    #: subclass's ``__init__``.
+    idx: tuple[int, ...]
+    #: ``None`` until ``__init__`` has run.
+    weak: int | None
+
+    def __init__(self, C: BoolArray | None = None, weak: int | None = None) -> None:
         if weak is not None:
             self.weak = weak
         elif C is not None:
             self.weak = sum(
                 not C[self.idx[i], self.idx[i + 1]] for i in range(len(self.idx) - 1)
             )
+        else:
+            self.weak = None
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, InternalCoord):
             return NotImplemented
         return type(self) is type(other) and self.idx == other.idx
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((type(self), self.idx))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         args = list(map(str, self.idx))
         if self.weak is not None:
             args.append('weak=' + str(self.weak))
         return f"{self.__class__.__name__}({', '.join(args)})"
 
+    # The four primitives below are defined on every concrete subclass with
+    # the same signature; declaring them here lets mypy type-check call sites
+    # in InternalCoords that iterate over a heterogeneous coord list.
+    def hessian(self, rho: FloatArray) -> float:  # pragma: no cover - abstract
+        raise NotImplementedError
+
+    def weight(self, rho: FloatArray, coords: FloatArray) -> float:  # pragma: no cover
+        raise NotImplementedError
+
+    def center(self, ijk: IntArray) -> FloatArray:  # pragma: no cover - abstract
+        raise NotImplementedError
+
+    def eval(
+        self, coords: FloatArray, grad: bool = False
+    ) -> EvalReturn:  # pragma: no cover - abstract
+        raise NotImplementedError
+
 
 class Bond(InternalCoord):
-    def __init__(self, i, j, **kwargs):
+    idx: tuple[int, int]
+
+    def __init__(self, i: int, j: int, **kwargs: Any) -> None:
         if i > j:
             i, j = j, i
         self.i = i
         self.j = j
-        self.idx = i, j
+        self.idx = (i, j)
         InternalCoord.__init__(self, **kwargs)
 
-    def hessian(self, rho):
-        return 0.45 * rho[self.i, self.j]
+    def hessian(self, rho: FloatArray) -> float:
+        return float(0.45 * rho[self.i, self.j])
 
-    def weight(self, rho, coords):
-        return rho[self.i, self.j]
+    def weight(self, rho: FloatArray, coords: FloatArray) -> float:
+        return float(rho[self.i, self.j])
 
-    def center(self, ijk):
-        return np.round(ijk[[self.i, self.j]].sum(0))
+    def center(self, ijk: IntArray) -> FloatArray:
+        result: FloatArray = np.round(ijk[[self.i, self.j]].sum(0))
+        return result
 
-    def eval(self, coords, grad=False):
+    def eval(self, coords: FloatArray, grad: bool = False) -> EvalReturn:
         v = (coords[self.i] - coords[self.j]) * angstrom
-        r = norm(v)
+        r = float(norm(v))
         if not grad:
             return r
         return r, [v / r, -v / r]
 
 
 class Angle(InternalCoord):
-    def __init__(self, i, j, k, **kwargs):
+    idx: tuple[int, int, int]
+
+    def __init__(self, i: int, j: int, k: int, **kwargs: Any) -> None:
         if i > k:
             i, j, k = k, j, i
         self.i = i
         self.j = j
         self.k = k
-        self.idx = i, j, k
+        self.idx = (i, j, k)
         InternalCoord.__init__(self, **kwargs)
 
-    def hessian(self, rho):
-        return 0.15 * (rho[self.i, self.j] * rho[self.j, self.k])
+    def hessian(self, rho: FloatArray) -> float:
+        return float(0.15 * (rho[self.i, self.j] * rho[self.j, self.k]))
 
-    def weight(self, rho, coords):
+    def weight(self, rho: FloatArray, coords: FloatArray) -> float:
         f = 0.12
-        return np.sqrt(rho[self.i, self.j] * rho[self.j, self.k]) * (
-            f + (1 - f) * np.sin(self.eval(coords))
+        ang = self.eval(coords)
+        assert isinstance(ang, float)
+        return float(
+            np.sqrt(rho[self.i, self.j] * rho[self.j, self.k])
+            * (f + (1 - f) * np.sin(ang))
         )
 
-    def center(self, ijk):
-        return np.round(2 * ijk[self.j])
+    def center(self, ijk: IntArray) -> FloatArray:
+        result: FloatArray = np.round(2 * ijk[self.j])
+        return result
 
-    def eval(self, coords, grad=False):
+    def eval(self, coords: FloatArray, grad: bool = False) -> EvalReturn:
         v1 = (coords[self.i] - coords[self.j]) * angstrom
         v2 = (coords[self.k] - coords[self.j]) * angstrom
-        dot_product = np.dot(v1, v2) / (norm(v1) * norm(v2))
+        dot_product = float(np.dot(v1, v2) / (norm(v1) * norm(v2)))
         if dot_product < -1:
             dot_product = -1
         elif dot_product > 1:
             dot_product = 1
-        phi = np.arccos(dot_product)
+        phi = float(np.arccos(dot_product))
         if not grad:
             return phi
         if abs(phi) > pi - 1e-6:
-            grad = [
+            grads = [
                 (pi - phi) / (2 * norm(v1) ** 2) * v1,
                 (1 / norm(v1) - 1 / norm(v2)) * (pi - phi) / (2 * norm(v1)) * v1,
                 (pi - phi) / (2 * norm(v2) ** 2) * v2,
             ]
         else:
-            grad = [
+            grads = [
                 1 / np.tan(phi) * v1 / norm(v1) ** 2
                 - v2 / (norm(v1) * norm(v2) * np.sin(phi)),
                 (v1 + v2) / (norm(v1) * norm(v2) * np.sin(phi))
@@ -116,11 +163,23 @@ class Angle(InternalCoord):
                 1 / np.tan(phi) * v2 / norm(v2) ** 2
                 - v1 / (norm(v1) * norm(v2) * np.sin(phi)),
             ]
-        return phi, grad
+        return phi, grads
 
 
 class Dihedral(InternalCoord):
-    def __init__(self, i, j, k, l, weak=None, angles=None, C=None, **kwargs):
+    idx: tuple[int, int, int, int]
+
+    def __init__(
+        self,
+        i: int,
+        j: int,
+        k: int,
+        l: int,
+        weak: int | None = None,
+        angles: tuple[Angle, Angle] | None = None,
+        C: BoolArray | None = None,
+        **kwargs: Any,
+    ) -> None:
         if j > k:
             i, j, k, l = l, k, j, i
         self.i = i
@@ -132,37 +191,41 @@ class Dihedral(InternalCoord):
         self.angles = angles
         InternalCoord.__init__(self, **kwargs)
 
-    def hessian(self, rho):
-        return 0.005 * rho[self.i, self.j] * rho[self.j, self.k] * rho[self.k, self.l]
+    def hessian(self, rho: FloatArray) -> float:
+        return float(
+            0.005 * rho[self.i, self.j] * rho[self.j, self.k] * rho[self.k, self.l]
+        )
 
-    def weight(self, rho, coords):
+    def weight(self, rho: FloatArray, coords: FloatArray) -> float:
         f = 0.12
         th1 = Angle(self.i, self.j, self.k).eval(coords)
         th2 = Angle(self.j, self.k, self.l).eval(coords)
-        return (
+        assert isinstance(th1, float) and isinstance(th2, float)
+        return float(
             (rho[self.i, self.j] * rho[self.j, self.k] * rho[self.k, self.l]) ** (1 / 3)
             * (f + (1 - f) * np.sin(th1))
             * (f + (1 - f) * np.sin(th2))
         )
 
-    def center(self, ijk):
-        return np.round(ijk[[self.j, self.k]].sum(0))
+    def center(self, ijk: IntArray) -> FloatArray:
+        result: FloatArray = np.round(ijk[[self.j, self.k]].sum(0))
+        return result
 
-    def eval(self, coords, grad=False):
+    def eval(self, coords: FloatArray, grad: bool = False) -> EvalReturn:
         v1 = (coords[self.i] - coords[self.j]) * angstrom
         v2 = (coords[self.l] - coords[self.k]) * angstrom
         w = (coords[self.k] - coords[self.j]) * angstrom
         ew = w / norm(w)
         a1 = v1 - dot(v1, ew) * ew
         a2 = v2 - dot(v2, ew) * ew
-        sgn = np.sign(np.linalg.det(np.array([v2, v1, w])))
+        sgn = float(np.sign(np.linalg.det(np.array([v2, v1, w]))))
         sgn = sgn or 1
-        dot_product = dot(a1, a2) / (norm(a1) * norm(a2))
+        dot_product = float(dot(a1, a2) / (norm(a1) * norm(a2)))
         if dot_product < -1:
             dot_product = -1
         elif dot_product > 1:
             dot_product = 1
-        phi = np.arccos(dot_product) * sgn
+        phi = float(np.arccos(dot_product) * sgn)
         if not grad:
             return phi
         if abs(phi) > pi - 1e-6:
@@ -170,7 +233,7 @@ class Dihedral(InternalCoord):
             g = g / norm(g)
             A = dot(v1, ew) / norm(w)
             B = dot(v2, ew) / norm(w)
-            grad = [
+            grads = [
                 g / (norm(g) * norm(a1)),
                 -((1 - A) / norm(a1) - B / norm(a2)) * g,
                 -((1 + B) / norm(a2) + A / norm(a1)) * g,
@@ -181,7 +244,7 @@ class Dihedral(InternalCoord):
             g = g / norm(g)
             A = dot(v1, ew) / norm(w)
             B = dot(v2, ew) / norm(w)
-            grad = [
+            grads = [
                 g / (norm(g) * norm(a1)),
                 -((1 - A) / norm(a1) + B / norm(a2)) * g,
                 ((1 + B) / norm(a2) - A / norm(a1)) * g,
@@ -190,7 +253,7 @@ class Dihedral(InternalCoord):
         else:
             A = dot(v1, ew) / norm(w)
             B = dot(v2, ew) / norm(w)
-            grad = [
+            grads = [
                 1 / np.tan(phi) * a1 / norm(a1) ** 2
                 - a2 / (norm(a1) * norm(a2) * np.sin(phi)),
                 ((1 - A) * a2 - B * a1) / (norm(a1) * norm(a2) * np.sin(phi))
@@ -204,7 +267,7 @@ class Dihedral(InternalCoord):
                 1 / np.tan(phi) * a2 / norm(a2) ** 2
                 - a1 / (norm(a1) * norm(a2) * np.sin(phi)),
             ]
-        return phi, grad
+        return phi, grads
 
 
 # Linear-bend handling --------------------------------------------------------
@@ -229,7 +292,7 @@ _LIN_EXIT = math.radians(170)
 _DUMMY_OFFSET = 1.0
 
 
-def _perp_from_ref(ref, axis):
+def _perp_from_ref(ref: FloatArray, axis: FloatArray) -> FloatArray | None:
     """Project ``ref`` onto the plane perpendicular to ``axis`` and normalise.
 
     ``ref`` and ``axis`` are 3-vectors. Returns ``None`` if ``ref`` is parallel
@@ -239,10 +302,11 @@ def _perp_from_ref(ref, axis):
     n = norm(perp)
     if n < 1e-8:
         return None
-    return perp / n
+    result: FloatArray = perp / n
+    return result
 
 
-def _pick_perp(axis):
+def _pick_perp(axis: FloatArray) -> FloatArray:
     """Return a unit vector perpendicular to ``axis``, chosen deterministically.
 
     Picks the cartesian basis vector least parallel to ``axis`` and projects
@@ -250,10 +314,12 @@ def _pick_perp(axis):
     """
     e = np.zeros(3)
     e[int(np.argmin(np.abs(axis)))] = 1.0
-    return _perp_from_ref(e, axis)
+    perp = _perp_from_ref(e, axis)
+    assert perp is not None
+    return perp
 
 
-class _DummySpec(object):
+class _DummySpec:
     """Recipe for placing a dummy atom for a (near-)linear ``i-j-k`` triple.
 
     The dummy sits at ``r_j + _DUMMY_OFFSET * p``, where ``p`` is a unit
@@ -263,25 +329,29 @@ class _DummySpec(object):
     of dummy placement as the host atoms move.
     """
 
-    def __init__(self, i, j, k, ref):
+    def __init__(self, i: int, j: int, k: int, ref: FloatArray) -> None:
         self.i = i
         self.j = j
         self.k = k
         self.ref = ref
 
-    def place(self, coords):
+    def place(self, coords: FloatArray) -> FloatArray:
         axis = coords[self.k] - coords[self.i]
         n_axis = norm(axis)
         if n_axis < 1e-8:
             # Hosts coincide; degenerate, place at j and bail.
-            return coords[self.j].copy()
+            result: FloatArray = coords[self.j].copy()
+            return result
         axis = axis / n_axis
         perp = _perp_from_ref(self.ref, axis)
         if perp is None:
             perp = _pick_perp(axis)
-        return coords[self.j] + _DUMMY_OFFSET * perp
+        place_result: FloatArray = coords[self.j] + _DUMMY_OFFSET * perp
+        return place_result
 
-    def place_and_jacobians(self, coords):
+    def place_and_jacobians(
+        self, coords: FloatArray
+    ) -> tuple[FloatArray, FloatArray, FloatArray, FloatArray]:
         """Place the dummy and return its Jacobians w.r.t. the three host atoms.
 
         Returns ``(d, J_i, J_j, J_k)`` where each ``J_*`` is the 3×3 matrix
@@ -326,7 +396,9 @@ class _DummySpec(object):
         return d, J_i, I3, J_k
 
 
-def _find_linear_triples(bondmatrix, coords):
+def _find_linear_triples(
+    bondmatrix: BoolArray, coords: FloatArray
+) -> Iterator[tuple[int, int, int]]:
     """Yield (j, i, k) for every near-linear triple ``i-j-k``.
 
     Iterates over *all* connectivity-allowed triples (every unordered pair of
@@ -339,11 +411,15 @@ def _find_linear_triples(bondmatrix, coords):
     singular, it just doesn't get a dummy replacement.
     """
     for j, i, k in _iter_candidate_triples(bondmatrix):
-        if Angle(i, j, k).eval(coords) > _LIN_THRE:
+        ang = Angle(i, j, k).eval(coords)
+        assert isinstance(ang, float)
+        if ang > _LIN_THRE:
             yield j, i, k
 
 
-def _iter_candidate_triples(bondmatrix):
+def _iter_candidate_triples(
+    bondmatrix: BoolArray,
+) -> Iterator[tuple[int, int, int]]:
     """Yield (j, i, k) for every triple ``i-j-k`` of distinct bonded neighbours.
 
     Each unordered ``{i, k}`` pair is yielded once per central atom ``j``.
@@ -354,17 +430,17 @@ def _iter_candidate_triples(bondmatrix):
     class), so only the geometry-dependent linearity flag is re-evaluated.
     """
     for j in range(len(bondmatrix)):
-        neighbors = np.flatnonzero(bondmatrix[j, :])
+        neighbors = [int(n) for n in np.flatnonzero(bondmatrix[j, :])]
         for i, k in combinations(neighbors, 2):
             yield j, i, k
 
 
-def _is_sp_like_centre(bondmatrix, j):
+def _is_sp_like_centre(bondmatrix: BoolArray, j: int) -> bool:
     """Return ``True`` if atom ``j`` has exactly two covalent neighbours.
 
     Gates dummy-atom placement for near-linear bends: the dummy machinery
     targets genuine sp-hybridised geometries (alkynes, nitriles, cumulenes,
-    CO₂). Placing dummies on higher-coordination centres
+    CO2). Placing dummies on higher-coordination centres
     (square-planar / octahedral metals, T-shaped halides) over-parameterises
     the problem and prevents convergence (e.g. mg_porphin, zn_edta in the
     Birkholz-Schlegel benchmark). For those centres the near-linear angle is
@@ -374,9 +450,9 @@ def _is_sp_like_centre(bondmatrix, j):
     return int(np.count_nonzero(bondmatrix[j, :])) == 2
 
 
-def get_clusters(C):
+def get_clusters(C: BoolArray) -> tuple[list[list[int]], BoolArray]:
     nonassigned = list(range(len(C)))
-    clusters = []
+    clusters: list[list[int]] = []
     while nonassigned:
         queue = {nonassigned[0]}
         clusters.append([])
@@ -384,7 +460,7 @@ def get_clusters(C):
             node = queue.pop()
             clusters[-1].append(node)
             nonassigned.remove(node)
-            queue.update(n for n in np.flatnonzero(C[node]) if n in nonassigned)
+            queue.update(int(n) for n in np.flatnonzero(C[node]) if n in nonassigned)
     C = np.zeros_like(C)
     for cluster in clusters:
         for i in cluster:
@@ -393,19 +469,25 @@ def get_clusters(C):
 
 
 class InternalCoords:
-    def __init__(self, geom, allowed=None, dihedral=True, superweakdih=False):
-        self._coords = []
+    def __init__(
+        self,
+        geom: Geometry,
+        allowed: Any = None,
+        dihedral: bool = True,
+        superweakdih: bool = False,
+    ) -> None:
+        self._coords: list[InternalCoord] = []
         # Dummy ("ghost") atoms used to handle near-linear angles. Coordinates
         # are stored in angstrom to match Geometry.coords. The array is
         # recomputed from the real atoms before every eval/B_matrix call.
-        self.dummy_atoms = np.zeros((0, 3))
-        self._dummy_specs = []
+        self.dummy_atoms: FloatArray = np.zeros((0, 3))
+        self._dummy_specs: list[_DummySpec] = []
         n = len(geom)
         geom = geom.supercell()
         self._n_real = len(geom)
         dist = geom.dist(geom)
         radii = np.array([get_property(sp, 'covalent_radius') for sp in geom.species])
-        bondmatrix = dist < 1.3 * (radii[None, :] + radii[:, None])
+        bondmatrix: BoolArray = dist < 1.3 * (radii[None, :] + radii[:, None])
         self.fragments, C = get_clusters(bondmatrix)
         radii = np.array([get_property(sp, 'vdw_radius') for sp in geom.species])
         shift = 0.0
@@ -433,7 +515,7 @@ class InternalCoords:
         #   centre constrained; introducing dummies here over-parameterises
         #   the problem and prevents convergence (mg_porphin, zn_edta).
         #   A centre with *only* near-linear angles is geometrically
-        #   impossible (you cannot have ≥3 collinear neighbours in 3D), so
+        #   impossible (you cannot have >=3 collinear neighbours in 3D), so
         #   dropping never leaves the centre unconstrained.
         #
         # Either way, dihedrals spanning a near-linear angle are filtered
@@ -443,6 +525,7 @@ class InternalCoords:
         # Skipped for periodic geometries because the dummy chain rule and
         # the lattice-folding logic in ``_reduce`` don't interact cleanly;
         # periodic systems fall back to legacy behaviour.
+        linear_set: set[tuple[int, int, int]]
         if geom.lattice is None:
             linear_set = set(_find_linear_triples(bondmatrix, geom.coords))
         else:
@@ -460,7 +543,9 @@ class InternalCoords:
         # ``_linear_set`` is the set of triples we *are* treating as linear
         # right now, including any that were introduced by hysteresis on a
         # previous rebuild.
-        self._bondmatrix = bondmatrix if geom.lattice is None else None
+        self._bondmatrix: BoolArray | None = (
+            bondmatrix if geom.lattice is None else None
+        )
         self._linear_set = set(linear_set)
         if dihedral:
             for bond in self.bonds:
@@ -476,18 +561,27 @@ class InternalCoords:
         if geom.lattice is not None:
             self._reduce(n)
 
-    def _build_angles(self, coords, bondmatrix, C, linear_set):
+    def _build_angles(
+        self,
+        coords: FloatArray,
+        bondmatrix: BoolArray,
+        C: BoolArray,
+        linear_set: set[tuple[int, int, int]],
+    ) -> None:
         """Append regular Angle coordinates, skipping near-linear triples that
         are handled separately by ``_add_linear_bend``."""
         for j in range(len(bondmatrix)):
-            for i, k in combinations(np.flatnonzero(bondmatrix[j, :]), 2):
+            for i_np, k_np in combinations(np.flatnonzero(bondmatrix[j, :]), 2):
+                i, k = int(i_np), int(k_np)
                 if (j, i, k) in linear_set:
                     continue
                 ang = Angle(i, j, k, C=C)
-                if ang.eval(coords) > pi / 4:
+                ang_val = ang.eval(coords)
+                assert isinstance(ang_val, float)
+                if ang_val > pi / 4:
                     self.append(ang)
 
-    def _add_linear_bend(self, coords, i, j, k):
+    def _add_linear_bend(self, coords: FloatArray, i: int, j: int, k: int) -> None:
         """Place two dummies for a near-linear ``i-j-k`` triple and emit the
         replacement angle coordinates.
 
@@ -516,7 +610,7 @@ class InternalCoords:
             for ad in (d1, d2):
                 self.append(Angle(ai, j, ad, weak=0))
 
-    def needs_rebuild(self, geom):
+    def needs_rebuild(self, geom: Geometry) -> bool:
         """Return ``True`` if the linear-bend topology should be rebuilt.
 
         Compares the set of near-linear triples currently tracked
@@ -553,9 +647,10 @@ class InternalCoords:
         if len(geom_super) != self._n_real:
             return False
         coords = geom_super.coords
-        candidate = set()
+        candidate: set[tuple[int, int, int]] = set()
         for j, i, k in _iter_candidate_triples(self._bondmatrix):
             ang = Angle(i, j, k).eval(coords)
+            assert isinstance(ang, float)
             if (j, i, k) in self._linear_set:
                 if ang > _LIN_EXIT:
                     candidate.add((j, i, k))
@@ -563,7 +658,7 @@ class InternalCoords:
                 candidate.add((j, i, k))
         return candidate != self._linear_set
 
-    def _refresh_dummies_from_coords(self, real_coords):
+    def _refresh_dummies_from_coords(self, real_coords: FloatArray) -> None:
         """Recompute every dummy position from the given (supercell-shaped)
         real coordinates. Must only be called when ``_dummy_specs`` is
         non-empty; callers that may have no dummies should short-circuit.
@@ -572,7 +667,7 @@ class InternalCoords:
             [spec.place(real_coords) for spec in self._dummy_specs]
         )
 
-    def _all_coords(self, geom_super):
+    def _all_coords(self, geom_super: Geometry) -> FloatArray:
         """Return the combined (real + dummy) coordinate array for the given
         already-expanded supercell geometry.
 
@@ -584,7 +679,7 @@ class InternalCoords:
         self._refresh_dummies_from_coords(geom_super.coords)
         return np.vstack([geom_super.coords, self.dummy_atoms])
 
-    def _rho_extended(self, geom_super):
+    def _rho_extended(self, geom_super: Geometry) -> FloatArray:
         """Build a rho matrix sized for real + dummy centers.
 
         Entries involving dummies default to 1.0; this turns into a nominal
@@ -600,66 +695,74 @@ class InternalCoords:
         rho[: self._n_real, : self._n_real] = rho_real
         return rho
 
-    def append(self, coord):
+    def append(self, coord: InternalCoord) -> None:
         self._coords.append(coord)
 
-    def extend(self, coords):
+    def extend(self, coords: Iterable[InternalCoord]) -> None:
         self._coords.extend(coords)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[InternalCoord]:
         return self._coords.__iter__()
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._coords)
 
     @property
-    def bonds(self):
+    def bonds(self) -> list[Bond]:
         return [c for c in self if isinstance(c, Bond)]
 
     @property
-    def angles(self):
+    def angles(self) -> list[Angle]:
         return [c for c in self if isinstance(c, Angle)]
 
     @property
-    def dihedrals(self):
+    def dihedrals(self) -> list[Dihedral]:
         return [c for c in self if isinstance(c, Dihedral)]
 
     @property
-    def dict(self):
+    def dict(self) -> OrderedDict[str, list[InternalCoord]]:
         return OrderedDict(
             [
-                ('bonds', self.bonds),
-                ('angles', self.angles),
-                ('dihedrals', self.dihedrals),
+                ('bonds', list(self.bonds)),
+                ('angles', list(self.angles)),
+                ('dihedrals', list(self.dihedrals)),
             ]
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         parts = ', '.join(
             f'{name}: {len(coords)}' for name, coords in self.dict.items()
         )
         return f'<InternalCoords {parts!r}>'
 
-    def __str__(self):
+    def __str__(self) -> str:
         ncoords = sum(len(coords) for coords in self.dict.values())
         s = 'Internal coordinates:\n'
         s += f'* Number of fragments: {len(self.fragments)}\n'
         s += f'* Number of internal coordinates: {ncoords}\n'
         for name, coords in self.dict.items():
             for degree, adjective in [(0, 'strong'), (1, 'weak'), (2, 'superweak')]:
-                n = len([None for c in coords if min(2, c.weak) == degree])
+                n = len(
+                    [
+                        None
+                        for c in coords
+                        if c.weak is not None and min(2, c.weak) == degree
+                    ]
+                )
                 if n > 0:
                     s += f'* Number of {adjective} {name}: {n}\n'
         return s.rstrip()
 
-    def eval_geom(self, geom, template=None):
+    def eval_geom(
+        self, geom: Geometry, template: FloatArray | None = None
+    ) -> FloatArray:
         geom = geom.supercell()
         coords = self._all_coords(geom)
         q = np.array([coord.eval(coords) for coord in self])
         if template is None:
             return q
-        swapped = []  # dihedrals swapped by pi
-        candidates = set()  # potentially swapped angles
+        swapped: list[Dihedral] = []  # dihedrals swapped by pi
+        candidates: set[Angle] = set()  # potentially swapped angles
         for i, dih in enumerate(self):
             if not isinstance(dih, Dihedral):
                 continue
@@ -669,7 +772,8 @@ class InternalCoords:
             elif abs(abs(diff) - pi) < pi / 2:
                 q[i] -= pi * np.sign(diff)
                 swapped.append(dih)
-                candidates.update(dih.angles)
+                if dih.angles is not None:
+                    candidates.update(dih.angles)
         for i, ang in enumerate(self):
             if not isinstance(ang, Angle) or ang not in candidates:
                 continue
@@ -678,12 +782,12 @@ class InternalCoords:
             if all(
                 dih in swapped or all(a in candidates for a in dih.angles)
                 for dih in self.dihedrals
-                if ang in dih.angles
+                if dih.angles is not None and ang in dih.angles
             ):
                 q[i] = 2 * pi - q[i]
         return q
 
-    def _reduce(self, n):
+    def _reduce(self, n: int) -> None:
         idxs = np.int64(np.floor(np.array(range(3**3 * n)) / n))
         idxs, i = np.divmod(idxs, 3)
         idxs, j = np.divmod(idxs, 3)
@@ -694,21 +798,21 @@ class InternalCoords:
             for coord in self._coords
             if np.all(np.isin(coord.center(ijk), [0, -1]))
         ]
-        idxs = {i for coord in self._coords for i in coord.idx}
-        self.fragments = [frag for frag in self.fragments if set(frag) & idxs]
+        idxs_set = {i for coord in self._coords for i in coord.idx}
+        self.fragments = [frag for frag in self.fragments if set(frag) & idxs_set]
 
-    def hessian_guess(self, geom):
+    def hessian_guess(self, geom: Geometry) -> FloatArray:
         geom = geom.supercell()
         rho = self._rho_extended(geom)
         return np.diag([coord.hessian(rho) for coord in self])
 
-    def weights(self, geom):
+    def weights(self, geom: Geometry) -> FloatArray:
         geom = geom.supercell()
         rho = self._rho_extended(geom)
         coords = self._all_coords(geom)
         return np.array([coord.weight(rho, coords) for coord in self])
 
-    def B_matrix(self, geom):
+    def B_matrix(self, geom: Geometry) -> FloatArray:
         geom = geom.supercell()
         n_real = len(geom)
         coords = self._all_coords(geom)
@@ -720,12 +824,14 @@ class InternalCoords:
         # coordinates can amplify into huge Cartesian displacements via
         # the pseudoinverse (see issue #23 large molecule).
         jac = [
-            (spec.i, spec.j, spec.k) + spec.place_and_jacobians(coords[:n_real])[1:]
+            (spec.i, spec.j, spec.k, *spec.place_and_jacobians(coords[:n_real])[1:])
             for spec in self._dummy_specs
         ]
         B = np.zeros((len(self), n_real, 3))
         for i, coord in enumerate(self):
-            _, grads = coord.eval(coords, grad=True)
+            result = coord.eval(coords, grad=True)
+            assert isinstance(result, tuple)
+            _, grads = result
             for k, grad in zip(coord.idx, grads):
                 if k < n_real:
                     B[i, k % n_real] += grad
@@ -736,11 +842,22 @@ class InternalCoords:
                     B[i, hk] += J_k.T @ grad
         return B.reshape(len(self), 3 * n_real)
 
-    def update_geom(self, geom, q, dq, B_inv, log=lambda _: None):
+    def update_geom(
+        self,
+        geom: Geometry,
+        q: FloatArray,
+        dq: FloatArray,
+        B_inv: FloatArray,
+        log: Callable[[str], None] = lambda _: None,
+    ) -> tuple[FloatArray, Geometry]:
         geom = geom.copy()
         thre = 1e-6
         # target = CartIter(q=q+dq)
         # prev = CartIter(geom.coords, q, dq)
+        keep_first: tuple[Geometry, FloatArray, float | None, float | None]
+        keep_first = (geom.copy(), q, None, None)
+        msg = 'Transformation did not converge in {} iterations'
+        i = 0
         for i in range(20):
             coords_new = geom.coords + B_inv.dot(dq).reshape(-1, 3) / angstrom
             dcart_rms = Math.rms(coords_new - geom.coords)
@@ -748,25 +865,36 @@ class InternalCoords:
             q_new = self.eval_geom(geom, template=q)
             dq_rms = Math.rms(q_new - q)
             q, dq = q_new, dq - (q_new - q)
-            if dcart_rms < thre:
+            if dcart_rms is not None and dcart_rms < thre:
                 msg = 'Perfect transformation to cartesians in {} iterations'
                 break
             if i == 0:
                 keep_first = geom.copy(), q, dcart_rms, dq_rms
         else:
-            msg = 'Transformation did not converge in {} iterations'
             geom, q, dcart_rms, dq_rms = keep_first
         log(msg.format(i + 1))
         log(f'* RMS(dcart): {dcart_rms:.3}, RMS(dq): {dq_rms:.3}')
         return q, geom
 
 
-def get_dihedrals(center, coords, bondmatrix, C, superweak=False):
+def get_dihedrals(
+    center: list[int],
+    coords: FloatArray,
+    bondmatrix: BoolArray,
+    C: BoolArray,
+    superweak: bool = False,
+) -> list[Dihedral]:
     lin_thre = 5 * pi / 180
-    neigh_l = [n for n in np.flatnonzero(bondmatrix[center[0], :]) if n not in center]
-    neigh_r = [n for n in np.flatnonzero(bondmatrix[center[-1], :]) if n not in center]
-    angles_l = [Angle(i, center[0], center[1]).eval(coords) for i in neigh_l]
-    angles_r = [Angle(center[-2], center[-1], j).eval(coords) for j in neigh_r]
+    neigh_l = [
+        int(n) for n in np.flatnonzero(bondmatrix[center[0], :]) if n not in center
+    ]
+    neigh_r = [
+        int(n) for n in np.flatnonzero(bondmatrix[center[-1], :]) if n not in center
+    ]
+    angles_l_raw = [Angle(i, center[0], center[1]).eval(coords) for i in neigh_l]
+    angles_r_raw = [Angle(center[-2], center[-1], j).eval(coords) for j in neigh_r]
+    angles_l: list[float] = [a for a in angles_l_raw if isinstance(a, float)]
+    angles_r: list[float] = [a for a in angles_r_raw if isinstance(a, float)]
     nonlinear_l = [
         n
         for n, ang in zip(neigh_l, angles_l)
@@ -785,11 +913,11 @@ def get_dihedrals(center, coords, bondmatrix, C, superweak=False):
     ]
     assert len(linear_l) <= 1
     assert len(linear_r) <= 1
+    dihedrals: list[Dihedral] = []
     if center[0] < center[-1]:
         nweak = len(
             [None for i in range(len(center) - 1) if not C[center[i], center[i + 1]]]
         )
-        dihedrals = []
         for nl, nr in product(nonlinear_l, nonlinear_r):
             if nl == nr:
                 continue
@@ -811,8 +939,6 @@ def get_dihedrals(center, coords, bondmatrix, C, superweak=False):
                     ),
                 )
             )
-    else:
-        dihedrals = []
     if len(center) > 3:
         pass
     elif linear_l and not linear_r:

@@ -19,7 +19,7 @@
     "paper_steps": 43,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 77
+    "pyberny_steps": 83
   },
   "azadirachtin": {
     "atoms": 95,
@@ -35,7 +35,7 @@
   "bisphenol_a": {
     "atoms": 33,
     "charge": 0,
-    "mopac_pm7_steps": null,
+    "mopac_pm7_steps": 47,
     "mult": 1,
     "name": "Bisphenol A",
     "paper_steps": 31,
@@ -134,13 +134,13 @@
   "ochratoxin_a": {
     "atoms": 45,
     "charge": 0,
-    "mopac_pm7_steps": null,
+    "mopac_pm7_steps": 68,
     "mult": 1,
     "name": "Ochratoxin A",
     "paper_steps": 31,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": null
+    "pyberny_steps": 87
   },
   "penicillin_v": {
     "atoms": 42,
@@ -184,7 +184,7 @@
     "paper_steps": 35,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 73
+    "pyberny_steps": 43
   },
   "vitamin_c": {
     "atoms": 20,

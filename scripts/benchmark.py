@@ -7,9 +7,10 @@ Usage::
                          [--molecules NAME ...] [--out PATH]
     scripts/benchmark.py --solver mopac
 
-``--benchmark`` selects the molecule set under ``tests/data/`` -- either
-``birkholz`` (the Birkholz-Schlegel 2016 19-molecule set, the default) or
-``baker`` (the 30-molecule Baker set from Shajan et al., chemrxiv 2023).
+``--benchmark`` selects which molecule set to run -- either ``birkholz``
+(the Birkholz-Schlegel 2016 19-molecule set, the default) or ``baker``
+(the 30-molecule Baker set from Shajan et al., chemrxiv 2023). Both sets
+ship with the package under :mod:`berny.benchmarks`.
 PySCF mode drives the optimization through ``pyscf.geomopt.berny_solver``
 and requires ``pip install pyberny[benchmark]``; MOPAC mode uses
 :func:`berny.solvers.MopacSolver` (charge and multiplicity from
@@ -63,19 +64,15 @@ import sys  # noqa: E402
 import time  # noqa: E402
 from pathlib import Path  # noqa: E402
 
-from berny import Berny, geomlib, optimize  # noqa: E402
+from berny import Berny, geomlib  # noqa: E402
+from berny.benchmarks import BENCHMARKS  # noqa: E402
 
-_DATA_ROOT = Path(__file__).resolve().parents[1] / 'tests' / 'data'
-BENCHMARKS = {
-    'birkholz': _DATA_ROOT / 'birkholz_schlegel',
-    'baker': _DATA_ROOT / 'baker_shajan_2023',
-}
 # Default exposed for backward compatibility: external callers (and
 # aggregate_benchmark.py) used to import ``DATA`` directly.
 DATA = BENCHMARKS['birkholz']
 
 
-def run_pyscf(name, ref, data_dir):
+def run_pyscf(name, ref, data_dir, trace=None):
     from pyscf import dft, gto, scf
     from pyscf.geomopt import berny_solver
 
@@ -94,14 +91,34 @@ def run_pyscf(name, ref, data_dir):
         mf.xc = 'b3lyp'
     else:
         raise ValueError(f'unsupported paper method {method!r}')
-    state = {'n': 0}
-    converged, _ = berny_solver.kernel(
-        mf, callback=lambda loc: state.update(n=loc['cycle'] + 1)
-    )
-    return converged, state['n']
+    state = {'n': 0, 'energies': []}
+
+    def callback(loc):
+        state['n'] = loc['cycle'] + 1
+        energy = loc.get('energy')
+        if energy is not None:
+            state['energies'].append(float(energy))
+
+    # pyscf's berny_solver.kernel forwards unknown kwargs to the underlying
+    # Berny constructor, so ``trace=`` is propagated straight through.
+    kwargs = {'trace': str(trace)} if trace is not None else {}
+    converged, _ = berny_solver.kernel(mf, callback=callback, **kwargs)
+    return converged, state['n'], state['energies']
 
 
-def run_mopac(name, ref, data_dir):
+def _optimize_recording_energies(berny, solver):
+    """Drive ``berny`` with ``solver`` (like ``berny.optimize``) and collect
+    the per-step energies, returning them as a list in step order."""
+    next(solver)
+    energies = []
+    for geom in berny:
+        energy, gradients = solver.send((list(geom), geom.lattice))
+        energies.append(energy)
+        berny.send((energy, gradients))
+    return energies
+
+
+def run_mopac(name, ref, data_dir, trace=None):
     from berny.solvers import MopacSolver
 
     geom = geomlib.readfile(str(data_dir / f'{name}.xyz'))
@@ -110,22 +127,31 @@ def run_mopac(name, ref, data_dir):
     # so they still have a chance to converge and be reported. Both are
     # documented non-convergers in reference.json (mopac_pm7_steps=null)
     # so the regression gate ignores them either way.
-    berny = Berny(geom, maxsteps=110)
-    optimize(berny, MopacSolver(charge=ref['charge'], mult=ref['mult']))
-    return berny.converged, berny._n
+    berny = Berny(geom, maxsteps=110, trace=trace)
+    solver = MopacSolver(charge=ref['charge'], mult=ref['mult'])
+    energies = _optimize_recording_energies(berny, solver)
+    return berny.converged, berny._n, energies
 
 
-def run_one(name, ref, kind, data_dir):
+def run_one(name, ref, kind, data_dir, trace_dir=None, benchmark=None):
     runner = run_pyscf if kind == 'pyscf' else run_mopac
+    trace_path = None
+    if trace_dir is not None:
+        trace_dir.mkdir(parents=True, exist_ok=True)
+        # Use the --benchmark CLI value rather than data_dir.name so the
+        # filename matches the documented schema and is stable across
+        # dataset-directory renames.
+        trace_path = trace_dir / f'{kind}-{benchmark}-{name}.trace.json'
     t0 = time.perf_counter()
     try:
-        converged, n = runner(name, ref, data_dir)
-    except Exception as e:  # noqa: BLE001
+        converged, n, energies = runner(name, ref, data_dir, trace=trace_path)
+    except Exception as e:
         return {
             'name': name,
             'converged': False,
             'steps': None,
             'wall': time.perf_counter() - t0,
+            'energies': [],
             'error': f'{type(e).__name__}: {e}',
         }
     return {
@@ -133,6 +159,7 @@ def run_one(name, ref, kind, data_dir):
         'converged': converged,
         'steps': n,
         'wall': time.perf_counter() - t0,
+        'energies': energies,
         'error': None,
     }
 
@@ -227,6 +254,17 @@ def main(argv=None):
     ap.add_argument(
         '--out-json', type=Path, default=None, help='write per-row results as JSON'
     )
+    ap.add_argument(
+        '--out-trace-dir',
+        type=Path,
+        default=None,
+        help=(
+            'write a per-molecule structured trace JSON into this directory '
+            '(file name: <solver>-<benchmark>-<molecule>.trace.json); '
+            'created if missing. For pyscf this requires a version whose '
+            'berny_solver.kernel forwards kwargs to Berny.'
+        ),
+    )
     args = ap.parse_args(argv)
 
     if args.solver == 'mopac' and not shutil.which('mopac'):
@@ -242,7 +280,16 @@ def main(argv=None):
     rows = []
     for name in names:
         print(f'==> {name}', flush=True)
-        rows.append(run_one(name, reference[name], args.solver, data_dir))
+        rows.append(
+            run_one(
+                name,
+                reference[name],
+                args.solver,
+                data_dir,
+                trace_dir=args.out_trace_dir,
+                benchmark=args.benchmark,
+            )
+        )
 
     table = format_table(rows, args.solver, reference)
     errors = format_errors(rows)

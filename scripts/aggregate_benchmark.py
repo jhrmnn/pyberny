@@ -27,7 +27,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from benchmark import (  # noqa: E402
+from benchmark import (
     BENCHMARKS,
     REF_STEPS_KEY,
     format_errors,
@@ -44,6 +44,12 @@ def load_rows(results_dir, solver, benchmark):
     # results directory hold shards from multiple benchmarks side-by-side,
     # which is what the push/pull_request auto-trigger produces.
     for path in sorted(results_dir.glob(f'{solver}-{benchmark}-*.json')):
+        # Per-molecule trace files (``<solver>-<benchmark>-<name>.trace.json``,
+        # written by benchmark.py --out-trace-dir) live alongside the batch
+        # shards and match the same glob; they're JSON lists rather than the
+        # ``{'rows': [...]}`` shards we want here, so skip them.
+        if path.name.endswith('.trace.json'):
+            continue
         data = json.loads(path.read_text())
         for row in data['rows']:
             name = row['name']

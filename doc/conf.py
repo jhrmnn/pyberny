@@ -21,6 +21,8 @@ sys.path.insert(0, os.path.abspath('../src'))
 with open('../pyproject.toml') as f:
     metadata = toml.load(f)['tool']['poetry']
 
+_HERE = os.path.abspath(os.path.dirname(__file__))
+
 project = 'PyBerny'
 author = ' '.join(metadata['authors'][0].split()[:-1])
 release = version = get_version('pyberny')
@@ -46,7 +48,13 @@ extensions = [
     'sphinx_multiversion',
 ]
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3', None),
+    'python': (
+        'https://docs.python.org/3',
+        (
+            'https://docs.python.org/3/objects.inv',
+            os.path.join(_HERE, 'python-objects.inv'),
+        ),
+    ),
 }
 exclude_patterns = ['build', '.DS_Store']
 
@@ -89,6 +97,7 @@ napoleon_use_ivar = True
 def skip_namedtuples(app, what, name, obj, skip, options):
     if hasattr(obj, '_source'):
         return True
+    return None
 
 
 def _callout_role(css_class):

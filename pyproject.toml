@@ -14,6 +14,9 @@ license = "MPL-2.0"
 packages = [
     { include = "berny", from = "src" },
 ]
+include = [
+    { path = "src/berny/py.typed", format = ["sdist", "wheel"] },
+]
 classifiers = [
     "Environment :: Console",
     "Intended Audience :: Science/Research",
@@ -23,8 +26,8 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9"
-numpy = ">=1.15,<3"
+python = "^3.10"
+numpy = ">=1.21,<3"
 pytest = { version = ">=6", optional = true }
 coverage = { version = ">=6", optional = true }
 sphinx = { version = ">=5,<8", optional = true }
@@ -32,20 +35,17 @@ sphinxcontrib-katex = { version = ">=0.9", optional = true }
 sphinx-multiversion = { version = ">=0.2", optional = true }
 toml = { version = ">=0.10", optional = true }
 pyscf = { version = ">=2.5", optional = true }
+matplotlib = { version = ">=3.5", optional = true }
 
 [tool.poetry.extras]
 test = ["pytest", "coverage"]
 doc = ["sphinx", "sphinxcontrib-katex", "sphinx-multiversion", "toml"]
 benchmark = ["pyscf"]
+plot = ["matplotlib"]
 
 [tool.poetry.group.dev.dependencies]
-flake8 = ">=5"
-flake8-bugbear = ">=22"
-flake8-comprehensions = ">=3"
+ruff = ">=0.6"
 black = ">=22"
-pep8-naming = ">=0.13"
-isort = ">=5"
-pydocstyle = ">=6"
 mypy = ">=1"
 
 [tool.poetry.scripts]
@@ -57,18 +57,98 @@ dirty = true
 pattern = '^(?P<base>\d+\.\d+\.\d+)$'
 
 [tool.black]
-target-version = ["py39"]
+target-version = ["py310"]
 skip-string-normalization = true
 force-exclude = "experiments/"
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.10"
 files = ["src/berny"]
-
-[[tool.mypy.overrides]]
-module = ["numpy", "numpy.*"]
-ignore_missing_imports = true
+strict = true
+warn_unreachable = true
+extra_checks = true
+disallow_any_unimported = true
+enable_error_code = [
+    "redundant-self",
+    "redundant-expr",
+    "possibly-undefined",
+    "truthy-bool",
+    "truthy-iterable",
+    "ignore-without-code",
+    "unused-awaitable",
+]
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::PendingDeprecationWarning"]
 testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 80
+extend-exclude = ["experiments"]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "W",
+    "C90",
+    "N",
+    "B",
+    "C4",
+    "I",
+    "UP",
+    "SIM",
+    "PIE",
+    "RET",
+    "PT",
+    "RUF",
+    "NPY",
+    "ANN",
+]
+ignore = [
+    "E501",  # line length handled by black
+    "E741",  # ambiguous variable name
+    "E203",  # whitespace before punctuation (black-compatible)
+    "N802",  # function name should be lowercase
+    "N803",  # argument name should be lowercase
+    "N806",  # variable in function should be lowercase
+    "N999",  # invalid module name (Math.py is intentional)
+    "B905",  # zip() without explicit strict=
+    "RUF001",  # ambiguous unicode in strings (intentional math typography)
+    "RUF002",  # ambiguous unicode in docstrings (intentional math typography)
+    "RUF003",  # ambiguous unicode in comments (intentional math typography)
+    "SIM108",  # use ternary; hurts readability in numeric branches
+    "PT018",  # composite assertions are often clearer as one line
+    "ANN401",  # Any in annotations (kept consistent with mypy not disallowing Any)
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 12
+
+[tool.ruff.lint.isort]
+section-order = [
+    "future",
+    "standard-library",
+    "typing",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+no-lines-before = ["typing"]
+combine-as-imports = true
+
+[tool.ruff.lint.isort.sections]
+typing = ["typing", "typing_extensions"]
+
+[tool.ruff.lint.per-file-ignores]
+# ANN (flake8-annotations) is only enforced on the importable library;
+# tests, scripts, and the docs config aren't subject to mypy --strict and
+# are kept annotation-light.
+"tests/**" = ["ANN"]
+"scripts/**" = ["ANN"]
+"doc/**" = ["ANN"]
+
+[tool.coverage.run]
+branch = true
+source = ["berny"]

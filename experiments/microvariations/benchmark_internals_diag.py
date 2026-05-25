@@ -54,7 +54,7 @@ from berny.coords import Angle, Bond, Dihedral, InternalCoords
 from berny.solvers import MopacSolver
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DATA_ROOT = REPO_ROOT / 'tests' / 'data'
+DATA_ROOT = REPO_ROOT / 'src' / 'berny' / 'benchmarks'
 OUT_DIR = REPO_ROOT / 'experiments' / 'microvariations' / 'benchmark_internals_diag'
 
 BENCHMARKS = {

@@ -5,11 +5,15 @@
 """Linear-bend / dihedral-crossover model potential."""
 
 import math
+from typing import Any, ClassVar
 
 import numpy as np
 from numpy.linalg import norm
+from numpy.typing import NDArray
 
 from .base import ModelPotential, _angle, _cos_with_grads
+
+FloatArray = NDArray[np.floating[Any]]
 
 
 class LinearBendCrossover(ModelPotential):
@@ -26,7 +30,7 @@ class LinearBendCrossover(ModelPotential):
     two angles, which are invariant under rigid motion and that soft rotation.
     """
 
-    species = ['C', 'C', 'C', 'C']
+    species: ClassVar[list[str]] = ['C', 'C', 'C', 'C']
     r_ab = 1.20
     r_bc = 1.30
     r_cd = 1.30
@@ -35,7 +39,7 @@ class LinearBendCrossover(ModelPotential):
     k_linear = 0.25
     k_bend = 0.25
 
-    def start(self):
+    def start(self) -> FloatArray:
         """Return a starting geometry with both bond angles far from linear."""
         a = np.zeros(3)
         b = a + np.array([self.r_ab, 0.0, 0.0])
@@ -50,7 +54,7 @@ class LinearBendCrossover(ModelPotential):
         d = c + 1.28 * cd
         return np.array([a, b, c, d])
 
-    def energy(self, coords):
+    def energy(self, coords: FloatArray) -> float:
         """Return the model energy at ``coords`` (``(4, 3)`` array, angstrom)."""
         a, b, c, d = np.asarray(coords, dtype=float)
         e = (
@@ -66,7 +70,7 @@ class LinearBendCrossover(ModelPotential):
         e += 0.5 * self.k_bend * (_angle(b, c, d) - self.theta_bcd) ** 2
         return float(e)
 
-    def gradient(self, coords):
+    def gradient(self, coords: FloatArray) -> FloatArray:
         """Return the analytic gradient ``dE/dr`` (``(4, 3)``, per angstrom)."""
         coords = np.asarray(coords, dtype=float)
         a, b, c, d = coords
@@ -90,7 +94,9 @@ class LinearBendCrossover(ModelPotential):
         g[3] += coef * dq2
         return g
 
-    def assert_at_minimum(self, coords, tol_dist=1e-2, tol_angle_deg=1.0):
+    def assert_at_minimum(  # type: ignore[override]
+        self, coords: FloatArray, tol_dist: float = 1e-2, tol_angle_deg: float = 1.0
+    ) -> None:
         """Assert ``coords`` match the known minimum (bond lengths and angles)."""
         coords = np.asarray(coords, dtype=float)
         a, b, c, d = coords

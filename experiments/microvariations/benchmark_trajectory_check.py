@@ -60,7 +60,7 @@ def silence_fd(fd):
         os.close(saved)
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DATA_ROOT = REPO_ROOT / 'tests' / 'data'
+DATA_ROOT = REPO_ROOT / 'src' / 'berny' / 'benchmarks'
 BENCHMARKS = {
     'birkholz': 'birkholz_schlegel',
     'baker': 'baker_shajan_2023',

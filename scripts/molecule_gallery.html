@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Birkholz benchmark molecules &mdash; PyBerny</title>
+    <script src="https://cdn.jsdelivr.net/npm/3dmol@2.4.2/build/3Dmol-min.js"></script>
+    <style>
+      :root {
+        --border: #ddd;
+        --accent: #1a6ebd;
+        --muted: #666;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        color: #222;
+      }
+      header {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+      }
+      header h1 {
+        margin: 0 0 0.25rem;
+        font-size: 1.25rem;
+      }
+      header p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      header a {
+        color: var(--accent);
+      }
+      .layout {
+        display: flex;
+        height: calc(100vh - 5rem);
+        min-height: 28rem;
+      }
+      #list {
+        flex: 0 0 14rem;
+        overflow-y: auto;
+        border-right: 1px solid var(--border);
+        padding: 0.5rem 0;
+      }
+      #list button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        padding: 0.4rem 1.25rem;
+        font-size: 0.9rem;
+        cursor: pointer;
+        color: #222;
+      }
+      #list button:hover {
+        background: #f2f6fb;
+      }
+      #list button.active {
+        background: var(--accent);
+        color: #fff;
+      }
+      .main {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      .controls {
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 0.85rem;
+      }
+      .controls button {
+        cursor: pointer;
+      }
+      #viewer {
+        position: relative;
+        flex: 1 1 auto;
+        min-height: 18rem;
+      }
+      #meta {
+        padding: 0.6rem 1rem;
+        border-top: 1px solid var(--border);
+        font-size: 0.85rem;
+        color: var(--muted);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem 1.5rem;
+      }
+      #meta strong {
+        color: #222;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Birkholz benchmark molecules</h1>
+      <p>
+        Starting geometries of the benchmark set from Birkholz &amp; Schlegel,
+        <em>Theor. Chem. Acc.</em> <strong>135</strong>, 84 (2016). Drag to
+        rotate, scroll to zoom. Atom labels are the
+        <strong>0-based</strong> indices used by PyBerny's internal
+        coordinates.
+      </p>
+    </header>
+    <div class="layout">
+      <nav id="list" aria-label="Molecule list"></nav>
+      <div class="main">
+        <div class="controls">
+          <label>
+            <input type="checkbox" id="labels-toggle" checked />
+            Atom labels
+          </label>
+          <button type="button" id="reset-view">Reset view</button>
+        </div>
+        <div id="viewer"></div>
+        <div id="meta"></div>
+      </div>
+    </div>
+
+    <script id="mol-data">
+      window.BIRKHOLZ_MOLECULES = __BIRKHOLZ_DATA__;
+    </script>
+    <script>
+      (function () {
+        var molecules = window.BIRKHOLZ_MOLECULES || [];
+        var listEl = document.getElementById('list');
+        var metaEl = document.getElementById('meta');
+        var labelsToggle = document.getElementById('labels-toggle');
+        var viewer = $3Dmol.createViewer('viewer', {
+          backgroundColor: 'white',
+        });
+        var current = null;
+
+        function dash(value) {
+          return value === null || value === undefined ? '—' : value;
+        }
+
+        function drawLabels() {
+          viewer.removeAllLabels();
+          if (labelsToggle.checked) {
+            var atoms = viewer.getModel().selectedAtoms({});
+            atoms.forEach(function (atom, index) {
+              viewer.addLabel(String(index), {
+                position: { x: atom.x, y: atom.y, z: atom.z },
+                fontSize: 11,
+                fontColor: 'black',
+                backgroundColor: 'white',
+                backgroundOpacity: 0.6,
+                borderThickness: 0,
+                inFront: true,
+              });
+            });
+          }
+          viewer.render();
+        }
+
+        function showMeta(mol) {
+          metaEl.innerHTML = '';
+          var fields = [
+            ['Name', mol.name],
+            ['Atoms', mol.atoms],
+            ['Charge', mol.charge],
+            ['Multiplicity', mol.mult],
+            [
+              'Paper steps',
+              dash(mol.paper_steps) +
+                ' (' +
+                mol.paper_steps_method +
+                '/' +
+                mol.paper_steps_basis +
+                ')',
+            ],
+            ['PyBerny steps', dash(mol.pyberny_steps)],
+            ['MOPAC PM7 steps', dash(mol.mopac_pm7_steps)],
+          ];
+          fields.forEach(function (field) {
+            var span = document.createElement('span');
+            span.innerHTML = '<strong>' + field[0] + ':</strong> ' + field[1];
+            metaEl.appendChild(span);
+          });
+        }
+
+        function select(mol, button) {
+          current = mol;
+          Array.prototype.forEach.call(listEl.children, function (child) {
+            child.classList.remove('active');
+          });
+          if (button) {
+            button.classList.add('active');
+          }
+          viewer.clear();
+          viewer.addModel(mol.xyz, 'xyz');
+          viewer.setStyle(
+            {},
+            { stick: { radius: 0.12 }, sphere: { scale: 0.25 } }
+          );
+          viewer.zoomTo();
+          drawLabels();
+          showMeta(mol);
+        }
+
+        molecules.forEach(function (mol, index) {
+          var button = document.createElement('button');
+          button.type = 'button';
+          button.textContent = mol.name;
+          button.addEventListener('click', function () {
+            select(mol, button);
+          });
+          listEl.appendChild(button);
+          if (index === 0) {
+            select(mol, button);
+          }
+        });
+
+        labelsToggle.addEventListener('change', drawLabels);
+        document
+          .getElementById('reset-view')
+          .addEventListener('click', function () {
+            viewer.zoomTo();
+            viewer.render();
+          });
+      })();
+    </script>
+  </body>
+</html>

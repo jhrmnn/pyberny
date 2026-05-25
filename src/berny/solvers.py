@@ -1,16 +1,33 @@
 # Any copyright is dedicated to the Public Domain.
 # http://creativecommons.org/publicdomain/zero/1.0/
+from __future__ import annotations
 
 import os
 import shutil
 import subprocess
 import tempfile
+from collections.abc import Callable, Generator
+from typing import Any, Optional
 
 import numpy as np
+from numpy.typing import NDArray
 
 from .coords import angstrom
 
 __all__ = ['MopacSolver']
+
+FloatArray = NDArray[np.floating[Any]]
+
+# NB: ``Optional[X]`` is used instead of ``X | None`` because these aliases
+# are evaluated at import time, and Sphinx's autodoc mocks numpy (see
+# ``doc/conf.py``), making ``FloatArray`` a Mock whose ``__or__`` raises.
+#: Geometry sent to a solver: per-atom ``(symbol, xyz)`` pairs and optional
+#: lattice vectors (``None`` for a molecule).
+SolverInput = tuple[list[tuple[str, FloatArray]], Optional[FloatArray]]  # noqa: UP045
+#: Energy and gradients yielded by a solver (gradients in atomic units).
+SolverOutput = tuple[float, FloatArray]
+#: Generator type of a solver — yields ``None`` once before the first send.
+Solver = Generator[Optional[SolverOutput], SolverInput, None]  # noqa: UP045
 
 
 _MOPAC_MULT_KEYWORDS = {
@@ -24,7 +41,7 @@ _MOPAC_MULT_KEYWORDS = {
 }
 
 
-def _mopac_keyword_line(method, charge, mult):
+def _mopac_keyword_line(method: str, charge: int, mult: int) -> str:
     """Build the MOPAC keyword line for a single-point gradient run."""
     try:
         mult_kw = _MOPAC_MULT_KEYWORDS[mult]
@@ -38,7 +55,14 @@ def _mopac_keyword_line(method, charge, mult):
     return ' '.join(keywords)
 
 
-def MopacSolver(cmd='mopac', method='PM7', workdir=None, *, charge=0, mult=1):
+def MopacSolver(
+    cmd: str = 'mopac',
+    method: str = 'PM7',
+    workdir: str | None = None,
+    *,
+    charge: int = 0,
+    mult: int = 1,
+) -> Solver:
     """
     Crate a solver that wraps `MOPAC <http://openmopac.net>`_.
 
@@ -55,7 +79,7 @@ def MopacSolver(cmd='mopac', method='PM7', workdir=None, *, charge=0, mult=1):
     kcal = 1 / 627.503
     tmpdir = workdir or tempfile.mkdtemp()
     try:
-        atoms, lattice = yield
+        atoms, lattice = yield None
         while True:
             mopac_input = f'{keyword_line}\n\n\n' + '\n'.join(
                 f'{el} {x} 1 {y} 1 {z} 1' for el, (x, y, z) in atoms
@@ -87,16 +111,16 @@ def MopacSolver(cmd='mopac', method='PM7', workdir=None, *, charge=0, mult=1):
             shutil.rmtree(tmpdir)
 
 
-def GenericSolver(f, *args, **kwargs):
-    delta = kwargs.pop('delta', 1e-3)
-    atoms, lattice = yield
+def GenericSolver(f: Callable[..., float], *args: Any, **kwargs: Any) -> Solver:
+    delta: float = kwargs.pop('delta', 1e-3)
+    atoms, lattice = yield None
     while True:
         energy = f(atoms, lattice, *args, **kwargs)
         coords = np.array([coord for _, coord in atoms])
         gradients = np.zeros(coords.shape)
         for i_atom in range(coords.shape[0]):
             for i_xyz in range(3):
-                ene = {}
+                ene: dict[int, float] = {}
                 for step in [-2, -1, 1, 2]:
                     coords_diff = coords.copy()
                     coords_diff[i_atom, i_xyz] += step * delta
@@ -117,5 +141,5 @@ def GenericSolver(f, *args, **kwargs):
         atoms, lattice = yield energy, gradients / angstrom
 
 
-def _diff5(x, delta):
+def _diff5(x: dict[int, float], delta: float) -> float:
     return (1 / 12 * x[-2] - 2 / 3 * x[-1] + 2 / 3 * x[1] - 1 / 12 * x[2]) / delta

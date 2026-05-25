@@ -2,9 +2,9 @@
 """Split the Birkholz-Schlegel 2016 SI text file into per-molecule .xyz files.
 
 Run once by a maintainer; the resulting files in
-``tests/data/birkholz_schlegel/`` are committed and the SI .txt itself is not.
-The SI is the electronic supplementary material of Birkholz & Schlegel,
-*Theor. Chem. Acc.* **135**, 84 (2016), doi:10.1007/s00214-016-1847-3.
+``src/berny/benchmarks/birkholz_schlegel/`` are committed and the SI .txt
+itself is not. The SI is the electronic supplementary material of Birkholz &
+Schlegel, *Theor. Chem. Acc.* **135**, 84 (2016), doi:10.1007/s00214-016-1847-3.
 """
 
 import argparse
@@ -18,8 +18,7 @@ from pathlib import Path
 def slugify(name):
     """Lowercase ASCII slug with underscores: ``Mg Porphin`` -> ``mg_porphin``."""
     s = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore').decode()
-    s = re.sub(r'[^A-Za-z0-9]+', '_', s).strip('_').lower()
-    return s
+    return re.sub(r'[^A-Za-z0-9]+', '_', s).strip('_').lower()
 
 
 def parse_si(text):
@@ -52,10 +51,11 @@ def main(argv=None):
         '--out',
         type=Path,
         default=Path(__file__).resolve().parents[1]
-        / 'tests'
-        / 'data'
+        / 'src'
+        / 'berny'
+        / 'benchmarks'
         / 'birkholz_schlegel',
-        help='output directory (default: tests/data/birkholz_schlegel)',
+        help='output directory (default: src/berny/benchmarks/birkholz_schlegel)',
     )
     args = ap.parse_args(argv)
 
