@@ -44,7 +44,9 @@ import tempfile
 import time
 from pathlib import Path
 
-DATA = Path(__file__).resolve().parents[1] / 'tests' / 'data' / 'birkholz_schlegel'
+from berny.benchmarks import data_dir as _bench_data_dir
+
+DATA = _bench_data_dir('birkholz')
 
 STEPS_KEY = {'mopac': 'mopac_pm7_steps', 'pyscf': 'pyberny_steps'}
 # Used only if STEPS_KEY value is null for a given molecule.

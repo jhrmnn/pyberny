@@ -2,10 +2,11 @@
 """Generate a standalone 3D viewer page for the Birkholz-Schlegel benchmark.
 
 Reads the benchmark ``.xyz`` geometries and ``reference.json`` metadata from
-``tests/data/birkholz_schlegel/`` and emits a single self-contained HTML file
-with the geometries embedded inline and 3Dmol.js loaded from a pinned CDN. The
-page is built independently of Sphinx and merged into the documentation site
-at deploy time (see ``.github/workflows/doc.yaml``).
+:mod:`berny.benchmarks` (``birkholz_schlegel`` subset) and emits a single
+self-contained HTML file with the geometries embedded inline and 3Dmol.js
+loaded from a pinned CDN. The page is built independently of Sphinx and
+merged into the documentation site at deploy time (see
+``.github/workflows/doc.yaml``).
 """
 
 import argparse
@@ -13,8 +14,9 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-DATA_DIR = ROOT / 'tests' / 'data' / 'birkholz_schlegel'
+from berny.benchmarks import data_dir as _bench_data_dir
+
+DATA_DIR = _bench_data_dir('birkholz')
 TEMPLATE = Path(__file__).resolve().parent / 'molecule_gallery.html'
 PLACEHOLDER = '__BIRKHOLZ_DATA__'
 

@@ -31,7 +31,7 @@ from berny import Berny, geomlib
 from berny.solvers import MopacSolver
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DATA = REPO_ROOT / 'tests' / 'data' / 'birkholz_schlegel'
+DATA = REPO_ROOT / 'src' / 'berny' / 'benchmarks' / 'birkholz_schlegel'
 
 DEFAULT_MOLECULES = [
     'estradiol',
@@ -121,7 +121,7 @@ def summarize(rows, molecules, sigmas):
         'every Cartesian coordinate of the Birkholz-Schlegel starting '
         'geometry. The PES is MOPAC PM7 (the same backend that produced the '
         '`mopac_pm7_steps` column of '
-        '`tests/data/birkholz_schlegel/reference.json`). Each non-zero sigma '
+        '`src/berny/benchmarks/birkholz_schlegel/reference.json`). Each non-zero sigma '
         f'cell aggregates {n_seeds} seeds.\n'
     )
     out.append(
