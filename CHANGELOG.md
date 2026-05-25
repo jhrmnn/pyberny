@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dropped the runtime dependency on `setuptools` (`pkg_resources`).
 - Unknown keyword arguments to `Berny()` now raise `TypeError` instead of being silently absorbed.
 - Mid-run internal-coordinate rebuilds now preserve accumulated Hessian curvature for surviving coordinates instead of restarting entirely from a diagonal guess.
+- Linear-bend mid-run rebuild now also fires on near-linear angles at higher-coordination centres (not only sp-like ones); the singular angle is dropped rather than replaced by dummies and the dependent dihedrals are reconstructed against the straightened geometry. Fixes a class of estradiol / zn_edta optimization failures (pinv warnings, trust-radius crash) at a small step-count cost on cases where the offending angle was already stable. `mopac_pm7_steps` references updated for estradiol (11→27), azadirachtin (60→66), zn_edta (100→119), acanil01 (44→40), and mesityl_oxide (8→12) accordingly; benchmark MOPAC ceiling raised from 110 to 130 steps to accommodate zn_edta's longer trajectory.
 
 ### Removed
 
