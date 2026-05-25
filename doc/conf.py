@@ -21,6 +21,8 @@ sys.path.insert(0, os.path.abspath('../src'))
 with open('../pyproject.toml') as f:
     metadata = toml.load(f)['tool']['poetry']
 
+_HERE = os.path.abspath(os.path.dirname(__file__))
+
 project = 'PyBerny'
 author = ' '.join(metadata['authors'][0].split()[:-1])
 release = version = get_version('pyberny')
@@ -48,7 +50,10 @@ extensions = [
 intersphinx_mapping = {
     'python': (
         'https://docs.python.org/3',
-        ('https://docs.python.org/3/objects.inv', 'python-objects.inv'),
+        (
+            'https://docs.python.org/3/objects.inv',
+            os.path.join(_HERE, 'python-objects.inv'),
+        ),
     ),
 }
 exclude_patterns = ['build', '.DS_Store']
