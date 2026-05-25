@@ -43,8 +43,8 @@ from .dihedral_from_linear import DihedralFromLinear
 from .linear_bend import LinearBendCrossover
 
 __all__ = [
-    'ModelPotential',
-    'LinearBendCrossover',
     'DihedralFromLinear',
+    'LinearBendCrossover',
+    'ModelPotential',
     'run_and_check',
 ]

@@ -102,6 +102,11 @@ ignore = [
     "N806",  # variable in function should be lowercase
     "N999",  # invalid module name (Math.py is intentional)
     "B905",  # zip() without explicit strict=
+    "RUF001",  # ambiguous unicode in strings (intentional math typography)
+    "RUF002",  # ambiguous unicode in docstrings (intentional math typography)
+    "RUF003",  # ambiguous unicode in comments (intentional math typography)
+    "SIM108",  # use ternary; hurts readability in numeric branches
+    "PT018",  # composite assertions are often clearer as one line
 ]
 
 [tool.ruff.lint.mccabe]

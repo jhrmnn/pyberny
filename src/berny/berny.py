@@ -182,7 +182,7 @@ class Berny(Generator):
 
     def send(  # type: ignore[override]
         self, energy_and_gradients: tuple[float, Any]
-    ) -> dict[str, Any] | None:  # noqa: D102
+    ) -> dict[str, Any] | None:
         self._log.step = self._n
         log, s = self._log.info, self._state
         record: dict[str, Any] | None
@@ -313,7 +313,7 @@ class Berny(Generator):
         tmp.write_text(json.dumps(self._trace, indent=2) + '\n', encoding='utf-8')
         os.replace(tmp, self._trace_path)
 
-    def throw(self, *args, **kwargs):  # noqa: D102
+    def throw(self, *args, **kwargs):
         return Generator.throw(self, *args, **kwargs)
 
 
@@ -399,22 +399,20 @@ def linear_search(E0, E1, g0, g1, log=no_log, *, record: dict | None = None):
                     }
                 return 0, E0
 
-            else:
-                log('* No fit succeeded, returning to best point')
-                if record is not None:
-                    record['linear_search'] = {
-                        'E0': float(E0),
-                        'E1': float(E1),
-                        'g0': float(g0),
-                        'g1': float(g1),
-                        'method': 'none-best',
-                        't': 1.0,
-                        'interpolated_energy': float(E1),
-                    }
-                return 1, E1
-        else:
-            msg = 'Cubic interpolation was performed'
-            method = 'cubic'
+            log('* No fit succeeded, returning to best point')
+            if record is not None:
+                record['linear_search'] = {
+                    'E0': float(E0),
+                    'E1': float(E1),
+                    'g0': float(g0),
+                    'g1': float(g1),
+                    'method': 'none-best',
+                    't': 1.0,
+                    'interpolated_energy': float(E1),
+                }
+            return 1, E1
+        msg = 'Cubic interpolation was performed'
+        method = 'cubic'
     else:
         msg = 'Quartic interpolation was performed'
         method = 'quartic'

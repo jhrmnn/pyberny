@@ -148,7 +148,7 @@ def run_one(name, ref, kind, data_dir, trace_dir=None, benchmark=None):
     t0 = time.perf_counter()
     try:
         converged, n, energies = runner(name, ref, data_dir, trace=trace_path)
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {
             'name': name,
             'converged': False,

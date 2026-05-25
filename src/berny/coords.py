@@ -253,7 +253,7 @@ def _pick_perp(axis):
     return _perp_from_ref(e, axis)
 
 
-class _DummySpec(object):
+class _DummySpec:
     """Recipe for placing a dummy atom for a (near-)linear ``i-j-k`` triple.
 
     The dummy sits at ``r_j + _DUMMY_OFFSET * p``, where ``p`` is a unit
@@ -677,7 +677,7 @@ class InternalCoords:
         # coordinates can amplify into huge Cartesian displacements via
         # the pseudoinverse (see issue #23 large molecule).
         jac = [
-            (spec.i, spec.j, spec.k) + spec.place_and_jacobians(coords[:n_real])[1:]
+            (spec.i, spec.j, spec.k, *spec.place_and_jacobians(coords[:n_real])[1:])
             for spec in self._dummy_specs
         ]
         B = np.zeros((len(self), n_real, 3))

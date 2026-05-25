@@ -27,12 +27,12 @@ from pathlib import Path
 import matplotlib
 
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt  # noqa: E402
-import numpy as np  # noqa: E402
+import matplotlib.pyplot as plt
+import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from benchmark import BENCHMARKS  # noqa: E402
+from benchmark import BENCHMARKS
 
 HARTREE_TO_KCAL = 627.503
 

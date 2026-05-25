@@ -63,7 +63,7 @@ def server(args):
     server.bind((host, int(port)))
     server.listen(0)
     while True:
-        sock, addr = server.accept()
+        sock, _addr = server.accept()
         f = sock.makefile('r+')
         geom = handler(berny, f)
         if geom:

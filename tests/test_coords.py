@@ -324,7 +324,7 @@ def test_needs_rebuild_returns_false_on_atom_count_mismatch():
     # gracefully rather than indexing past the stored bond matrix.
     bent = _co2(angle_deg=160)
     coords = InternalCoords(bent)
-    longer = Geometry(['O', 'C', 'O', 'H'], _co2_coords(160) + [[3.0, 0.0, 0.0]])
+    longer = Geometry(['O', 'C', 'O', 'H'], [*_co2_coords(160), [3.0, 0.0, 0.0]])
     assert not coords.needs_rebuild(longer)
 
 

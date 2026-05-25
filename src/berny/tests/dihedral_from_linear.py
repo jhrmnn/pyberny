@@ -5,6 +5,7 @@
 """Reverse-direction model potential: a bent dihedral reached from linear."""
 
 import math
+from typing import ClassVar
 
 import numpy as np
 from numpy.linalg import norm
@@ -31,7 +32,7 @@ class DihedralFromLinear(ModelPotential):
     checks only the bond lengths and the two angles.
     """
 
-    species = ['C', 'C', 'C', 'C']
+    species: ClassVar[list[str]] = ['C', 'C', 'C', 'C']
     r_ab = 1.45
     r_bc = 1.50
     r_cd = 1.45

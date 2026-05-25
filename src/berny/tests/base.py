@@ -9,6 +9,7 @@ and the :func:`run_and_check` driver that exercises an optimizer against one.
 """
 
 import math
+from typing import ClassVar
 
 import numpy as np
 from numpy import dot
@@ -45,7 +46,7 @@ class ModelPotential:
     gradient is ``dE/dr`` in those units per angstrom.
     """
 
-    species: list
+    species: ClassVar[list[str]]
 
     def start(self):
         """Return the starting geometry as an ``(N, 3)`` array in angstrom."""

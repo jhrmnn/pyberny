@@ -5,6 +5,7 @@
 """Linear-bend / dihedral-crossover model potential."""
 
 import math
+from typing import ClassVar
 
 import numpy as np
 from numpy.linalg import norm
@@ -26,7 +27,7 @@ class LinearBendCrossover(ModelPotential):
     two angles, which are invariant under rigid motion and that soft rotation.
     """
 
-    species = ['C', 'C', 'C', 'C']
+    species: ClassVar[list[str]] = ['C', 'C', 'C', 'C']
     r_ab = 1.20
     r_bc = 1.30
     r_cd = 1.30
