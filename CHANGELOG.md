@@ -19,10 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New `berny.tests` subpackage shipping reusable, optimizer-agnostic end-to-end tests built on analytic model potentials whose minima are known in closed form, so any optimizer (not just `Berny`) can install pyberny and check itself via `run_and_check(potential, minimize)`. The bundled `LinearBendCrossover` and `DihedralFromLinear` potentials exercise the linear-bend / dihedral coordinate handoff in both directions.
 - New `berny.benchmarks` subpackage shipping the Birkholz–Schlegel and Baker (Shajan-2023) benchmark sets — starting geometries plus `reference.json` metadata — directly inside the wheel, with a small discovery API (`BENCHMARKS`, `data_dir`, `load_reference`, `iter_molecules`) so downstream optimizers can drive themselves through the same standard sets that `scripts/benchmark.py` uses.
 - Interactive 3D viewer of the Birkholz & Schlegel benchmark molecules, published with the documentation, showing each starting geometry with atoms labelled by their 0-based index.
+- PEP 561 `py.typed` marker — pyberny now ships type information, and the codebase is fully annotated and checked under `mypy --strict`.
 
 ### Changed
 
-- Minimum supported Python version raised to 3.9.
+- Minimum supported Python version raised to 3.10.
 - `berny.Math.FindrootException` renamed to `berny.Math.FindrootError`.
 - Dropped the runtime dependency on `setuptools` (`pkg_resources`).
 - Unknown keyword arguments to `Berny()` now raise `TypeError` instead of being silently absorbed.

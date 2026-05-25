@@ -9,14 +9,20 @@ and the :func:`run_and_check` driver that exercises an optimizer against one.
 """
 
 import math
-from typing import ClassVar
+from collections.abc import Callable
+from typing import Any, ClassVar
 
 import numpy as np
 from numpy import dot
 from numpy.linalg import norm
+from numpy.typing import NDArray
+
+FloatArray = NDArray[np.floating[Any]]
 
 
-def _cos_with_grads(p, v, q):
+def _cos_with_grads(
+    p: FloatArray, v: FloatArray, q: FloatArray
+) -> tuple[float, FloatArray, FloatArray, FloatArray]:
     # Cosine of the angle at vertex ``v`` (arms to ``p`` and ``q``) and its
     # derivatives w.r.t. each of the three points.
     u = p - v
@@ -27,14 +33,14 @@ def _cos_with_grads(p, v, q):
     dcos_dp = w / (nu * nw) - cos * u / nu**2
     dcos_dq = u / (nu * nw) - cos * w / nw**2
     dcos_dv = -(dcos_dp + dcos_dq)
-    return cos, dcos_dp, dcos_dv, dcos_dq
+    return float(cos), dcos_dp, dcos_dv, dcos_dq
 
 
-def _angle(p, v, q):
+def _angle(p: FloatArray, v: FloatArray, q: FloatArray) -> float:
     u = p - v
     w = q - v
     cos = dot(u, w) / (norm(u) * norm(w))
-    return math.acos(min(1.0, max(-1.0, cos)))
+    return math.acos(min(1.0, max(-1.0, float(cos))))
 
 
 class ModelPotential:
@@ -48,23 +54,23 @@ class ModelPotential:
 
     species: ClassVar[list[str]]
 
-    def start(self):
+    def start(self) -> FloatArray:
         """Return the starting geometry as an ``(N, 3)`` array in angstrom."""
         raise NotImplementedError
 
-    def energy(self, coords):
+    def energy(self, coords: FloatArray) -> float:
         """Return the potential energy at ``coords`` (``(N, 3)``, angstrom)."""
         raise NotImplementedError
 
-    def gradient(self, coords):
+    def gradient(self, coords: FloatArray) -> FloatArray:
         """Return the analytic gradient ``dE/dr`` at ``coords`` (per angstrom)."""
         raise NotImplementedError
 
-    def assert_at_minimum(self, coords, **tols):
+    def assert_at_minimum(self, coords: FloatArray, **tols: Any) -> None:
         """Assert that ``coords`` sit at the known minimum of this potential."""
         raise NotImplementedError
 
-    def numerical_gradient(self, coords, step=1e-5):
+    def numerical_gradient(self, coords: FloatArray, step: float = 1e-5) -> FloatArray:
         """Return a central-difference gradient, to cross-check :meth:`gradient`."""
         coords = np.asarray(coords, dtype=float)
         g = np.zeros_like(coords)
@@ -78,7 +84,11 @@ class ModelPotential:
         return g
 
 
-def run_and_check(potential, minimize, **tols):
+def run_and_check(
+    potential: ModelPotential,
+    minimize: Callable[..., Any],
+    **tols: Any,
+) -> FloatArray:
     """Run ``minimize`` against ``potential`` and assert it reaches the minimum.
 
     ``minimize`` is the adapter for the optimizer under test, called as

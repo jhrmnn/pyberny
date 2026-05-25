@@ -1,24 +1,30 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+from collections.abc import Callable
+from typing import Any
+
 import numpy as np
+from numpy.typing import NDArray
 
 __all__ = ['findroot', 'fit_cubic', 'fit_quartic']
 
+FloatArray = NDArray[np.floating[Any]]
 
-def rms(A):
+
+def rms(A: FloatArray) -> float | None:
     if A.size == 0:
         return None
-    return np.sqrt(np.sum(A**2) / A.size)
+    return float(np.sqrt(np.sum(A**2) / A.size))
 
 
-def pinv(A, log=lambda _: None):
+def pinv(A: FloatArray, log: Callable[[str], None] = lambda _: None) -> FloatArray:
     U, D, V = np.linalg.svd(A)
     thre = 1e3
     thre_log = 1e8
     gaps = D[:-1] / D[1:]
     try:
-        n = np.flatnonzero(gaps > thre)[0]
+        n = int(np.flatnonzero(gaps > thre)[0])
     except IndexError:
         n = len(gaps)
     else:
@@ -27,10 +33,10 @@ def pinv(A, log=lambda _: None):
             log(f'Pseudoinverse gap of only: {gap:.1e}')
     D[n + 1 :] = 0
     D[: n + 1] = 1 / D[: n + 1]
-    return U.dot(np.diag(D)).dot(V)
+    return U.dot(np.diag(D)).dot(V)  # type: ignore[no-any-return]
 
 
-def cross(a, b):
+def cross(a: FloatArray, b: FloatArray) -> FloatArray:
     return np.array(
         [
             a[1] * b[2] - a[2] * b[1],
@@ -40,7 +46,9 @@ def cross(a, b):
     )
 
 
-def fit_cubic(y0, y1, g0, g1):
+def fit_cubic(
+    y0: float, y1: float, g0: float, g1: float
+) -> tuple[float | None, float | None]:
     """Fit cubic polynomial to function values and derivatives at x = 0, 1.
 
     Returns position and function value of minimum if fit succeeds. Fit does
@@ -56,17 +64,19 @@ def fit_cubic(y0, y1, g0, g1):
     r = np.roots(np.polyder(p))
     if not np.isreal(r).all():
         return None, None
-    r = sorted(x.real for x in r)
+    r_sorted = sorted(x.real for x in r)
     if p[0] > 0:
-        maxim, minim = r
+        maxim, minim = r_sorted
     else:
-        minim, maxim = r
+        minim, maxim = r_sorted
     if 0 < maxim < 1 and abs(minim - 0.5) > abs(maxim - 0.5):
         return None, None
-    return minim, np.polyval(p, minim)
+    return minim, float(np.polyval(p, minim))
 
 
-def fit_quartic(y0, y1, g0, g1):
+def fit_quartic(
+    y0: float, y1: float, g0: float, g1: float
+) -> tuple[float | None, float | None]:
     """Fit constrained quartic polynomial to function values and erivatives at x = 0,1.
 
     Returns position and function value of minimum or None if fit fails or has
@@ -76,19 +86,19 @@ def fit_quartic(y0, y1, g0, g1):
     two, the one with lower minimum is chosen.
     """
 
-    def g(y0, y1, g0, g1, c):
+    def g(y0: float, y1: float, g0: float, g1: float, c: float) -> FloatArray:
         a = c + 3 * (y0 - y1) + 2 * g0 + g1
         b = -2 * c - 4 * (y0 - y1) - 3 * g0 - g1
         return np.array([a, b, c, g0, y0])
 
-    def quart_min(p):
+    def quart_min(p: FloatArray) -> tuple[float, float]:
         r = np.roots(np.polyder(p))
         is_real = np.isreal(r)
         if is_real.sum() == 1:
             minim = r[is_real][0].real
         else:
             minim = r[(r == max(-abs(r))) | (r == -max(-abs(r)))][0].real
-        return minim, np.polyval(p, minim)
+        return float(minim), float(np.polyval(p, minim))
 
     # discriminant of d^2y/dx^2=0
     D = -((g0 + g1) ** 2) - 2 * g0 * g1 + 6 * (y1 - y0) * (g0 + g1) - 6 * (y1 - y0) ** 2
@@ -110,7 +120,7 @@ class FindrootError(Exception):
     pass
 
 
-def findroot(f, lim):
+def findroot(f: Callable[[float], float], lim: float) -> float:
     """Find root of increasing function on (-inf,lim).
 
     Assumes f(-inf) < 0, f(lim) > 0.
@@ -136,5 +146,4 @@ def findroot(f, lim):
         if err_new >= err:
             return x
         err = err_new
-    else:
-        raise FindrootError()
+    raise FindrootError()

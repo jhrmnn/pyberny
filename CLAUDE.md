@@ -10,11 +10,11 @@ refactor, or take cues from it when working on anything else.
 ## Pre-push checks
 
 Before `git push`, run `scripts/check.sh`. It runs the same lint, test, and
-doc-build commands CI runs (`ruff check`, `black --check`, `pytest`, and
-`sphinx-build -W -E doc doc/_check`) against the current Python, so most CI
-failures are catchable locally without waiting for the 5-version matrix. The
-Sphinx step uses server-side KaTeX prerender, so `node` and the `[doc]` extra
-(`pip install -e ".[doc]"`) must be installed.
+doc-build commands CI runs (`ruff check`, `black --check`, `mypy`, `pytest`,
+and `sphinx-build -W -E doc doc/_check`) against the current Python, so most
+CI failures are catchable locally without waiting for the 5-version matrix.
+The Sphinx step uses server-side KaTeX prerender, so `node` and the `[doc]`
+extra (`pip install -e ".[doc]"`) must be installed.
 
 ## CI results
 

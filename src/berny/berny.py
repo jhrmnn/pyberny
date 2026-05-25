@@ -14,6 +14,7 @@ from typing import Any, NamedTuple
 import numpy as np
 from numpy import dot, eye
 from numpy.linalg import norm
+from numpy.typing import NDArray
 
 from . import Math
 from .coords import InternalCoords
@@ -22,6 +23,8 @@ from .geomlib import Geometry
 __all__ = ['Berny', 'BernyParams']
 
 log = logging.getLogger(__name__)
+
+FloatArray = NDArray[np.floating[Any]]
 
 
 @dataclass
@@ -55,9 +58,9 @@ class BernyParams:
 class OptPoint(NamedTuple):
     # E and g are None for ``future``/``predicted`` points whose energy or
     # gradient haven't been computed yet, and a float/ndarray otherwise.
-    q: np.ndarray
-    E: Any
-    g: Any
+    q: FloatArray
+    E: float | None
+    g: FloatArray | None
 
 
 @dataclass
@@ -68,8 +71,8 @@ class BernyState:
     params: BernyParams
     trust: float
     coords: InternalCoords
-    H: np.ndarray
-    weights: np.ndarray
+    H: FloatArray
+    weights: FloatArray
     future: OptPoint
     first: bool = True
     interpolated: OptPoint | None = None
@@ -78,16 +81,16 @@ class BernyState:
     best: OptPoint | None = None
 
 
-class BernyAdapter(logging.LoggerAdapter):
+class BernyAdapter(logging.LoggerAdapter):  # type: ignore[type-arg]
     def __init__(self, logger: logging.Logger) -> None:
         super().__init__(logger, {})
         self.step: int = 0
 
-    def process(self, msg, kwargs):
+    def process(self, msg: Any, kwargs: Any) -> tuple[str, Any]:
         return f'{self.step} {msg}', kwargs
 
 
-class Berny(Generator):
+class Berny(Generator):  # type: ignore[type-arg]
     """Generator that receives energy and gradients and yields the next geometry.
 
     Args:
@@ -146,7 +149,7 @@ class Berny(Generator):
 
     def _build_coord_state(
         self, geom: Geometry, params: BernyParams
-    ) -> tuple[InternalCoords, np.ndarray, np.ndarray, OptPoint]:
+    ) -> tuple[InternalCoords, FloatArray, FloatArray, OptPoint]:
         """Build ``InternalCoords`` and the coord-derived state for ``geom``.
 
         Returns ``(coords, H, weights, future)`` and logs ``str(coords)``.
@@ -222,11 +225,18 @@ class Berny(Generator):
         B = s.coords.B_matrix(s.geom)
         B_inv = B.T.dot(Math.pinv(np.dot(B, B.T), log=log))
         current = OptPoint(s.future.q, energy, dot(B_inv.T, gradients.reshape(-1)))
+        assert current.E is not None
+        assert current.g is not None
         if not s.first:
             assert s.best is not None
+            assert s.best.E is not None
+            assert s.best.g is not None
             assert s.previous is not None
+            assert s.previous.E is not None
             assert s.predicted is not None
+            assert s.predicted.E is not None
             assert s.interpolated is not None
+            assert s.interpolated.E is not None
             s.H = update_hessian(
                 s.H, current.q - s.best.q, current.g - s.best.g, log=log, record=record
             )
@@ -239,12 +249,12 @@ class Berny(Generator):
                 energy_noise=s.params.energy_noise,
                 record=record,
             )
-            dq = s.best.q - current.q
+            dq: FloatArray = s.best.q - current.q
             t, E = linear_search(
                 current.E,
                 s.best.E,
-                dot(current.g, dq),
-                dot(s.best.g, dq),
+                float(dot(current.g, dq)),
+                float(dot(s.best.g, dq)),
                 log=log,
                 record=record,
             )
@@ -257,6 +267,7 @@ class Berny(Generator):
             raise RuntimeError('The trust radius got too small, check forces?')
         proj = dot(B, B_inv)
         H_proj = proj.dot(s.H).dot(proj) + 1000 * (eye(len(s.coords)) - proj)
+        assert s.interpolated.g is not None
         dq, dE, on_sphere = quadratic_step(
             dot(proj, s.interpolated.g),
             H_proj,
@@ -265,12 +276,14 @@ class Berny(Generator):
             log=log,
             record=record,
         )
+        assert s.interpolated.E is not None
         s.predicted = OptPoint(s.interpolated.q + dq, s.interpolated.E + dE, None)
         dq = s.predicted.q - current.q
-        log(f'Total step: RMS: {Math.rms(dq):.3}, max: {max(abs(dq)):.3}')
+        rms_dq = Math.rms(dq)
+        log(f'Total step: RMS: {rms_dq:.3}, max: {max(abs(dq)):.3}')
         if record is not None:
             record['total_step'] = {
-                'rms': float(Math.rms(dq)),
+                'rms': float(rms_dq) if rms_dq is not None else None,
                 'max': float(max(abs(dq))),
             }
         q, s.geom = s.coords.update_geom(
@@ -278,7 +291,9 @@ class Berny(Generator):
         )
         s.future = OptPoint(q, None, None)
         s.previous = current
-        if s.first or (s.best is not None and current.E < s.best.E):
+        if s.first or (
+            s.best is not None and s.best.E is not None and current.E < s.best.E
+        ):
             s.best = current
         s.first = False
         self._converged = is_converged(
@@ -313,38 +328,47 @@ class Berny(Generator):
         tmp.write_text(json.dumps(self._trace, indent=2) + '\n', encoding='utf-8')
         os.replace(tmp, self._trace_path)
 
-    def throw(self, *args, **kwargs):
+    def throw(self, *args: Any, **kwargs: Any) -> Any:
         return Generator.throw(self, *args, **kwargs)
 
 
-def no_log(msg, **kwargs):
+def no_log(msg: str, **kwargs: Any) -> None:
     pass
 
 
-def update_hessian(H, dq, dg, log=no_log, *, record: dict | None = None):
+def update_hessian(
+    H: FloatArray,
+    dq: FloatArray,
+    dg: FloatArray,
+    log: Any = no_log,
+    *,
+    record: dict[str, Any] | None = None,
+) -> FloatArray:
     dH1 = dg[None, :] * dg[:, None] / dot(dq, dg)
     dH2 = H.dot(dq[None, :] * dq[:, None]).dot(H) / dq.dot(H).dot(dq)
     dH = dH1 - dH2  # BFGS update
     log('Hessian update information:')
-    log(f'* Change: RMS: {Math.rms(dH):.3}, max: {abs(dH).max():.3}')
+    rms_dH = Math.rms(dH)
+    log(f'* Change: RMS: {rms_dH:.3}, max: {abs(dH).max():.3}')
     if record is not None:
         record['hessian_update'] = {
-            'rms_change': float(Math.rms(dH)),
+            'rms_change': float(rms_dH) if rms_dH is not None else None,
             'max_change': float(abs(dH).max()),
         }
-    return H + dH
+    result: FloatArray = H + dH
+    return result
 
 
 def update_trust(
-    trust,
-    dE,
-    dE_predicted,
-    dq,
-    log=no_log,
+    trust: float,
+    dE: float,
+    dE_predicted: float,
+    dq: FloatArray,
+    log: Any = no_log,
     *,
-    energy_noise=2e-8,
-    record: dict | None = None,
-):
+    energy_noise: float = 2e-8,
+    record: dict[str, Any] | None = None,
+) -> float:
     if abs(dE_predicted) < 10 * energy_noise:
         if abs(norm(dq) - trust) < 1e-10:
             new_trust = 2 * trust
@@ -377,7 +401,15 @@ def update_trust(
     return new_trust
 
 
-def linear_search(E0, E1, g0, g1, log=no_log, *, record: dict | None = None):
+def linear_search(
+    E0: float,
+    E1: float,
+    g0: float,
+    g1: float,
+    log: Any = no_log,
+    *,
+    record: dict[str, Any] | None = None,
+) -> tuple[float, float]:
     log('Linear interpolation:')
     log(f'* Energies: {E0:.8}, {E1:.8}')
     log(f'* Derivatives: {g0:.3}, {g1:.3}')
@@ -416,6 +448,7 @@ def linear_search(E0, E1, g0, g1, log=no_log, *, record: dict | None = None):
     else:
         msg = 'Quartic interpolation was performed'
         method = 'quartic'
+    assert E is not None
     log(f'* {msg}: t = {t:.3}')
     log(f'* Interpolated energy: {E:.8}')
     if record is not None:
@@ -431,7 +464,15 @@ def linear_search(E0, E1, g0, g1, log=no_log, *, record: dict | None = None):
     return t, E
 
 
-def quadratic_step(g, H, w, trust, log=no_log, *, record: dict | None = None):
+def quadratic_step(
+    g: FloatArray,
+    H: FloatArray,
+    w: FloatArray,
+    trust: float,
+    log: Any = no_log,
+    *,
+    record: dict[str, Any] | None = None,
+) -> tuple[FloatArray, float, bool]:
     ev = np.linalg.eigvalsh((H + H.T) / 2)
     rfo = np.vstack((np.hstack((H, g[:, None])), np.hstack((g, 0))[None, :]))
     D, V = np.linalg.eigh((rfo + rfo.T) / 2)
@@ -443,8 +484,8 @@ def quadratic_step(g, H, w, trust, log=no_log, *, record: dict | None = None):
         step_type = 'rfo'
     else:
 
-        def steplength(l):
-            return norm(np.linalg.solve(l * eye(H.shape[0]) - H, g)) - trust
+        def steplength(l: float) -> float:
+            return float(norm(np.linalg.solve(l * eye(H.shape[0]) - H, g)) - trust)
 
         l = Math.findroot(steplength, ev[0])  # minimization on sphere
         dq = np.linalg.solve(l * eye(H.shape[0]) - H, g)
@@ -456,7 +497,8 @@ def quadratic_step(g, H, w, trust, log=no_log, *, record: dict | None = None):
     log(f'* Number of negative eigenvalues: {(ev < 0).sum()}')
     log(f'* Lowest eigenvalue: {ev[0]:.3}')
     log(f'* lambda: {l:.3}')
-    log(f'Quadratic step: RMS: {Math.rms(dq):.3}, max: {max(abs(dq)):.3}')
+    rms_dq = Math.rms(dq)
+    log(f'Quadratic step: RMS: {rms_dq:.3}, max: {max(abs(dq)):.3}')
     log(f'* Predicted energy change: {dE:.3}')
     if record is not None:
         record['quadratic_step'] = {
@@ -466,23 +508,23 @@ def quadratic_step(g, H, w, trust, log=no_log, *, record: dict | None = None):
             'n_negative_eigenvalues': int((ev < 0).sum()),
             'lowest_eigenvalue': float(ev[0]),
             'lambda': float(l),
-            'step_rms': float(Math.rms(dq)),
+            'step_rms': float(rms_dq) if rms_dq is not None else None,
             'step_max': float(max(abs(dq))),
             'predicted_energy_change': float(dE),
         }
-    return dq, dE, on_sphere
+    return dq, float(dE), on_sphere
 
 
 def is_converged(
-    forces,
-    step,
-    on_sphere,
+    forces: FloatArray,
+    step: FloatArray,
+    on_sphere: bool,
     params: BernyParams,
-    log=no_log,
+    log: Any = no_log,
     *,
-    record: dict | None = None,
+    record: dict[str, Any] | None = None,
 ) -> bool:
-    criteria: list[tuple] = [
+    criteria: list[tuple[Any, ...]] = [
         ('Gradient RMS', Math.rms(forces), params.gradientrms),
         ('Gradient maximum', np.max(abs(forces)), params.gradientmax),
     ]
