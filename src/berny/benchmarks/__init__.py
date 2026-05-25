@@ -25,54 +25,80 @@ Discovery API::
 
 The ``BENCHMARKS`` mapping is also re-exported by ``scripts/benchmark.py``,
 which adds PySCF / MOPAC adapters and a markdown reporting harness on top.
+
+Resource access goes through :func:`importlib.resources.files`, mirroring
+how ``species-data.csv`` is loaded elsewhere in the package, so
+:func:`load_reference` and :func:`iter_molecules` work in zipimport /
+packed environments as well as ordinary on-disk installs.
 """
 
 import json
-from pathlib import Path
+from importlib.resources import files
 
-_HERE = Path(__file__).resolve().parent
+_PKG = files(__package__)
 
-#: Mapping of short benchmark names to the on-disk subdirectory holding
-#: their geometries and ``reference.json``. The subdirectory names encode
-#: provenance (paper / SI source); the short keys are the stable public
-#: identifiers used by the CLI and downstream tooling.
-BENCHMARKS = {
-    'birkholz': _HERE / 'birkholz_schlegel',
-    'baker': _HERE / 'baker_shajan_2023',
+#: Mapping of short benchmark names to the on-disk subdirectory name
+#: holding their geometries and ``reference.json``. The subdirectory
+#: names encode provenance (paper / SI source); the short keys are the
+#: stable public identifiers used by the CLI and downstream tooling.
+_SUBDIRS = {
+    'birkholz': 'birkholz_schlegel',
+    'baker': 'baker_shajan_2023',
 }
+
+#: Mapping of short benchmark names to their data directories, resolved
+#: via :func:`importlib.resources.files`. For ordinary file-system
+#: installs the values are :class:`pathlib.Path` objects supporting
+#: ``/`` / ``read_text()`` / ``exists()`` as usual.
+BENCHMARKS = {name: _PKG.joinpath(sub) for name, sub in _SUBDIRS.items()}
+
+
+def _resolve(benchmark):
+    try:
+        return _SUBDIRS[benchmark]
+    except KeyError:
+        raise ValueError(
+            f'unknown benchmark {benchmark!r}; valid: {sorted(_SUBDIRS)}'
+        ) from None
 
 
 def data_dir(benchmark):
-    """Return the filesystem path to ``benchmark``'s data directory."""
-    try:
-        return BENCHMARKS[benchmark]
-    except KeyError:
-        raise ValueError(
-            f'unknown benchmark {benchmark!r}; valid: {sorted(BENCHMARKS)}'
-        ) from None
+    """Return the on-disk path to ``benchmark``'s data directory.
+
+    Returned object is whatever :func:`importlib.resources.files` resolves
+    to for the package; for ordinary file-system installs this is a
+    :class:`pathlib.Path`. Library code that should work in zipimport /
+    packed environments should prefer :func:`load_reference` /
+    :func:`iter_molecules` (which use resource ``read_text``) instead.
+    """
+    return _PKG.joinpath(_resolve(benchmark))
 
 
 def load_reference(benchmark):
     """Return the parsed ``reference.json`` for ``benchmark``."""
-    return json.loads((data_dir(benchmark) / 'reference.json').read_text())
+    text = _PKG.joinpath(_resolve(benchmark), 'reference.json').read_text()
+    return json.loads(text)
 
 
 def iter_molecules(benchmark, names=None):
     """Yield ``(name, Geometry, ref)`` triples for ``benchmark``.
 
     ``names`` optionally restricts and orders the iteration; the default
-    is every molecule in ``reference.json``, sorted by name.
+    is every molecule in ``reference.json``, sorted by name. Raises
+    :class:`ValueError` for an unknown benchmark or unknown molecule name.
     """
     from berny import geomlib
 
+    sub = _resolve(benchmark)
     reference = load_reference(benchmark)
     selected = sorted(reference) if names is None else list(names)
     missing = [n for n in selected if n not in reference]
     if missing:
         raise ValueError(f'unknown molecules in {benchmark!r}: {missing}')
-    d = data_dir(benchmark)
+    base = _PKG.joinpath(sub)
     for name in selected:
-        yield name, geomlib.readfile(str(d / f'{name}.xyz')), reference[name]
+        xyz_text = base.joinpath(f'{name}.xyz').read_text()
+        yield name, geomlib.loads(xyz_text, 'xyz'), reference[name]
 
 
 __all__ = ['BENCHMARKS', 'data_dir', 'load_reference', 'iter_molecules']

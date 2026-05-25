@@ -40,18 +40,22 @@ gradient scanner)::
    mol = gto.M(atom='start.xyz', basis='3-21G')
    mol_opt = optimize(scf.RHF(mol))
 
-The 19-molecule benchmark shipped as ``berny.benchmarks.birkholz_schlegel``
-reproduces the geometries of [BirkholzTCA16]_; ``scripts/benchmark.py`` runs
-the suite through that PySCF bridge (and optionally
-:func:`~berny.solvers.MopacSolver`) and prints a step-count comparison
-table.
+The 19-molecule benchmark shipped with the package — the Birkholz–Schlegel
+2016 set [BirkholzTCA16]_ — is exposed under :mod:`berny.benchmarks` (key
+``'birkholz'``; on-disk subdirectory ``berny/benchmarks/birkholz_schlegel/``).
+``scripts/benchmark.py`` runs the suite through that PySCF bridge (and
+optionally :func:`~berny.solvers.MopacSolver`) and prints a step-count
+comparison table.
 
-A second 30-molecule set under ``berny.benchmarks.baker_shajan_2023``
-reproduces Baker's classic test set as redistributed in the supporting
+A second 30-molecule set is exposed under :mod:`berny.benchmarks` as key
+``'baker'`` (on-disk subdirectory ``berny/benchmarks/baker_shajan_2023/``);
+it reproduces Baker's classic test set as redistributed in the supporting
 information of Shajan, Manathunga, Goetz & Merz, *chemrxiv* 2023:7r7qn
 (preprint; HF/6-31G\*\*). Select it with
 ``scripts/benchmark.py --benchmark baker``; the default remains
-``birkholz``.
+``birkholz``. Third-party optimizers can iterate either set via
+``berny.benchmarks.iter_molecules('birkholz')`` (or ``'baker'``); see
+that module's docstring for the discovery API.
 
 A different option is to use the package via a command-line or socket
 interface defined by the ``berny`` command:

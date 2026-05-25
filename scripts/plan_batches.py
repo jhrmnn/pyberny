@@ -44,7 +44,12 @@ import tempfile
 import time
 from pathlib import Path
 
-from berny.benchmarks import data_dir as _bench_data_dir
+# Allow running from a source checkout without an installed editable package;
+# must happen before any ``berny`` import below. ``_measure_mopac`` /
+# ``_measure_pyscf`` rely on the same path for their late imports.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
+
+from berny.benchmarks import data_dir as _bench_data_dir  # noqa: E402
 
 DATA = _bench_data_dir('birkholz')
 
@@ -72,7 +77,6 @@ def _pin_threads():
 
 
 def _measure_mopac(name, ref):
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
     from berny import geomlib
 
     geom = geomlib.readfile(str(DATA / f'{name}.xyz'))
