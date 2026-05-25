@@ -2,7 +2,12 @@
 
 import pytest
 
-from berny.benchmarks import BENCHMARKS, data_dir, iter_molecules, load_reference
+from berny.benchmarks import (
+    BENCHMARKS,
+    data_dir,
+    iter_molecules,
+    load_reference,
+)
 from berny.geomlib import Geometry
 
 
