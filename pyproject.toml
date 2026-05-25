@@ -14,6 +14,9 @@ license = "MPL-2.0"
 packages = [
     { include = "berny", from = "src" },
 ]
+include = [
+    { path = "src/berny/py.typed", format = ["sdist", "wheel"] },
+]
 classifiers = [
     "Environment :: Console",
     "Intended Audience :: Science/Research",
@@ -23,8 +26,8 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9"
-numpy = ">=1.15,<3"
+python = "^3.10"
+numpy = ">=1.21,<3"
 pytest = { version = ">=6", optional = true }
 coverage = { version = ">=6", optional = true }
 sphinx = { version = ">=5,<8", optional = true }
@@ -54,17 +57,26 @@ dirty = true
 pattern = '^(?P<base>\d+\.\d+\.\d+)$'
 
 [tool.black]
-target-version = ["py39"]
+target-version = ["py310"]
 skip-string-normalization = true
 force-exclude = "experiments/"
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.10"
 files = ["src/berny"]
-
-[[tool.mypy.overrides]]
-module = ["numpy", "numpy.*"]
-ignore_missing_imports = true
+strict = true
+warn_unreachable = true
+extra_checks = true
+disallow_any_unimported = true
+enable_error_code = [
+    "redundant-self",
+    "redundant-expr",
+    "possibly-undefined",
+    "truthy-bool",
+    "truthy-iterable",
+    "ignore-without-code",
+    "unused-awaitable",
+]
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::PendingDeprecationWarning"]
@@ -73,7 +85,7 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 80
 extend-exclude = ["experiments"]
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = [

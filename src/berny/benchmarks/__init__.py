@@ -33,7 +33,18 @@ packed environments as well as ordinary on-disk installs.
 """
 
 import json
+from collections.abc import Iterable, Iterator
 from importlib.resources import files
+from typing import TYPE_CHECKING, Any, Optional
+
+if TYPE_CHECKING:
+    # ``importlib.resources.abc.Traversable`` is the canonical home as of
+    # Python 3.11; the typeshed stubs only expose it under
+    # ``importlib.abc``, which is deprecated for removal in 3.14 but still
+    # works statically.
+    from importlib.abc import Traversable
+
+    from berny.geomlib import Geometry
 
 _PKG = files(__package__)
 
@@ -50,10 +61,12 @@ _SUBDIRS = {
 #: via :func:`importlib.resources.files`. For ordinary file-system
 #: installs the values are :class:`pathlib.Path` objects supporting
 #: ``/`` / ``read_text()`` / ``exists()`` as usual.
-BENCHMARKS = {name: _PKG.joinpath(sub) for name, sub in _SUBDIRS.items()}
+BENCHMARKS: 'dict[str, Traversable]' = {
+    name: _PKG.joinpath(sub) for name, sub in _SUBDIRS.items()
+}
 
 
-def _resolve(benchmark):
+def _resolve(benchmark: str) -> str:
     try:
         return _SUBDIRS[benchmark]
     except KeyError:
@@ -62,7 +75,7 @@ def _resolve(benchmark):
         ) from None
 
 
-def data_dir(benchmark):
+def data_dir(benchmark: str) -> 'Traversable':
     """Return the on-disk path to ``benchmark``'s data directory.
 
     Returned object is whatever :func:`importlib.resources.files` resolves
@@ -74,13 +87,16 @@ def data_dir(benchmark):
     return _PKG.joinpath(_resolve(benchmark))
 
 
-def load_reference(benchmark):
+def load_reference(benchmark: str) -> dict[str, Any]:
     """Return the parsed ``reference.json`` for ``benchmark``."""
-    text = _PKG.joinpath(_resolve(benchmark), 'reference.json').read_text()
-    return json.loads(text)
+    text = _PKG.joinpath(_resolve(benchmark)).joinpath('reference.json').read_text()
+    data: dict[str, Any] = json.loads(text)
+    return data
 
 
-def iter_molecules(benchmark, names=None):
+def iter_molecules(
+    benchmark: str, names: Optional[Iterable[str]] = None
+) -> Iterator[tuple[str, 'Geometry', Any]]:
     """Yield ``(name, Geometry, ref)`` triples for ``benchmark``.
 
     ``names`` optionally restricts and orders the iteration; the default

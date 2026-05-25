@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Minimum supported Python version raised to 3.9.
+- Minimum supported Python version raised to 3.10.
 - `berny.Math.FindrootException` renamed to `berny.Math.FindrootError`.
 - Dropped the runtime dependency on `setuptools` (`pkg_resources`).
 - Unknown keyword arguments to `Berny()` now raise `TypeError` instead of being silently absorbed.

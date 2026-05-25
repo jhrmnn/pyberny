@@ -4,7 +4,7 @@ Getting started
 Dependencies
 ------------
 
-Python >=3.9 with NumPy.
+Python >=3.10 with NumPy.
 
 Usage
 -----
