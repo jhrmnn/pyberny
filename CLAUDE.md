@@ -1,5 +1,12 @@
 # Project conventions
 
+## `experiments/`
+
+Ignore the `experiments/` directory unless the task explicitly asks you to
+work in it. It is research scratch space, force-excluded from `black` and
+`ruff`, and not covered by tests or docs. Do not read, lint, reformat,
+refactor, or take cues from it when working on anything else.
+
 ## Pre-push checks
 
 Before `git push`, run `scripts/check.sh`. It runs the same lint, test, and
