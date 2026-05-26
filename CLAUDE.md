@@ -17,14 +17,13 @@ When a task does ask for work in `experiments/`, follow this layout:
   across multiple `.md` files (no separate `summary.md`,
   `NOTES.md`, etc.).
 - Embed figures directly in the `README.md` as committed PNGs
-  alongside it. If figures are generated, ship the rendering script
-  (e.g. `make_figures.py`) so they can be regenerated from the raw
-  results, and commit the PNG outputs so the README renders without
-  re-running anything.
-- Driver scripts and machine-readable raw outputs (`.json`, `.csv`,
-  …) live next to the README. Do *not* commit transient run artifacts
-  like captured stdout (`run.log`), temporary working directories,
-  or solver scratch files.
+  alongside it. Do *not* commit the rendering script or the raw
+  results it consumes — the README plus the PNGs is the record of
+  the experiment.
+- Do *not* commit driver scripts, machine-readable raw outputs
+  (`.json`, `.csv`, …), captured stdout (`run.log`), temporary
+  working directories, or solver scratch files. The experiment
+  folder contains only the `README.md` and its figures.
 - Diagnostic helpers that branch off a main experiment may live in a
   nested subdirectory of the experiment folder.
 

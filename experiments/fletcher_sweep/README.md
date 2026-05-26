@@ -41,8 +41,8 @@ more often?
 
 ## Method
 
-[`run_sweep.py`](run_sweep.py) monkey-patches `berny.berny.update_trust`
-with a parametrised version exposing four knobs:
+The sweep monkey-patches `berny.berny.update_trust` with a parametrised
+version exposing four knobs:
 
 | knob          | default | meaning                              |
 |---------------|--------:|--------------------------------------|
@@ -230,19 +230,11 @@ rarely populated under `loose_thr` (0.1, 0.5) and not at all under
 
 ## Reproducing
 
-Needs `mopac` on `$PATH` and (for the figures) `matplotlib`. Wall time
-≈ 70 min single-threaded on a GitHub Actions runner.
-
-```bash
-python experiments/fletcher_sweep/run_sweep.py            # full sweep, both benchmarks
-python experiments/fletcher_sweep/run_sweep.py --help     # subset to a single setting / benchmark / molecule
-python experiments/fletcher_sweep/make_figures.py         # regenerate the PNGs from results.json
-```
-
-## Files in this folder
-
-- `README.md` — this write-up.
-- `run_sweep.py` — driver; produces `results.json`.
-- `make_figures.py` — renders the embedded PNGs from `results.json`.
-- `results.json` — raw per-molecule per-step Fletcher records (≈ 1 MB).
-- `good_step_fraction.png`, `r_distribution.png` — embedded figures.
+The driver and raw `results.json` are not committed; the embedded PNGs
+above are the record of the run. To redo the sweep, monkey-patch
+`berny.berny.update_trust` with the four-knob version described in
+*Method*, run `Berny + MopacSolver(PM7)` end-to-end over both
+benchmarks (`tests/data/birkholz`, `tests/data/baker`), and record per
+step the value of `r`, the Fletcher bucket, the trust radius before and
+after, and `|Δq|`. Wall time ≈ 70 min single-threaded on a GitHub
+Actions runner; needs `mopac` on `$PATH`.
