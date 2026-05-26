@@ -7,6 +7,27 @@ work in it. It is research scratch space, force-excluded from `black` and
 `ruff`, and not covered by tests or docs. Do not read, lint, reformat,
 refactor, or take cues from it when working on anything else.
 
+When a task does ask for work in `experiments/`, follow this layout:
+
+- One subdirectory per experiment, named after what it studies
+  (e.g. `experiments/fletcher_sweep/`, `experiments/microvariations/`).
+- A single `README.md` at the top of the subdirectory is the *only*
+  narrative document — motivation, method, results, conclusions, and
+  reproduction commands all live there. Do not split the write-up
+  across multiple `.md` files (no separate `summary.md`,
+  `NOTES.md`, etc.).
+- Embed figures directly in the `README.md` as committed PNGs
+  alongside it. If figures are generated, ship the rendering script
+  (e.g. `make_figures.py`) so they can be regenerated from the raw
+  results, and commit the PNG outputs so the README renders without
+  re-running anything.
+- Driver scripts and machine-readable raw outputs (`.json`, `.csv`,
+  …) live next to the README. Do *not* commit transient run artifacts
+  like captured stdout (`run.log`), temporary working directories,
+  or solver scratch files.
+- Diagnostic helpers that branch off a main experiment may live in a
+  nested subdirectory of the experiment folder.
+
 ## Pre-push checks
 
 Before `git push`, run `scripts/check.sh`. It runs the same lint, test, and
