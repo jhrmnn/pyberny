@@ -14,7 +14,7 @@ from numpy.typing import NDArray
 
 from .coords import angstrom
 
-__all__ = ['MopacSolver']
+__all__ = ['MopacSolver', 'TS_SolverOutput']
 
 FloatArray = NDArray[np.floating[Any]]
 
@@ -26,6 +26,8 @@ FloatArray = NDArray[np.floating[Any]]
 SolverInput = tuple[list[tuple[str, FloatArray]], Optional[FloatArray]]  # noqa: UP045
 #: Energy and gradients yielded by a solver (gradients in atomic units).
 SolverOutput = tuple[float, FloatArray]
+#: Energy, gradients, and optional Cartesian Hessian yielded by a TS-capable solver.
+TS_SolverOutput = tuple[float, FloatArray, Optional[FloatArray]]  # noqa: UP045
 #: Generator type of a solver — yields ``None`` once before the first send.
 Solver = Generator[Optional[SolverOutput], SolverInput, None]  # noqa: UP045
 

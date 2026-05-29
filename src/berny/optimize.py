@@ -8,12 +8,12 @@ from contextlib import ExitStack
 
 from .berny import Berny
 from .geomlib import Geometry
-from .solvers import SolverInput, SolverOutput
+from .solvers import SolverInput, SolverOutput, TS_SolverOutput
 
 
 def optimize(
     optimizer: Berny,
-    solver: Generator[SolverOutput, SolverInput, None],
+    solver: Generator[SolverOutput | TS_SolverOutput, SolverInput, None],
     trajectory: str | None = None,
 ) -> Geometry:
     """Optimize a geometry with respect to a solver.
@@ -24,7 +24,9 @@ def optimize(
             list of 2-tuples of the atom symbol and coordinate (as a 3-tuple),
             and of a list of lattice vectors (or :data:`None` if molecule), and
             yields the energy and gradients (as a :math:`N`-by-3 matrix or
-            :math:`(N+3)`-by-3 matrix in case of a crystal geometry).
+            :math:`(N+3)`-by-3 matrix in case of a crystal geometry), and
+            optionally a Cartesian Hessian as a :math:`(3N)`-by-:math:`(3N)`
+            matrix (for TS-capable solvers).
 
             See :class:`~berny.solvers.MopacSolver` for an example.
         trajectory: filename for the XYZ trajectory
@@ -36,16 +38,16 @@ def optimize(
 
         next(solver)
         for geom in optimizer:
-            energy, gradients = solver.send((list(geom), geom.lattice))
-            optimizer.send((energy, gradients))
+            result = solver.send((list(geom), geom.lattice))
+            optimizer.send(result)
     """
     with ExitStack() as stack:
         traj_fp = stack.enter_context(open(trajectory, 'w')) if trajectory else None
         next(solver)
         for geom in optimizer:
-            energy, gradients = solver.send((list(geom), geom.lattice))
+            result = solver.send((list(geom), geom.lattice))
             if traj_fp is not None:
                 geom.dump(traj_fp, 'xyz')
-            optimizer.send((energy, gradients))
-    result: Geometry = geom
-    return result
+            optimizer.send(result)
+    result_geom: Geometry = geom
+    return result_geom
