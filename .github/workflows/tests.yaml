@@ -15,6 +15,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Populate external/oligomer-benchmarks so the oligomers benchmark's
+          # geometry-loading path is exercised by test_benchmarks (it skips
+          # when the submodule is absent).
+          submodules: true
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}

@@ -35,6 +35,8 @@ from benchmark import (
     regression_reason,
 )
 
+from berny.benchmarks import load_reference
+
 
 def load_rows(results_dir, solver, benchmark):
     rows = {}
@@ -162,12 +164,16 @@ def main(argv=None):
         help='summary path (default: results/summary-<benchmark>.md)',
     )
     args = ap.parse_args(argv)
-    if args.reference is None:
-        args.reference = BENCHMARKS[args.benchmark] / 'reference.json'
     if args.out is None:
         args.out = Path(f'results/summary-{args.benchmark}.md')
 
-    reference = json.loads(args.reference.read_text())
+    # reference.json is package data and not necessarily under the geometry
+    # root (the oligomers set keeps geometries in a submodule), so resolve it
+    # via load_reference unless the caller passes an explicit --reference path.
+    if args.reference is not None:
+        reference = json.loads(args.reference.read_text())
+    else:
+        reference = load_reference(args.benchmark)
     parts = []
     failed = []
     for solver in args.solvers:

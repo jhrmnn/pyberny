@@ -13,10 +13,15 @@ on:
         # and pyscf's shards are the same regardless. push/pull_request
         # auto-trigger unions the birkholz and baker xtb pools so both reference
         # sets get exercised cheaply on every push; baker pyscf is
-        # workflow_dispatch only because a full sweep is ~2 h.
+        # workflow_dispatch only because a full sweep is ~2 h. oligomers is
+        # workflow_dispatch + xtb only (no published pyscf reference; its
+        # geometries come from the external/oligomer-benchmarks submodule); its
+        # xtb_gfn2_steps are unseeded, so the first dispatch run is a baseline
+        # that reports step counts without gating.
         options:
           - birkholz
           - baker
+          - oligomers
         default: birkholz
       solver:
         description: 'Which solver(s) to use'
@@ -108,6 +113,19 @@ jobs:
           baker_xtb = [
               {"solver": "xtb", "batch_id": "b0", "molecules": "water hydroxysulfane acetylene ammonia allene methylamine ethane disilyl_ether furan ethanol acetone difluorobenzene_13 trifluorobenzene_135 benzene hydroxybicyclopentane_2 benzaldehyde achtar10 difuropyrazine pterin mesityl_oxide neopentane trisilacyclohexane_135 difluoronaphthalene_15 naphthalene acanil01 histidine dimethylpentane caffeine benzidine menthone"},
           ]
+          # Oligomers: 91 molecules across 6 xtb shards, greedily bin-packed on
+          # an atoms**2.5 cost proxy (no measured tblite timings yet, since the
+          # set is unseeded) and sorted within each shard by atom count. Reseed
+          # once xtb_gfn2_steps are filled in:
+          #   python scripts/plan_batches.py --benchmark oligomers --solvers xtb
+          oligomers_xtb = [
+              {"solver": "xtb", "batch_id": "b0", "molecules": "PPE_n1 polyyne_n6 polyyne_n10 polyethylene_n3 PPE_n2 polypropylene_n3 polyglycine_n4 PEG_n6 polyserine_n3 polyglycine_n6 polyserine_n4 nylon6_n8"},
+              {"solver": "xtb", "batch_id": "b1", "molecules": "polyyne_n5 PEG_n2 polyyne_n9 polypropylene_n2 polyglycine_n2 polyserine_n2 PEG_n5 polyalanine_n3 PPE_n4 octacene nonacene PPE_n5 PPE_n6 nylon6_n7"},
+              {"solver": "xtb", "batch_id": "b2", "molecules": "diacetylene PEG_n1 polyyne_n7 naphthalene nylon6_n1 thiophene_n4 PEG_n4 polypropylene_n4 hexacene polyglycine_n5 polyalanine_n4 polypropylene_n6 polyserine_n5 polypropylene_n8 polyalanine_n7 nylon6_n6"},
+              {"solver": "xtb", "batch_id": "b3", "molecules": "thiophene_n1 polyethylene_n2 polyalanine_n1 PEG_n3 anthracene polyethylene_n5 pentacene polyethylene_n6 polypropylene_n5 PEG_n7 PEG_n8 decacene polyglycine_n8 nylon6_n4 PPE_n7 polyserine_n8"},
+              {"solver": "xtb", "batch_id": "b4", "molecules": "polyyne_n4 thiophene_n2 polyglycine_n1 polyserine_n1 polyethylene_n4 polyglycine_n3 thiophene_n5 nylon6_n2 heptacene thiophene_n7 nylon6_n3 polyglycine_n7 polypropylene_n7 polyserine_n6 polyalanine_n8 PPE_n8"},
+              {"solver": "xtb", "batch_id": "b5", "molecules": "polyyne_n3 polyethylene_n1 polypropylene_n1 polyyne_n8 thiophene_n3 tetracene polyalanine_n2 PPE_n3 thiophene_n6 polyethylene_n7 polyethylene_n8 thiophene_n8 polyalanine_n5 polyalanine_n6 dodecacene polyserine_n7 nylon6_n5"},
+          ]
           # The "benchmark" key on each shard is consumed below to set the
           # --benchmark flag on benchmark.py and threads through to the
           # aggregate step's --benchmark / artifact-name suffix.
@@ -115,6 +133,8 @@ jobs:
               s["benchmark"] = "birkholz"
           for s in baker_pyscf + baker_xtb:
               s["benchmark"] = "baker"
+          for s in oligomers_xtb:
+              s["benchmark"] = "oligomers"
           # (benchmark, solver) -> ordered list of shard pools to pull from.
           pools_by_axes = {
               ("birkholz", "xtb"):   [birkholz_xtb],
@@ -123,6 +143,10 @@ jobs:
               ("baker",    "xtb"):   [baker_xtb],
               ("baker",    "pyscf"): [baker_pyscf],
               ("baker",    "both"):  [baker_xtb, baker_pyscf],
+              # oligomers has no pyscf reference, so only the xtb axis is wired;
+              # ("oligomers", "pyscf"/"both") fall through to the .get default
+              # below and produce an empty (no-op) matrix.
+              ("oligomers", "xtb"):  [oligomers_xtb],
           }
           benchmark = os.environ["BENCHMARK"]
           solver = os.environ["SOLVER"]
@@ -134,7 +158,11 @@ jobs:
               # still pick exactly one (benchmark, solver) combination.
               shards = birkholz_xtb + baker_xtb
           else:
-              shards = [s for pool in pools_by_axes[(benchmark, solver)] for s in pool]
+              shards = [
+                  s
+                  for pool in pools_by_axes.get((benchmark, solver), [])
+                  for s in pool
+              ]
           include = []
           for shard in shards:
               shard_mols = shard["molecules"].split()
@@ -159,6 +187,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # The oligomers benchmark reads its geometries from the
+          # external/oligomer-benchmarks submodule; harmless for the other
+          # sets, whose geometries are package data.
+          submodules: true
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -235,7 +267,7 @@ jobs:
         # auto-trigger which produces shards from both.
         run: |
           mkdir -p results
-          for bench in birkholz baker; do
+          for bench in birkholz baker oligomers; do
             python scripts/aggregate_benchmark.py \
               --benchmark "$bench" \
               --results-dir all-results \
@@ -249,7 +281,7 @@ jobs:
         # the Aggregate step still yields plots.
         if: always()
         run: |
-          for bench in birkholz baker; do
+          for bench in birkholz baker oligomers; do
             for solver in pyscf xtb; do
               python scripts/plot_convergence.py \
                 --benchmark "$bench" \

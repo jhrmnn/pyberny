@@ -4,10 +4,10 @@
 
 """Standard geometry-optimization benchmark sets bundled with pyberny.
 
-Two molecule sets ship with the package, each as a directory of starting
-``.xyz`` geometries plus a ``reference.json`` recording per-molecule
-metadata (charge, multiplicity, atom count) and reference step counts
-from the original paper and from pyberny itself:
+Each benchmark is a ``reference.json`` recording per-molecule metadata
+(charge, multiplicity, atom count) and reference step counts from the
+original paper and from pyberny itself, paired with the starting ``.xyz``
+geometries it scores:
 
 * ``'birkholz'`` -- the 19-molecule set from Birkholz & Schlegel,
   *Theor. Chem. Acc.* **135**, 84 (2016); see
@@ -15,6 +15,15 @@ from the original paper and from pyberny itself:
 * ``'baker'`` -- the 30-molecule Baker test set as redistributed by
   Shajan, Manathunga, Goetz & Merz, *chemrxiv* 2023:7r7qn; see
   ``baker_shajan_2023/SOURCE.md``.
+* ``'oligomers'`` -- length series of common oligomers (acenes, poly-ynes,
+  PPE, peptides, …); see ``oligomers/SOURCE.md``.
+
+The ``birkholz`` and ``baker`` geometries sit next to their
+``reference.json`` in package data. The ``oligomers`` geometries instead
+come from the ``external/oligomer-benchmarks`` git submodule, so only its
+``reference.json`` is package data and each entry carries a ``file`` key
+locating its ``.xyz`` under the submodule's geometry root. The discovery
+API hides this split: every benchmark is read the same way.
 
 Discovery API::
 
@@ -35,6 +44,7 @@ packed environments as well as ordinary on-disk installs.
 import json
 from collections.abc import Iterable, Iterator
 from importlib.resources import files
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
@@ -48,21 +58,30 @@ if TYPE_CHECKING:
 
 _PKG = files(__package__)
 
-#: Mapping of short benchmark names to the on-disk subdirectory name
-#: holding their geometries and ``reference.json``. The subdirectory
-#: names encode provenance (paper / SI source); the short keys are the
-#: stable public identifiers used by the CLI and downstream tooling.
+#: Mapping of short benchmark names to the package subdirectory holding
+#: their ``reference.json`` (and ``SOURCE.md``). The subdirectory names
+#: encode provenance (paper / SI source); the short keys are the stable
+#: public identifiers used by the CLI and downstream tooling. For
+#: ``birkholz`` / ``baker`` this directory also holds the ``.xyz``
+#: geometries; for ``oligomers`` it holds only ``reference.json`` (the
+#: geometries come from the submodule -- see ``_GEOM_ROOTS``).
 _SUBDIRS = {
     'birkholz': 'birkholz_schlegel',
     'baker': 'baker_shajan_2023',
+    'oligomers': 'oligomers',
 }
 
-#: Mapping of short benchmark names to their data directories, resolved
-#: via :func:`importlib.resources.files`. For ordinary file-system
-#: installs the values are :class:`pathlib.Path` objects supporting
-#: ``/`` / ``read_text()`` / ``exists()`` as usual.
-BENCHMARKS: 'dict[str, Traversable]' = {
-    name: _PKG.joinpath(sub) for name, sub in _SUBDIRS.items()
+#: Repository root, used to reach the ``external/oligomer-benchmarks`` git
+#: submodule. Resolved from this source file rather than from package
+#: resources: the submodule is a development/CI asset that only exists in a
+#: source checkout, never in a packaged (wheel / zipimport) install.
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+
+#: Override of the geometry root for benchmarks whose ``.xyz`` files do not
+#: live next to their ``reference.json``. Absent benchmarks default to
+#: their package subdirectory (``data_dir``).
+_GEOM_ROOTS: 'dict[str, Traversable]' = {
+    'oligomers': _REPO_ROOT / 'external' / 'oligomer-benchmarks' / 'xyz',
 }
 
 
@@ -76,15 +95,24 @@ def _resolve(benchmark: str) -> str:
 
 
 def data_dir(benchmark: str) -> 'Traversable':
-    """Return the on-disk path to ``benchmark``'s data directory.
+    """Return the geometry root for ``benchmark`` (where ``.xyz`` live).
 
-    Returned object is whatever :func:`importlib.resources.files` resolves
-    to for the package; for ordinary file-system installs this is a
-    :class:`pathlib.Path`. Library code that should work in zipimport /
-    packed environments should prefer :func:`load_reference` /
-    :func:`iter_molecules` (which use resource ``read_text``) instead.
+    For ``birkholz`` / ``baker`` this is the package data subdirectory
+    (also holding ``reference.json``); for ``oligomers`` it is the
+    ``external/oligomer-benchmarks`` submodule's geometry root. Note that
+    ``reference.json`` is *not* necessarily under this directory -- use
+    :func:`load_reference` to read it. Library code that should work in
+    zipimport / packed environments should prefer :func:`load_reference` /
+    :func:`iter_molecules` over poking at the returned path directly.
     """
-    return _PKG.joinpath(_resolve(benchmark))
+    _resolve(benchmark)  # validate name
+    return _GEOM_ROOTS.get(benchmark) or _PKG.joinpath(_SUBDIRS[benchmark])
+
+
+#: Mapping of short benchmark names to their geometry roots; back-compat
+#: alias kept because ``scripts/benchmark.py`` and downstream tooling
+#: import ``BENCHMARKS`` directly.
+BENCHMARKS: 'dict[str, Traversable]' = {name: data_dir(name) for name in _SUBDIRS}
 
 
 def load_reference(benchmark: str) -> dict[str, Any]:
@@ -100,21 +128,24 @@ def iter_molecules(
     """Yield ``(name, Geometry, ref)`` triples for ``benchmark``.
 
     ``names`` optionally restricts and orders the iteration; the default
-    is every molecule in ``reference.json``, sorted by name. Raises
-    :class:`ValueError` for an unknown benchmark or unknown molecule name.
+    is every molecule in ``reference.json``, sorted by name. Each ``.xyz``
+    is located at ``ref['file']`` relative to the benchmark's geometry root
+    when that key is present (the ``oligomers`` submodule layout), else at
+    ``<name>.xyz`` next to ``reference.json``. Raises :class:`ValueError`
+    for an unknown benchmark or unknown molecule name.
     """
     from berny import geomlib
 
-    sub = _resolve(benchmark)
     reference = load_reference(benchmark)
     selected = sorted(reference) if names is None else list(names)
     missing = [n for n in selected if n not in reference]
     if missing:
         raise ValueError(f'unknown molecules in {benchmark!r}: {missing}')
-    base = _PKG.joinpath(sub)
+    base = data_dir(benchmark)
     for name in selected:
-        xyz_text = base.joinpath(f'{name}.xyz').read_text()
-        yield name, geomlib.loads(xyz_text, 'xyz'), reference[name]
+        rec = reference[name]
+        xyz_text = base.joinpath(rec.get('file', f'{name}.xyz')).read_text()
+        yield name, geomlib.loads(xyz_text, 'xyz'), rec
 
 
 __all__ = ['BENCHMARKS', 'data_dir', 'iter_molecules', 'load_reference']

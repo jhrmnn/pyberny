@@ -11,13 +11,21 @@ from berny.benchmarks import (
 from berny.geomlib import Geometry
 
 
+def _oligomers_geometries_available():
+    """True when the external/oligomer-benchmarks submodule is checked out."""
+    try:
+        return data_dir('oligomers').joinpath('acenes', 'naphthalene.xyz').exists()
+    except OSError:
+        return False
+
+
 def test_benchmarks_mapping_has_known_keys():
-    assert set(BENCHMARKS) == {'birkholz', 'baker'}
+    assert set(BENCHMARKS) == {'birkholz', 'baker', 'oligomers'}
 
 
 @pytest.mark.parametrize(
     ('name', 'n_molecules'),
-    [('birkholz', 19), ('baker', 30)],
+    [('birkholz', 19), ('baker', 30), ('oligomers', 91)],
 )
 def test_load_reference_returns_expected_set(name, n_molecules):
     ref = load_reference(name)
@@ -27,6 +35,13 @@ def test_load_reference_returns_expected_set(name, n_molecules):
     sample = next(iter(ref.values()))
     for key in ('atoms', 'charge', 'mult'):
         assert key in sample, f'missing {key!r} in {name} reference entry'
+
+
+def test_oligomers_reference_entries_carry_file_key():
+    # The oligomers geometries live in a submodule, so every entry must
+    # locate its .xyz via a ``file`` key relative to the geometry root.
+    ref = load_reference('oligomers')
+    assert all('file' in rec for rec in ref.values())
 
 
 @pytest.mark.parametrize('name', ['birkholz', 'baker'])
@@ -41,6 +56,25 @@ def test_iter_molecules_yields_geometry_matching_reference(name):
         assert isinstance(geom, Geometry)
         assert len(geom) == meta['atoms'], (
             f'{name}/{mol_name}: geometry has {len(geom)} atoms but '
+            f"reference says {meta['atoms']}"
+        )
+
+
+@pytest.mark.skipif(
+    not _oligomers_geometries_available(),
+    reason='external/oligomer-benchmarks submodule not checked out',
+)
+def test_iter_molecules_oligomers_reads_from_submodule():
+    # The oligomers set resolves each .xyz via ref['file'] under a geometry
+    # root outside the package (the submodule); exercise that path end to end.
+    triples = list(iter_molecules('oligomers'))
+    ref = load_reference('oligomers')
+    assert len(triples) == len(ref) == 91
+    assert [n for n, _, _ in triples] == sorted(ref)
+    for mol_name, geom, meta in triples:
+        assert isinstance(geom, Geometry)
+        assert len(geom) == meta['atoms'], (
+            f'oligomers/{mol_name}: geometry has {len(geom)} atoms but '
             f"reference says {meta['atoms']}"
         )
 
