@@ -69,7 +69,11 @@ import time  # noqa: E402
 from pathlib import Path  # noqa: E402
 
 from berny import Berny, geomlib  # noqa: E402
-from berny.benchmarks import BENCHMARKS, load_reference  # noqa: E402
+from berny.benchmarks import (  # noqa: E402
+    BENCHMARKS,
+    load_reference,
+    require_geometries,
+)
 
 # Default exposed for backward compatibility: external callers (and
 # aggregate_benchmark.py) used to import ``DATA`` directly.
@@ -277,7 +281,13 @@ def main(argv=None):
     # Geometry root (where ``<name>.xyz`` / ``ref['file']`` resolve) and the
     # reference metadata are looked up separately: for the oligomers set the
     # geometries live in a submodule while reference.json is package data.
-    data_dir = BENCHMARKS[args.benchmark]
+    # require_geometries fails fast with actionable guidance if a
+    # submodule-backed set has not been checked out, rather than letting
+    # run_one swallow one missing-file error per molecule.
+    try:
+        data_dir = require_geometries(args.benchmark)
+    except FileNotFoundError as e:
+        raise SystemExit(str(e)) from None
     reference = load_reference(args.benchmark)
     names = args.molecules or sorted(reference)
     missing = [n for n in names if n not in reference]

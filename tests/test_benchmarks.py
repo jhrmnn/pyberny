@@ -2,21 +2,21 @@
 
 import pytest
 
+import berny.benchmarks as benchmarks
 from berny.benchmarks import (
     BENCHMARKS,
     data_dir,
+    geometries_available,
     iter_molecules,
     load_reference,
+    require_geometries,
 )
 from berny.geomlib import Geometry
 
 
 def _oligomers_geometries_available():
     """True when the external/oligomer-benchmarks submodule is checked out."""
-    try:
-        return data_dir('oligomers').joinpath('acenes', 'naphthalene.xyz').exists()
-    except OSError:
-        return False
+    return geometries_available('oligomers')
 
 
 def test_benchmarks_mapping_has_known_keys():
@@ -42,6 +42,28 @@ def test_oligomers_reference_entries_carry_file_key():
     # locate its .xyz via a ``file`` key relative to the geometry root.
     ref = load_reference('oligomers')
     assert all('file' in rec for rec in ref.values())
+
+
+@pytest.mark.parametrize('name', ['birkholz', 'baker'])
+def test_packaged_sets_geometries_always_available(name):
+    # birkholz/baker are package data: available from any install, never
+    # gated behind a submodule.
+    assert geometries_available(name)
+    assert require_geometries(name) == data_dir(name)
+
+
+def test_missing_submodule_raises_actionable_error(tmp_path, monkeypatch):
+    # Simulate a packaged install / uninitialised submodule by pointing the
+    # oligomers geometry root at a nonexistent directory. load_reference must
+    # still work (it's package data), but geometry access must fail loudly
+    # with guidance rather than a cryptic missing-file error.
+    monkeypatch.setitem(benchmarks._GEOM_ROOTS, 'oligomers', tmp_path / 'absent')
+    assert not geometries_available('oligomers')
+    assert len(load_reference('oligomers')) == 91
+    with pytest.raises(FileNotFoundError, match='git submodule update'):
+        require_geometries('oligomers')
+    with pytest.raises(FileNotFoundError, match='git submodule update'):
+        list(iter_molecules('oligomers'))
 
 
 @pytest.mark.parametrize('name', ['birkholz', 'baker'])

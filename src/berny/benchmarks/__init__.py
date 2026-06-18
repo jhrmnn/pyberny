@@ -19,11 +19,19 @@ geometries it scores:
   PPE, peptides, …); see ``oligomers/SOURCE.md``.
 
 The ``birkholz`` and ``baker`` geometries sit next to their
-``reference.json`` in package data. The ``oligomers`` geometries instead
-come from the ``external/oligomer-benchmarks`` git submodule, so only its
+``reference.json`` in package data, so they work from any install. The
+``oligomers`` geometries are **not** shipped in the wheel: they come from
+the ``external/oligomer-benchmarks`` git submodule, so only its
 ``reference.json`` is package data and each entry carries a ``file`` key
-locating its ``.xyz`` under the submodule's geometry root. The discovery
-API hides this split: every benchmark is read the same way.
+locating its ``.xyz`` under the submodule's geometry root. That makes
+``oligomers`` effectively a development/CI-only set, usable from a source
+checkout with submodules initialised (``git submodule update --init``) but
+unavailable from a plain ``pip install pyberny``. The discovery API hides
+the layout split -- every benchmark is read the same way -- but callers
+that must tolerate a packaged install can gate on
+:func:`geometries_available` (or catch the :class:`FileNotFoundError` that
+:func:`iter_molecules` / :func:`require_geometries` raise) to skip
+``oligomers`` gracefully when its geometries are absent.
 
 Discovery API::
 
@@ -115,6 +123,42 @@ def data_dir(benchmark: str) -> 'Traversable':
 BENCHMARKS: 'dict[str, Traversable]' = {name: data_dir(name) for name in _SUBDIRS}
 
 
+def geometries_available(benchmark: str) -> bool:
+    """Whether ``benchmark``'s starting geometries are present on disk.
+
+    The bundled ``birkholz`` / ``baker`` sets are package data and so always
+    available. ``oligomers`` geometries are *not* shipped in the wheel --
+    they come from the ``external/oligomer-benchmarks`` git submodule, so
+    this returns ``False`` in a packaged install or a source checkout whose
+    submodules have not been initialised.
+    """
+    base = data_dir(benchmark)
+    try:
+        return base.is_dir()
+    except OSError:
+        return False
+
+
+def require_geometries(benchmark: str) -> 'Traversable':
+    """Return the geometry root, or raise an actionable error if it's absent.
+
+    Turns the cryptic missing-file error a packaged (non-submodule) install
+    would otherwise hit on :func:`iter_molecules` / ``scripts/benchmark.py``
+    into guidance on how to obtain the geometries.
+    """
+    base = data_dir(benchmark)
+    if benchmark in _GEOM_ROOTS and not geometries_available(benchmark):
+        raise FileNotFoundError(
+            f'{benchmark!r} geometries not found at {base}. This benchmark is '
+            'not shipped in the package -- its geometries live in the '
+            "'external/oligomer-benchmarks' git submodule and require a source "
+            'checkout. Run `git submodule update --init '
+            'external/oligomer-benchmarks` to fetch them '
+            '(see oligomers/SOURCE.md).'
+        )
+    return base
+
+
 def load_reference(benchmark: str) -> dict[str, Any]:
     """Return the parsed ``reference.json`` for ``benchmark``."""
     text = _PKG.joinpath(_resolve(benchmark)).joinpath('reference.json').read_text()
@@ -132,7 +176,9 @@ def iter_molecules(
     is located at ``ref['file']`` relative to the benchmark's geometry root
     when that key is present (the ``oligomers`` submodule layout), else at
     ``<name>.xyz`` next to ``reference.json``. Raises :class:`ValueError`
-    for an unknown benchmark or unknown molecule name.
+    for an unknown benchmark or unknown molecule name, and
+    :class:`FileNotFoundError` (with guidance) if a submodule-backed set's
+    geometries are not checked out.
     """
     from berny import geomlib
 
@@ -141,11 +187,18 @@ def iter_molecules(
     missing = [n for n in selected if n not in reference]
     if missing:
         raise ValueError(f'unknown molecules in {benchmark!r}: {missing}')
-    base = data_dir(benchmark)
+    base = require_geometries(benchmark)
     for name in selected:
         rec = reference[name]
         xyz_text = base.joinpath(rec.get('file', f'{name}.xyz')).read_text()
         yield name, geomlib.loads(xyz_text, 'xyz'), rec
 
 
-__all__ = ['BENCHMARKS', 'data_dir', 'iter_molecules', 'load_reference']
+__all__ = [
+    'BENCHMARKS',
+    'data_dir',
+    'geometries_available',
+    'iter_molecules',
+    'load_reference',
+    'require_geometries',
+]
