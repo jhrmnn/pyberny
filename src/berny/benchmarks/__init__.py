@@ -132,11 +132,10 @@ def geometries_available(benchmark: str) -> bool:
     this returns ``False`` in a packaged install or a source checkout whose
     submodules have not been initialised.
     """
-    base = data_dir(benchmark)
-    try:
-        return base.is_dir()
-    except OSError:
-        return False
+    # ``Path.is_dir()`` (and the importlib.resources Traversable protocol)
+    # already report a missing or non-directory target as ``False`` rather
+    # than raising, so no extra guarding is needed here.
+    return data_dir(benchmark).is_dir()
 
 
 def require_geometries(benchmark: str) -> 'Traversable':
