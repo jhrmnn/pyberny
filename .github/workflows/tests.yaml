@@ -39,9 +39,10 @@ jobs:
           fail_ci_if_error: false
 
   # The xtb bindings have no reliable PyPI wheel and build from source
-  # otherwise (needs LAPACK), so the xtb-backed solver is exercised in a
-  # dedicated conda-forge environment rather than the pip matrix above. The
-  # live XTBSolver tests skip in the pip jobs and run here.
+  # otherwise (needs LAPACK), so the real xtb-backed solver is smoke-tested in
+  # a dedicated conda-forge environment. The pip matrix above covers the
+  # solver's code paths with a fake bindings module; this job confirms it
+  # works against the actual xtb library. Coverage is left to the pip jobs.
   xtb:
     name: xtb (conda-forge)
     runs-on: ubuntu-latest
@@ -63,9 +64,4 @@ jobs:
       - name: Install
         run: pip install -e ".[test]"
       - name: Test
-        run: coverage run -m pytest -v -k xtb
-      - name: Upload to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
+        run: pytest -v -k xtb

@@ -66,19 +66,6 @@ def test_optimize_xtb(xtb, test_case):
     assert berny.converged
 
 
-@xtb_required
-def test_xtb_solver_singlepoint_with_accuracy():
-    # Exercise the accuracy knob and the single-point path directly: energy in
-    # Hartree and an (N, 3) gradient in Hartree/bohr come straight from the xtb
-    # bindings without unit conversion.
-    geom, _ = water()
-    solver = XTBSolver(accuracy=1.0)
-    next(solver)
-    energy, gradients = solver.send((list(geom), geom.lattice))
-    assert isinstance(energy, float)
-    assert gradients.shape == (len(geom), 3)
-
-
 def test_optimize_writes_trajectory(mopac, tmp_path):
     geom, _ = water()
     berny = Berny(geom)
