@@ -10,10 +10,10 @@ Per-step diagnostics for every "bad case" molecule from `benchmark_diag/warnings
 | baker_shajan_2023 | allene | pinv@final | yes | 12 | 3,5,6,7,8... | angle C1-C0-C2=180.0 deg; 3-coord C1 sum=360.0 deg | linear-angle-dihedral |
 | baker_shajan_2023 | disilyl_ether | pinv@final | yes | 7 | 5,6,7 | angle Si0-O2-Si1=171.7 deg | linear-angle-dihedral |
 | birkholz_schlegel | estradiol | pinv@final (cross-validate) | yes | 11 | 6,7,8,9,10... | angle H37-C36-O40=171.5 deg; 3-coord C5 sum=360.0 deg; bond 36-40 ratio=1.54 | linear-angle-dihedral |
-| birkholz_schlegel | raffinose | heavy back-xform + saddles | yes | 85 | 42,43,45,46,47 | - | unattributed |
+| birkholz_schlegel | raffinose | heavy back-xform + saddles | yes | 85 | 42,43,45,46,47 | - | bfgs-flip/flat-torsion (#98) |
 | baker_shajan_2023 | caffeine | sustained neg-eig | ERR (FindrootError: ) | 75 | 27,31,33,37,40... | - | crashed |
-| birkholz_schlegel | maltose | severe dq (converges right) | yes | 54 | 27,30,31 | - | unattributed |
-| birkholz_schlegel | inosine_cation | severe dq (converges right) | yes | 47 | 11 | 3-coord C21 sum=360.0 deg | planar-center |
+| birkholz_schlegel | maltose | severe dq (converges right) | yes | 54 | 27,30,31 | - | bfgs-flip/flat-torsion (#98) |
+| birkholz_schlegel | inosine_cation | severe dq (converges right) | yes | 47 | 11 | 3-coord C21 sum=360.0 deg | bfgs-flip/flat-torsion (#98; planar-center is aromatic FP) |
 | birkholz_schlegel | ochratoxin_a | hit maxsteps | no | 110 | 41,44,47,51,54 | 3-coord C22 sum=360.0 deg | planar-center |
 | birkholz_schlegel | bisphenol_a | hit maxsteps | no | 110 | 13,15 | 3-coord C16 sum=360.0 deg | planar-center |
 | birkholz_schlegel | artemisinin | control (clean) | yes | 25 | - | - | clean |
@@ -129,9 +129,19 @@ Each row is one optimizer step. `mechanism` is the classification applied at tha
 |---|---:|---:|
 | linear-angle-dihedral | 16 / 53 | 30% |
 | planar-center | 28 / 53 | 53% |
+| bfgs-flip/flat-torsion | 8 / 53 | 15% |
 | sp3-inversion | 0 / 53 | 0% |
 | bond-stretch | 0 / 53 | 0% |
-| unattributed | 9 / 53 | 17% |
+| unattributed | 1 / 53 | 2% |
+
+The 8 `bfgs-flip/flat-torsion` steps are raffinose's five (42,43,45,46,47) and
+maltose's three (27,30,31), reclassified per the #98 investigation in
+[`saddle_pass/`](saddle_pass/README.md). The lone remaining `unattributed` step
+is disilyl_ether step 5, an early step of the linear-angle-dihedral case before
+its Si-O-Si angle crossed the 175° threshold. inosine_cation's one warning step
+(11) still classes as `planar-center` here under the per-step rule, but that is
+the aromatic-ring false positive flagged in the caveat above; the molecule's
+true mechanism is `bfgs-flip/flat-torsion`.
 
 ## Classification rules
 
@@ -140,6 +150,7 @@ Each row is one optimizer step. `mechanism` is the classification applied at tha
 - `sp3-inversion`: any 4-bond-neighbour atom whose minimum out-of-plane angle (defined as the smallest of the 4 centre->m to plane-of-the-other-three angles) drops below 5.0 deg (sp3 inverted through planar).
 - `bond-stretch`: any `Bond` whose length exceeds 1.5 x the sum of its atoms' covalent radii.
 - `unattributed`: no geometric flag triggered at this step. These are the cases that *do not* match the estradiol-style singular-coordinate story and need a separate explanation (candidate: BFGS Hessian flips / RFO saddle-mode descent on a flat torsional manifold; not investigated here).
+- `bfgs-flip/flat-torsion`: the `unattributed` candidate, now investigated and confirmed for raffinose, maltose, and inosine_cation in [`saddle_pass/`](saddle_pass/README.md) (issue #98). The bursts arise inside the Hessian/step machinery, not the coordinate system (pinv gap stays >1e+11). Two coupled regimes: (a) soft torsional modes — the Dihedral Hessian guess is `0.005·ρ³`, ~90× softer than a Bond's `0.45·ρ` — combine with `trust=0.3` to produce large internal steps (`severe-dq`) whose curved back-transformation occasionally overruns its 20-iteration cap (`back-xform`); (b) a *transient* BFGS curvature flip drives one mode negative (`neg-eig`), which on-sphere RFO descent handles as a controlled saddle pass (`λ ≈ ev[0] < 0`). The flip lasts 1–3 steps and the Hessian re-stiffens, which is why these recover — unlike caffeine (#94), whose `neg-eig` is sustained.
 
 
 ## Estradiol cross-validation
