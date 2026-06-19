@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Convergence is no longer hard-blocked while the quadratic step is truncated to the trust sphere. The four standard convergence criteria (gradient RMS/max, step RMS/max) are now always tested against the actual displacement taken, so a structure sitting at a noisy, flat minimum — where the trust radius collapses and the step stays pinned to the sphere — converges once all four criteria are met instead of burning the entire step budget. Genuinely unconverged sphere steps (large displacement) still correctly do not converge. Fixes false-negative non-convergence on floppy systems (issue #129).
+- Convergence is no longer hard-blocked while the quadratic step is truncated to the trust sphere. The four standard convergence criteria (gradient RMS/max, step RMS/max) are now always tested against the actual displacement taken, so a structure sitting at a flat minimum — where the trust radius collapses and the step stays pinned to the sphere — converges once all four criteria are met instead of burning the entire step budget. Genuinely unconverged sphere steps (large displacement) still correctly do not converge. This recovers several flat-minimum systems that lock onto the sphere (e.g. `azadirachtin`, which the AUX-precision solver of #136 turned into a non-converger). Fixes false-negative non-convergence on floppy systems (issue #129).
 - `get_property` now raises a clear `KeyError` identifying the species and property when the requested datum is missing, instead of letting the call fail later with an opaque numpy error.
 - Lookup of species data by atomic number (rather than symbol) now works correctly.
 
