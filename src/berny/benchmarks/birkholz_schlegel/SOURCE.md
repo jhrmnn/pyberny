@@ -28,19 +28,23 @@ B3LYP/6-31G(d,p)). The ``pyberny_steps`` and ``mopac_pm7_steps`` fields are
 populated by running ``scripts/benchmark.py`` and committing the measured
 counts as a regression baseline.
 
-``mopac_pm7_steps`` is left ``null`` for ``azadirachtin``: this one does not
-converge with PM7 within the benchmark's 130-step ceiling and so has no
-meaningful step count to record. Azadirachtin has a very flat minimum, and
-once ``MopacSolver`` switched to the high-precision ``AUX`` file (lowering the
-energy noise floor by ~1000×) the optimizer's trust radius collapses onto the
-trust-region sphere at that minimum and never satisfies the step-convergence
-criteria. (Raffinose, formerly the ``null`` non-converger, now converges
-with the precise ``AUX`` energies/gradients.) The reference values come from a
-run on GitHub Actions' ``ubuntu-latest`` (MOPAC 23.2.5, BLAS threads pinned to
-the runner's physical-core count); MOPAC PM7 is not bitwise-reproducible
-across hosts, so ``scripts/benchmark.py`` and ``scripts/aggregate_benchmark.py``
-allow each row to drift from its reference by up to 7% (with an absolute
-floor of 2 steps) before failing the run.
+``mopac_pm7_steps`` is left ``null`` for ``azadirachtin`` and ``raffinose``:
+both have very flat minima where, once ``MopacSolver`` switched to the
+high-precision ``AUX`` file (lowering the energy noise floor by ~1000×), the
+discrete Fletcher trust-radius rule reacts to the real ~1e-6 Ha energy
+changes and limit-cycles on the trust-region sphere at the minimum.
+``azadirachtin`` never satisfies the step-convergence criteria within the
+benchmark's 130-step ceiling; ``raffinose`` does eventually converge, but at a
+step count that is not reproducible across hosts (e.g. 76 vs 87 on otherwise
+identical GitHub Actions runs), so it has no meaningful baseline to gate on.
+Both are documented non-convergers rather than a regression: the flat-minimum
+sawtooth is orthogonal to this AUX/noise-floor change and is addressed
+separately by the sphere-convergence gate, not by ``energy_noise``. The
+reference values come from a run on GitHub Actions' ``ubuntu-latest`` (MOPAC
+23.2.5, BLAS threads pinned to the runner's physical-core count); MOPAC PM7 is
+not bitwise-reproducible across hosts, so ``scripts/benchmark.py`` and
+``scripts/aggregate_benchmark.py`` allow each row to drift from its reference
+by up to 7% (with an absolute floor of 2 steps) before failing the run.
 
 ``pyberny_steps`` records the PySCF step counts from a GitHub Actions run
 using the method and basis in ``paper_steps_method``/``paper_steps_basis``
