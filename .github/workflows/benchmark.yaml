@@ -203,6 +203,7 @@ jobs:
           create-args: >-
             python=3.12
             xtb-python
+            typing-extensions
           init-shell: bash
       - name: Install pyberny
         run: |

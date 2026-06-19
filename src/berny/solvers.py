@@ -187,8 +187,9 @@ def _xtb_singlepoint(
         from xtb.libxtb import VERBOSITY_MUTED
     except ImportError as e:
         raise ImportError(
-            'XTBSolver requires the xtb package; install it with '
-            '`pip install pyberny[xtb]`'
+            'XTBSolver requires the xtb Python bindings; install them from '
+            'conda-forge with `conda install -c conda-forge xtb-python` '
+            f'(underlying import error: {e})'
         ) from e
     numbers, positions = _xtb_geometry(atoms)
     calc = Calculator(
