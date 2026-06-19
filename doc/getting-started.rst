@@ -30,6 +30,19 @@ or equivalently::
 
    relaxed = optimize(Berny(geomlib.readfile('start.xyz')), MopacSolver())
 
+For a smoother semiempirical surface than PM7,
+:func:`~berny.solvers.XTBSolver` evaluates the GFN-xTB methods through the
+`tblite <https://tblite.readthedocs.io>`_ library and can be dropped in
+wherever ``MopacSolver()`` appears::
+
+   from berny.solvers import XTBSolver
+
+   relaxed = optimize(Berny(geomlib.readfile('start.xyz')), XTBSolver())
+
+The backend is ``tblite``, shipped in the ``benchmark`` extra
+(``pip install pyberny[benchmark]``); it can also be installed on its own with
+``pip install tblite``.
+
 For PySCF, use upstream PySCF's own bridge to pyberny (it imports ``Berny``
 internally and handles unit conversion, ghost atoms, symmetry, and the
 gradient scanner)::

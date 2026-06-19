@@ -1,16 +1,26 @@
+import importlib.util
 from pathlib import Path
 
 import pytest
 
 from berny import Berny, geomlib, optimize
-from berny.solvers import MopacSolver
+from berny.solvers import MopacSolver, XTBSolver
 
 XYZ_DIR = Path(__file__).parent
+
+xtb_required = pytest.mark.skipif(
+    importlib.util.find_spec('tblite') is None, reason='tblite not installed'
+)
 
 
 @pytest.fixture
 def mopac():
     return MopacSolver()
+
+
+@pytest.fixture
+def xtb():
+    return XTBSolver()
 
 
 def ethanol():
@@ -42,6 +52,18 @@ def test_optimize(mopac, test_case):
     assert (
         berny._n <= n_ref + 2
     ), f'converged in {berny._n} steps, more than the {n_ref} + 2 band'
+
+
+@xtb_required
+@pytest.mark.parametrize('test_case', [ethanol, aniline, cyanogen, water])
+def test_optimize_xtb(xtb, test_case):
+    # GFN2-xTB step counts differ from PM7 and aren't pinned to a historical
+    # baseline, so we only assert that the optimization converges (within a
+    # generous ceiling) through the same coroutine path as MopacSolver.
+    geom, _ = test_case()
+    berny = Berny(geom, maxsteps=100)
+    optimize(berny, xtb)
+    assert berny.converged
 
 
 def test_optimize_writes_trajectory(mopac, tmp_path):

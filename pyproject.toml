@@ -36,11 +36,12 @@ sphinx-multiversion = { version = ">=0.2", optional = true }
 toml = { version = ">=0.10", optional = true }
 pyscf = { version = ">=2.5", optional = true }
 matplotlib = { version = ">=3.5", optional = true }
+tblite = { version = ">=0.3", optional = true }
 
 [tool.poetry.extras]
 test = ["pytest", "coverage"]
 doc = ["sphinx", "sphinxcontrib-katex", "sphinx-multiversion", "toml"]
-benchmark = ["pyscf"]
+benchmark = ["pyscf", "tblite"]
 plot = ["matplotlib"]
 
 [tool.poetry.group.dev.dependencies]
@@ -77,6 +78,12 @@ enable_error_code = [
     "ignore-without-code",
     "unused-awaitable",
 ]
+
+# tblite ships no type stubs; XTBSolver imports it lazily and uses it only at
+# runtime, so let mypy treat the module as untyped.
+[[tool.mypy.overrides]]
+module = "tblite.*"
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::PendingDeprecationWarning"]

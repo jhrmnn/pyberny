@@ -58,6 +58,7 @@ for _v in ('OMP_NUM_THREADS', 'MKL_NUM_THREADS', 'OPENBLAS_NUM_THREADS'):
 del _n, _v
 
 import argparse  # noqa: E402
+import importlib.util  # noqa: E402
 import json  # noqa: E402
 import shutil  # noqa: E402
 import sys  # noqa: E402
@@ -136,8 +137,20 @@ def run_mopac(name, ref, data_dir, trace=None):
     return berny.converged, berny._n, energies
 
 
+def run_xtb(name, ref, data_dir, trace=None):
+    from berny.solvers import XTBSolver
+
+    geom = geomlib.readfile(str(data_dir / f'{name}.xyz'))
+    # Match the generous ceiling used for MOPAC so slow convergers are still
+    # reported rather than counted as failures.
+    berny = Berny(geom, maxsteps=130, trace=trace)
+    solver = XTBSolver(charge=ref['charge'], mult=ref['mult'])
+    energies = _optimize_recording_energies(berny, solver)
+    return berny.converged, berny._n, energies
+
+
 def run_one(name, ref, kind, data_dir, trace_dir=None, benchmark=None):
-    runner = run_pyscf if kind == 'pyscf' else run_mopac
+    runner = {'pyscf': run_pyscf, 'mopac': run_mopac, 'xtb': run_xtb}[kind]
     trace_path = None
     if trace_dir is not None:
         trace_dir.mkdir(parents=True, exist_ok=True)
@@ -167,7 +180,13 @@ def run_one(name, ref, kind, data_dir, trace_dir=None, benchmark=None):
     }
 
 
-REF_STEPS_KEY = {'mopac': 'mopac_pm7_steps', 'pyscf': 'pyberny_steps'}
+REF_STEPS_KEY = {
+    'mopac': 'mopac_pm7_steps',
+    'pyscf': 'pyberny_steps',
+    # No reference step counts are populated yet; the column reports measured
+    # steps without gating until stable values are recorded (see CLAUDE.md).
+    'xtb': 'xtb_gfn2_steps',
+}
 
 
 def format_table(rows, kind, reference):
@@ -240,7 +259,7 @@ def regression_reason(row, ref):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument('--solver', choices=['pyscf', 'mopac'], required=True)
+    ap.add_argument('--solver', choices=['pyscf', 'mopac', 'xtb'], required=True)
     ap.add_argument(
         '--benchmark',
         choices=sorted(BENCHMARKS),
@@ -272,6 +291,10 @@ def main(argv=None):
 
     if args.solver == 'mopac' and not shutil.which('mopac'):
         raise SystemExit('mopac not on PATH')
+    if args.solver == 'xtb' and importlib.util.find_spec('tblite') is None:
+        raise SystemExit(
+            'tblite package not installed (pip install pyberny[benchmark])'
+        )
 
     data_dir = BENCHMARKS[args.benchmark]
     reference = json.loads((data_dir / 'reference.json').read_text())
@@ -308,10 +331,12 @@ def main(argv=None):
         print(errors, end='')
 
     # Treat documented-null reference entries (e.g. MOPAC's one
-    # known non-converger) as expected rather than failing the run.
+    # known non-converger) as expected rather than failing the run. A
+    # missing key (no baseline recorded yet for this solver, as with
+    # xtb) is likewise treated as null and skips the gate.
     ref_key = REF_STEPS_KEY[args.solver]
     regressions = [
-        (row['name'], regression_reason(row, reference[row['name']][ref_key]))
+        (row['name'], regression_reason(row, reference[row['name']].get(ref_key)))
         for row in rows
     ]
     regressions = [(n, r) for n, r in regressions if r]
