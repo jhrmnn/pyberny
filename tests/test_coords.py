@@ -4,11 +4,13 @@ import pytest
 from berny.coords import (
     Angle,
     Bond,
+    CoordinateError,
     Dihedral,
     InternalCoords,
     _DummySpec,
     _perp_from_ref,
     angstrom,
+    get_dihedrals,
 )
 from berny.geomlib import Geometry
 from berny.species_data import get_property, species_data
@@ -381,6 +383,27 @@ def _methoxy_h_coords(hco_angle_deg):
 
 def _methoxy_h(hco_angle_deg):
     return Geometry(['H', 'C', 'H', 'H', 'O', 'H'], _methoxy_h_coords(hco_angle_deg))
+
+
+def test_get_dihedrals_branching_linear_terminus_raises_diagnostic():
+    # A center terminus with two near-linear neighbours breaks the assumption
+    # of the single-chain linear extension. The bare ``assert`` this used to
+    # hit surfaced as an opaque ``AssertionError`` (issue #130, PPE_n6); it now
+    # raises a contextual ``CoordinateError``.
+    coords = np.array(
+        [
+            [0.0, 0.0, 0.0],  # 0: center start
+            [1.0, 0.0, 0.0],  # 1: center end
+            [-1.0, 0.02, 0.0],  # 2: near-linear neighbour of 0
+            [-1.0, -0.02, 0.0],  # 3: near-linear neighbour of 0
+        ]
+    )
+    bondmatrix = np.zeros((4, 4), dtype=bool)
+    for i, j in [(0, 1), (0, 2), (0, 3)]:
+        bondmatrix[i, j] = bondmatrix[j, i] = True
+    C = bondmatrix.copy()
+    with pytest.raises(CoordinateError, match='branching terminus'):
+        get_dihedrals([0, 1], coords, bondmatrix, C)
 
 
 def test_near_linear_angle_dropped_on_non_sp_centre():

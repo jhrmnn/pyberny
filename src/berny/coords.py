@@ -31,6 +31,10 @@ IntArray = NDArray[np.integer[Any]]
 EvalReturn = float | tuple[float, list[FloatArray]]
 
 
+class CoordinateError(Exception):
+    """Raised when internal-coordinate construction hits an unsupported case."""
+
+
 class InternalCoord:
     #: 0-based atom indices that define this coordinate. Set by each
     #: subclass's ``__init__``.
@@ -911,8 +915,15 @@ def get_dihedrals(
     linear_r = [
         n for n, ang in zip(neigh_r, angles_r) if ang >= pi - lin_thre or ang < lin_thre
     ]
-    assert len(linear_l) <= 1
-    assert len(linear_r) <= 1
+    if len(linear_l) > 1 or len(linear_r) > 1:
+        raise CoordinateError(
+            'Cannot build dihedrals through a near-linear chain with a '
+            'branching terminus: the linear-chain extension supports at most '
+            f'one near-linear neighbour per end (center={center}, '
+            f'linear_l={linear_l}, linear_r={linear_r}). This typically '
+            'arises in fully linear-rich systems such as long poly(phenylene-'
+            'ethynylene) chains.'
+        )
     dihedrals: list[Dihedral] = []
     if center[0] < center[-1]:
         nweak = len(
