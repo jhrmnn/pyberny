@@ -131,7 +131,9 @@ def violations(reference, solver, rows_by_name):
     key = REF_STEPS_KEY[solver]
     out = []
     for n, r in rows_by_name.items():
-        reason = regression_reason(r, reference[n][key])
+        # A missing key (no baseline recorded for this solver yet, as with
+        # xtb) is treated as null, which regression_reason skips.
+        reason = regression_reason(r, reference[n].get(key))
         if reason:
             out.append((n, reason))
     return out
