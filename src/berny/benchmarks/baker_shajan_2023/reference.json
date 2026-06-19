@@ -8,7 +8,8 @@
     "paper_steps": 7,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 7
+    "pyberny_steps": 7,
+    "xtb_gfn2_steps": 6
   },
   "acetone": {
     "atoms": 10,
@@ -19,7 +20,8 @@
     "paper_steps": 5,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 5
+    "pyberny_steps": 5,
+    "xtb_gfn2_steps": 5
   },
   "acetylene": {
     "atoms": 4,
@@ -30,7 +32,8 @@
     "paper_steps": 5,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 5
+    "pyberny_steps": 5,
+    "xtb_gfn2_steps": 4
   },
   "achtar10": {
     "atoms": 16,
@@ -41,7 +44,8 @@
     "paper_steps": 10,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 11
+    "pyberny_steps": 11,
+    "xtb_gfn2_steps": 30
   },
   "allene": {
     "atoms": 7,
@@ -52,7 +56,8 @@
     "paper_steps": 5,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 4
+    "pyberny_steps": 4,
+    "xtb_gfn2_steps": 5
   },
   "ammonia": {
     "atoms": 4,
@@ -63,7 +68,8 @@
     "paper_steps": 4,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 4
+    "pyberny_steps": 4,
+    "xtb_gfn2_steps": 4
   },
   "benzaldehyde": {
     "atoms": 14,
@@ -74,7 +80,8 @@
     "paper_steps": 7,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 6
+    "pyberny_steps": 6,
+    "xtb_gfn2_steps": 5
   },
   "benzene": {
     "atoms": 12,
@@ -85,7 +92,8 @@
     "paper_steps": 3,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 3
+    "pyberny_steps": 3,
+    "xtb_gfn2_steps": 3
   },
   "benzidine": {
     "atoms": 26,
@@ -96,7 +104,8 @@
     "paper_steps": 7,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 8
+    "pyberny_steps": 8,
+    "xtb_gfn2_steps": 8
   },
   "caffeine": {
     "atoms": 24,
@@ -107,7 +116,8 @@
     "paper_steps": 10,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 10
+    "pyberny_steps": 10,
+    "xtb_gfn2_steps": 7
   },
   "difluorobenzene_13": {
     "atoms": 12,
@@ -118,7 +128,8 @@
     "paper_steps": 4,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 4
+    "pyberny_steps": 4,
+    "xtb_gfn2_steps": 4
   },
   "difluoronaphthalene_15": {
     "atoms": 18,
@@ -129,7 +140,8 @@
     "paper_steps": 5,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 5
+    "pyberny_steps": 5,
+    "xtb_gfn2_steps": 4
   },
   "difuropyrazine": {
     "atoms": 16,
@@ -140,7 +152,8 @@
     "paper_steps": 7,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 7
+    "pyberny_steps": 7,
+    "xtb_gfn2_steps": 7
   },
   "dimethylpentane": {
     "atoms": 23,
@@ -151,7 +164,8 @@
     "paper_steps": 6,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 12
+    "pyberny_steps": 12,
+    "xtb_gfn2_steps": 12
   },
   "disilyl_ether": {
     "atoms": 9,
@@ -162,7 +176,8 @@
     "paper_steps": 9,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 12
+    "pyberny_steps": 12,
+    "xtb_gfn2_steps": 16
   },
   "ethane": {
     "atoms": 8,
@@ -173,7 +188,8 @@
     "paper_steps": 4,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 4
+    "pyberny_steps": 4,
+    "xtb_gfn2_steps": 4
   },
   "ethanol": {
     "atoms": 9,
@@ -184,7 +200,8 @@
     "paper_steps": 5,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 5
+    "pyberny_steps": 5,
+    "xtb_gfn2_steps": 5
   },
   "furan": {
     "atoms": 9,
@@ -195,7 +212,8 @@
     "paper_steps": 5,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 5
+    "pyberny_steps": 5,
+    "xtb_gfn2_steps": 5
   },
   "histidine": {
     "atoms": 20,
@@ -206,7 +224,8 @@
     "paper_steps": 14,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 20
+    "pyberny_steps": 20,
+    "xtb_gfn2_steps": 19
   },
   "hydroxybicyclopentane_2": {
     "atoms": 14,
@@ -217,7 +236,8 @@
     "paper_steps": 9,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 9
+    "pyberny_steps": 9,
+    "xtb_gfn2_steps": 9
   },
   "hydroxysulfane": {
     "atoms": 4,
@@ -228,7 +248,8 @@
     "paper_steps": 6,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 6
+    "pyberny_steps": 6,
+    "xtb_gfn2_steps": 7
   },
   "menthone": {
     "atoms": 29,
@@ -239,7 +260,8 @@
     "paper_steps": 10,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 13
+    "pyberny_steps": 13,
+    "xtb_gfn2_steps": 13
   },
   "mesityl_oxide": {
     "atoms": 17,
@@ -250,7 +272,8 @@
     "paper_steps": 7,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 7
+    "pyberny_steps": 7,
+    "xtb_gfn2_steps": 6
   },
   "methylamine": {
     "atoms": 7,
@@ -261,7 +284,8 @@
     "paper_steps": 4,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 4
+    "pyberny_steps": 4,
+    "xtb_gfn2_steps": 5
   },
   "naphthalene": {
     "atoms": 18,
@@ -272,7 +296,8 @@
     "paper_steps": 5,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 5
+    "pyberny_steps": 5,
+    "xtb_gfn2_steps": 4
   },
   "neopentane": {
     "atoms": 17,
@@ -283,7 +308,8 @@
     "paper_steps": 4,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 4
+    "pyberny_steps": 4,
+    "xtb_gfn2_steps": 3
   },
   "pterin": {
     "atoms": 17,
@@ -294,7 +320,8 @@
     "paper_steps": 11,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 8
+    "pyberny_steps": 8,
+    "xtb_gfn2_steps": 7
   },
   "trifluorobenzene_135": {
     "atoms": 12,
@@ -305,7 +332,8 @@
     "paper_steps": 4,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 4
+    "pyberny_steps": 4,
+    "xtb_gfn2_steps": 4
   },
   "trisilacyclohexane_135": {
     "atoms": 18,
@@ -316,7 +344,8 @@
     "paper_steps": 4,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 7
+    "pyberny_steps": 7,
+    "xtb_gfn2_steps": 7
   },
   "water": {
     "atoms": 3,
@@ -327,6 +356,7 @@
     "paper_steps": 4,
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
-    "pyberny_steps": 4
+    "pyberny_steps": 4,
+    "xtb_gfn2_steps": 4
   }
 }

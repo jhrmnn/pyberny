@@ -60,6 +60,21 @@ MOPAC PM7 totals 274 steps over 29 molecules; ``caffeine`` is left
 documented-non-converger convention used by ``bisphenol_a`` in the
 ``birkholz_schlegel`` set.
 
+``xtb_gfn2_steps`` records the GFN2-xTB step counts (evaluated through the
+``tblite`` library; see ``berny.solvers.XTBSolver``). All 30 molecules
+converge under xTB within the 130-step ceiling -- including ``caffeine``, which
+is a non-converger under PM7 -- so no entry is ``null``. Unlike three
+flat-minimum molecules in the ``birkholz_schlegel`` set, every Baker molecule's
+xTB step count is reproducible to 0-1 steps across repeated single-host runs. As
+with the other solvers, those counts are not guaranteed bitwise across different
+hosts, so the same 7%/2-step drift tolerance applies and the committed
+single-host baseline should be confirmed from the first CI ``workflow_dispatch``
+xTB run. One GFN2-xTB call on these small organics is
+a few milliseconds, so the whole Baker set is only ~3 s of compute under xTB;
+like ``mopac_pm7_steps`` it runs as a single CI shard (``scripts/plan_batches.py
+--benchmark baker --solvers xtb --nbins 1``) -- extra shards would be dominated
+by per-job setup overhead.
+
 Coordinate data is treated as factual and is redistributed under
 pyberny's MPL-2.0 license, with attribution to Shajan et al. via this
 file and via the citation embedded in the comment line of each ``.xyz``.
