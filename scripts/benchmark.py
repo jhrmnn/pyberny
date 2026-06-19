@@ -3,18 +3,19 @@
 
 Usage::
 
-    scripts/benchmark.py --solver pyscf [--benchmark NAME]
+    scripts/benchmark.py [--solver xtb] [--benchmark NAME]
                          [--molecules NAME ...] [--out PATH]
-    scripts/benchmark.py --solver mopac
+    scripts/benchmark.py --solver pyscf
 
 ``--benchmark`` selects which molecule set to run -- either ``birkholz``
 (the Birkholz-Schlegel 2016 19-molecule set, the default) or ``baker``
 (the 30-molecule Baker set from Shajan et al., chemrxiv 2023). Both sets
 ship with the package under :mod:`berny.benchmarks`.
-PySCF mode drives the optimization through ``pyscf.geomopt.berny_solver``
-and requires ``pip install pyberny[benchmark]``; MOPAC mode uses
-:func:`berny.solvers.MopacSolver` (charge and multiplicity from
-``reference.json``) and requires a ``mopac`` binary on ``$PATH``.
+xTB mode (the default) uses :func:`berny.solvers.XTBSolver` (GFN2-xTB,
+charge and multiplicity from ``reference.json``) and requires the
+``tblite`` package (``pip install pyberny[benchmark]``); PySCF mode drives
+the optimization through ``pyscf.geomopt.berny_solver`` and requires the
+same extra.
 A molecule fails the run when it either does not converge or its step
 count drifts from the reference by more than 7% (with an absolute floor
 of 2 steps, so the gate stays meaningful for small references);
@@ -60,7 +61,6 @@ del _n, _v
 import argparse  # noqa: E402
 import importlib.util  # noqa: E402
 import json  # noqa: E402
-import shutil  # noqa: E402
 import sys  # noqa: E402
 import time  # noqa: E402
 from pathlib import Path  # noqa: E402
@@ -119,38 +119,18 @@ def _optimize_recording_energies(berny, solver):
     return energies
 
 
-def run_mopac(name, ref, data_dir, trace=None):
-    from berny.solvers import MopacSolver
-
-    geom = geomlib.readfile(str(data_dir / f'{name}.xyz'))
-    # A couple of molecules (raffinose, sphingomyelin) need more than
-    # pyberny's default 100-step ceiling under MOPAC PM7 on CI; raise it
-    # so they still have a chance to converge and be reported. Both are
-    # documented non-convergers in reference.json (mopac_pm7_steps=null)
-    # so the regression gate ignores them either way. zn_edta also needs
-    # ~119 steps to converge once the generalised linear-bend trigger
-    # (PR #104) rebuilds around the Zn centre several times; keep the
-    # ceiling above that.
-    berny = Berny(geom, maxsteps=130, trace=trace)
-    solver = MopacSolver(charge=ref['charge'], mult=ref['mult'])
-    energies = _optimize_recording_energies(berny, solver)
-    return berny.converged, berny._n, energies
-
-
 def run_xtb(name, ref, data_dir, trace=None):
     from berny.solvers import XTBSolver
 
     geom = geomlib.readfile(str(data_dir / f'{name}.xyz'))
-    # Match the generous ceiling used for MOPAC so slow convergers are still
-    # reported rather than counted as failures.
-    berny = Berny(geom, maxsteps=130, trace=trace)
+    berny = Berny(geom, trace=trace)
     solver = XTBSolver(charge=ref['charge'], mult=ref['mult'])
     energies = _optimize_recording_energies(berny, solver)
     return berny.converged, berny._n, energies
 
 
 def run_one(name, ref, kind, data_dir, trace_dir=None, benchmark=None):
-    runner = {'pyscf': run_pyscf, 'mopac': run_mopac, 'xtb': run_xtb}[kind]
+    runner = {'pyscf': run_pyscf, 'xtb': run_xtb}[kind]
     trace_path = None
     if trace_dir is not None:
         trace_dir.mkdir(parents=True, exist_ok=True)
@@ -181,10 +161,7 @@ def run_one(name, ref, kind, data_dir, trace_dir=None, benchmark=None):
 
 
 REF_STEPS_KEY = {
-    'mopac': 'mopac_pm7_steps',
     'pyscf': 'pyberny_steps',
-    # No reference step counts are populated yet; the column reports measured
-    # steps without gating until stable values are recorded (see CLAUDE.md).
     'xtb': 'xtb_gfn2_steps',
 }
 
@@ -259,7 +236,7 @@ def regression_reason(row, ref):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument('--solver', choices=['pyscf', 'mopac', 'xtb'], required=True)
+    ap.add_argument('--solver', choices=['pyscf', 'xtb'], default='xtb')
     ap.add_argument(
         '--benchmark',
         choices=sorted(BENCHMARKS),
@@ -289,8 +266,6 @@ def main(argv=None):
     )
     args = ap.parse_args(argv)
 
-    if args.solver == 'mopac' and not shutil.which('mopac'):
-        raise SystemExit('mopac not on PATH')
     if args.solver == 'xtb' and importlib.util.find_spec('tblite') is None:
         raise SystemExit(
             'tblite package not installed (pip install pyberny[benchmark])'
@@ -330,10 +305,10 @@ def main(argv=None):
     if errors:
         print(errors, end='')
 
-    # Treat documented-null reference entries (e.g. MOPAC's one
-    # known non-converger) as expected rather than failing the run. A
-    # missing key (no baseline recorded yet for this solver, as with
-    # xtb) is likewise treated as null and skips the gate.
+    # Treat documented-null reference entries (e.g. the xTB flat-minimum
+    # non-reproducers) as expected rather than failing the run. A missing
+    # key (no baseline recorded yet for this solver) is likewise treated as
+    # null and skips the gate.
     ref_key = REF_STEPS_KEY[args.solver]
     regressions = [
         (row['name'], regression_reason(row, reference[row['name']].get(ref_key)))

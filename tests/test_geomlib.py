@@ -33,18 +33,6 @@ def test_xyz_round_trip():
     assert g2.lattice is None
 
 
-def test_mopac_dump_contains_atoms_with_flags():
-    # mopac is dump-only (load doesn't accept it). Just check the output
-    # has one line per atom with the trailing `1` optimization flags.
-    g = Geometry(['H', 'H'], [[0.0, 0.0, 0.0], [0.74, 0.0, 0.0]])
-    out = format(g, 'mopac').splitlines()
-    assert out[0].startswith('*')
-    assert len(out) == 1 + len(g)
-    # Each line: symbol x 1 y 1 z 1
-    assert out[1].split()[0] == 'H'
-    assert out[1].split()[-1] == '1'
-
-
 def test_dump_empty_format_uses_repr():
     g = Geometry(['H'], [[0.0, 0.0, 0.0]])
     assert format(g, '') == repr(g)
@@ -99,17 +87,13 @@ def test_write_dispatches_by_extension(tmp_path):
     xyz = tmp_path / 'mol.xyz'
     aims = tmp_path / 'mol.aims'
     geom_in = tmp_path / 'geometry.in'
-    mop = tmp_path / 'mol.mopac'
     g.write(str(xyz))
     g.write(str(aims))
     g.write(str(geom_in))
-    g.write(str(mop))
-    # Round-trip the two formats that can be loaded.
+    # Round-trip the formats that can be loaded.
     assert loads(xyz.read_text(), 'xyz').species == g.species
     assert loads(aims.read_text(), 'aims').species == g.species
     assert loads(geom_in.read_text(), 'aims').species == g.species
-    # mopac is dump-only — just check it produced something starting with `*`.
-    assert mop.read_text().startswith('*')
 
 
 def test_write_unknown_extension_raises(tmp_path):

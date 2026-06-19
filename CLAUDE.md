@@ -46,9 +46,9 @@ do not leave them unchecked at end of turn.
 Do not chase inconsequential, non-deterministic CI slips. A sub-percent
 `codecov/project` dip from a single flaky line flipping hit/miss — especially
 when the diff adds no measured `berny` source and `codecov/patch` is clean — is
-noise, not a regression. Likewise, MOPAC PM7 benchmark step counts are not
+noise, not a regression. Likewise, GFN2-xTB benchmark step counts are not
 bitwise-reproducible across runners (see
-`src/berny/benchmarks/birkholz_schlegel/SOURCE.md`), so an occasional `birkholz mopac`
+`src/berny/benchmarks/birkholz_schlegel/SOURCE.md`), so an occasional `birkholz xtb`
 batch drifting past tolerance is flaky. Report these and move on; do not add
 coverage-gate config, loosen tolerances, or rewrite reference values to make
 them green.

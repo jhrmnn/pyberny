@@ -2,10 +2,6 @@
 # http://creativecommons.org/publicdomain/zero/1.0/
 from __future__ import annotations
 
-import os
-import shutil
-import subprocess
-import tempfile
 from collections.abc import Callable, Generator
 from typing import Any, Optional
 
@@ -15,7 +11,7 @@ from numpy.typing import NDArray
 from .coords import angstrom
 from .species_data import get_property
 
-__all__ = ['MopacSolver', 'XTBSolver']
+__all__ = ['XTBSolver']
 
 FloatArray = NDArray[np.floating[Any]]
 
@@ -29,109 +25,6 @@ SolverInput = tuple[list[tuple[str, FloatArray]], Optional[FloatArray]]  # noqa:
 SolverOutput = tuple[float, FloatArray]
 #: Generator type of a solver — yields ``None`` once before the first send.
 Solver = Generator[Optional[SolverOutput], SolverInput, None]  # noqa: UP045
-
-
-_MOPAC_MULT_KEYWORDS = {
-    1: '',
-    2: 'DOUBLET',
-    3: 'TRIPLET',
-    4: 'QUARTET',
-    5: 'QUINTET',
-    6: 'SEXTET',
-    7: 'SEPTET',
-}
-
-
-def _mopac_keyword_line(method: str, charge: int, mult: int) -> str:
-    """Build the MOPAC keyword line for a single-point gradient run."""
-    try:
-        mult_kw = _MOPAC_MULT_KEYWORDS[mult]
-    except KeyError as e:
-        raise ValueError(f'unsupported MOPAC multiplicity: {mult}') from e
-    keywords = [method, '1SCF', 'GRADIENTS', 'AUX(PRECISION=9)']
-    if charge:
-        keywords.append(f'CHARGE={charge}')
-    if mult_kw:
-        keywords += [mult_kw, 'UHF']
-    return ' '.join(keywords)
-
-
-def _parse_mopac_aux(path: str, n_grad: int) -> tuple[float, FloatArray]:
-    """Parse the energy and gradients from a MOPAC ``AUX`` file.
-
-    The ``AUX`` file carries the heat of formation to 15 significant figures
-    (vs. ``1e-5 kcal/mol`` print quantization in the ``.out`` file) and the
-    gradients to higher precision, both as flat whitespace-separated lists in
-    a Fortran ``D`` exponent format. ``n_grad`` is the expected number of
-    gradient components (``3`` per atom and lattice vector).
-    """
-    energy: float | None = None
-    with open(path) as f:
-        lines = iter(f)
-        for line in lines:
-            if line.startswith(' HEAT_OF_FORMATION:KCAL/MOL='):
-                energy = float(line.split('=', 1)[1].replace('D', 'E'))
-            elif line.startswith(' GRADIENTS:KCAL/MOL/ANGSTROM'):
-                if energy is None:
-                    raise ValueError('no HEAT_OF_FORMATION found in MOPAC AUX file')
-                values: list[float] = []
-                for grad_line in lines:
-                    values += [float(t.replace('D', 'E')) for t in grad_line.split()]
-                    if len(values) >= n_grad:
-                        return energy, np.array(values[:n_grad]).reshape(-1, 3)
-                raise ValueError(
-                    'MOPAC AUX GRADIENTS block is truncated: expected '
-                    f'{n_grad} gradient components, found {len(values)} '
-                    '(MOPAC likely failed or was interrupted)'
-                )
-    raise ValueError('no GRADIENTS found in MOPAC AUX file')
-
-
-def MopacSolver(
-    cmd: str = 'mopac',
-    method: str = 'PM7',
-    workdir: str | None = None,
-    *,
-    charge: int = 0,
-    mult: int = 1,
-) -> Solver:
-    """
-    Crate a solver that wraps `MOPAC <http://openmopac.net>`_.
-
-    Mopac needs to be installed on the system.
-
-    :param str cmd: MOPAC executable
-    :param str method: model to calculate energy
-    :param workdir: directory for MOPAC scratch files (default: a tempdir)
-    :param int charge: total charge (keyword-only)
-    :param int mult: spin multiplicity, keyword-only (1 = singlet, 2 = doublet,
-        ...); values > 1 also switch MOPAC to UHF
-    """
-    keyword_line = _mopac_keyword_line(method, charge, mult)
-    kcal = 1 / 627.503
-    tmpdir = workdir or tempfile.mkdtemp()
-    try:
-        atoms, lattice = yield None
-        while True:
-            mopac_input = f'{keyword_line}\n\n\n' + '\n'.join(
-                f'{el} {x} 1 {y} 1 {z} 1' for el, (x, y, z) in atoms
-            )
-            if lattice is not None:
-                mopac_input += '\n' + '\n'.join(
-                    f'Tv {x} 1 {y} 1 {z} 1' for x, y, z in lattice
-                )
-            input_file = os.path.join(tmpdir, 'job.mop')
-            with open(input_file, 'w') as f:
-                f.write(mopac_input)
-            subprocess.check_call([cmd, input_file])
-            n_grad = 3 * (len(atoms) + (0 if lattice is None else 3))
-            energy, gradients = _parse_mopac_aux(
-                os.path.join(tmpdir, 'job.aux'), n_grad
-            )
-            atoms, lattice = yield energy * kcal, gradients * kcal / angstrom
-    finally:
-        if tmpdir != workdir:
-            shutil.rmtree(tmpdir)
 
 
 #: Maps an ``XTBSolver`` method name to the corresponding ``tblite`` method.
@@ -179,7 +72,7 @@ def _tblite_singlepoint(
     """Run a single tblite energy+gradient evaluation via the Python bindings.
 
     Energy (Hartree) and gradient (Hartree/bohr) come back in atomic units and
-    are returned unchanged -- no unit conversion, unlike :func:`MopacSolver`.
+    are returned unchanged -- no unit conversion needed.
     """
     try:
         from tblite.interface import Calculator
@@ -212,9 +105,8 @@ def XTBSolver(
     <https://tblite.readthedocs.io>`_ library.
 
     The ``tblite`` package must be installed (``pip install pyberny[benchmark]``).
-    Unlike :func:`MopacSolver`, GFN2-xTB has a smooth potential-energy surface,
-    which makes it a useful alternative semiempirical backend near flat minima
-    where PM7 can be effectively discontinuous.
+    GFN2-xTB has a smooth potential-energy surface, which makes it well behaved
+    even near flat minima.
 
     :param str method: xTB parametrisation -- ``'gfn2'`` (default), ``'gfn1'``
         or ``'ipea1'``

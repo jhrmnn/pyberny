@@ -152,7 +152,6 @@ def main(argv=None):
                 'paper_steps': paper_steps,
                 'paper_steps_method': 'HF',
                 'paper_steps_basis': '6-31G**',
-                'mopac_pm7_steps': None,
                 'pyberny_steps': None,
             }
             print(f'wrote {xyz_path.name}  ({len(atoms)} atoms, paper={paper_steps})')
@@ -162,7 +161,6 @@ def main(argv=None):
         'paper_steps',
         'paper_steps_method',
         'paper_steps_basis',
-        'mopac_pm7_steps',
         'pyberny_steps',
     )
     if ref_path.exists():

@@ -96,9 +96,9 @@ def main(argv=None):
     )
     ap.add_argument(
         '--solver',
-        default='mopac',
+        default='xtb',
         help=(
-            'which solver the shards were run with (default: mopac). Any '
+            'which solver the shards were run with (default: xtb). Any '
             'value is accepted: the plot is built straight from the recorded '
             'energy trajectories, which have the same shape for every runner, '
             'so no per-solver logic gates this script.'

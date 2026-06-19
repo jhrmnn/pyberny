@@ -24,7 +24,7 @@ Discovery API::
         ...  # drive your optimizer on `geom` and compare against `ref`
 
 The ``BENCHMARKS`` mapping is also re-exported by ``scripts/benchmark.py``,
-which adds PySCF / MOPAC adapters and a markdown reporting harness on top.
+which adds PySCF / xTB adapters and a markdown reporting harness on top.
 
 Resource access goes through :func:`importlib.resources.files`, mirroring
 how ``species-data.csv`` is loaded elsewhere in the package, so

@@ -8,27 +8,24 @@ on:
       benchmark:
         description: 'Which benchmark to run'
         type: choice
-        # birkholz-fast drops easc (~90 s on its own under mopac) and rebatches
-        # the remaining 18 mopac molecules into 3 bins of ~25 s each. pyscf
-        # has no fast/full distinction -- its shards are identical for both
-        # birkholz-fast and birkholz-full. push/pull_request auto-trigger
-        # unions ``mopac_fast`` (birkholz) with ``baker_mopac`` so both
-        # reference sets get exercised cheaply on every push; baker pyscf
-        # is workflow_dispatch only because a full sweep is ~2 h.
+        # No fast/full distinction: xtb has no per-call outlier to quarantine
+        # (one GFN2-xTB call is sub-second even for the 95-atom azadirachtin)
+        # and pyscf's shards are the same regardless. push/pull_request
+        # auto-trigger unions the birkholz and baker xtb pools so both reference
+        # sets get exercised cheaply on every push; baker pyscf is
+        # workflow_dispatch only because a full sweep is ~2 h.
         options:
-          - birkholz-fast
-          - birkholz-full
+          - birkholz
           - baker
-        default: birkholz-fast
+        default: birkholz
       solver:
         description: 'Which solver(s) to use'
         type: choice
         options:
-          - mopac
-          - pyscf
           - xtb
+          - pyscf
           - both
-        default: mopac
+        default: xtb
       molecules:
         description: 'Subset of molecule names (space-separated; empty = all)'
         type: string
@@ -36,7 +33,7 @@ on:
 
 jobs:
   # Build the benchmark matrix dynamically so off-axis shards (e.g. all
-  # pyscf shards when `inputs.solver == 'mopac'`) and shards with no
+  # pyscf shards when `inputs.solver == 'xtb'`) and shards with no
   # molecule overlap with `inputs.molecules` are not instantiated at all.
   # A static matrix with per-step `if:` gates would still produce green
   # check-mark jobs for the skipped shards, which is misleading.
@@ -51,7 +48,7 @@ jobs:
         env:
           # `inputs.*` are empty on push / pull_request; the matrix builder
           # below uses EVENT to detect this case and unions every benchmark's
-          # cheap mopac pool. workflow_dispatch always sets BENCHMARK / SOLVER
+          # cheap xtb pool. workflow_dispatch always sets BENCHMARK / SOLVER
           # explicitly via the dropdowns.
           EVENT: ${{ github.event_name }}
           BENCHMARK: ${{ inputs.benchmark || '' }}
@@ -61,30 +58,18 @@ jobs:
         # Cost = measured single energy+gradient call × pyberny step count.
         # Rerun (per solver, since --nbins and --exclude differ) and paste a
         # fresh block if reference.json changes:
-        #   python scripts/plan_batches.py --solvers mopac
-        #   python scripts/plan_batches.py --solvers mopac \
-        #     --exclude easc --nbins 3      # fast-mopac batches
-        #   python scripts/plan_batches.py --solvers pyscf \
-        #     --exclude azadirachtin --nbins 7
         #   python scripts/plan_batches.py --benchmark birkholz --solvers xtb
         #   python scripts/plan_batches.py --benchmark baker --solvers xtb --nbins 1
+        #   python scripts/plan_batches.py --solvers pyscf \
+        #     --exclude azadirachtin --nbins 7
         # pyscf excludes azadirachtin: ~526s/call × 77 paper_steps ≈ 11 h,
-        # which busts GitHub's 360-min job cap. It still runs under mopac and xtb
-        # (one GFN2-xTB call is sub-second, so azadirachtin costs ~45 s total).
+        # which busts GitHub's 360-min job cap. It still runs under xtb (one
+        # GFN2-xTB call is sub-second, so azadirachtin costs ~45 s total).
         # baker xtb is pinned to one shard (--nbins 1): ~3 s of total compute, so
         # extra shards would be pure per-job setup overhead.
         run: |
           python - >> "$GITHUB_OUTPUT" <<'PY'
           import json, os
-          mopac_fast = [
-              {"solver": "mopac", "batch_id": "b0", "molecules": "inosine_cation mg_porphin penicillin_v artemisinin ochratoxin_a sphingomyelin"},
-              {"solver": "mopac", "batch_id": "b1", "molecules": "bisphenol_a diisobutyl_phthalate estradiol cetirizine tamoxifen azadirachtin"},
-              {"solver": "mopac", "batch_id": "b2", "molecules": "vitamin_c zn_edta codeine avobenzone maltose raffinose"},
-          ]
-          mopac_full = [
-              {"solver": "mopac", "batch_id": "b0", "molecules": "easc"},
-              {"solver": "mopac", "batch_id": "b1", "molecules": "vitamin_c inosine_cation zn_edta bisphenol_a mg_porphin penicillin_v diisobutyl_phthalate artemisinin codeine estradiol avobenzone ochratoxin_a maltose cetirizine tamoxifen raffinose sphingomyelin azadirachtin"},
-          ]
           pyscf = [
               {"solver": "pyscf", "batch_id": "b0", "molecules": "easc"},
               {"solver": "pyscf", "batch_id": "b1", "molecules": "raffinose"},
@@ -94,17 +79,11 @@ jobs:
               {"solver": "pyscf", "batch_id": "b5", "molecules": "penicillin_v diisobutyl_phthalate estradiol avobenzone"},
               {"solver": "pyscf", "batch_id": "b6", "molecules": "artemisinin codeine ochratoxin_a maltose"},
           ]
-          # All 30 Baker molecules are small organics. Mopac under PM7
-          # finishes the whole set in ~15s on a CI runner, so one shard is
-          # plenty -- additional shards would be dominated by per-job
-          # setup overhead (~60s of checkout + python + MOPAC install).
+          # All 30 Baker molecules are small organics.
           # Pyscf shards are LPT-balanced on the wall times measured by the
           # first manual-dispatch baseline run (PR #84); 5 bins lands every
           # shard at ~27 min, which is basically caffeine's own wall time
           # (26.5 min) -- adding more bins only grows per-job overhead.
-          baker_mopac = [
-              {"solver": "mopac", "batch_id": "b0", "molecules": "acanil01 acetone acetylene achtar10 allene ammonia benzaldehyde benzene benzidine caffeine difluorobenzene_13 difluoronaphthalene_15 difuropyrazine dimethylpentane disilyl_ether ethane ethanol furan histidine hydroxybicyclopentane_2 hydroxysulfane menthone mesityl_oxide methylamine naphthalene neopentane pterin trifluorobenzene_135 trisilacyclohexane_135 water"},
-          ]
           baker_pyscf = [
               {"solver": "pyscf", "batch_id": "b0", "molecules": "caffeine benzene furan"},
               {"solver": "pyscf", "batch_id": "b1", "molecules": "menthone mesityl_oxide trifluorobenzene_135 ethanol methylamine"},
@@ -113,57 +92,47 @@ jobs:
               {"solver": "pyscf", "batch_id": "b4", "molecules": "dimethylpentane pterin difuropyrazine difluoronaphthalene_15 achtar10 difluorobenzene_13 allene hydroxysulfane acetylene"},
           ]
           # GFN2-xTB shards are sized by scripts/plan_batches.py (per-call tblite
-          # cost × xtb_gfn2_steps), NOT cloned from mopac: xtb's cost profile is
-          # different (no pathological per-call outlier like easc under PM7), so
-          # the mopac groupings were badly unbalanced for it. Like pyscf, xtb has
-          # no fast/full distinction -- there is no easc-style molecule to
-          # quarantine -- so one birkholz pool serves both birkholz-* options.
-          # xtb is dispatch-only -- not in the push/pull_request auto-trigger pool.
+          # cost × xtb_gfn2_steps). xtb has no per-call outlier to quarantine, so
+          # like pyscf it has no fast/full distinction -- one birkholz pool serves
+          # both birkholz-* options. xtb is the default backend and the cheap
+          # pool the push/pull_request auto-trigger runs.
           birkholz_xtb = [
               {"solver": "xtb", "batch_id": "b0", "molecules": "azadirachtin"},
               {"solver": "xtb", "batch_id": "b1", "molecules": "artemisinin estradiol sphingomyelin"},
               {"solver": "xtb", "batch_id": "b2", "molecules": "vitamin_c easc inosine_cation zn_edta bisphenol_a penicillin_v tamoxifen raffinose"},
               {"solver": "xtb", "batch_id": "b3", "molecules": "mg_porphin diisobutyl_phthalate codeine ochratoxin_a avobenzone maltose cetirizine"},
           ]
-          # Baker under xtb is ~3 s of total compute (small organics); like
-          # baker_mopac, one shard is plenty -- extra shards would be dominated
-          # by per-job setup overhead.
+          # Baker under xtb is ~3 s of total compute (small organics); one shard
+          # is plenty -- extra shards would be dominated by per-job setup
+          # overhead.
           baker_xtb = [
               {"solver": "xtb", "batch_id": "b0", "molecules": "water hydroxysulfane acetylene ammonia allene methylamine ethane disilyl_ether furan ethanol acetone difluorobenzene_13 trifluorobenzene_135 benzene hydroxybicyclopentane_2 benzaldehyde achtar10 difuropyrazine pterin mesityl_oxide neopentane trisilacyclohexane_135 difluoronaphthalene_15 naphthalene acanil01 histidine dimethylpentane caffeine benzidine menthone"},
           ]
           # The "benchmark" key on each shard is consumed below to set the
           # --benchmark flag on benchmark.py and threads through to the
           # aggregate step's --benchmark / artifact-name suffix.
-          for s in mopac_fast + mopac_full + pyscf + birkholz_xtb:
+          for s in pyscf + birkholz_xtb:
               s["benchmark"] = "birkholz"
-          for s in baker_mopac + baker_pyscf + baker_xtb:
+          for s in baker_pyscf + baker_xtb:
               s["benchmark"] = "baker"
           # (benchmark, solver) -> ordered list of shard pools to pull from.
-          # pyscf and xtb have no fast/full distinction; both birkholz-* options
-          # reuse the same single pool (`pyscf` / `birkholz_xtb`) for them.
           pools_by_axes = {
-              ("birkholz-fast", "mopac"): [mopac_fast],
-              ("birkholz-fast", "pyscf"): [pyscf],
-              ("birkholz-fast", "xtb"):   [birkholz_xtb],
-              ("birkholz-fast", "both"):  [mopac_fast, pyscf],
-              ("birkholz-full", "mopac"): [mopac_full],
-              ("birkholz-full", "pyscf"): [pyscf],
-              ("birkholz-full", "xtb"):   [birkholz_xtb],
-              ("birkholz-full", "both"):  [mopac_full, pyscf],
-              ("baker",         "mopac"): [baker_mopac],
-              ("baker",         "pyscf"): [baker_pyscf],
-              ("baker",         "xtb"):   [baker_xtb],
-              ("baker",         "both"):  [baker_mopac, baker_pyscf],
+              ("birkholz", "xtb"):   [birkholz_xtb],
+              ("birkholz", "pyscf"): [pyscf],
+              ("birkholz", "both"):  [birkholz_xtb, pyscf],
+              ("baker",    "xtb"):   [baker_xtb],
+              ("baker",    "pyscf"): [baker_pyscf],
+              ("baker",    "both"):  [baker_xtb, baker_pyscf],
           }
           benchmark = os.environ["BENCHMARK"]
           solver = os.environ["SOLVER"]
           subset = os.environ["SUBSET"].split()
           if os.environ["EVENT"] != "workflow_dispatch":
-              # Auto-trigger on push / pull_request: run the cheap mopac pool
+              # Auto-trigger on push / pull_request: run the cheap xtb pool
               # from every benchmark so the auto-trigger covers both the
               # birkholz and baker reference sets. Workflow-dispatch users
               # still pick exactly one (benchmark, solver) combination.
-              shards = mopac_fast + baker_mopac
+              shards = birkholz_xtb + baker_xtb
           else:
               shards = [s for pool in pools_by_axes[(benchmark, solver)] for s in pool]
           include = []
@@ -200,26 +169,9 @@ jobs:
           echo "OMP_NUM_THREADS=$n" >> "$GITHUB_ENV"
           echo "MKL_NUM_THREADS=$n" >> "$GITHUB_ENV"
           echo "OPENBLAS_NUM_THREADS=$n" >> "$GITHUB_ENV"
-      - name: Install MOPAC
-        if: matrix.solver == 'mopac'
-        run: |
-          mkdir mopac
-          cd mopac
-          wget -q https://github.com/openmopac/mopac/releases/download/v${MOPAC_VERSION}/mopac-${MOPAC_VERSION}-linux.tar.gz
-          tar --strip-components=1 -xzf mopac-${MOPAC_VERSION}-linux.tar.gz
-          echo "$PWD/bin" >>$GITHUB_PATH
-          echo "LD_LIBRARY_PATH=$PWD/lib" >>$GITHUB_ENV
-        env:
-          MOPAC_VERSION: 23.2.5
       - name: Install pyberny
-        run: |
-          # mopac needs no Python backend; pyscf and xtb shards both come from
-          # the benchmark extra (pyscf + tblite).
-          if [ "${{ matrix.solver }}" = "mopac" ]; then
-            pip install -e .
-          else
-            pip install -e '.[benchmark]'
-          fi
+        # Both pyscf and xtb shards come from the benchmark extra (pyscf + tblite).
+        run: pip install -e '.[benchmark]'
       - name: Run batch
         env:
           BENCHMARK: ${{ matrix.benchmark }}
@@ -231,7 +183,7 @@ jobs:
           read -ra mols <<< "$MOLS"
           # Benchmark embedded in filename so a multi-benchmark run (the
           # push/pull_request auto-trigger covers both birkholz and baker)
-          # doesn't have birkholz/mopac-b0.json collide with baker/mopac-b0.json
+          # doesn't have birkholz/xtb-b0.json collide with baker/xtb-b0.json
           # when artifacts are merged in the aggregate step.
           python scripts/benchmark.py --benchmark "$BENCHMARK" \
             --solver "$SOLVER" \
@@ -287,18 +239,18 @@ jobs:
             python scripts/aggregate_benchmark.py \
               --benchmark "$bench" \
               --results-dir all-results \
-              --solvers mopac pyscf xtb
+              --solvers pyscf xtb
           done
       - name: Plot energy convergence
         # One combined figure per (benchmark, solver) axis. plot_convergence.py
         # skips an axis with no shards, so iterating every solver is safe across
-        # all trigger combinations (the auto-trigger produces mopac shards; a
-        # full dispatch adds pyscf / xtb). always() so a regression exit-1 from
+        # all trigger combinations (the auto-trigger produces xtb shards; a
+        # full dispatch adds pyscf). always() so a regression exit-1 from
         # the Aggregate step still yields plots.
         if: always()
         run: |
           for bench in birkholz baker; do
-            for solver in mopac pyscf xtb; do
+            for solver in pyscf xtb; do
               python scripts/plot_convergence.py \
                 --benchmark "$bench" \
                 --solver "$solver" \

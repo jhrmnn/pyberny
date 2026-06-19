@@ -2,7 +2,6 @@
   "artemisinin": {
     "atoms": 42,
     "charge": 0,
-    "mopac_pm7_steps": 25,
     "mult": 1,
     "name": "Artemisinin",
     "paper_steps": 24,
@@ -14,7 +13,6 @@
   "avobenzone": {
     "atoms": 45,
     "charge": 0,
-    "mopac_pm7_steps": 90,
     "mult": 1,
     "name": "Avobenzone",
     "paper_steps": 43,
@@ -26,7 +24,6 @@
   "azadirachtin": {
     "atoms": 95,
     "charge": 0,
-    "mopac_pm7_steps": null,
     "mult": 1,
     "name": "Azadirachtin",
     "paper_steps": 77,
@@ -38,7 +35,6 @@
   "bisphenol_a": {
     "atoms": 33,
     "charge": 0,
-    "mopac_pm7_steps": 45,
     "mult": 1,
     "name": "Bisphenol A",
     "paper_steps": 31,
@@ -50,7 +46,6 @@
   "cetirizine": {
     "atoms": 52,
     "charge": 0,
-    "mopac_pm7_steps": 57,
     "mult": 1,
     "name": "Cetirizine",
     "paper_steps": 35,
@@ -62,7 +57,6 @@
   "codeine": {
     "atoms": 43,
     "charge": 0,
-    "mopac_pm7_steps": 31,
     "mult": 1,
     "name": "Codeine",
     "paper_steps": 18,
@@ -74,7 +68,6 @@
   "diisobutyl_phthalate": {
     "atoms": 42,
     "charge": 0,
-    "mopac_pm7_steps": 38,
     "mult": 1,
     "name": "Diisobutyl phthalate",
     "paper_steps": 27,
@@ -86,7 +79,6 @@
   "easc": {
     "atoms": 26,
     "charge": 0,
-    "mopac_pm7_steps": 53,
     "mult": 1,
     "name": "EASC",
     "paper_steps": 40,
@@ -98,7 +90,6 @@
   "estradiol": {
     "atoms": 44,
     "charge": 0,
-    "mopac_pm7_steps": 27,
     "mult": 1,
     "name": "Estradiol",
     "paper_steps": 21,
@@ -110,7 +101,6 @@
   "inosine_cation": {
     "atoms": 31,
     "charge": 1,
-    "mopac_pm7_steps": 47,
     "mult": 1,
     "name": "Inosine",
     "paper_steps": 41,
@@ -122,7 +112,6 @@
   "maltose": {
     "atoms": 45,
     "charge": 0,
-    "mopac_pm7_steps": 54,
     "mult": 1,
     "name": "Maltose",
     "paper_steps": 35,
@@ -134,7 +123,6 @@
   "mg_porphin": {
     "atoms": 37,
     "charge": 0,
-    "mopac_pm7_steps": 32,
     "mult": 1,
     "name": "Mg Porphin",
     "paper_steps": 14,
@@ -146,7 +134,6 @@
   "ochratoxin_a": {
     "atoms": 45,
     "charge": 0,
-    "mopac_pm7_steps": 59,
     "mult": 1,
     "name": "Ochratoxin A",
     "paper_steps": 31,
@@ -158,7 +145,6 @@
   "penicillin_v": {
     "atoms": 42,
     "charge": 0,
-    "mopac_pm7_steps": 54,
     "mult": 1,
     "name": "Penicillin V",
     "paper_steps": 31,
@@ -170,7 +156,6 @@
   "raffinose": {
     "atoms": 66,
     "charge": 0,
-    "mopac_pm7_steps": null,
     "mult": 1,
     "name": "Raffinose",
     "paper_steps": 53,
@@ -182,7 +167,6 @@
   "sphingomyelin": {
     "atoms": 84,
     "charge": 0,
-    "mopac_pm7_steps": 89,
     "mult": 1,
     "name": "Sphingomyelin",
     "paper_steps": 56,
@@ -194,7 +178,6 @@
   "tamoxifen": {
     "atoms": 57,
     "charge": 0,
-    "mopac_pm7_steps": 72,
     "mult": 1,
     "name": "Tamoxifen",
     "paper_steps": 35,
@@ -206,7 +189,6 @@
   "vitamin_c": {
     "atoms": 20,
     "charge": 0,
-    "mopac_pm7_steps": 29,
     "mult": 1,
     "name": "Vitamin C",
     "paper_steps": 18,
@@ -218,7 +200,6 @@
   "zn_edta": {
     "atoms": 33,
     "charge": -2,
-    "mopac_pm7_steps": 117,
     "mult": 1,
     "name": "Zn EDTA",
     "paper_steps": 29,

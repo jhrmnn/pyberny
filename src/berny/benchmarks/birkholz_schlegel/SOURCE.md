@@ -24,27 +24,9 @@ benchmark.
 ``paper_steps`` (from Table 1, "Standard" column) for each molecule, along
 with the QM ``paper_steps_method`` and ``paper_steps_basis`` used for that
 row (HF/3-21G for all molecules except EASC and Vitamin C, which use
-B3LYP/6-31G(d,p)). The ``pyberny_steps``, ``mopac_pm7_steps`` and
-``xtb_gfn2_steps`` fields are populated by running ``scripts/benchmark.py`` and
-committing the measured counts as a regression baseline.
-
-``mopac_pm7_steps`` is left ``null`` for ``azadirachtin`` and ``raffinose``:
-both have very flat minima where, once ``MopacSolver`` switched to the
-high-precision ``AUX`` file (lowering the energy noise floor by ~1000×), the
-discrete Fletcher trust-radius rule reacts to the real ~1e-6 Ha energy
-changes and limit-cycles on the trust-region sphere at the minimum.
-``azadirachtin`` never satisfies the step-convergence criteria within the
-benchmark's 130-step ceiling; ``raffinose`` does eventually converge, but at a
-step count that is not reproducible across hosts (e.g. 76 vs 87 on otherwise
-identical GitHub Actions runs), so it has no meaningful baseline to gate on.
-Both are documented non-convergers rather than a regression: the flat-minimum
-sawtooth is orthogonal to this AUX/noise-floor change and is addressed
-separately by the sphere-convergence gate, not by ``energy_noise``. The
-reference values come from a run on GitHub Actions' ``ubuntu-latest`` (MOPAC
-23.2.5, BLAS threads pinned to the runner's physical-core count); MOPAC PM7 is
-not bitwise-reproducible across hosts, so ``scripts/benchmark.py`` and
-``scripts/aggregate_benchmark.py`` allow each row to drift from its reference
-by up to 7% (with an absolute floor of 2 steps) before failing the run.
+B3LYP/6-31G(d,p)). The ``pyberny_steps`` and ``xtb_gfn2_steps`` fields are
+populated by running ``scripts/benchmark.py`` and committing the measured
+counts as a regression baseline.
 
 ``pyberny_steps`` records the PySCF step counts from a GitHub Actions run
 using the method and basis in ``paper_steps_method``/``paper_steps_basis``
@@ -55,8 +37,7 @@ within the 100-step default ceiling.
 
 ``xtb_gfn2_steps`` records the GFN2-xTB step counts (evaluated through the
 ``tblite`` library; see ``berny.solvers.XTBSolver``). All 19 molecules *converge*
-under xTB within the benchmark's 130-step ceiling -- including ``azadirachtin``
-and ``raffinose``, documented non-convergers under PM7, and ``ochratoxin_a``,
+under xTB within the default 100-step ceiling -- including ``ochratoxin_a``,
 which does not converge under PySCF. A single GFN2-xTB energy+gradient call is
 sub-second even for the 95-atom ``azadirachtin`` (~0.75 s), so unlike PySCF
 nothing has to be excluded on cost grounds.
@@ -67,10 +48,9 @@ reproducible: ``tblite``'s OpenMP reductions are not bitwise-deterministic, and
 near a flat minimum the resulting ~1e-9 Ha noise reroutes the trust-radius path,
 so repeated runs on a *single* host already scatter well past the 7%/2-step gate
 (``bisphenol_a`` ranged 63-85 over four runs; ``penicillin_v`` 52-64;
-``maltose`` 76-86). They are the xTB analogue of ``raffinose``/``azadirachtin``
-under PM7 and have no meaningful value to gate on. The other 16 molecules are
-reproducible to 0-1 steps across runs. Like PM7, even those stable counts are
-not guaranteed bitwise across *different* hosts, so the same 7%/2-step drift
+``maltose`` 76-86), so they have no meaningful value to gate on. The other 16
+molecules are reproducible to 0-1 steps across runs. Even those stable counts
+are not guaranteed bitwise across *different* hosts, so the same 7%/2-step drift
 tolerance applies; the committed values are a single-host baseline and should be
 confirmed (and refreshed if needed) from the first CI ``workflow_dispatch`` xTB
 run.
@@ -78,9 +58,8 @@ run.
 xTB needs no fast/full batch split (no easc-style per-call outlier to
 quarantine): ``scripts/plan_batches.py`` bins it into four cost-balanced shards
 (per-call ``tblite`` time × ``xtb_gfn2_steps``, falling back to ``paper_steps``
-for the three ``null`` rows) used for both ``birkholz-fast`` and
-``birkholz-full``. The ``null`` molecules still *run* in those shards; only the
-regression gate skips them.
+for the three ``null`` rows). The ``null`` molecules still *run* in those
+shards; only the regression gate skips them.
 
 Coordinate data is treated as factual and is redistributed under pyberny's
 MPL-2.0 license, with attribution to Birkholz & Schlegel via this file and

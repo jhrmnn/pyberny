@@ -31,22 +31,6 @@ jobs:
         with:
           node-version: "20"
 
-      # MOPAC is required by tests/test_optimize.py, which shells out to the
-      # `mopac` binary. Install it OUTSIDE the repository checkout (under
-      # $RUNNER_TEMP) so the extracted files are never picked up by `git add`
-      # in the agent's working tree.
-      - name: Install MOPAC
-        env:
-          MOPAC_VERSION: 23.2.5
-        run: |
-          mkdir -p "$RUNNER_TEMP/mopac"
-          cd "$RUNNER_TEMP/mopac"
-          wget -q https://github.com/openmopac/mopac/releases/download/v${MOPAC_VERSION}/mopac-${MOPAC_VERSION}-linux.tar.gz
-          tar --strip-components=1 -xzf mopac-${MOPAC_VERSION}-linux.tar.gz
-          rm mopac-${MOPAC_VERSION}-linux.tar.gz
-          echo "$PWD/bin" >>$GITHUB_PATH
-          echo "LD_LIBRARY_PATH=$PWD/lib" >>$GITHUB_ENV
-
       # The benchmark extra pulls in tblite (the GFN-xTB backend for
       # berny.solvers.XTBSolver) and pyscf, so both are importable in agent
       # sessions.

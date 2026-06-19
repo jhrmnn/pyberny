@@ -5,11 +5,10 @@
 with the package under :mod:`berny.benchmarks`.
 
 For each solver, this script times one energy+gradient call per molecule
-(``mopac`` with ``1SCF GRADIENTS``; ``pyscf`` with one SCF + analytic
-gradient; ``xtb`` with one GFN2-xTB singlepoint through tblite), multiplies by
-the pyberny step count from ``reference.json``, and prints a YAML fragment ready
-to paste into the ``strategy.matrix.include`` block of
-``.github/workflows/benchmark.yaml``.
+(``xtb`` with one GFN2-xTB singlepoint through tblite; ``pyscf`` with one SCF +
+analytic gradient), multiplies by the pyberny step count from
+``reference.json``, and prints a YAML fragment ready to paste into the
+``strategy.matrix.include`` block of ``.github/workflows/benchmark.yaml``.
 
 The per-call timing is the only cost source — there is no analytical
 N**p fallback. Per-iteration cost varies by an order of magnitude across
@@ -17,11 +16,11 @@ this dataset (``easc`` with Al/Cl is ~35x slower than CHNO organics of
 similar size), and no closed-form expression in ``atoms`` captures it.
 
 Step counts come from each solver's column in ``reference.json``
-(``mopac_pm7_steps`` / ``pyberny_steps`` / ``xtb_gfn2_steps``). Where that is
-``null`` for a molecule (a documented non-converger, e.g. ``azadirachtin`` /
-``raffinose`` under mopac) the fallback in ``FALLBACK_STEPS_KEY`` is used --
-``paper_steps`` for pyscf and xtb -- and if that too is missing the median over
-the rest stands in, so a single gap never bottlenecks planning.
+(``xtb_gfn2_steps`` / ``pyberny_steps``). Where that is ``null`` for a molecule
+(a documented non-reproducer, e.g. ``bisphenol_a`` / ``maltose`` under xtb) the
+fallback in ``FALLBACK_STEPS_KEY`` (``paper_steps``) is used -- and if that too
+is missing the median over the rest stands in, so a single gap never
+bottlenecks planning.
 
 Bin-packing: Longest-Processing-Time-first (LPT). ``--nbins`` defaults
 to ``ceil(total / max_single)`` so the heaviest molecule does not
@@ -42,11 +41,8 @@ import glob
 import json
 import math
 import os
-import shutil
 import statistics
-import subprocess
 import sys
-import tempfile
 import time
 from pathlib import Path
 
@@ -64,17 +60,15 @@ from berny.benchmarks import BENCHMARKS, data_dir as _bench_data_dir
 DATA = _bench_data_dir('birkholz')
 
 STEPS_KEY = {
-    'mopac': 'mopac_pm7_steps',
     'pyscf': 'pyberny_steps',
     'xtb': 'xtb_gfn2_steps',
 }
 # Used only if STEPS_KEY value is null for a given molecule.
 FALLBACK_STEPS_KEY = {
-    'mopac': 'mopac_pm7_steps',
     'pyscf': 'paper_steps',
     'xtb': 'paper_steps',
 }
-REPEATS = {'mopac': 3, 'pyscf': 1, 'xtb': 3}
+REPEATS = {'pyscf': 1, 'xtb': 3}
 
 
 def _pin_threads():
@@ -92,30 +86,6 @@ def _pin_threads():
     n = str(len(ids) or os.cpu_count() or 1)
     for v in ('OMP_NUM_THREADS', 'MKL_NUM_THREADS', 'OPENBLAS_NUM_THREADS'):
         os.environ.setdefault(v, n)
-
-
-def _measure_mopac(name, ref):
-    from berny import geomlib
-
-    geom = geomlib.readfile(str(DATA / f'{name}.xyz'))
-    atoms = list(geom)
-    mults = {1: '', 2: 'DOUBLET', 3: 'TRIPLET', 4: 'QUARTET', 5: 'QUINTET'}
-    kw = ['PM7', '1SCF', 'GRADIENTS']
-    if ref['charge']:
-        kw.append(f'CHARGE={ref["charge"]}')
-    if mults[ref['mult']]:
-        kw += [mults[ref['mult']], 'UHF']
-    body = (
-        ' '.join(kw)
-        + '\n\n\n'
-        + '\n'.join(f'{el} {x} 1 {y} 1 {z} 1' for el, (x, y, z) in atoms)
-    )
-    with tempfile.TemporaryDirectory() as td:
-        f = Path(td) / 'job.mop'
-        f.write_text(body)
-        t0 = time.perf_counter()
-        subprocess.check_call(['mopac', str(f)], stdout=subprocess.DEVNULL)
-        return time.perf_counter() - t0
 
 
 def _measure_pyscf(name, ref):
@@ -166,7 +136,7 @@ def _measure_xtb(name, ref):
     return time.perf_counter() - t0
 
 
-MEASURE = {'mopac': _measure_mopac, 'pyscf': _measure_pyscf, 'xtb': _measure_xtb}
+MEASURE = {'pyscf': _measure_pyscf, 'xtb': _measure_xtb}
 
 
 def _step_count(ref, solver, fallback):
@@ -269,7 +239,7 @@ def main(argv=None):
         default=None,
         help='reference.json path (default: derived from --benchmark)',
     )
-    ap.add_argument('--solvers', nargs='+', default=['mopac', 'pyscf'])
+    ap.add_argument('--solvers', nargs='+', default=['xtb', 'pyscf'])
     ap.add_argument(
         '--nbins',
         type=int,
@@ -296,8 +266,6 @@ def main(argv=None):
     if args.reference is None:
         args.reference = DATA / 'reference.json'
     _pin_threads()
-    if 'mopac' in args.solvers and not shutil.which('mopac'):
-        raise SystemExit('mopac not on PATH')
     reference = json.loads(args.reference.read_text())
     unknown = [n for n in args.exclude if n not in reference]
     if unknown:

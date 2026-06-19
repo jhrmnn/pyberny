@@ -9,102 +9,9 @@ from berny.solvers import (
     GenericSolver,
     XTBSolver,
     _diff5,
-    _mopac_keyword_line,
-    _parse_mopac_aux,
     _tblite_geometry,
     _tblite_method,
 )
-
-# A trimmed MOPAC AUX file for water (PM7 1SCF GRADIENTS AUX(PRECISION=9)).
-# Energy and gradients are printed in Fortran ``D`` exponent format and to
-# 15 significant figures -- far finer than the ``1e-5 kcal/mol`` quantization
-# of the ``.out`` file the solver used to parse.
-_WATER_AUX = """\
- HEAT_OF_FORMATION:KCAL/MOL=-0.577822806548975D+02
- GRADIENT_NORM:KCAL/MOL/ANGSTROM=+0.546567360177825D+01
- ATOM_X_OPT:ANGSTROMS[09]=
-    0.0000000000000    0.0000000000000    0.0000000000000
- GRADIENTS:KCAL/MOL/ANGSTROM[09]=
-  -3.4312143657544   0.0000000507512  -2.3676270992310   0.7963817277085 \
-   0.0000000252344   2.2122353896105   2.6348324481675   0.0000000251599 \
-   0.1553914772902
- CPU_TIME:SECONDS[1]=        0.01
-"""
-
-
-def test_parse_mopac_aux(tmp_path):
-    aux = tmp_path / 'job.aux'
-    aux.write_text(_WATER_AUX)
-    energy, gradients = _parse_mopac_aux(str(aux), 9)
-    assert energy == pytest.approx(-57.7822806548975, abs=0)
-    assert gradients.shape == (3, 3)
-    np.testing.assert_allclose(
-        gradients,
-        [
-            [-3.4312143657544, 0.0000000507512, -2.3676270992310],
-            [0.7963817277085, 0.0000000252344, 2.2122353896105],
-            [2.6348324481675, 0.0000000251599, 0.1553914772902],
-        ],
-    )
-
-
-def test_parse_mopac_aux_missing_gradients(tmp_path):
-    aux = tmp_path / 'job.aux'
-    aux.write_text(' HEAT_OF_FORMATION:KCAL/MOL=-0.577822806548975D+02\n')
-    with pytest.raises(ValueError, match='no GRADIENTS'):
-        _parse_mopac_aux(str(aux), 9)
-
-
-def test_parse_mopac_aux_truncated_gradients(tmp_path):
-    # GRADIENTS block present but cut short (MOPAC died mid-write): must raise
-    # a clear, contextual error rather than letting ``next`` exhaust the file
-    # and surface an opaque ``StopIteration``/``RuntimeError`` (see issue #130).
-    aux = tmp_path / 'job.aux'
-    aux.write_text(
-        ' HEAT_OF_FORMATION:KCAL/MOL=-0.577822806548975D+02\n'
-        ' GRADIENTS:KCAL/MOL/ANGSTROM[09]=\n'
-        '  -3.4312143657544   0.0000000507512  -2.3676270992310\n'
-    )
-    with pytest.raises(ValueError, match='truncated'):
-        _parse_mopac_aux(str(aux), 9)
-
-
-def test_parse_mopac_aux_gradients_before_energy(tmp_path):
-    # A GRADIENTS block with no preceding HEAT_OF_FORMATION is malformed.
-    aux = tmp_path / 'job.aux'
-    aux.write_text(' GRADIENTS:KCAL/MOL/ANGSTROM[03]=\n  1.0  2.0  3.0\n')
-    with pytest.raises(ValueError, match='no HEAT_OF_FORMATION'):
-        _parse_mopac_aux(str(aux), 3)
-
-
-def test_mopac_neutral_singlet():
-    assert _mopac_keyword_line('PM7', 0, 1) == 'PM7 1SCF GRADIENTS AUX(PRECISION=9)'
-
-
-def test_mopac_cation():
-    assert (
-        _mopac_keyword_line('PM7', 1, 1)
-        == 'PM7 1SCF GRADIENTS AUX(PRECISION=9) CHARGE=1'
-    )
-
-
-def test_mopac_dianion():
-    assert (
-        _mopac_keyword_line('PM7', -2, 1)
-        == 'PM7 1SCF GRADIENTS AUX(PRECISION=9) CHARGE=-2'
-    )
-
-
-def test_mopac_doublet_cation():
-    assert (
-        _mopac_keyword_line('PM7', 1, 2)
-        == 'PM7 1SCF GRADIENTS AUX(PRECISION=9) CHARGE=1 DOUBLET UHF'
-    )
-
-
-def test_mopac_unsupported_multiplicity():
-    with pytest.raises(ValueError, match='unsupported MOPAC multiplicity'):
-        _mopac_keyword_line('PM7', 0, 99)
 
 
 @pytest.mark.parametrize(
@@ -123,7 +30,7 @@ def test_tblite_method(method, expected):
 
 def test_tblite_method_unsupported():
     with pytest.raises(ValueError, match='unsupported xtb method'):
-        _tblite_method('pm7')
+        _tblite_method('bogus')
 
 
 def test_tblite_geometry_numbers_and_bohr_positions():

@@ -100,8 +100,7 @@ class Geometry:
         """Save the geometry into a file.
 
         :param file f: file object
-        :param str fmt: geometry format, one of ``""``, ``"xyz"``, ``"aims"``,
-            ``"mopac"``.
+        :param str fmt: geometry format, one of ``""``, ``"xyz"``, ``"aims"``.
         """
         if fmt == '':
             f.write(repr(self))
@@ -120,11 +119,6 @@ class Geometry:
             for specie, coord in self:
                 coords_str = ' '.join(f'{x:15.8}' for x in coord)
                 f.write(f'atom {coords_str} {specie:>2}\n')
-        elif fmt == 'mopac':
-            f.write(f'* Formula: {self.formula}\n')
-            for specie, coord in self:
-                coords_str = ' '.join(f'{x:15.8} 1' for x in coord)
-                f.write(f'{specie:>2} {coords_str}\n')
         else:
             raise ValueError(f'Unknown format: {fmt!r}')
 
@@ -147,8 +141,6 @@ class Geometry:
             fmt = 'xyz'
         elif ext == '.aims' or os.path.basename(filename) == 'geometry.in':
             fmt = 'aims'
-        elif ext == '.mopac':
-            fmt = 'mopac'
         else:
             raise ValueError('Unknown file extension')
         with open(filename, 'w') as f:

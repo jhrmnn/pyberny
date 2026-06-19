@@ -48,32 +48,26 @@ therefore drift from the paper's numbers for two independent reasons:
 ``paper_steps`` by up to 7% (with an absolute floor of 2 steps) before
 failing the run -- same rule as the Birkholz-Schlegel benchmark.
 
-``pyberny_steps`` and ``mopac_pm7_steps`` were seeded from the first
-manual workflow_dispatch baseline run (PR #84, baker × both at HF/6-31G\*\*
-through PySCF and PM7 through MOPAC). PySCF reaches the same minimum the
-paper found for every one of the 30 molecules with a total of 208 steps
-vs. the paper's 190 (per-row delta typically ≤1 step, with histidine,
-dimethylpentane, menthone, disilyl\_ether, trisilacyclohexane\_135,
-pterin needing a few extra cycles past ASE/Berny's ``fmax``-only test).
-MOPAC PM7 totals 274 steps over 29 molecules; ``caffeine`` is left
-``null`` because PM7 hits the 110-step ceiling on this molecule, the same
-documented-non-converger convention used by ``bisphenol_a`` in the
-``birkholz_schlegel`` set.
+``pyberny_steps`` was seeded from the first manual workflow_dispatch
+baseline run (PR #84, baker at HF/6-31G\*\* through PySCF). PySCF reaches
+the same minimum the paper found for every one of the 30 molecules with a
+total of 208 steps vs. the paper's 190 (per-row delta typically ≤1 step,
+with histidine, dimethylpentane, menthone, disilyl\_ether,
+trisilacyclohexane\_135, pterin needing a few extra cycles past ASE/Berny's
+``fmax``-only test).
 
 ``xtb_gfn2_steps`` records the GFN2-xTB step counts (evaluated through the
 ``tblite`` library; see ``berny.solvers.XTBSolver``). All 30 molecules
-converge under xTB within the 130-step ceiling -- including ``caffeine``, which
-is a non-converger under PM7 -- so no entry is ``null``. Unlike three
-flat-minimum molecules in the ``birkholz_schlegel`` set, every Baker molecule's
-xTB step count is reproducible to 0-1 steps across repeated single-host runs. As
-with the other solvers, those counts are not guaranteed bitwise across different
-hosts, so the same 7%/2-step drift tolerance applies and the committed
+converge under xTB within the default 100-step ceiling -- so no entry is ``null``.
+Unlike three flat-minimum molecules in the ``birkholz_schlegel`` set, every
+Baker molecule's xTB step count is reproducible to 0-1 steps across repeated
+single-host runs. As with PySCF, those counts are not guaranteed bitwise across
+different hosts, so the same 7%/2-step drift tolerance applies and the committed
 single-host baseline should be confirmed from the first CI ``workflow_dispatch``
-xTB run. One GFN2-xTB call on these small organics is
-a few milliseconds, so the whole Baker set is only ~3 s of compute under xTB;
-like ``mopac_pm7_steps`` it runs as a single CI shard (``scripts/plan_batches.py
---benchmark baker --solvers xtb --nbins 1``) -- extra shards would be dominated
-by per-job setup overhead.
+xTB run. One GFN2-xTB call on these small organics is a few milliseconds, so the
+whole Baker set is only ~3 s of compute under xTB; it runs as a single CI shard
+(``scripts/plan_batches.py --benchmark baker --solvers xtb --nbins 1``) -- extra
+shards would be dominated by per-job setup overhead.
 
 Coordinate data is treated as factual and is redistributed under
 pyberny's MPL-2.0 license, with attribution to Shajan et al. via this

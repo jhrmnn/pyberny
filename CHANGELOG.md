@@ -34,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- `berny.solvers.MopacSolver`, the MOPAC backend. Use `berny.solvers.XTBSolver` (GFN2-xTB via the `tblite` library), now the default energy/gradient backend throughout the docs and benchmarks, instead.
+- The `"mopac"` geometry output format (`Geometry.dump(f, 'mopac')` / `Geometry.write('*.mopac')`).
 - The module-level `berny.berny.defaults` dict. Use `berny.BernyParams` (or pass overrides as keyword arguments to `Berny()`) instead.
 
 ### Fixed

@@ -15,7 +15,7 @@ solver either failed to converge or drifts from its reference step count
 by more than 7% (with an absolute floor of 2 steps) — same rule as
 ``benchmark.py``'s exit-code logic. Entries with ``null`` reference step
 counts are skipped from the gate (documented non-convergers / unmeasured),
-so seeding ``pyberny_steps`` / ``mopac_pm7_steps`` in ``reference.json``
+so seeding ``pyberny_steps`` / ``xtb_gfn2_steps`` in ``reference.json``
 is what activates the regression check.
 """
 
