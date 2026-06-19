@@ -28,8 +28,11 @@ jobs:
           echo "LD_LIBRARY_PATH=$PWD/lib" >>$GITHUB_ENV
         env:
           MOPAC_VERSION: 23.2.5
+      # tblite (the GFN-xTB backend behind berny.solvers.XTBSolver) ships
+      # manylinux wheels for every supported Python, so the xtb extra installs
+      # cleanly here and the live XTBSolver tests run across the whole matrix.
       - name: Install
-        run: pip install -e ".[test]"
+        run: pip install -e ".[test,xtb]"
       - name: Test
         run: coverage run -m pytest -v
       - name: Upload to Codecov
@@ -37,31 +40,3 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
-
-  # The xtb bindings have no reliable PyPI wheel and build from source
-  # otherwise (needs LAPACK), so the real xtb-backed solver is smoke-tested in
-  # a dedicated conda-forge environment. The pip matrix above covers the
-  # solver's code paths with a fake bindings module; this job confirms it
-  # works against the actual xtb library. Coverage is left to the pip jobs.
-  xtb:
-    name: xtb (conda-forge)
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash -l {0}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: mamba-org/setup-micromamba@v2
-        with:
-          environment-name: xtb
-          create-args: >-
-            python=3.12
-            xtb-python
-            typing-extensions
-          init-shell: bash
-      - name: Install
-        run: pip install -e ".[test]"
-      - name: Test
-        run: pytest -v -k xtb

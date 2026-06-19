@@ -9,7 +9,7 @@ from berny.solvers import MopacSolver, XTBSolver
 XYZ_DIR = Path(__file__).parent
 
 xtb_required = pytest.mark.skipif(
-    importlib.util.find_spec('xtb') is None, reason='xtb not installed'
+    importlib.util.find_spec('tblite') is None, reason='tblite not installed'
 )
 
 

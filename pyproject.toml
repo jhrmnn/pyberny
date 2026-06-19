@@ -36,14 +36,14 @@ sphinx-multiversion = { version = ">=0.2", optional = true }
 toml = { version = ">=0.10", optional = true }
 pyscf = { version = ">=2.5", optional = true }
 matplotlib = { version = ">=3.5", optional = true }
-xtb = { version = ">=20", optional = true }
+tblite = { version = ">=0.3", optional = true }
 
 [tool.poetry.extras]
 test = ["pytest", "coverage"]
 doc = ["sphinx", "sphinxcontrib-katex", "sphinx-multiversion", "toml"]
 benchmark = ["pyscf"]
 plot = ["matplotlib"]
-xtb = ["xtb"]
+xtb = ["tblite"]
 
 [tool.poetry.group.dev.dependencies]
 ruff = ">=0.6"
@@ -80,10 +80,10 @@ enable_error_code = [
     "unused-awaitable",
 ]
 
-# The xtb bindings ship no type stubs; XTBSolver imports them lazily and uses
-# them only at runtime, so let mypy treat the module as untyped.
+# tblite ships no type stubs; XTBSolver imports it lazily and uses it only at
+# runtime, so let mypy treat the module as untyped.
 [[tool.mypy.overrides]]
-module = "xtb.*"
+module = "tblite.*"
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

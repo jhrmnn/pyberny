@@ -291,8 +291,8 @@ def main(argv=None):
 
     if args.solver == 'mopac' and not shutil.which('mopac'):
         raise SystemExit('mopac not on PATH')
-    if args.solver == 'xtb' and importlib.util.find_spec('xtb') is None:
-        raise SystemExit('xtb package not installed (pip install pyberny[xtb])')
+    if args.solver == 'xtb' and importlib.util.find_spec('tblite') is None:
+        raise SystemExit('tblite package not installed (pip install pyberny[xtb])')
 
     data_dir = BENCHMARKS[args.benchmark]
     reference = json.loads((data_dir / 'reference.json').read_text())

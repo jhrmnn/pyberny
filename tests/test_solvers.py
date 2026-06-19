@@ -11,8 +11,8 @@ from berny.solvers import (
     _diff5,
     _mopac_keyword_line,
     _parse_mopac_aux,
-    _xtb_geometry,
-    _xtb_method_key,
+    _tblite_geometry,
+    _tblite_method,
 )
 
 # A trimmed MOPAC AUX file for water (PM7 1SCF GRADIENTS AUX(PRECISION=9)).
@@ -110,44 +110,44 @@ def test_mopac_unsupported_multiplicity():
 @pytest.mark.parametrize(
     ('method', 'expected'),
     [
-        ('gfn2', 'GFN2xTB'),
-        ('2', 'GFN2xTB'),
-        ('GFN1', 'GFN1xTB'),
-        ('gfn-ff', 'GFNFF'),
-        ('GFNFF', 'GFNFF'),
+        ('gfn2', 'GFN2-xTB'),
+        ('2', 'GFN2-xTB'),
+        ('GFN1', 'GFN1-xTB'),
+        ('ipea1', 'IPEA1-xTB'),
+        ('IPEA1', 'IPEA1-xTB'),
     ],
 )
-def test_xtb_method_key(method, expected):
-    assert _xtb_method_key(method) == expected
+def test_tblite_method(method, expected):
+    assert _tblite_method(method) == expected
 
 
-def test_xtb_method_key_unsupported():
+def test_tblite_method_unsupported():
     with pytest.raises(ValueError, match='unsupported xtb method'):
-        _xtb_method_key('pm7')
+        _tblite_method('pm7')
 
 
-def test_xtb_geometry_numbers_and_bohr_positions():
+def test_tblite_geometry_numbers_and_bohr_positions():
     # Atomic numbers come from the species table and coordinates are converted
-    # from Angstrom to bohr (the atomic units the xtb bindings expect).
+    # from Angstrom to bohr (the atomic units tblite expects).
     atoms = [
         ('O', np.array([0.0, 0.0, 0.0])),
         ('H', np.array([0.0, 0.0, 0.96])),
     ]
-    numbers, positions = _xtb_geometry(atoms)
+    numbers, positions = _tblite_geometry(atoms)
     np.testing.assert_array_equal(numbers, [8, 1])
     np.testing.assert_allclose(positions, [[0, 0, 0], [0, 0, 0.96 * angstrom]])
 
 
 def test_xtb_solver_rejects_nonpositive_multiplicity():
-    # Validation happens when the generator is primed (before any xtb import),
-    # so this raises even when xtb is not installed.
+    # Validation happens when the generator is primed (before any tblite import),
+    # so this raises even when tblite is not installed.
     with pytest.raises(ValueError, match='multiplicity must be >= 1'):
         next(XTBSolver(mult=0))
 
 
 def test_xtb_solver_rejects_periodic_system():
     # GFN2-xTB here is molecule-only; a non-None lattice must raise. The lattice
-    # check runs before the lazy xtb import, so it works without xtb installed.
+    # check runs before the lazy tblite import, so it works without tblite.
     solver = XTBSolver()
     next(solver)
     atoms = [('H', np.array([0.0, 0.0, 0.0]))]
@@ -156,37 +156,27 @@ def test_xtb_solver_rejects_periodic_system():
         solver.send((atoms, lattice))
 
 
-def _install_fake_xtb(monkeypatch):
-    """Inject a minimal fake ``xtb`` bindings package into ``sys.modules``.
+def _install_fake_tblite(monkeypatch):
+    """Inject a minimal fake ``tblite`` package into ``sys.modules``.
 
     This lets the XTBSolver single-point path (import, Calculator construction,
     verbosity/accuracy, singlepoint, result unpacking) be exercised
-    deterministically in the regular pip test matrix, without the real ``xtb``
-    package -- which has no reliable PyPI wheel and is only available in the
-    dedicated conda-forge job. ``calls`` captures what the solver passed in.
+    deterministically without the real ``tblite`` package. ``calls`` captures
+    what the solver passed in.
     """
-    calls: dict = {'accuracy': None}
-
-    class Param:
-        GFN2xTB = 'GFN2xTB'
-        GFN1xTB = 'GFN1xTB'
-        GFN0xTB = 'GFN0xTB'
-        GFNFF = 'GFNFF'
+    calls: dict = {'settings': {}}
 
     class _Result:
         def __init__(self, n_atoms):
             self._n = n_atoms
 
-        def get_energy(self):
-            return -1.5
-
-        def get_gradient(self):
-            return np.zeros((self._n, 3))
+        def get(self, key):
+            return {'energy': -1.5, 'gradient': np.zeros((self._n, 3))}[key]
 
     class Calculator:
-        def __init__(self, param, numbers, positions, charge=0, uhf=0):
+        def __init__(self, method, numbers, positions, charge=0.0, uhf=0):
             calls.update(
-                param=param,
+                method=method,
                 numbers=numbers,
                 positions=positions,
                 charge=charge,
@@ -194,28 +184,21 @@ def _install_fake_xtb(monkeypatch):
             )
             self._n = len(numbers)
 
-        def set_verbosity(self, verbosity):
-            calls['verbosity'] = verbosity
-
-        def set_accuracy(self, accuracy):
-            calls['accuracy'] = accuracy
+        def set(self, key, value):
+            calls['settings'][key] = value
 
         def singlepoint(self):
             return _Result(self._n)
 
-    interface = types.ModuleType('xtb.interface')
+    interface = types.ModuleType('tblite.interface')
     interface.Calculator = Calculator
-    interface.Param = Param
-    libxtb = types.ModuleType('xtb.libxtb')
-    libxtb.VERBOSITY_MUTED = 0
-    monkeypatch.setitem(sys.modules, 'xtb', types.ModuleType('xtb'))
-    monkeypatch.setitem(sys.modules, 'xtb.interface', interface)
-    monkeypatch.setitem(sys.modules, 'xtb.libxtb', libxtb)
+    monkeypatch.setitem(sys.modules, 'tblite', types.ModuleType('tblite'))
+    monkeypatch.setitem(sys.modules, 'tblite.interface', interface)
     return calls
 
 
 def test_xtb_singlepoint_passes_inputs_and_returns_atomic_units(monkeypatch):
-    calls = _install_fake_xtb(monkeypatch)
+    calls = _install_fake_tblite(monkeypatch)
     solver = XTBSolver(method='gfn2', charge=-1, mult=2, accuracy=0.5)
     next(solver)
     atoms = [
@@ -227,34 +210,34 @@ def test_xtb_singlepoint_passes_inputs_and_returns_atomic_units(monkeypatch):
     # Energy (Hartree) and gradient (Hartree/bohr) are returned unchanged.
     assert energy == -1.5
     assert gradients.shape == (2, 3)
-    # GFN level, charge and uhf = mult - 1 are forwarded; coordinates reach xtb
+    # Method, charge and uhf = mult - 1 are forwarded; coordinates reach tblite
     # in bohr and elements as atomic numbers.
-    assert calls['param'] == 'GFN2xTB'
-    assert calls['charge'] == -1
+    assert calls['method'] == 'GFN2-xTB'
+    assert calls['charge'] == -1.0
     assert calls['uhf'] == 1
-    assert calls['accuracy'] == 0.5
+    assert calls['settings']['accuracy'] == 0.5
     np.testing.assert_array_equal(calls['numbers'], [8, 1])
     np.testing.assert_allclose(calls['positions'][1], [0.0, 0.0, 0.96 * angstrom])
 
 
 def test_xtb_singlepoint_skips_accuracy_when_unset(monkeypatch):
-    calls = _install_fake_xtb(monkeypatch)
+    calls = _install_fake_tblite(monkeypatch)
     solver = XTBSolver()
     next(solver)
     energy, _ = solver.send(([('H', np.zeros(3))], None))
     assert energy == -1.5
-    # accuracy defaults to None, so set_accuracy is never called.
-    assert calls['accuracy'] is None
+    # accuracy defaults to None, so it is never passed to tblite.
+    assert 'accuracy' not in calls['settings']
 
 
 def test_xtb_solver_missing_bindings_raises_helpful_error(monkeypatch):
-    # Force the lazy xtb import to fail (covers the ImportError branch even when
-    # the real bindings are installed, e.g. in the conda-forge job).
-    monkeypatch.setitem(sys.modules, 'xtb', None)
-    monkeypatch.setitem(sys.modules, 'xtb.interface', None)
+    # Force the lazy tblite import to fail (covers the ImportError branch even
+    # when the real package is installed).
+    monkeypatch.setitem(sys.modules, 'tblite', None)
+    monkeypatch.setitem(sys.modules, 'tblite.interface', None)
     solver = XTBSolver()
     next(solver)
-    with pytest.raises(ImportError, match='conda-forge'):
+    with pytest.raises(ImportError, match='tblite'):
         solver.send(([('H', np.zeros(3))], None))
 
 

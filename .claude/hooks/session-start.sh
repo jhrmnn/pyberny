@@ -28,11 +28,10 @@ pip install -e ".[test,doc]"
 
 pip install ruff black
 
-# xtb provides berny.solvers.XTBSolver. The Claude Code on the web image's
-# Python has a prebuilt xtb wheel, so pip works here (unlike CI's Python 3.12,
-# which has no wheel and provisions xtb from conda-forge). typing_extensions is
-# imported by the bindings but not always pulled in. Best-effort: never fail
-# session startup if a wheel is unavailable -- XTBSolver tests just skip then.
-pip install xtb typing_extensions ||
-  echo "warning: xtb wheel unavailable; XTBSolver tests will skip" >&2
+# tblite is the GFN-xTB backend for berny.solvers.XTBSolver. It ships manylinux
+# wheels for every supported Python, so pip installs it directly. Best-effort:
+# never fail session startup if a wheel is unavailable -- XTBSolver tests just
+# skip then.
+pip install tblite ||
+  echo "warning: tblite wheel unavailable; XTBSolver tests will skip" >&2
 
