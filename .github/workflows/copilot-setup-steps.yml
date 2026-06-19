@@ -47,8 +47,8 @@ jobs:
           echo "$PWD/bin" >>$GITHUB_PATH
           echo "LD_LIBRARY_PATH=$PWD/lib" >>$GITHUB_ENV
 
-      - name: Install project with test and doc extras
-        run: pip install -e ".[test,doc]"
+      - name: Install project with test, doc, and xtb extras
+        run: pip install -e ".[test,doc,xtb]"
 
       # Lint tools used by .github/workflows/lint.yaml so `ruff`, `black`,
       # and `mypy` are available without a network round-trip.

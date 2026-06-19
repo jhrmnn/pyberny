@@ -13,8 +13,9 @@ import numpy as np
 from numpy.typing import NDArray
 
 from .coords import angstrom
+from .species_data import get_property
 
-__all__ = ['MopacSolver']
+__all__ = ['MopacSolver', 'XTBSolver']
 
 FloatArray = NDArray[np.floating[Any]]
 
@@ -131,6 +132,110 @@ def MopacSolver(
     finally:
         if tmpdir != workdir:
             shutil.rmtree(tmpdir)
+
+
+#: Maps an ``XTBSolver`` method name to the corresponding ``xtb.Param`` member.
+_XTB_METHODS = {
+    'gfn0': 'GFN0xTB',
+    'gfn1': 'GFN1xTB',
+    'gfn2': 'GFN2xTB',
+    'gfnff': 'GFNFF',
+}
+
+
+def _xtb_method_key(method: str) -> str:
+    """Normalise an ``XTBSolver`` method name to an ``xtb.Param`` member name."""
+    key = str(method).lower().replace('-', '').replace('_', '').replace(' ', '')
+    if key in ('0', '1', '2'):
+        key = f'gfn{key}'
+    try:
+        return _XTB_METHODS[key]
+    except KeyError as e:
+        raise ValueError(
+            f'unsupported xtb method: {method!r} '
+            f'(choose from {", ".join(sorted(_XTB_METHODS))})'
+        ) from e
+
+
+def _xtb_geometry(
+    atoms: list[tuple[str, FloatArray]],
+) -> tuple[FloatArray, FloatArray]:
+    """Convert ``(symbol, xyz_in_angstrom)`` atoms to the inputs xtb expects.
+
+    Returns integer atomic numbers and Cartesian positions in bohr (the xtb
+    bindings work in atomic units, unlike the Angstrom geometry pyberny uses).
+    """
+    numbers = np.array([int(get_property(sp, 'number')) for sp, _ in atoms])
+    positions = np.array([coord for _, coord in atoms]) * angstrom
+    return numbers, positions
+
+
+def _xtb_singlepoint(
+    param_name: str,
+    atoms: list[tuple[str, FloatArray]],
+    charge: int,
+    mult: int,
+    accuracy: float | None,
+) -> SolverOutput:
+    """Run a single xtb energy+gradient evaluation via the Python bindings.
+
+    Energy (Hartree) and gradient (Hartree/bohr) come back in atomic units and
+    are returned unchanged -- no unit conversion, unlike :func:`MopacSolver`.
+    """
+    try:
+        from xtb.interface import Calculator, Param
+        from xtb.libxtb import VERBOSITY_MUTED
+    except ImportError as e:
+        raise ImportError(
+            'XTBSolver requires the xtb package; install it with '
+            '`pip install pyberny[xtb]`'
+        ) from e
+    numbers, positions = _xtb_geometry(atoms)
+    calc = Calculator(
+        getattr(Param, param_name), numbers, positions, charge=charge, uhf=mult - 1
+    )
+    calc.set_verbosity(VERBOSITY_MUTED)
+    if accuracy is not None:
+        calc.set_accuracy(accuracy)
+    res = calc.singlepoint()
+    return res.get_energy(), res.get_gradient()
+
+
+def XTBSolver(
+    method: str = 'gfn2',
+    *,
+    charge: int = 0,
+    mult: int = 1,
+    accuracy: float | None = None,
+) -> Solver:
+    """
+    Create a solver that wraps `xtb <https://xtb-docs.readthedocs.io>`_, Grimme's
+    semiempirical tight-binding program, through its Python bindings.
+
+    The ``xtb`` package must be installed (``pip install pyberny[xtb]``). Unlike
+    :func:`MopacSolver`, GFN2-xTB has a smooth potential-energy surface, which
+    makes it a useful alternative semiempirical backend near flat minima where
+    PM7 can be effectively discontinuous.
+
+    :param str method: GFN parametrisation -- ``'gfn2'`` (default), ``'gfn1'``,
+        ``'gfn0'`` or ``'gfnff'``
+    :param int charge: total charge (keyword-only)
+    :param int mult: spin multiplicity, keyword-only (1 = singlet, 2 = doublet,
+        ...); passed to xtb as ``mult - 1`` unpaired electrons
+    :param accuracy: xtb numerical accuracy (smaller is tighter); the xtb
+        default is used when ``None`` (keyword-only)
+    """
+    if mult < 1:
+        raise ValueError(f'multiplicity must be >= 1, got {mult}')
+    param_name = _xtb_method_key(method)
+    atoms, lattice = yield None
+    while True:
+        if lattice is not None:
+            raise NotImplementedError(
+                'XTBSolver does not support periodic systems (lattice vectors)'
+            )
+        energy, gradients = _xtb_singlepoint(param_name, atoms, charge, mult, accuracy)
+        atoms, lattice = yield energy, gradients
 
 
 def GenericSolver(f: Callable[..., float], *args: Any, **kwargs: Any) -> Solver:

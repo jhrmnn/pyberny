@@ -26,6 +26,7 @@ on:
         options:
           - mopac
           - pyscf
+          - xtb
           - both
         default: mopac
       molecules:
@@ -106,12 +107,18 @@ jobs:
               {"solver": "pyscf", "batch_id": "b3", "molecules": "histidine acanil01 trisilacyclohexane_135 hydroxybicyclopentane_2 neopentane acetone ammonia water"},
               {"solver": "pyscf", "batch_id": "b4", "molecules": "dimethylpentane pterin difuropyrazine difluoronaphthalene_15 achtar10 difluorobenzene_13 allene hydroxysulfane acetylene"},
           ]
+          # GFN2-xTB shards reuse the mopac molecule groupings (same per-call
+          # cost class) but run under the xtb solver. xtb is dispatch-only --
+          # it is not part of the push/pull_request auto-trigger pool.
+          xtb_fast = [{**s, "solver": "xtb"} for s in mopac_fast]
+          xtb_full = [{**s, "solver": "xtb"} for s in mopac_full]
+          baker_xtb = [{**s, "solver": "xtb"} for s in baker_mopac]
           # The "benchmark" key on each shard is consumed below to set the
           # --benchmark flag on benchmark.py and threads through to the
           # aggregate step's --benchmark / artifact-name suffix.
-          for s in mopac_fast + mopac_full + pyscf:
+          for s in mopac_fast + mopac_full + pyscf + xtb_fast + xtb_full:
               s["benchmark"] = "birkholz"
-          for s in baker_mopac + baker_pyscf:
+          for s in baker_mopac + baker_pyscf + baker_xtb:
               s["benchmark"] = "baker"
           # (benchmark, solver) -> ordered list of shard pools to pull from.
           # pyscf has no fast/full distinction; both birkholz-* benchmarks
@@ -119,12 +126,15 @@ jobs:
           pools_by_axes = {
               ("birkholz-fast", "mopac"): [mopac_fast],
               ("birkholz-fast", "pyscf"): [pyscf],
+              ("birkholz-fast", "xtb"):   [xtb_fast],
               ("birkholz-fast", "both"):  [mopac_fast, pyscf],
               ("birkholz-full", "mopac"): [mopac_full],
               ("birkholz-full", "pyscf"): [pyscf],
+              ("birkholz-full", "xtb"):   [xtb_full],
               ("birkholz-full", "both"):  [mopac_full, pyscf],
               ("baker",         "mopac"): [baker_mopac],
               ("baker",         "pyscf"): [baker_pyscf],
+              ("baker",         "xtb"):   [baker_xtb],
               ("baker",         "both"):  [baker_mopac, baker_pyscf],
           }
           benchmark = os.environ["BENCHMARK"]
@@ -187,6 +197,8 @@ jobs:
         run: |
           if [ "${{ matrix.solver }}" = "mopac" ]; then
             pip install -e .
+          elif [ "${{ matrix.solver }}" = "xtb" ]; then
+            pip install -e '.[xtb]'
           else
             pip install -e '.[benchmark]'
           fi
@@ -257,7 +269,7 @@ jobs:
             python scripts/aggregate_benchmark.py \
               --benchmark "$bench" \
               --results-dir all-results \
-              --solvers mopac pyscf
+              --solvers mopac pyscf xtb
           done
       - name: Plot energy convergence
         # One combined figure per benchmark (mopac is the auto-trigger solver;

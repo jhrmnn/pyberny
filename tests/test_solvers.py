@@ -4,9 +4,12 @@ import pytest
 from berny.coords import angstrom
 from berny.solvers import (
     GenericSolver,
+    XTBSolver,
     _diff5,
     _mopac_keyword_line,
     _parse_mopac_aux,
+    _xtb_geometry,
+    _xtb_method_key,
 )
 
 # A trimmed MOPAC AUX file for water (PM7 1SCF GRADIENTS AUX(PRECISION=9)).
@@ -99,6 +102,55 @@ def test_mopac_doublet_cation():
 def test_mopac_unsupported_multiplicity():
     with pytest.raises(ValueError, match='unsupported MOPAC multiplicity'):
         _mopac_keyword_line('PM7', 0, 99)
+
+
+@pytest.mark.parametrize(
+    ('method', 'expected'),
+    [
+        ('gfn2', 'GFN2xTB'),
+        ('2', 'GFN2xTB'),
+        ('GFN1', 'GFN1xTB'),
+        ('gfn-ff', 'GFNFF'),
+        ('GFNFF', 'GFNFF'),
+    ],
+)
+def test_xtb_method_key(method, expected):
+    assert _xtb_method_key(method) == expected
+
+
+def test_xtb_method_key_unsupported():
+    with pytest.raises(ValueError, match='unsupported xtb method'):
+        _xtb_method_key('pm7')
+
+
+def test_xtb_geometry_numbers_and_bohr_positions():
+    # Atomic numbers come from the species table and coordinates are converted
+    # from Angstrom to bohr (the atomic units the xtb bindings expect).
+    atoms = [
+        ('O', np.array([0.0, 0.0, 0.0])),
+        ('H', np.array([0.0, 0.0, 0.96])),
+    ]
+    numbers, positions = _xtb_geometry(atoms)
+    np.testing.assert_array_equal(numbers, [8, 1])
+    np.testing.assert_allclose(positions, [[0, 0, 0], [0, 0, 0.96 * angstrom]])
+
+
+def test_xtb_solver_rejects_nonpositive_multiplicity():
+    # Validation happens when the generator is primed (before any xtb import),
+    # so this raises even when xtb is not installed.
+    with pytest.raises(ValueError, match='multiplicity must be >= 1'):
+        next(XTBSolver(mult=0))
+
+
+def test_xtb_solver_rejects_periodic_system():
+    # GFN2-xTB here is molecule-only; a non-None lattice must raise. The lattice
+    # check runs before the lazy xtb import, so it works without xtb installed.
+    solver = XTBSolver()
+    next(solver)
+    atoms = [('H', np.array([0.0, 0.0, 0.0]))]
+    lattice = np.eye(3)
+    with pytest.raises(NotImplementedError, match='periodic'):
+        solver.send((atoms, lattice))
 
 
 def test_diff5_recovers_derivative_of_cubic():
