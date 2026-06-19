@@ -71,12 +71,18 @@ def _parse_mopac_aux(path: str, n_grad: int) -> tuple[float, FloatArray]:
             if line.startswith(' HEAT_OF_FORMATION:KCAL/MOL='):
                 energy = float(line.split('=', 1)[1].replace('D', 'E'))
             elif line.startswith(' GRADIENTS:KCAL/MOL/ANGSTROM'):
-                values: list[float] = []
-                while len(values) < n_grad:
-                    values += [float(t.replace('D', 'E')) for t in next(lines).split()]
                 if energy is None:
                     raise ValueError('no HEAT_OF_FORMATION found in MOPAC AUX file')
-                return energy, np.array(values).reshape(-1, 3)
+                values: list[float] = []
+                for grad_line in lines:
+                    values += [float(t.replace('D', 'E')) for t in grad_line.split()]
+                    if len(values) >= n_grad:
+                        return energy, np.array(values[:n_grad]).reshape(-1, 3)
+                raise ValueError(
+                    'MOPAC AUX GRADIENTS block is truncated: expected '
+                    f'{n_grad} gradient components, found {len(values)} '
+                    '(MOPAC likely failed or was interrupted)'
+                )
     raise ValueError('no GRADIENTS found in MOPAC AUX file')
 
 

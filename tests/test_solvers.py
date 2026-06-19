@@ -49,6 +49,20 @@ def test_parse_mopac_aux_missing_gradients(tmp_path):
         _parse_mopac_aux(str(aux), 9)
 
 
+def test_parse_mopac_aux_truncated_gradients(tmp_path):
+    # GRADIENTS block present but cut short (MOPAC died mid-write): must raise
+    # a clear, contextual error rather than letting ``next`` exhaust the file
+    # and surface an opaque ``StopIteration``/``RuntimeError`` (see issue #130).
+    aux = tmp_path / 'job.aux'
+    aux.write_text(
+        ' HEAT_OF_FORMATION:KCAL/MOL=-0.577822806548975D+02\n'
+        ' GRADIENTS:KCAL/MOL/ANGSTROM[09]=\n'
+        '  -3.4312143657544   0.0000000507512  -2.3676270992310\n'
+    )
+    with pytest.raises(ValueError, match='truncated'):
+        _parse_mopac_aux(str(aux), 9)
+
+
 def test_parse_mopac_aux_gradients_before_energy(tmp_path):
     # A GRADIENTS block with no preceding HEAT_OF_FORMATION is malformed.
     aux = tmp_path / 'job.aux'
