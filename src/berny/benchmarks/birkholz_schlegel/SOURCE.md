@@ -58,9 +58,8 @@ run.
 xTB needs no fast/full batch split (no easc-style per-call outlier to
 quarantine): ``scripts/plan_batches.py`` bins it into four cost-balanced shards
 (per-call ``tblite`` time × ``xtb_gfn2_steps``, falling back to ``paper_steps``
-for the three ``null`` rows) used for both ``birkholz-fast`` and
-``birkholz-full``. The ``null`` molecules still *run* in those shards; only the
-regression gate skips them.
+for the three ``null`` rows). The ``null`` molecules still *run* in those
+shards; only the regression gate skips them.
 
 Coordinate data is treated as factual and is redistributed under pyberny's
 MPL-2.0 license, with attribution to Birkholz & Schlegel via this file and

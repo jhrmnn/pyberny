@@ -8,19 +8,16 @@ on:
       benchmark:
         description: 'Which benchmark to run'
         type: choice
-        # Neither backend has a fast/full distinction: xtb has no per-call
-        # outlier to quarantine (one GFN2-xTB call is sub-second even for the
-        # 95-atom azadirachtin) and pyscf's shards are identical for both
-        # birkholz-* options. birkholz-fast and birkholz-full therefore map to
-        # the same pools and are kept only as familiar labels. push/pull_request
+        # No fast/full distinction: xtb has no per-call outlier to quarantine
+        # (one GFN2-xTB call is sub-second even for the 95-atom azadirachtin)
+        # and pyscf's shards are the same regardless. push/pull_request
         # auto-trigger unions the birkholz and baker xtb pools so both reference
         # sets get exercised cheaply on every push; baker pyscf is
         # workflow_dispatch only because a full sweep is ~2 h.
         options:
-          - birkholz-fast
-          - birkholz-full
+          - birkholz
           - baker
-        default: birkholz-fast
+        default: birkholz
       solver:
         description: 'Which solver(s) to use'
         type: choice
@@ -119,18 +116,13 @@ jobs:
           for s in baker_pyscf + baker_xtb:
               s["benchmark"] = "baker"
           # (benchmark, solver) -> ordered list of shard pools to pull from.
-          # Neither pyscf nor xtb has a fast/full distinction; both birkholz-*
-          # options reuse the same single pool (`birkholz_xtb` / `pyscf`).
           pools_by_axes = {
-              ("birkholz-fast", "xtb"):   [birkholz_xtb],
-              ("birkholz-fast", "pyscf"): [pyscf],
-              ("birkholz-fast", "both"):  [birkholz_xtb, pyscf],
-              ("birkholz-full", "xtb"):   [birkholz_xtb],
-              ("birkholz-full", "pyscf"): [pyscf],
-              ("birkholz-full", "both"):  [birkholz_xtb, pyscf],
-              ("baker",         "xtb"):   [baker_xtb],
-              ("baker",         "pyscf"): [baker_pyscf],
-              ("baker",         "both"):  [baker_xtb, baker_pyscf],
+              ("birkholz", "xtb"):   [birkholz_xtb],
+              ("birkholz", "pyscf"): [pyscf],
+              ("birkholz", "both"):  [birkholz_xtb, pyscf],
+              ("baker",    "xtb"):   [baker_xtb],
+              ("baker",    "pyscf"): [baker_pyscf],
+              ("baker",    "both"):  [baker_xtb, baker_pyscf],
           }
           benchmark = os.environ["BENCHMARK"]
           solver = os.environ["SOLVER"]
