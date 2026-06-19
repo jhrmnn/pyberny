@@ -47,12 +47,37 @@ def _mopac_keyword_line(method: str, charge: int, mult: int) -> str:
         mult_kw = _MOPAC_MULT_KEYWORDS[mult]
     except KeyError as e:
         raise ValueError(f'unsupported MOPAC multiplicity: {mult}') from e
-    keywords = [method, '1SCF', 'GRADIENTS']
+    keywords = [method, '1SCF', 'GRADIENTS', 'AUX(PRECISION=9)']
     if charge:
         keywords.append(f'CHARGE={charge}')
     if mult_kw:
         keywords += [mult_kw, 'UHF']
     return ' '.join(keywords)
+
+
+def _parse_mopac_aux(path: str, n_grad: int) -> tuple[float, FloatArray]:
+    """Parse the energy and gradients from a MOPAC ``AUX`` file.
+
+    The ``AUX`` file carries the heat of formation to 15 significant figures
+    (vs. ``1e-5 kcal/mol`` print quantization in the ``.out`` file) and the
+    gradients to higher precision, both as flat whitespace-separated lists in
+    a Fortran ``D`` exponent format. ``n_grad`` is the expected number of
+    gradient components (``3`` per atom and lattice vector).
+    """
+    energy: float | None = None
+    with open(path) as f:
+        lines = iter(f)
+        for line in lines:
+            if line.startswith(' HEAT_OF_FORMATION:KCAL/MOL='):
+                energy = float(line.split('=', 1)[1].replace('D', 'E'))
+            elif line.startswith(' GRADIENTS:KCAL/MOL/ANGSTROM'):
+                values: list[float] = []
+                while len(values) < n_grad:
+                    values += [float(t.replace('D', 'E')) for t in next(lines).split()]
+                if energy is None:
+                    raise ValueError('no HEAT_OF_FORMATION found in MOPAC AUX file')
+                return energy, np.array(values).reshape(-1, 3)
+    raise ValueError('no GRADIENTS found in MOPAC AUX file')
 
 
 def MopacSolver(
@@ -92,19 +117,10 @@ def MopacSolver(
             with open(input_file, 'w') as f:
                 f.write(mopac_input)
             subprocess.check_call([cmd, input_file])
-            with open(os.path.join(tmpdir, 'job.out')) as f:
-                energy = float(
-                    next(l for l in f if 'FINAL HEAT OF FORMATION' in l).split()[5]
-                )
-                next(l for l in f if 'FINAL  POINT  AND  DERIVATIVES' in l)
-                next(f)
-                next(f)
-                gradients = np.array(
-                    [
-                        [float(next(f).split()[6]) for _ in range(3)]
-                        for _ in range(len(atoms) + (0 if lattice is None else 3))
-                    ]
-                )
+            n_grad = 3 * (len(atoms) + (0 if lattice is None else 3))
+            energy, gradients = _parse_mopac_aux(
+                os.path.join(tmpdir, 'job.aux'), n_grad
+            )
             atoms, lattice = yield energy * kcal, gradients * kcal / angstrom
     finally:
         if tmpdir != workdir:

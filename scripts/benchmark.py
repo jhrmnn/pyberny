@@ -130,14 +130,7 @@ def run_mopac(name, ref, data_dir, trace=None):
     # ~119 steps to converge once the generalised linear-bend trigger
     # (PR #104) rebuilds around the Zn centre several times; keep the
     # ceiling above that.
-    # MOPAC PM7 SCF is converged to ~10^-7 Hartree, an order of magnitude
-    # noisier than the BernyParams default (2e-8 a.u.) which targets DFT
-    # precision. Widen the trust-region noise gate accordingly so the
-    # late-iteration |dE_predicted| ~ a few * 10^-7 are correctly treated
-    # as noise (otherwise Fletcher's ratio dE/dE_predicted collapses the
-    # trust radius and the optimizer locks onto the trust-region sphere
-    # at the minimum; see PR #104 azadirachtin residual).
-    berny = Berny(geom, maxsteps=130, trace=trace, energy_noise=2e-7)
+    berny = Berny(geom, maxsteps=130, trace=trace)
     solver = MopacSolver(charge=ref['charge'], mult=ref['mult'])
     energies = _optimize_recording_energies(berny, solver)
     return berny.converged, berny._n, energies
