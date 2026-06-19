@@ -39,8 +39,9 @@ wherever ``MopacSolver()`` appears::
 
    relaxed = optimize(Berny(geomlib.readfile('start.xyz')), XTBSolver())
 
-Install the backend with the ``xtb`` extra (``pip install pyberny[xtb]``),
-which pulls in ``tblite`` from PyPI.
+The backend is ``tblite``, shipped in the ``benchmark`` extra
+(``pip install pyberny[benchmark]``); it can also be installed on its own with
+``pip install tblite``.
 
 For PySCF, use upstream PySCF's own bridge to pyberny (it imports ``Berny``
 internally and handles unit conversion, ghost atoms, symmetry, and the

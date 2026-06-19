@@ -41,9 +41,8 @@ tblite = { version = ">=0.3", optional = true }
 [tool.poetry.extras]
 test = ["pytest", "coverage"]
 doc = ["sphinx", "sphinxcontrib-katex", "sphinx-multiversion", "toml"]
-benchmark = ["pyscf"]
+benchmark = ["pyscf", "tblite"]
 plot = ["matplotlib"]
-xtb = ["tblite"]
 
 [tool.poetry.group.dev.dependencies]
 ruff = ">=0.6"

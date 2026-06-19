@@ -195,10 +195,10 @@ jobs:
           MOPAC_VERSION: 23.2.5
       - name: Install pyberny
         run: |
+          # mopac needs no Python backend; pyscf and xtb shards both come from
+          # the benchmark extra (pyscf + tblite).
           if [ "${{ matrix.solver }}" = "mopac" ]; then
             pip install -e .
-          elif [ "${{ matrix.solver }}" = "xtb" ]; then
-            pip install -e '.[xtb]'
           else
             pip install -e '.[benchmark]'
           fi

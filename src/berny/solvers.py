@@ -186,7 +186,7 @@ def _tblite_singlepoint(
     except ImportError as e:
         raise ImportError(
             'XTBSolver requires the tblite package; install it with '
-            f'`pip install pyberny[xtb]` (underlying import error: {e})'
+            f'`pip install pyberny[benchmark]` (underlying import error: {e})'
         ) from e
     numbers, positions = _tblite_geometry(atoms)
     calc = Calculator(method, numbers, positions, charge=float(charge), uhf=mult - 1)
@@ -211,7 +211,7 @@ def XTBSolver(
     semiempirical tight-binding methods, evaluated through the `tblite
     <https://tblite.readthedocs.io>`_ library.
 
-    The ``tblite`` package must be installed (``pip install pyberny[xtb]``).
+    The ``tblite`` package must be installed (``pip install pyberny[benchmark]``).
     Unlike :func:`MopacSolver`, GFN2-xTB has a smooth potential-energy surface,
     which makes it a useful alternative semiempirical backend near flat minima
     where PM7 can be effectively discontinuous.

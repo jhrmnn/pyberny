@@ -28,11 +28,11 @@ jobs:
           echo "LD_LIBRARY_PATH=$PWD/lib" >>$GITHUB_ENV
         env:
           MOPAC_VERSION: 23.2.5
-      # tblite (the GFN-xTB backend behind berny.solvers.XTBSolver) ships
-      # manylinux wheels for every supported Python, so the xtb extra installs
-      # cleanly here and the live XTBSolver tests run across the whole matrix.
+      # tblite (the GFN-xTB backend behind berny.solvers.XTBSolver) lives in the
+      # benchmark extra alongside pyscf; both ship wheels for every supported
+      # Python, so the live XTBSolver tests run across the whole matrix.
       - name: Install
-        run: pip install -e ".[test,xtb]"
+        run: pip install -e ".[test,benchmark]"
       - name: Test
         run: coverage run -m pytest -v
       - name: Upload to Codecov

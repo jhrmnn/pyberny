@@ -20,18 +20,11 @@ echo "export PATH=\"$MOPAC_DIR/bin:\$PATH\"" >> "$CLAUDE_ENV_FILE"
 echo "export LD_LIBRARY_PATH=\"$MOPAC_DIR/lib:\${LD_LIBRARY_PATH:-}\"" >> "$CLAUDE_ENV_FILE"
 
 cd "$CLAUDE_PROJECT_DIR"
-# [doc] is needed for the sphinx-build step in scripts/check.sh. The
-# Sphinx step relies on `node` for sphinxcontrib-katex's server-side
-# prerender; the Claude Code on the web base image ships node, so no
-# extra install is required here.
-pip install -e ".[test,doc]"
+# [doc] is needed for the sphinx-build step in scripts/check.sh. The Sphinx
+# step relies on `node` for sphinxcontrib-katex's server-side prerender; the
+# Claude Code on the web base image ships node, so no extra install is required
+# here. [benchmark] pulls in tblite, the GFN-xTB backend for
+# berny.solvers.XTBSolver, so its tests run rather than skip.
+pip install -e ".[test,doc,benchmark]"
 
 pip install ruff black
-
-# tblite is the GFN-xTB backend for berny.solvers.XTBSolver. It ships manylinux
-# wheels for every supported Python, so pip installs it directly. Best-effort:
-# never fail session startup if a wheel is unavailable -- XTBSolver tests just
-# skip then.
-pip install tblite ||
-  echo "warning: tblite wheel unavailable; XTBSolver tests will skip" >&2
-

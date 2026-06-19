@@ -47,11 +47,11 @@ jobs:
           echo "$PWD/bin" >>$GITHUB_PATH
           echo "LD_LIBRARY_PATH=$PWD/lib" >>$GITHUB_ENV
 
-      # The xtb extra pulls in tblite (the GFN-xTB backend for
-      # berny.solvers.XTBSolver), which ships manylinux wheels, so it installs
-      # cleanly here and is importable in agent sessions.
-      - name: Install project with test, doc, and xtb extras
-        run: pip install -e ".[test,doc,xtb]"
+      # The benchmark extra pulls in tblite (the GFN-xTB backend for
+      # berny.solvers.XTBSolver) and pyscf, so both are importable in agent
+      # sessions.
+      - name: Install project with test, doc, and benchmark extras
+        run: pip install -e ".[test,doc,benchmark]"
 
       # Lint tools used by .github/workflows/lint.yaml so `ruff`, `black`,
       # and `mypy` are available without a network round-trip.
