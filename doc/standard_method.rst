@@ -690,11 +690,18 @@ max gradient (active space)        :math:`< 4.5\times 10^{-4}` Eh/bohr or Eh/rad
 ================================== ===================
 
 All four must be satisfied simultaneously. The defaults in
-:class:`berny.BernyParams` reproduce these thresholds exactly. When the
-sphere-restricted minimisation was triggered on a step, the step-based
-criteria are by construction not satisfied; PyBerny then skips the
-step-based criteria and demands the gradient-based criteria only
-(:func:`berny.berny.is_converged`).
+:class:`berny.BernyParams` reproduce these thresholds exactly
+(:func:`berny.berny.is_converged`). The step-based criteria are tested
+against the *actual* displacement taken, which for a sphere-restricted
+step is the trust-limited step rather than the unconstrained RFO step.
+A sphere step whose trust radius is still larger than the displacement
+thresholds therefore fails the step-based criteria by construction —
+matching the SM intent that a converged minimum sit at an interior step —
+but a sphere step at a noisy, flat minimum, where the trust radius has
+collapsed below those thresholds, *does* satisfy all four criteria and
+converges. (Earlier versions hard-blocked convergence on any
+sphere-restricted step, which produced false negatives that burned the
+whole step budget on already-converged floppy systems; see issue #129.)
 
 
 Coordinate weighting

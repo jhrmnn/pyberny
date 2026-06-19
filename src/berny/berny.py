@@ -272,7 +272,10 @@ class Berny(Generator):  # type: ignore[type-arg]
         proj = dot(B, B_inv)
         H_proj = proj.dot(s.H).dot(proj) + 1000 * (eye(len(s.coords)) - proj)
         assert s.interpolated.g is not None
-        dq, dE, on_sphere = quadratic_step(
+        # ``on_sphere`` (whether the step hit the trust boundary) is recorded
+        # in the trace by ``quadratic_step`` itself; it no longer gates
+        # convergence, so it is not needed here.
+        dq, dE, _on_sphere = quadratic_step(
             dot(proj, s.interpolated.g),
             H_proj,
             s.weights,
@@ -303,7 +306,6 @@ class Berny(Generator):  # type: ignore[type-arg]
         self._converged = is_converged(
             current.g,
             s.future.q - current.q,
-            on_sphere,
             s.params,
             log=log,
             record=record,
@@ -545,48 +547,39 @@ def quadratic_step(
 def is_converged(
     forces: FloatArray,
     step: FloatArray,
-    on_sphere: bool,
     params: BernyParams,
     log: Any = no_log,
     *,
     record: dict[str, Any] | None = None,
 ) -> bool:
-    criteria: list[tuple[Any, ...]] = [
+    # The four standard-method (Gaussian-style) criteria; all must hold
+    # simultaneously. ``step`` is the actual displacement taken, so when the
+    # quadratic step was truncated to the trust sphere the displacement
+    # criteria are tested against that trust-limited step rather than being
+    # hard-blocked: a sphere-restricted step at a (noisy, flat) minimum still
+    # converges once the trust radius has shrunk below the step thresholds.
+    # See ``doc/standard_method.rst`` and issue #129.
+    criteria: list[tuple[str, Any, float]] = [
         ('Gradient RMS', Math.rms(forces), params.gradientrms),
         ('Gradient maximum', np.max(abs(forces)), params.gradientmax),
+        ('Step RMS', Math.rms(step), params.steprms),
+        ('Step maximum', np.max(abs(step)), params.stepmax),
     ]
-    if on_sphere:
-        criteria.append(('Minimization on sphere', False))
-    else:
-        criteria.extend(
-            [
-                ('Step RMS', Math.rms(step), params.steprms),
-                ('Step maximum', np.max(abs(step)), params.stepmax),
-            ]
-        )
     log('Convergence criteria:')
     all_matched = True
     crit_records: list[dict[str, Any]] = []
-    for crit in criteria:
-        if len(crit) > 2:
-            result = crit[1] < crit[2]
-            op = '<' if result else '>'
-            msg = f'{crit[1]:.3} {op} {crit[2]:.3}'
-            crit_records.append(
-                {
-                    'name': crit[0],
-                    'value': float(crit[1]),
-                    'threshold': float(crit[2]),
-                    'matched': bool(result),
-                }
-            )
-        else:
-            msg, result = crit
-            crit_records.append({'name': crit[0], 'matched': bool(result)})
-        msg = f'{crit[0]}: {msg}' if msg else crit[0]
-        verdict = 'OK' if result else 'no'
-        msg = f'* {msg} => {verdict}'
-        log(msg)
+    for name, value, threshold in criteria:
+        result = value < threshold
+        op = '<' if result else '>'
+        log(f'* {name}: {value:.3} {op} {threshold:.3} => {"OK" if result else "no"}')
+        crit_records.append(
+            {
+                'name': name,
+                'value': float(value),
+                'threshold': float(threshold),
+                'matched': bool(result),
+            }
+        )
         if not result:
             all_matched = False
     if all_matched:

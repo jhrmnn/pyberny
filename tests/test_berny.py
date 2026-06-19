@@ -316,19 +316,30 @@ class TestIsConverged:
     def test_zero_forces_zero_step_converges(self):
         forces = np.zeros(6)
         step = np.zeros(6)
-        assert is_converged(forces, step, on_sphere=False, params=BernyParams())
+        assert is_converged(forces, step, params=BernyParams())
 
     def test_large_gradient_not_converged(self):
         forces = np.ones(6)
         step = np.zeros(6)
-        assert not is_converged(forces, step, on_sphere=False, params=BernyParams())
+        assert not is_converged(forces, step, params=BernyParams())
 
-    def test_on_sphere_blocks_convergence(self):
-        # Even tiny gradients/steps shouldn't be reported as converged when
-        # the previous quadratic step ran into the trust-sphere boundary.
+    def test_large_step_not_converged(self):
+        # Converged gradients but a large displacement (e.g. a step truncated
+        # to a wide trust sphere) must not be reported as converged: the
+        # optimizer is still moving a long way. See issue #129.
         forces = np.zeros(6)
-        step = np.zeros(6)
-        assert not is_converged(forces, step, on_sphere=True, params=BernyParams())
+        step = np.full(6, 1.0)
+        assert not is_converged(forces, step, params=BernyParams())
+
+    def test_sphere_step_converges_once_step_is_small(self):
+        # A sphere-restricted step at a noisy flat minimum: once the trust
+        # radius has shrunk below the step thresholds, both the gradient and
+        # the (trust-limited) displacement criteria are met, so the run
+        # converges instead of being hard-blocked for being on the sphere
+        # (issue #129).
+        forces = np.zeros(6)
+        step = np.full(6, 1e-5)
+        assert is_converged(forces, step, params=BernyParams())
 
 
 class TestTrace:
