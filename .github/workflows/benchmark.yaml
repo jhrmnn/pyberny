@@ -272,16 +272,20 @@ jobs:
               --solvers mopac pyscf xtb
           done
       - name: Plot energy convergence
-        # One combined figure per benchmark (mopac is the auto-trigger solver;
-        # plot_convergence.py skips a benchmark with no mopac shards). always()
-        # so a regression exit-1 from the Aggregate step still yields plots.
+        # One combined figure per (benchmark, solver) axis. plot_convergence.py
+        # skips an axis with no shards, so iterating every solver is safe across
+        # all trigger combinations (the auto-trigger produces mopac shards; a
+        # full dispatch adds pyscf / xtb). always() so a regression exit-1 from
+        # the Aggregate step still yields plots.
         if: always()
         run: |
           for bench in birkholz baker; do
-            python scripts/plot_convergence.py \
-              --benchmark "$bench" \
-              --solver mopac \
-              --results-dir all-results
+            for solver in mopac pyscf xtb; do
+              python scripts/plot_convergence.py \
+                --benchmark "$bench" \
+                --solver "$solver" \
+                --results-dir all-results
+            done
           done
       - name: Publish plots and embed in run summary
         # Inline images in a job summary need a public URL (GitHub strips
