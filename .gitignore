@@ -10,3 +10,4 @@
 /htmlcov/
 /poetry.lock
 /fort*
+/artifacts/
