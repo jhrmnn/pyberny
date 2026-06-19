@@ -36,7 +36,7 @@ sphinx-multiversion = { version = ">=0.2", optional = true }
 toml = { version = ">=0.10", optional = true }
 pyscf = { version = ">=2.5", optional = true }
 matplotlib = { version = ">=3.5", optional = true }
-xtb = { version = ">=22", optional = true }
+xtb = { version = ">=20", optional = true }
 
 [tool.poetry.extras]
 test = ["pytest", "coverage"]

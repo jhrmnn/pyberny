@@ -193,12 +193,23 @@ jobs:
           echo "LD_LIBRARY_PATH=$PWD/lib" >>$GITHUB_ENV
         env:
           MOPAC_VERSION: 23.2.5
+      # The xtb bindings have no reliable PyPI wheel, so xtb shards get a
+      # conda-forge environment; mopac/pyscf shards use the runner's Python.
+      - name: Set up xtb (conda-forge)
+        if: matrix.solver == 'xtb'
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-name: xtb
+          create-args: >-
+            python=3.12
+            xtb-python
+          init-shell: bash
       - name: Install pyberny
         run: |
           if [ "${{ matrix.solver }}" = "mopac" ]; then
             pip install -e .
           elif [ "${{ matrix.solver }}" = "xtb" ]; then
-            pip install -e '.[xtb]'
+            micromamba run -n xtb pip install -e .
           else
             pip install -e '.[benchmark]'
           fi
@@ -211,11 +222,14 @@ jobs:
         run: |
           mkdir -p results
           read -ra mols <<< "$MOLS"
+          # xtb runs in its conda-forge env; other solvers use the runner Python.
+          run=""
+          [ "$SOLVER" = "xtb" ] && run="micromamba run -n xtb"
           # Benchmark embedded in filename so a multi-benchmark run (the
           # push/pull_request auto-trigger covers both birkholz and baker)
           # doesn't have birkholz/mopac-b0.json collide with baker/mopac-b0.json
           # when artifacts are merged in the aggregate step.
-          python scripts/benchmark.py --benchmark "$BENCHMARK" \
+          $run python scripts/benchmark.py --benchmark "$BENCHMARK" \
             --solver "$SOLVER" \
             --molecules "${mols[@]}" \
             --out-json "results/${SOLVER}-${BENCHMARK}-${BATCH}.json" \

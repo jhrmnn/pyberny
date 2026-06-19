@@ -32,12 +32,16 @@ or equivalently::
 
 For a smoother semiempirical surface than PM7,
 :func:`~berny.solvers.XTBSolver` drives GFN2-xTB through the ``xtb`` Python
-bindings (install with ``pip install pyberny[xtb]``) and can be dropped in
-wherever ``MopacSolver()`` appears::
+bindings and can be dropped in wherever ``MopacSolver()`` appears::
 
    from berny.solvers import XTBSolver
 
    relaxed = optimize(Berny(geomlib.readfile('start.xyz')), XTBSolver())
+
+The bindings are most reliably installed from conda-forge
+(``conda install -c conda-forge xtb-python``); the ``xtb`` pip extra
+(``pip install pyberny[xtb]``) works only where a prebuilt ``xtb`` wheel is
+available for your platform and Python version.
 
 For PySCF, use upstream PySCF's own bridge to pyberny (it imports ``Berny``
 internally and handles unit conversion, ghost atoms, symmetry, and the
