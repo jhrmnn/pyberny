@@ -66,8 +66,13 @@ jobs:
         #     --exclude easc --nbins 3      # fast-mopac batches
         #   python scripts/plan_batches.py --solvers pyscf \
         #     --exclude azadirachtin --nbins 7
+        #   python scripts/plan_batches.py --benchmark birkholz --solvers xtb
+        #   python scripts/plan_batches.py --benchmark baker --solvers xtb --nbins 1
         # pyscf excludes azadirachtin: ~526s/call × 77 paper_steps ≈ 11 h,
-        # which busts GitHub's 360-min job cap. It still runs under mopac.
+        # which busts GitHub's 360-min job cap. It still runs under mopac and xtb
+        # (one GFN2-xTB call is sub-second, so azadirachtin costs ~45 s total).
+        # baker xtb is pinned to one shard (--nbins 1): ~3 s of total compute, so
+        # extra shards would be pure per-job setup overhead.
         run: |
           python - >> "$GITHUB_OUTPUT" <<'PY'
           import json, os
@@ -107,30 +112,43 @@ jobs:
               {"solver": "pyscf", "batch_id": "b3", "molecules": "histidine acanil01 trisilacyclohexane_135 hydroxybicyclopentane_2 neopentane acetone ammonia water"},
               {"solver": "pyscf", "batch_id": "b4", "molecules": "dimethylpentane pterin difuropyrazine difluoronaphthalene_15 achtar10 difluorobenzene_13 allene hydroxysulfane acetylene"},
           ]
-          # GFN2-xTB shards reuse the mopac molecule groupings (same per-call
-          # cost class) but run under the xtb solver. xtb is dispatch-only --
-          # it is not part of the push/pull_request auto-trigger pool.
-          xtb_fast = [{**s, "solver": "xtb"} for s in mopac_fast]
-          xtb_full = [{**s, "solver": "xtb"} for s in mopac_full]
-          baker_xtb = [{**s, "solver": "xtb"} for s in baker_mopac]
+          # GFN2-xTB shards are sized by scripts/plan_batches.py (per-call tblite
+          # cost × xtb_gfn2_steps), NOT cloned from mopac: xtb's cost profile is
+          # different (no pathological per-call outlier like easc under PM7), so
+          # the mopac groupings were badly unbalanced for it. Like pyscf, xtb has
+          # no fast/full distinction -- there is no easc-style molecule to
+          # quarantine -- so one birkholz pool serves both birkholz-* options.
+          # xtb is dispatch-only -- not in the push/pull_request auto-trigger pool.
+          birkholz_xtb = [
+              {"solver": "xtb", "batch_id": "b0", "molecules": "azadirachtin"},
+              {"solver": "xtb", "batch_id": "b1", "molecules": "artemisinin estradiol sphingomyelin"},
+              {"solver": "xtb", "batch_id": "b2", "molecules": "vitamin_c easc inosine_cation zn_edta bisphenol_a penicillin_v tamoxifen raffinose"},
+              {"solver": "xtb", "batch_id": "b3", "molecules": "mg_porphin diisobutyl_phthalate codeine ochratoxin_a avobenzone maltose cetirizine"},
+          ]
+          # Baker under xtb is ~3 s of total compute (small organics); like
+          # baker_mopac, one shard is plenty -- extra shards would be dominated
+          # by per-job setup overhead.
+          baker_xtb = [
+              {"solver": "xtb", "batch_id": "b0", "molecules": "water hydroxysulfane acetylene ammonia allene methylamine ethane disilyl_ether furan ethanol acetone difluorobenzene_13 trifluorobenzene_135 benzene hydroxybicyclopentane_2 benzaldehyde achtar10 difuropyrazine pterin mesityl_oxide neopentane trisilacyclohexane_135 difluoronaphthalene_15 naphthalene acanil01 histidine dimethylpentane caffeine benzidine menthone"},
+          ]
           # The "benchmark" key on each shard is consumed below to set the
           # --benchmark flag on benchmark.py and threads through to the
           # aggregate step's --benchmark / artifact-name suffix.
-          for s in mopac_fast + mopac_full + pyscf + xtb_fast + xtb_full:
+          for s in mopac_fast + mopac_full + pyscf + birkholz_xtb:
               s["benchmark"] = "birkholz"
           for s in baker_mopac + baker_pyscf + baker_xtb:
               s["benchmark"] = "baker"
           # (benchmark, solver) -> ordered list of shard pools to pull from.
-          # pyscf has no fast/full distinction; both birkholz-* benchmarks
-          # use the same `pyscf` pool when solver is pyscf or both.
+          # pyscf and xtb have no fast/full distinction; both birkholz-* options
+          # reuse the same single pool (`pyscf` / `birkholz_xtb`) for them.
           pools_by_axes = {
               ("birkholz-fast", "mopac"): [mopac_fast],
               ("birkholz-fast", "pyscf"): [pyscf],
-              ("birkholz-fast", "xtb"):   [xtb_fast],
+              ("birkholz-fast", "xtb"):   [birkholz_xtb],
               ("birkholz-fast", "both"):  [mopac_fast, pyscf],
               ("birkholz-full", "mopac"): [mopac_full],
               ("birkholz-full", "pyscf"): [pyscf],
-              ("birkholz-full", "xtb"):   [xtb_full],
+              ("birkholz-full", "xtb"):   [birkholz_xtb],
               ("birkholz-full", "both"):  [mopac_full, pyscf],
               ("baker",         "mopac"): [baker_mopac],
               ("baker",         "pyscf"): [baker_pyscf],

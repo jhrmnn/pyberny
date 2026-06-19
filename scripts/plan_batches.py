@@ -1,21 +1,27 @@
 #!/usr/bin/env python3
-"""Offline tool: bin-pack the Birkholz-Schlegel benchmark into parallel batches.
+"""Offline tool: bin-pack a benchmark set into parallel batches.
+
+``--benchmark`` selects the set (``birkholz`` default, or ``baker``); both ship
+with the package under :mod:`berny.benchmarks`.
 
 For each solver, this script times one energy+gradient call per molecule
 (``mopac`` with ``1SCF GRADIENTS``; ``pyscf`` with one SCF + analytic
-gradient), multiplies by the pyberny step count from ``reference.json``,
-and prints a YAML fragment ready to paste into the
-``strategy.matrix.include`` block of ``.github/workflows/benchmark.yaml``.
+gradient; ``xtb`` with one GFN2-xTB singlepoint through tblite), multiplies by
+the pyberny step count from ``reference.json``, and prints a YAML fragment ready
+to paste into the ``strategy.matrix.include`` block of
+``.github/workflows/benchmark.yaml``.
 
 The per-call timing is the only cost source — there is no analytical
 N**p fallback. Per-iteration cost varies by an order of magnitude across
 this dataset (``easc`` with Al/Cl is ~35x slower than CHNO organics of
 similar size), and no closed-form expression in ``atoms`` captures it.
 
-``pyberny_steps`` is ``null`` for every entry in ``reference.json``, so
-``paper_steps`` is the only available step proxy for pyscf.
-``mopac_pm7_steps`` is ``null`` for one molecule (``bisphenol_a``); the
-median over the rest is used.
+Step counts come from each solver's column in ``reference.json``
+(``mopac_pm7_steps`` / ``pyberny_steps`` / ``xtb_gfn2_steps``). Where that is
+``null`` for a molecule (a documented non-converger, e.g. ``azadirachtin`` /
+``raffinose`` under mopac) the fallback in ``FALLBACK_STEPS_KEY`` is used --
+``paper_steps`` for pyscf and xtb -- and if that too is missing the median over
+the rest stands in, so a single gap never bottlenecks planning.
 
 Bin-packing: Longest-Processing-Time-first (LPT). ``--nbins`` defaults
 to ``ceil(total / max_single)`` so the heaviest molecule does not
@@ -45,18 +51,30 @@ import time
 from pathlib import Path
 
 # Allow running from a source checkout without an installed editable package;
-# must happen before any ``berny`` import below. ``_measure_mopac`` /
-# ``_measure_pyscf`` rely on the same path for their late imports.
+# must happen before any ``berny`` import below. The ``_measure_*`` helpers rely
+# on the same path for their late imports.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 
-from berny.benchmarks import data_dir as _bench_data_dir
+from berny.benchmarks import BENCHMARKS, data_dir as _bench_data_dir
 
+# Data directory for the benchmark being planned. Module-global because the
+# per-call ``_measure_*`` helpers read it at call time; ``main`` rebinds it from
+# ``--benchmark`` before any measurement runs. Defaults to birkholz so importing
+# this module (or running without ``--benchmark``) keeps the historical behaviour.
 DATA = _bench_data_dir('birkholz')
 
-STEPS_KEY = {'mopac': 'mopac_pm7_steps', 'pyscf': 'pyberny_steps'}
+STEPS_KEY = {
+    'mopac': 'mopac_pm7_steps',
+    'pyscf': 'pyberny_steps',
+    'xtb': 'xtb_gfn2_steps',
+}
 # Used only if STEPS_KEY value is null for a given molecule.
-FALLBACK_STEPS_KEY = {'mopac': 'mopac_pm7_steps', 'pyscf': 'paper_steps'}
-REPEATS = {'mopac': 3, 'pyscf': 1}
+FALLBACK_STEPS_KEY = {
+    'mopac': 'mopac_pm7_steps',
+    'pyscf': 'paper_steps',
+    'xtb': 'paper_steps',
+}
+REPEATS = {'mopac': 3, 'pyscf': 1, 'xtb': 3}
 
 
 def _pin_threads():
@@ -133,7 +151,22 @@ def _measure_pyscf(name, ref):
     return time.perf_counter() - t0
 
 
-MEASURE = {'mopac': _measure_mopac, 'pyscf': _measure_pyscf}
+def _measure_xtb(name, ref):
+    from berny import geomlib
+    from berny.solvers import XTBSolver
+
+    geom = geomlib.readfile(str(DATA / f'{name}.xyz'))
+    # Drive the public solver one step: priming with next() then a single send()
+    # is exactly one GFN2-xTB energy+gradient evaluation through tblite, the same
+    # quantum the optimizer pays per pyberny step.
+    solver = XTBSolver(charge=ref['charge'], mult=ref['mult'])
+    next(solver)
+    t0 = time.perf_counter()
+    solver.send((list(geom), geom.lattice))
+    return time.perf_counter() - t0
+
+
+MEASURE = {'mopac': _measure_mopac, 'pyscf': _measure_pyscf, 'xtb': _measure_xtb}
 
 
 def _step_count(ref, solver, fallback):
@@ -224,7 +257,18 @@ def emit(reference, solvers, nbins_arg, cache, cache_path=None, exclude=()):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument('--reference', type=Path, default=DATA / 'reference.json')
+    ap.add_argument(
+        '--benchmark',
+        choices=sorted(BENCHMARKS),
+        default='birkholz',
+        help='which benchmark set to plan (default: birkholz)',
+    )
+    ap.add_argument(
+        '--reference',
+        type=Path,
+        default=None,
+        help='reference.json path (default: derived from --benchmark)',
+    )
     ap.add_argument('--solvers', nargs='+', default=['mopac', 'pyscf'])
     ap.add_argument(
         '--nbins',
@@ -247,6 +291,10 @@ def main(argv=None):
         '--solvers entry; rerun per solver if exclusions differ)',
     )
     args = ap.parse_args(argv)
+    global DATA
+    DATA = _bench_data_dir(args.benchmark)
+    if args.reference is None:
+        args.reference = DATA / 'reference.json'
     _pin_threads()
     if 'mopac' in args.solvers and not shutil.which('mopac'):
         raise SystemExit('mopac not on PATH')

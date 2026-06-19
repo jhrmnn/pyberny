@@ -8,7 +8,8 @@
     "paper_steps": 24,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 23
+    "pyberny_steps": 23,
+    "xtb_gfn2_steps": 27
   },
   "avobenzone": {
     "atoms": 45,
@@ -19,7 +20,8 @@
     "paper_steps": 43,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 83
+    "pyberny_steps": 83,
+    "xtb_gfn2_steps": 48
   },
   "azadirachtin": {
     "atoms": 95,
@@ -30,7 +32,8 @@
     "paper_steps": 77,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": null
+    "pyberny_steps": null,
+    "xtb_gfn2_steps": 60
   },
   "bisphenol_a": {
     "atoms": 33,
@@ -41,7 +44,8 @@
     "paper_steps": 31,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 50
+    "pyberny_steps": 50,
+    "xtb_gfn2_steps": null
   },
   "cetirizine": {
     "atoms": 52,
@@ -52,7 +56,8 @@
     "paper_steps": 35,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 51
+    "pyberny_steps": 51,
+    "xtb_gfn2_steps": 51
   },
   "codeine": {
     "atoms": 43,
@@ -63,7 +68,8 @@
     "paper_steps": 18,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 25
+    "pyberny_steps": 25,
+    "xtb_gfn2_steps": 36
   },
   "diisobutyl_phthalate": {
     "atoms": 42,
@@ -74,7 +80,8 @@
     "paper_steps": 27,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 90
+    "pyberny_steps": 90,
+    "xtb_gfn2_steps": 34
   },
   "easc": {
     "atoms": 26,
@@ -85,7 +92,8 @@
     "paper_steps": 40,
     "paper_steps_basis": "6-31G(d,p)",
     "paper_steps_method": "B3LYP",
-    "pyberny_steps": 33
+    "pyberny_steps": 33,
+    "xtb_gfn2_steps": 38
   },
   "estradiol": {
     "atoms": 44,
@@ -96,7 +104,8 @@
     "paper_steps": 21,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 12
+    "pyberny_steps": 12,
+    "xtb_gfn2_steps": 27
   },
   "inosine_cation": {
     "atoms": 31,
@@ -107,7 +116,8 @@
     "paper_steps": 41,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 50
+    "pyberny_steps": 50,
+    "xtb_gfn2_steps": 58
   },
   "maltose": {
     "atoms": 45,
@@ -118,7 +128,8 @@
     "paper_steps": 35,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 36
+    "pyberny_steps": 36,
+    "xtb_gfn2_steps": null
   },
   "mg_porphin": {
     "atoms": 37,
@@ -129,7 +140,8 @@
     "paper_steps": 14,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 14
+    "pyberny_steps": 14,
+    "xtb_gfn2_steps": 16
   },
   "ochratoxin_a": {
     "atoms": 45,
@@ -140,7 +152,8 @@
     "paper_steps": 31,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 87
+    "pyberny_steps": 87,
+    "xtb_gfn2_steps": 56
   },
   "penicillin_v": {
     "atoms": 42,
@@ -151,7 +164,8 @@
     "paper_steps": 31,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 35
+    "pyberny_steps": 35,
+    "xtb_gfn2_steps": null
   },
   "raffinose": {
     "atoms": 66,
@@ -162,7 +176,8 @@
     "paper_steps": 53,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 50
+    "pyberny_steps": 50,
+    "xtb_gfn2_steps": 47
   },
   "sphingomyelin": {
     "atoms": 84,
@@ -173,7 +188,8 @@
     "paper_steps": 56,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 61
+    "pyberny_steps": 61,
+    "xtb_gfn2_steps": 83
   },
   "tamoxifen": {
     "atoms": 57,
@@ -184,7 +200,8 @@
     "paper_steps": 35,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 43
+    "pyberny_steps": 43,
+    "xtb_gfn2_steps": 45
   },
   "vitamin_c": {
     "atoms": 20,
@@ -195,7 +212,8 @@
     "paper_steps": 18,
     "paper_steps_basis": "6-31G(d,p)",
     "paper_steps_method": "B3LYP",
-    "pyberny_steps": 22
+    "pyberny_steps": 22,
+    "xtb_gfn2_steps": 30
   },
   "zn_edta": {
     "atoms": 33,
@@ -206,6 +224,7 @@
     "paper_steps": 29,
     "paper_steps_basis": "3-21G",
     "paper_steps_method": "HF",
-    "pyberny_steps": 52
+    "pyberny_steps": 52,
+    "xtb_gfn2_steps": 40
   }
 }
