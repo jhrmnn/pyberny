@@ -49,6 +49,14 @@ def test_parse_mopac_aux_missing_gradients(tmp_path):
         _parse_mopac_aux(str(aux), 9)
 
 
+def test_parse_mopac_aux_gradients_before_energy(tmp_path):
+    # A GRADIENTS block with no preceding HEAT_OF_FORMATION is malformed.
+    aux = tmp_path / 'job.aux'
+    aux.write_text(' GRADIENTS:KCAL/MOL/ANGSTROM[03]=\n  1.0  2.0  3.0\n')
+    with pytest.raises(ValueError, match='no HEAT_OF_FORMATION'):
+        _parse_mopac_aux(str(aux), 3)
+
+
 def test_mopac_neutral_singlet():
     assert _mopac_keyword_line('PM7', 0, 1) == 'PM7 1SCF GRADIENTS AUX(PRECISION=9)'
 

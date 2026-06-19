@@ -2,7 +2,7 @@
   "acanil01": {
     "atoms": 19,
     "charge": 0,
-    "mopac_pm7_steps": 40,
+    "mopac_pm7_steps": 39,
     "mult": 1,
     "name": "ACANIL01",
     "paper_steps": 7,
@@ -145,7 +145,7 @@
   "dimethylpentane": {
     "atoms": 23,
     "charge": 0,
-    "mopac_pm7_steps": 8,
+    "mopac_pm7_steps": 10,
     "mult": 1,
     "name": "Dimethylpentane",
     "paper_steps": 6,
@@ -156,7 +156,7 @@
   "disilyl_ether": {
     "atoms": 9,
     "charge": 0,
-    "mopac_pm7_steps": 10,
+    "mopac_pm7_steps": 8,
     "mult": 1,
     "name": "Disilyl ether",
     "paper_steps": 9,
@@ -244,7 +244,7 @@
   "mesityl_oxide": {
     "atoms": 17,
     "charge": 0,
-    "mopac_pm7_steps": 12,
+    "mopac_pm7_steps": 8,
     "mult": 1,
     "name": "Mesityl oxide",
     "paper_steps": 7,
