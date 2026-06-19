@@ -2,23 +2,84 @@ import numpy as np
 import pytest
 
 from berny.coords import angstrom
-from berny.solvers import GenericSolver, _diff5, _mopac_keyword_line
+from berny.solvers import (
+    GenericSolver,
+    _diff5,
+    _mopac_keyword_line,
+    _parse_mopac_aux,
+)
+
+# A trimmed MOPAC AUX file for water (PM7 1SCF GRADIENTS AUX(PRECISION=9)).
+# Energy and gradients are printed in Fortran ``D`` exponent format and to
+# 15 significant figures -- far finer than the ``1e-5 kcal/mol`` quantization
+# of the ``.out`` file the solver used to parse.
+_WATER_AUX = """\
+ HEAT_OF_FORMATION:KCAL/MOL=-0.577822806548975D+02
+ GRADIENT_NORM:KCAL/MOL/ANGSTROM=+0.546567360177825D+01
+ ATOM_X_OPT:ANGSTROMS[09]=
+    0.0000000000000    0.0000000000000    0.0000000000000
+ GRADIENTS:KCAL/MOL/ANGSTROM[09]=
+  -3.4312143657544   0.0000000507512  -2.3676270992310   0.7963817277085 \
+   0.0000000252344   2.2122353896105   2.6348324481675   0.0000000251599 \
+   0.1553914772902
+ CPU_TIME:SECONDS[1]=        0.01
+"""
+
+
+def test_parse_mopac_aux(tmp_path):
+    aux = tmp_path / 'job.aux'
+    aux.write_text(_WATER_AUX)
+    energy, gradients = _parse_mopac_aux(str(aux), 9)
+    assert energy == pytest.approx(-57.7822806548975, abs=0)
+    assert gradients.shape == (3, 3)
+    np.testing.assert_allclose(
+        gradients,
+        [
+            [-3.4312143657544, 0.0000000507512, -2.3676270992310],
+            [0.7963817277085, 0.0000000252344, 2.2122353896105],
+            [2.6348324481675, 0.0000000251599, 0.1553914772902],
+        ],
+    )
+
+
+def test_parse_mopac_aux_missing_gradients(tmp_path):
+    aux = tmp_path / 'job.aux'
+    aux.write_text(' HEAT_OF_FORMATION:KCAL/MOL=-0.577822806548975D+02\n')
+    with pytest.raises(ValueError, match='no GRADIENTS'):
+        _parse_mopac_aux(str(aux), 9)
+
+
+def test_parse_mopac_aux_gradients_before_energy(tmp_path):
+    # A GRADIENTS block with no preceding HEAT_OF_FORMATION is malformed.
+    aux = tmp_path / 'job.aux'
+    aux.write_text(' GRADIENTS:KCAL/MOL/ANGSTROM[03]=\n  1.0  2.0  3.0\n')
+    with pytest.raises(ValueError, match='no HEAT_OF_FORMATION'):
+        _parse_mopac_aux(str(aux), 3)
 
 
 def test_mopac_neutral_singlet():
-    assert _mopac_keyword_line('PM7', 0, 1) == 'PM7 1SCF GRADIENTS'
+    assert _mopac_keyword_line('PM7', 0, 1) == 'PM7 1SCF GRADIENTS AUX(PRECISION=9)'
 
 
 def test_mopac_cation():
-    assert _mopac_keyword_line('PM7', 1, 1) == 'PM7 1SCF GRADIENTS CHARGE=1'
+    assert (
+        _mopac_keyword_line('PM7', 1, 1)
+        == 'PM7 1SCF GRADIENTS AUX(PRECISION=9) CHARGE=1'
+    )
 
 
 def test_mopac_dianion():
-    assert _mopac_keyword_line('PM7', -2, 1) == 'PM7 1SCF GRADIENTS CHARGE=-2'
+    assert (
+        _mopac_keyword_line('PM7', -2, 1)
+        == 'PM7 1SCF GRADIENTS AUX(PRECISION=9) CHARGE=-2'
+    )
 
 
 def test_mopac_doublet_cation():
-    assert _mopac_keyword_line('PM7', 1, 2) == 'PM7 1SCF GRADIENTS CHARGE=1 DOUBLET UHF'
+    assert (
+        _mopac_keyword_line('PM7', 1, 2)
+        == 'PM7 1SCF GRADIENTS AUX(PRECISION=9) CHARGE=1 DOUBLET UHF'
+    )
 
 
 def test_mopac_unsupported_multiplicity():
