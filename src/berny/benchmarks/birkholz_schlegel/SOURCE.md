@@ -37,7 +37,7 @@ within the 100-step default ceiling.
 
 ``xtb_gfn2_steps`` records the GFN2-xTB step counts (evaluated through the
 ``tblite`` library; see ``berny.solvers.XTBSolver``). All 19 molecules *converge*
-under xTB within the benchmark's 130-step ceiling -- including ``ochratoxin_a``,
+under xTB within the default 100-step ceiling -- including ``ochratoxin_a``,
 which does not converge under PySCF. A single GFN2-xTB energy+gradient call is
 sub-second even for the 95-atom ``azadirachtin`` (~0.75 s), so unlike PySCF
 nothing has to be excluded on cost grounds.

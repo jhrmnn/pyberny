@@ -123,11 +123,7 @@ def run_xtb(name, ref, data_dir, trace=None):
     from berny.solvers import XTBSolver
 
     geom = geomlib.readfile(str(data_dir / f'{name}.xyz'))
-    # Raise the ceiling above pyberny's default 100 steps so slow convergers
-    # are still reported rather than counted as failures. zn_edta, for
-    # instance, needs ~119 steps to converge once the generalised linear-bend
-    # trigger (PR #104) rebuilds around the Zn centre several times.
-    berny = Berny(geom, maxsteps=130, trace=trace)
+    berny = Berny(geom, trace=trace)
     solver = XTBSolver(charge=ref['charge'], mult=ref['mult'])
     energies = _optimize_recording_energies(berny, solver)
     return berny.converged, berny._n, energies

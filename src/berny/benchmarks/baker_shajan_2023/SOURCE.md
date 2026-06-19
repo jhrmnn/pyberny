@@ -58,7 +58,7 @@ trisilacyclohexane\_135, pterin needing a few extra cycles past ASE/Berny's
 
 ``xtb_gfn2_steps`` records the GFN2-xTB step counts (evaluated through the
 ``tblite`` library; see ``berny.solvers.XTBSolver``). All 30 molecules
-converge under xTB within the 130-step ceiling -- so no entry is ``null``.
+converge under xTB within the default 100-step ceiling -- so no entry is ``null``.
 Unlike three flat-minimum molecules in the ``birkholz_schlegel`` set, every
 Baker molecule's xTB step count is reproducible to 0-1 steps across repeated
 single-host runs. As with PySCF, those counts are not guaranteed bitwise across
