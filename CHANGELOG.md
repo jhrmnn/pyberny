@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `get_property` now raises a clear `KeyError` identifying the species and property when the requested datum is missing, instead of letting the call fail later with an opaque numpy error.
 - Lookup of species data by atomic number (rather than symbol) now works correctly.
+- `MopacSolver` now parses MOPAC derivative rows with variant column layouts and raises a clear error for truncated derivative blocks.
 
 ## [0.6.3] - 2021-02-22
 

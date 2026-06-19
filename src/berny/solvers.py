@@ -6,7 +6,7 @@ import os
 import shutil
 import subprocess
 import tempfile
-from collections.abc import Callable, Generator
+from collections.abc import Callable, Generator, Iterable, Iterator
 from typing import Any, Optional
 
 import numpy as np
@@ -55,6 +55,80 @@ def _mopac_keyword_line(method: str, charge: int, mult: int) -> str:
     return ' '.join(keywords)
 
 
+def _parse_float_token(token: str) -> float:
+    return float(token.replace('D', 'E').replace('d', 'e'))
+
+
+def _parse_mopac_energy(line: str) -> float:
+    tokens = line.replace('=', ' = ').split()
+    if '=' in tokens:
+        tokens = tokens[tokens.index('=') + 1 :]
+    for token in tokens:
+        try:
+            return _parse_float_token(token)
+        except ValueError:
+            pass
+    raise ValueError(f'could not parse MOPAC energy line: {line.strip()}')
+
+
+def _parse_mopac_gradient_value(line: str) -> float:
+    tokens = line.split()
+    if 'KCAL/ANGSTROM' in tokens:
+        tokens = tokens[: tokens.index('KCAL/ANGSTROM')]
+    for token in reversed(tokens):
+        try:
+            return _parse_float_token(token)
+        except ValueError:
+            pass
+    raise ValueError(f'could not parse MOPAC gradient line: {line.strip()}')
+
+
+def _read_mopac_gradient_value(
+    lines: Iterator[str], component_number: int, total_components: int
+) -> float:
+    for line in lines:
+        if 'ATOM' in line and 'CHEMICAL' in line:
+            break
+        if 'CARTESIAN' not in line:
+            continue
+        return _parse_mopac_gradient_value(line)
+    raise ValueError(
+        'MOPAC output ended before gradient component '
+        f'{component_number} of {total_components}'
+    )
+
+
+def _parse_mopac_output(
+    lines: Iterable[str], n_gradient_rows: int
+) -> tuple[float, FloatArray]:
+    line_iter = iter(lines)
+    energy_line = next(
+        (line for line in line_iter if 'FINAL HEAT OF FORMATION' in line), None
+    )
+    if energy_line is None:
+        raise ValueError('MOPAC output is missing FINAL HEAT OF FORMATION')
+    energy = _parse_mopac_energy(energy_line)
+    derivatives_line = next(
+        (
+            line
+            for line in line_iter
+            if 'FINAL' in line and 'POINT' in line and 'DERIVATIVES' in line
+        ),
+        None,
+    )
+    if derivatives_line is None:
+        raise ValueError('MOPAC output is missing FINAL POINT AND DERIVATIVES block')
+    n_components = 3 * n_gradient_rows
+    gradient_values = [
+        _read_mopac_gradient_value(line_iter, i + 1, n_components)
+        for i in range(n_components)
+    ]
+    gradients: FloatArray = np.array(gradient_values, dtype=float).reshape(
+        (n_gradient_rows, 3)
+    )
+    return energy, gradients
+
+
 def MopacSolver(
     cmd: str = 'mopac',
     method: str = 'PM7',
@@ -93,17 +167,8 @@ def MopacSolver(
                 f.write(mopac_input)
             subprocess.check_call([cmd, input_file])
             with open(os.path.join(tmpdir, 'job.out')) as f:
-                energy = float(
-                    next(l for l in f if 'FINAL HEAT OF FORMATION' in l).split()[5]
-                )
-                next(l for l in f if 'FINAL  POINT  AND  DERIVATIVES' in l)
-                next(f)
-                next(f)
-                gradients = np.array(
-                    [
-                        [float(next(f).split()[6]) for _ in range(3)]
-                        for _ in range(len(atoms) + (0 if lattice is None else 3))
-                    ]
+                energy, gradients = _parse_mopac_output(
+                    f, len(atoms) + (0 if lattice is None else 3)
                 )
             atoms, lattice = yield energy * kcal, gradients * kcal / angstrom
     finally:

@@ -1,8 +1,15 @@
+from io import StringIO
+
 import numpy as np
 import pytest
 
 from berny.coords import angstrom
-from berny.solvers import GenericSolver, _diff5, _mopac_keyword_line
+from berny.solvers import (
+    GenericSolver,
+    _diff5,
+    _mopac_keyword_line,
+    _parse_mopac_output,
+)
 
 
 def test_mopac_neutral_singlet():
@@ -24,6 +31,38 @@ def test_mopac_doublet_cation():
 def test_mopac_unsupported_multiplicity():
     with pytest.raises(ValueError, match='unsupported MOPAC multiplicity'):
         _mopac_keyword_line('PM7', 0, 99)
+
+
+def test_parse_mopac_output_accepts_derivative_table_variants():
+    output = """\
+FINAL HEAT OF FORMATION = -12.5 KCAL/MOL
+
+FINAL  POINT  AND  DERIVATIVES
+
+PARAMETER     ATOM    TYPE            VALUE        GRADIENT
+   1          1  C    CARTESIAN X    -0.000187      0.975569  KCAL/ANGSTROM
+   2          1  C    CARTESIAN Y   357.799425  KCAL/ANGSTROM
+   3          1  C    CARTESIAN Z   -48.096494  KCAL/ANGSTROM
+"""
+
+    energy, gradients = _parse_mopac_output(StringIO(output), 1)
+
+    assert energy == pytest.approx(-12.5)
+    np.testing.assert_allclose(gradients, [[0.975569, 357.799425, -48.096494]])
+
+
+def test_parse_mopac_output_reports_truncated_derivatives_block():
+    output = """\
+FINAL HEAT OF FORMATION = -12.5 KCAL/MOL
+
+FINAL  POINT  AND  DERIVATIVES
+
+PARAMETER     ATOM    TYPE            VALUE        GRADIENT
+   1          1  C    CARTESIAN X     0.975569  KCAL/ANGSTROM
+"""
+
+    with pytest.raises(ValueError, match='gradient component 2 of 3'):
+        _parse_mopac_output(StringIO(output), 1)
 
 
 def test_diff5_recovers_derivative_of_cubic():
