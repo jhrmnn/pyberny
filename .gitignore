@@ -9,6 +9,4 @@
 /doc/_check/
 /htmlcov/
 /poetry.lock
-.claude/mopac/
-/mopac/
 /fort*

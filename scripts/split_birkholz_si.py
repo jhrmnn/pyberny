@@ -78,7 +78,6 @@ def main(argv=None):
             'paper_steps': None,
             'paper_steps_method': 'HF',
             'paper_steps_basis': '3-21G',
-            'mopac_pm7_steps': None,
             'pyberny_steps': None,
         }
         print(
@@ -90,7 +89,6 @@ def main(argv=None):
         'paper_steps',
         'paper_steps_method',
         'paper_steps_basis',
-        'mopac_pm7_steps',
         'pyberny_steps',
     )
     if ref_path.exists():

@@ -40,6 +40,4 @@ expected by :func:`~berny.optimize`.
 
 .. module:: berny.solvers
 
-.. autofunction:: MopacSolver
-
 .. autofunction:: XTBSolver

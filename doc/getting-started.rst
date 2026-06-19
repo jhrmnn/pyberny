@@ -13,10 +13,10 @@ The Python API consists of coroutine :class:`~berny.Berny` and function
 :func:`~berny.optimize`::
 
    from berny import Berny, geomlib
-   from berny.solvers import MopacSolver
+   from berny.solvers import XTBSolver
 
    optimizer = Berny(geomlib.readfile('start.xyz'))
-   solver = MopacSolver()
+   solver = XTBSolver()
    next(solver)
    for geom in optimizer:
        energy, gradients = solver.send((list(geom), geom.lattice))
@@ -26,20 +26,14 @@ The Python API consists of coroutine :class:`~berny.Berny` and function
 or equivalently::
 
    from berny import Berny, geomlib, optimize
-   from berny.solvers import MopacSolver
-
-   relaxed = optimize(Berny(geomlib.readfile('start.xyz')), MopacSolver())
-
-For a smoother semiempirical surface than PM7,
-:func:`~berny.solvers.XTBSolver` evaluates the GFN-xTB methods through the
-`tblite <https://tblite.readthedocs.io>`_ library and can be dropped in
-wherever ``MopacSolver()`` appears::
-
    from berny.solvers import XTBSolver
 
    relaxed = optimize(Berny(geomlib.readfile('start.xyz')), XTBSolver())
 
-The backend is ``tblite``, shipped in the ``benchmark`` extra
+:func:`~berny.solvers.XTBSolver` evaluates the GFN-xTB methods (GFN2-xTB by
+default) through the `tblite <https://tblite.readthedocs.io>`_ library, which
+gives a smooth semiempirical potential-energy surface that is well behaved even
+near flat minima. The backend is ``tblite``, shipped in the ``benchmark`` extra
 (``pip install pyberny[benchmark]``); it can also be installed on its own with
 ``pip install tblite``.
 
@@ -56,9 +50,8 @@ gradient scanner)::
 The 19-molecule benchmark shipped with the package — the Birkholz–Schlegel
 2016 set [BirkholzTCA16]_ — is exposed under :mod:`berny.benchmarks` (key
 ``'birkholz'``; on-disk subdirectory ``berny/benchmarks/birkholz_schlegel/``).
-``scripts/benchmark.py`` runs the suite through that PySCF bridge (and
-optionally :func:`~berny.solvers.MopacSolver`) and prints a step-count
-comparison table.
+``scripts/benchmark.py`` runs the suite through :func:`~berny.solvers.XTBSolver`
+(the default) or that PySCF bridge and prints a step-count comparison table.
 
 A second 30-molecule set is exposed under :mod:`berny.benchmarks` as key
 ``'baker'`` (on-disk subdirectory ``berny/benchmarks/baker_shajan_2023/``);

@@ -31,17 +31,18 @@ pip install -U pyberny
 ## Example
 
 The snippet below optimizes a geometry from `geom.xyz` end-to-end using
-[MOPAC](http://openmopac.net) as the energy/gradient backend:
+GFN2-xTB (via [tblite](https://tblite.readthedocs.io)) as the
+energy/gradient backend:
 
 ```python
 from berny import Berny, geomlib, optimize
-from berny.solvers import MopacSolver
+from berny.solvers import XTBSolver
 
 optimizer = Berny(geomlib.readfile('geom.xyz'))
-relaxed = optimize(optimizer, MopacSolver())
+relaxed = optimize(optimizer, XTBSolver())
 ```
 
-To plug in a different backend, replace `MopacSolver()` with any
+To plug in a different backend, replace `XTBSolver()` with any
 coroutine that follows the same interface (see the
 [documentation](https://jhrmnn.github.io/pyberny/master/getting-started.html)
 for the manual generator pattern and the solver protocol).

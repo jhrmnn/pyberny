@@ -26,7 +26,7 @@ def optimize(
             yields the energy and gradients (as a :math:`N`-by-3 matrix or
             :math:`(N+3)`-by-3 matrix in case of a crystal geometry).
 
-            See :class:`~berny.solvers.MopacSolver` for an example.
+            See :class:`~berny.solvers.XTBSolver` for an example.
         trajectory: filename for the XYZ trajectory
 
     Returns:

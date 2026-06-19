@@ -44,7 +44,7 @@ def collect_molecules(data_dir):
                 'paper_steps_method': meta['paper_steps_method'],
                 'paper_steps_basis': meta['paper_steps_basis'],
                 'pyberny_steps': meta['pyberny_steps'],
-                'mopac_pm7_steps': meta['mopac_pm7_steps'],
+                'xtb_gfn2_steps': meta['xtb_gfn2_steps'],
                 'xyz': (data_dir / f'{mol_id}.xyz').read_text(),
             }
         )

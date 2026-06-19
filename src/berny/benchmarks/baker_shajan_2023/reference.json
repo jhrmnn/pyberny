@@ -2,7 +2,6 @@
   "acanil01": {
     "atoms": 19,
     "charge": 0,
-    "mopac_pm7_steps": 39,
     "mult": 1,
     "name": "ACANIL01",
     "paper_steps": 7,
@@ -14,7 +13,6 @@
   "acetone": {
     "atoms": 10,
     "charge": 0,
-    "mopac_pm7_steps": 7,
     "mult": 1,
     "name": "Acetone",
     "paper_steps": 5,
@@ -26,7 +24,6 @@
   "acetylene": {
     "atoms": 4,
     "charge": 0,
-    "mopac_pm7_steps": 9,
     "mult": 1,
     "name": "Acetylene",
     "paper_steps": 5,
@@ -38,7 +35,6 @@
   "achtar10": {
     "atoms": 16,
     "charge": 0,
-    "mopac_pm7_steps": 9,
     "mult": 1,
     "name": "ACHTAR10",
     "paper_steps": 10,
@@ -50,7 +46,6 @@
   "allene": {
     "atoms": 7,
     "charge": 0,
-    "mopac_pm7_steps": 14,
     "mult": 1,
     "name": "Allene",
     "paper_steps": 5,
@@ -62,7 +57,6 @@
   "ammonia": {
     "atoms": 4,
     "charge": 0,
-    "mopac_pm7_steps": 4,
     "mult": 1,
     "name": "Ammonia",
     "paper_steps": 4,
@@ -74,7 +68,6 @@
   "benzaldehyde": {
     "atoms": 14,
     "charge": 0,
-    "mopac_pm7_steps": 5,
     "mult": 1,
     "name": "Benzaldehyde",
     "paper_steps": 7,
@@ -86,7 +79,6 @@
   "benzene": {
     "atoms": 12,
     "charge": 0,
-    "mopac_pm7_steps": 4,
     "mult": 1,
     "name": "Benzene",
     "paper_steps": 3,
@@ -98,7 +90,6 @@
   "benzidine": {
     "atoms": 26,
     "charge": 0,
-    "mopac_pm7_steps": 24,
     "mult": 1,
     "name": "Benzidine",
     "paper_steps": 7,
@@ -110,7 +101,6 @@
   "caffeine": {
     "atoms": 24,
     "charge": 0,
-    "mopac_pm7_steps": null,
     "mult": 1,
     "name": "Caffeine",
     "paper_steps": 10,
@@ -122,7 +112,6 @@
   "difluorobenzene_13": {
     "atoms": 12,
     "charge": 0,
-    "mopac_pm7_steps": 5,
     "mult": 1,
     "name": "1,3-Difluorobenzene",
     "paper_steps": 4,
@@ -134,7 +123,6 @@
   "difluoronaphthalene_15": {
     "atoms": 18,
     "charge": 0,
-    "mopac_pm7_steps": 5,
     "mult": 1,
     "name": "1,5-Difluoronaphthalene",
     "paper_steps": 5,
@@ -146,7 +134,6 @@
   "difuropyrazine": {
     "atoms": 16,
     "charge": 0,
-    "mopac_pm7_steps": 7,
     "mult": 1,
     "name": "Difuropyrazine",
     "paper_steps": 7,
@@ -158,7 +145,6 @@
   "dimethylpentane": {
     "atoms": 23,
     "charge": 0,
-    "mopac_pm7_steps": 10,
     "mult": 1,
     "name": "Dimethylpentane",
     "paper_steps": 6,
@@ -170,7 +156,6 @@
   "disilyl_ether": {
     "atoms": 9,
     "charge": 0,
-    "mopac_pm7_steps": 8,
     "mult": 1,
     "name": "Disilyl ether",
     "paper_steps": 9,
@@ -182,7 +167,6 @@
   "ethane": {
     "atoms": 8,
     "charge": 0,
-    "mopac_pm7_steps": 4,
     "mult": 1,
     "name": "Ethane",
     "paper_steps": 4,
@@ -194,7 +178,6 @@
   "ethanol": {
     "atoms": 9,
     "charge": 0,
-    "mopac_pm7_steps": 5,
     "mult": 1,
     "name": "Ethanol",
     "paper_steps": 5,
@@ -206,7 +189,6 @@
   "furan": {
     "atoms": 9,
     "charge": 0,
-    "mopac_pm7_steps": 5,
     "mult": 1,
     "name": "Furan",
     "paper_steps": 5,
@@ -218,7 +200,6 @@
   "histidine": {
     "atoms": 20,
     "charge": 0,
-    "mopac_pm7_steps": 19,
     "mult": 1,
     "name": "Histidine",
     "paper_steps": 14,
@@ -230,7 +211,6 @@
   "hydroxybicyclopentane_2": {
     "atoms": 14,
     "charge": 0,
-    "mopac_pm7_steps": 9,
     "mult": 1,
     "name": "2-Hydroxybicyclopentane",
     "paper_steps": 9,
@@ -242,7 +222,6 @@
   "hydroxysulfane": {
     "atoms": 4,
     "charge": 0,
-    "mopac_pm7_steps": 6,
     "mult": 1,
     "name": "Hydroxysulfane",
     "paper_steps": 6,
@@ -254,7 +233,6 @@
   "menthone": {
     "atoms": 29,
     "charge": 0,
-    "mopac_pm7_steps": 16,
     "mult": 1,
     "name": "Menthone",
     "paper_steps": 10,
@@ -266,7 +244,6 @@
   "mesityl_oxide": {
     "atoms": 17,
     "charge": 0,
-    "mopac_pm7_steps": 8,
     "mult": 1,
     "name": "Mesityl oxide",
     "paper_steps": 7,
@@ -278,7 +255,6 @@
   "methylamine": {
     "atoms": 7,
     "charge": 0,
-    "mopac_pm7_steps": 18,
     "mult": 1,
     "name": "Methylamine",
     "paper_steps": 4,
@@ -290,7 +266,6 @@
   "naphthalene": {
     "atoms": 18,
     "charge": 0,
-    "mopac_pm7_steps": 5,
     "mult": 1,
     "name": "Naphthalene",
     "paper_steps": 5,
@@ -302,7 +277,6 @@
   "neopentane": {
     "atoms": 17,
     "charge": 0,
-    "mopac_pm7_steps": 4,
     "mult": 1,
     "name": "Neopentane",
     "paper_steps": 4,
@@ -314,7 +288,6 @@
   "pterin": {
     "atoms": 17,
     "charge": 0,
-    "mopac_pm7_steps": 8,
     "mult": 1,
     "name": "Pterin",
     "paper_steps": 11,
@@ -326,7 +299,6 @@
   "trifluorobenzene_135": {
     "atoms": 12,
     "charge": 0,
-    "mopac_pm7_steps": 4,
     "mult": 1,
     "name": "1,3,5-Trifluorobenzene",
     "paper_steps": 4,
@@ -338,7 +310,6 @@
   "trisilacyclohexane_135": {
     "atoms": 18,
     "charge": 0,
-    "mopac_pm7_steps": 7,
     "mult": 1,
     "name": "1,3,5-Trisilacyclohexane",
     "paper_steps": 4,
@@ -350,7 +321,6 @@
   "water": {
     "atoms": 3,
     "charge": 0,
-    "mopac_pm7_steps": 5,
     "mult": 1,
     "name": "Water",
     "paper_steps": 4,
