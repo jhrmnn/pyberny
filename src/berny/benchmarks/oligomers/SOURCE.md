@@ -39,14 +39,24 @@ solver step-count baseline ``xtb_gfn2_steps``. All 91 molecules are
 closed-shell neutral C/H/N/O/S organics, so every row has ``charge=0`` and
 ``mult=1``.
 
-``xtb_gfn2_steps`` is ``null`` for every molecule: this set ships
-**unseeded**. As with the other benchmarks, a ``null`` reference disables
-the regression gate for that row (see ``scripts/benchmark.py``), so the
-first ``workflow_dispatch`` run of ``Benchmark`` (benchmark ``oligomers``,
-solver ``xtb``) is a baseline pass that simply reports measured step
-counts without failing. Seed ``xtb_gfn2_steps`` from that baseline to
-activate the per-row regression check, exactly as ``birkholz_schlegel`` and
-``baker_shajan_2023`` were seeded.
+``xtb_gfn2_steps`` records the GFN2-xTB pyberny step count for each
+molecule. It was seeded from the first ``workflow_dispatch`` baseline run of
+the ``Benchmark`` workflow (benchmark ``oligomers``, solver ``xtb``) on
+commit ``937a289``: 86 of the 91 molecules converged and carry their
+measured step count (3–82 steps, 1599 total); a ``null`` reference disables
+the regression gate for a row (see ``scripts/benchmark.py``), so subsequent
+runs check the 86 seeded molecules within the usual 7 %/±2-step tolerance
+while leaving the five non-convergers ungated. As noted in
+``birkholz_schlegel/SOURCE.md``, GFN2-xTB step counts are not bitwise
+reproducible across runners, so an occasional row drifting past tolerance is
+flaky rather than a regression. Reseed by rerunning the baseline dispatch.
+
+The five ``null`` rows are documented non-convergers under GFN2-xTB at the
+default settings (same convention as ``bisphenol_a`` in
+``birkholz_schlegel``): ``nylon6_n8`` and ``PPE_n8`` fail at the tblite SCF
+(``SCF not converged in 250 cycles``), while ``nylon6_n5``, ``nylon6_n6``,
+and ``polyglycine_n8`` -- large floppy chains -- do not satisfy the
+geometry-convergence criteria within pyberny's default step ceiling.
 
 There are no ``paper_steps``/``paper_steps_method``/``paper_steps_basis``
 entries because this set has no published reference optimization; the pyscf
