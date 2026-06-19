@@ -1,5 +1,13 @@
 # PM7 energy noise near flat minima
 
+> **Update (after [#136](https://github.com/jhrmnn/pyberny/issues/136)
+> merged):** the fix this study motivated — parsing the MOPAC `AUX` file
+> instead of the quantized `.out` — has landed. Re-running the analysis on
+> the new solver confirms the print-quantization staircase is gone (only a
+> ~`1e-12 Ha` SCF-level floor remains) **and**, as a bonus, that the extra
+> precision rescues raffinose at the *default* `energy_noise = 2e-8`. See
+> [§ Update](#update--after-the-aux-parsing-fix-136) at the end.
+
 ## TL;DR
 
 This is the characterization [#132](https://github.com/jhrmnn/pyberny/issues/132)
@@ -225,9 +233,67 @@ Reading across (`noise_sweep.png`, dotted line = PM7 `2e-7`):
   submodule is available — the issue flags them as the cleanest, most
   on-sphere flat-minimum cases.
 
+## Update — after the AUX-parsing fix (#136)
+
+The fix proposed above was implemented in
+[#136](https://github.com/jhrmnn/pyberny/issues/136): `MopacSolver` now
+parses the `AUX` file (energy *and* gradients, ~15 sig. figs) instead of
+the `.out` file, and the PM7-specific `energy_noise = 2e-7` benchmark
+override was dropped back to the `2e-8` default. Re-running this study on
+the merged solver answers the natural follow-up — *is there any residual
+noise once the parsing artifact is removed?*
+
+![Post-fix noise floor and the raffinose rescue](postfix.png)
+
+**1. The staircase is gone; a ~`1e-12 Ha` floor remains.** Repeating the
+fixed-geometry probes with the AUX solver:
+
+- Determinism is unchanged — ten repeats at one geometry return a
+  bit-identical energy.
+- The multi-scale residual (panel a) collapses from the old
+  `4.6e-9 Ha` (quantum/√12) to a flat **~`1e-12 Ha`** across every scan
+  half-width from `3e-2` down to `3e-6 Å`. It does *not* keep shrinking to
+  the float/print resolution (~`1.6e-15 Ha`), so this floor is real: it is
+  MOPAC's **SCF-convergence tolerance**, the genuine per-evaluation noise
+  of PM7. At ~`1e-12 Ha` it is ~4 orders below the old quantization floor
+  and ~7 orders below `energy_noise = 2e-8` — negligible for the trust
+  update. The gradients improve in step: `.out` printed them on a
+  `1e-6 kcal/mol/Å` grid (≈`8e-10 a.u.`); `AUX` carries ~13 digits.
+
+**2. The extra precision rescues raffinose at the default noise floor.**
+This is the headline change and it *revises conclusion 3 above*. With the
+old `.out` solver raffinose never converged (period-3 trust limit cycle,
+even at `2e-7`). With the AUX solver it **converges at the default
+`energy_noise = 2e-8` in 87 steps** (panel b), and is now nearly
+insensitive to the knob (87 / 86 / 86 steps at `2e-8` / `2e-7` / `2e-6`).
+
+A 2×2 factorial at `2e-8` — crossing AUX vs `.out`-rounded *energy* with
+AUX vs `.out`-rounded *gradients* — shows both precisions contribute, and
+complementarily:
+
+| energy | gradient | converged | steps |
+|---|---|---:|---:|
+| AUX | AUX | yes | **87** |
+| AUX | `.out`-grid | yes | 118 |
+| `.out`-grid | AUX | yes | 111 |
+| `.out`-grid | `.out`-grid | **no** | — |
+
+Degrading *either* energy or gradient back to the `.out` grid costs
+~25–35 steps; degrading *both* reproduces the original non-convergence.
+
+**Reconciliation with conclusion 3.** The earlier framing — "the sawtooth
+is the discrete Fletcher rule, not the solver" — was only half right. The
+limit *cycle* is indeed a property of the discrete rule, but the `.out`
+quantization (of energy **and** gradients) was a genuine contributing
+cause of raffinose tipping into it: removing the quantization lets the
+same rule converge. The structural fixes (#131 sphere gate, a continuous
+trust update) remain worthwhile, but for this reproducible case the
+precision fix alone is sufficient at the default noise floor — which is
+exactly why dropping the PM7-specific `2e-7` override was safe.
+
 ## Reproducing
 
-The driver scripts and raw traces are not committed; the three embedded
+The driver scripts and raw traces are not committed; the four embedded
 PNGs are the record of the run. To redo it: (1) re-evaluate a fixed
 geometry several times to confirm bit-determinism; (2) optimize maltose
 to its PM7 minimum and scan along a fixed random Cartesian direction,
@@ -238,3 +304,13 @@ Fletcher-`r` / convergence records; (4) sweep the seven molecules above
 over `energy_noise ∈ {0, 2e-8, 2e-7, 2e-6, 2e-5}` and tabulate steps,
 convergence, and trust-collapse counts. Wall time ≈ 9 min
 single-threaded; needs `mopac` on `$PATH`.
+
+For the post-fix update (#136): (5) on the merged AUX solver, repeat the
+fixed-geometry scan at half-widths `3e-2 … 3e-6 Å`, reading both the
+`AUX` and `.out` energies, and take each residual against a local quartic
+fit — the AUX residual plateaus at `~1e-12 Ha`; (6) optimize raffinose at
+`energy_noise = 2e-8` with the AUX solver (converges at 87) and contrast
+its trust trajectory with the pre-fix `.out` run (limit cycle); (7) for
+the factorial, wrap the AUX solver to optionally round the energy to
+`1e-5 kcal/mol` and the gradients to `1e-6 kcal/mol/Å` before the a.u.
+conversion, and run all four energy×gradient combinations.
