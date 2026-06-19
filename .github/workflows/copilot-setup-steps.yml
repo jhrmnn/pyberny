@@ -16,14 +16,27 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    defaults:
+      run:
+        # Login shell so the conda environment created below is auto-activated
+        # for every step (and for the agent's own shell).
+        shell: bash -l {0}
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      # The xtb bindings (berny.solvers.XTBSolver) have no reliable PyPI wheel,
+      # so the agent's Python comes from conda-forge with xtb-python preinstalled
+      # (plus typing-extensions, which xtb-python imports but does not depend on).
+      # This makes XTBSolver importable in agent sessions; pyberny and its other
+      # dependencies are pip-installed into this same environment below.
+      - uses: mamba-org/setup-micromamba@v2
         with:
-          python-version: "3.12"
-          cache: pip
-          cache-dependency-path: pyproject.toml
+          environment-name: pyberny
+          create-args: >-
+            python=3.12
+            xtb-python
+            typing-extensions
+          init-shell: bash
 
       # Node is required by sphinxcontrib-katex's server-side prerender,
       # which scripts/check.sh and .github/workflows/doc.yaml both run.
@@ -47,9 +60,6 @@ jobs:
           echo "$PWD/bin" >>$GITHUB_PATH
           echo "LD_LIBRARY_PATH=$PWD/lib" >>$GITHUB_ENV
 
-      # The xtb bindings (used by berny.solvers.XTBSolver) are not pip-installable
-      # without a LAPACK toolchain; they come from conda-forge in tests.yaml's
-      # dedicated job. Here the live XTBSolver tests simply skip.
       - name: Install project with test and doc extras
         run: pip install -e ".[test,doc]"
 
