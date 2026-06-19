@@ -1,0 +1,5 @@
+# Per the experiments convention, only README.md and the committed PNG live
+# here. The driver, its raw traces, and machine-readable outputs are scratch.
+run_diag.py
+merged.json
+traces/
