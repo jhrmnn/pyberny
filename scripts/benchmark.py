@@ -7,10 +7,13 @@ Usage::
                          [--molecules NAME ...] [--out PATH]
     scripts/benchmark.py --solver pyscf
 
-``--benchmark`` selects which molecule set to run -- either ``birkholz``
-(the Birkholz-Schlegel 2016 19-molecule set, the default) or ``baker``
-(the 30-molecule Baker set from Shajan et al., chemrxiv 2023). Both sets
-ship with the package under :mod:`berny.benchmarks`.
+``--benchmark`` selects which molecule set to run: ``birkholz`` (the
+Birkholz-Schlegel 2016 19-molecule set, the default), ``baker`` (the
+30-molecule Baker set from Shajan et al., chemrxiv 2023), or ``oligomers``
+(length series of common oligomers). The first two ship with the package
+under :mod:`berny.benchmarks`; ``oligomers`` reads its geometries from the
+``external/oligomer-benchmarks`` git submodule (run ``git submodule update
+--init`` first).
 xTB mode (the default) uses :func:`berny.solvers.XTBSolver` (GFN2-xTB,
 charge and multiplicity from ``reference.json``) and requires the
 ``tblite`` package (``pip install pyberny[benchmark]``); PySCF mode drives
@@ -66,7 +69,11 @@ import time  # noqa: E402
 from pathlib import Path  # noqa: E402
 
 from berny import Berny, geomlib  # noqa: E402
-from berny.benchmarks import BENCHMARKS  # noqa: E402
+from berny.benchmarks import (  # noqa: E402
+    BENCHMARKS,
+    load_reference,
+    require_geometries,
+)
 
 # Default exposed for backward compatibility: external callers (and
 # aggregate_benchmark.py) used to import ``DATA`` directly.
@@ -78,7 +85,7 @@ def run_pyscf(name, ref, data_dir, trace=None):
     from pyscf.geomopt import berny_solver
 
     mol = gto.M(
-        atom=str(data_dir / f'{name}.xyz'),
+        atom=str(data_dir / ref.get('file', f'{name}.xyz')),
         basis=ref['paper_steps_basis'],
         charge=ref['charge'],
         spin=ref['mult'] - 1,
@@ -122,7 +129,7 @@ def _optimize_recording_energies(berny, solver):
 def run_xtb(name, ref, data_dir, trace=None):
     from berny.solvers import XTBSolver
 
-    geom = geomlib.readfile(str(data_dir / f'{name}.xyz'))
+    geom = geomlib.readfile(str(data_dir / ref.get('file', f'{name}.xyz')))
     berny = Berny(geom, trace=trace)
     solver = XTBSolver(charge=ref['charge'], mult=ref['mult'])
     energies = _optimize_recording_energies(berny, solver)
@@ -271,8 +278,17 @@ def main(argv=None):
             'tblite package not installed (pip install pyberny[benchmark])'
         )
 
-    data_dir = BENCHMARKS[args.benchmark]
-    reference = json.loads((data_dir / 'reference.json').read_text())
+    # Geometry root (where ``<name>.xyz`` / ``ref['file']`` resolve) and the
+    # reference metadata are looked up separately: for the oligomers set the
+    # geometries live in a submodule while reference.json is package data.
+    # require_geometries fails fast with actionable guidance if a
+    # submodule-backed set has not been checked out, rather than letting
+    # run_one swallow one missing-file error per molecule.
+    try:
+        data_dir = require_geometries(args.benchmark)
+    except FileNotFoundError as e:
+        raise SystemExit(str(e)) from None
+    reference = load_reference(args.benchmark)
     names = args.molecules or sorted(reference)
     missing = [n for n in names if n not in reference]
     if missing:

@@ -1,0 +1,730 @@
+{
+  "PEG_n1": {
+    "atoms": 10,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene_glycol",
+    "file": "ethylene_glycol/PEG_n1.xyz",
+    "xtb_gfn2_steps": 7
+  },
+  "PEG_n2": {
+    "atoms": 17,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene_glycol",
+    "file": "ethylene_glycol/PEG_n2.xyz",
+    "xtb_gfn2_steps": 6
+  },
+  "PEG_n3": {
+    "atoms": 24,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene_glycol",
+    "file": "ethylene_glycol/PEG_n3.xyz",
+    "xtb_gfn2_steps": 8
+  },
+  "PEG_n4": {
+    "atoms": 31,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene_glycol",
+    "file": "ethylene_glycol/PEG_n4.xyz",
+    "xtb_gfn2_steps": 6
+  },
+  "PEG_n5": {
+    "atoms": 38,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene_glycol",
+    "file": "ethylene_glycol/PEG_n5.xyz",
+    "xtb_gfn2_steps": 8
+  },
+  "PEG_n6": {
+    "atoms": 45,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene_glycol",
+    "file": "ethylene_glycol/PEG_n6.xyz",
+    "xtb_gfn2_steps": 6
+  },
+  "PEG_n7": {
+    "atoms": 52,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene_glycol",
+    "file": "ethylene_glycol/PEG_n7.xyz",
+    "xtb_gfn2_steps": 8
+  },
+  "PEG_n8": {
+    "atoms": 59,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene_glycol",
+    "file": "ethylene_glycol/PEG_n8.xyz",
+    "xtb_gfn2_steps": 6
+  },
+  "PPE_n1": {
+    "atoms": 14,
+    "charge": 0,
+    "mult": 1,
+    "family": "ppe",
+    "file": "ppe/PPE_n1.xyz",
+    "xtb_gfn2_steps": 8
+  },
+  "PPE_n2": {
+    "atoms": 26,
+    "charge": 0,
+    "mult": 1,
+    "family": "ppe",
+    "file": "ppe/PPE_n2.xyz",
+    "xtb_gfn2_steps": 7
+  },
+  "PPE_n3": {
+    "atoms": 38,
+    "charge": 0,
+    "mult": 1,
+    "family": "ppe",
+    "file": "ppe/PPE_n3.xyz",
+    "xtb_gfn2_steps": 10
+  },
+  "PPE_n4": {
+    "atoms": 50,
+    "charge": 0,
+    "mult": 1,
+    "family": "ppe",
+    "file": "ppe/PPE_n4.xyz",
+    "xtb_gfn2_steps": 10
+  },
+  "PPE_n5": {
+    "atoms": 62,
+    "charge": 0,
+    "mult": 1,
+    "family": "ppe",
+    "file": "ppe/PPE_n5.xyz",
+    "xtb_gfn2_steps": 8
+  },
+  "PPE_n6": {
+    "atoms": 74,
+    "charge": 0,
+    "mult": 1,
+    "family": "ppe",
+    "file": "ppe/PPE_n6.xyz",
+    "xtb_gfn2_steps": 8
+  },
+  "PPE_n7": {
+    "atoms": 86,
+    "charge": 0,
+    "mult": 1,
+    "family": "ppe",
+    "file": "ppe/PPE_n7.xyz",
+    "xtb_gfn2_steps": 9
+  },
+  "PPE_n8": {
+    "atoms": 98,
+    "charge": 0,
+    "mult": 1,
+    "family": "ppe",
+    "file": "ppe/PPE_n8.xyz",
+    "xtb_gfn2_steps": null
+  },
+  "anthracene": {
+    "atoms": 24,
+    "charge": 0,
+    "mult": 1,
+    "family": "acenes",
+    "file": "acenes/anthracene.xyz",
+    "xtb_gfn2_steps": 7
+  },
+  "decacene": {
+    "atoms": 66,
+    "charge": 0,
+    "mult": 1,
+    "family": "acenes",
+    "file": "acenes/decacene.xyz",
+    "xtb_gfn2_steps": 21
+  },
+  "diacetylene": {
+    "atoms": 6,
+    "charge": 0,
+    "mult": 1,
+    "family": "polyynes",
+    "file": "polyynes/diacetylene.xyz",
+    "xtb_gfn2_steps": 6
+  },
+  "dodecacene": {
+    "atoms": 78,
+    "charge": 0,
+    "mult": 1,
+    "family": "acenes",
+    "file": "acenes/dodecacene.xyz",
+    "xtb_gfn2_steps": 39
+  },
+  "heptacene": {
+    "atoms": 50,
+    "charge": 0,
+    "mult": 1,
+    "family": "acenes",
+    "file": "acenes/heptacene.xyz",
+    "xtb_gfn2_steps": 22
+  },
+  "hexacene": {
+    "atoms": 42,
+    "charge": 0,
+    "mult": 1,
+    "family": "acenes",
+    "file": "acenes/hexacene.xyz",
+    "xtb_gfn2_steps": 10
+  },
+  "naphthalene": {
+    "atoms": 18,
+    "charge": 0,
+    "mult": 1,
+    "family": "acenes",
+    "file": "acenes/naphthalene.xyz",
+    "xtb_gfn2_steps": 8
+  },
+  "nonacene": {
+    "atoms": 60,
+    "charge": 0,
+    "mult": 1,
+    "family": "acenes",
+    "file": "acenes/nonacene.xyz",
+    "xtb_gfn2_steps": 16
+  },
+  "nylon6_n1": {
+    "atoms": 22,
+    "charge": 0,
+    "mult": 1,
+    "family": "nylon",
+    "file": "nylon/nylon6_n1.xyz",
+    "xtb_gfn2_steps": 11
+  },
+  "nylon6_n2": {
+    "atoms": 41,
+    "charge": 0,
+    "mult": 1,
+    "family": "nylon",
+    "file": "nylon/nylon6_n2.xyz",
+    "xtb_gfn2_steps": 14
+  },
+  "nylon6_n3": {
+    "atoms": 60,
+    "charge": 0,
+    "mult": 1,
+    "family": "nylon",
+    "file": "nylon/nylon6_n3.xyz",
+    "xtb_gfn2_steps": 16
+  },
+  "nylon6_n4": {
+    "atoms": 79,
+    "charge": 0,
+    "mult": 1,
+    "family": "nylon",
+    "file": "nylon/nylon6_n4.xyz",
+    "xtb_gfn2_steps": 43
+  },
+  "nylon6_n5": {
+    "atoms": 98,
+    "charge": 0,
+    "mult": 1,
+    "family": "nylon",
+    "file": "nylon/nylon6_n5.xyz",
+    "xtb_gfn2_steps": null
+  },
+  "nylon6_n6": {
+    "atoms": 117,
+    "charge": 0,
+    "mult": 1,
+    "family": "nylon",
+    "file": "nylon/nylon6_n6.xyz",
+    "xtb_gfn2_steps": null
+  },
+  "nylon6_n7": {
+    "atoms": 136,
+    "charge": 0,
+    "mult": 1,
+    "family": "nylon",
+    "file": "nylon/nylon6_n7.xyz",
+    "xtb_gfn2_steps": 44
+  },
+  "nylon6_n8": {
+    "atoms": 155,
+    "charge": 0,
+    "mult": 1,
+    "family": "nylon",
+    "file": "nylon/nylon6_n8.xyz",
+    "xtb_gfn2_steps": null
+  },
+  "octacene": {
+    "atoms": 54,
+    "charge": 0,
+    "mult": 1,
+    "family": "acenes",
+    "file": "acenes/octacene.xyz",
+    "xtb_gfn2_steps": 23
+  },
+  "pentacene": {
+    "atoms": 36,
+    "charge": 0,
+    "mult": 1,
+    "family": "acenes",
+    "file": "acenes/pentacene.xyz",
+    "xtb_gfn2_steps": 7
+  },
+  "polyalanine_n1": {
+    "atoms": 22,
+    "charge": 0,
+    "mult": 1,
+    "family": "alanine",
+    "file": "alanine/polyalanine_n1.xyz",
+    "xtb_gfn2_steps": 22
+  },
+  "polyalanine_n2": {
+    "atoms": 32,
+    "charge": 0,
+    "mult": 1,
+    "family": "alanine",
+    "file": "alanine/polyalanine_n2.xyz",
+    "xtb_gfn2_steps": 19
+  },
+  "polyalanine_n3": {
+    "atoms": 42,
+    "charge": 0,
+    "mult": 1,
+    "family": "alanine",
+    "file": "alanine/polyalanine_n3.xyz",
+    "xtb_gfn2_steps": 35
+  },
+  "polyalanine_n4": {
+    "atoms": 52,
+    "charge": 0,
+    "mult": 1,
+    "family": "alanine",
+    "file": "alanine/polyalanine_n4.xyz",
+    "xtb_gfn2_steps": 21
+  },
+  "polyalanine_n5": {
+    "atoms": 62,
+    "charge": 0,
+    "mult": 1,
+    "family": "alanine",
+    "file": "alanine/polyalanine_n5.xyz",
+    "xtb_gfn2_steps": 27
+  },
+  "polyalanine_n6": {
+    "atoms": 72,
+    "charge": 0,
+    "mult": 1,
+    "family": "alanine",
+    "file": "alanine/polyalanine_n6.xyz",
+    "xtb_gfn2_steps": 68
+  },
+  "polyalanine_n7": {
+    "atoms": 82,
+    "charge": 0,
+    "mult": 1,
+    "family": "alanine",
+    "file": "alanine/polyalanine_n7.xyz",
+    "xtb_gfn2_steps": 24
+  },
+  "polyalanine_n8": {
+    "atoms": 92,
+    "charge": 0,
+    "mult": 1,
+    "family": "alanine",
+    "file": "alanine/polyalanine_n8.xyz",
+    "xtb_gfn2_steps": 31
+  },
+  "polyethylene_n1": {
+    "atoms": 11,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene",
+    "file": "ethylene/polyethylene_n1.xyz",
+    "xtb_gfn2_steps": 4
+  },
+  "polyethylene_n2": {
+    "atoms": 17,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene",
+    "file": "ethylene/polyethylene_n2.xyz",
+    "xtb_gfn2_steps": 4
+  },
+  "polyethylene_n3": {
+    "atoms": 23,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene",
+    "file": "ethylene/polyethylene_n3.xyz",
+    "xtb_gfn2_steps": 4
+  },
+  "polyethylene_n4": {
+    "atoms": 29,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene",
+    "file": "ethylene/polyethylene_n4.xyz",
+    "xtb_gfn2_steps": 4
+  },
+  "polyethylene_n5": {
+    "atoms": 35,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene",
+    "file": "ethylene/polyethylene_n5.xyz",
+    "xtb_gfn2_steps": 4
+  },
+  "polyethylene_n6": {
+    "atoms": 41,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene",
+    "file": "ethylene/polyethylene_n6.xyz",
+    "xtb_gfn2_steps": 4
+  },
+  "polyethylene_n7": {
+    "atoms": 47,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene",
+    "file": "ethylene/polyethylene_n7.xyz",
+    "xtb_gfn2_steps": 4
+  },
+  "polyethylene_n8": {
+    "atoms": 53,
+    "charge": 0,
+    "mult": 1,
+    "family": "ethylene",
+    "file": "ethylene/polyethylene_n8.xyz",
+    "xtb_gfn2_steps": 4
+  },
+  "polyglycine_n1": {
+    "atoms": 19,
+    "charge": 0,
+    "mult": 1,
+    "family": "glycine",
+    "file": "glycine/polyglycine_n1.xyz",
+    "xtb_gfn2_steps": 7
+  },
+  "polyglycine_n2": {
+    "atoms": 26,
+    "charge": 0,
+    "mult": 1,
+    "family": "glycine",
+    "file": "glycine/polyglycine_n2.xyz",
+    "xtb_gfn2_steps": 23
+  },
+  "polyglycine_n3": {
+    "atoms": 33,
+    "charge": 0,
+    "mult": 1,
+    "family": "glycine",
+    "file": "glycine/polyglycine_n3.xyz",
+    "xtb_gfn2_steps": 34
+  },
+  "polyglycine_n4": {
+    "atoms": 40,
+    "charge": 0,
+    "mult": 1,
+    "family": "glycine",
+    "file": "glycine/polyglycine_n4.xyz",
+    "xtb_gfn2_steps": 41
+  },
+  "polyglycine_n5": {
+    "atoms": 47,
+    "charge": 0,
+    "mult": 1,
+    "family": "glycine",
+    "file": "glycine/polyglycine_n5.xyz",
+    "xtb_gfn2_steps": 50
+  },
+  "polyglycine_n6": {
+    "atoms": 54,
+    "charge": 0,
+    "mult": 1,
+    "family": "glycine",
+    "file": "glycine/polyglycine_n6.xyz",
+    "xtb_gfn2_steps": 66
+  },
+  "polyglycine_n7": {
+    "atoms": 61,
+    "charge": 0,
+    "mult": 1,
+    "family": "glycine",
+    "file": "glycine/polyglycine_n7.xyz",
+    "xtb_gfn2_steps": 52
+  },
+  "polyglycine_n8": {
+    "atoms": 68,
+    "charge": 0,
+    "mult": 1,
+    "family": "glycine",
+    "file": "glycine/polyglycine_n8.xyz",
+    "xtb_gfn2_steps": null
+  },
+  "polypropylene_n1": {
+    "atoms": 14,
+    "charge": 0,
+    "mult": 1,
+    "family": "propylene",
+    "file": "propylene/polypropylene_n1.xyz",
+    "xtb_gfn2_steps": 3
+  },
+  "polypropylene_n2": {
+    "atoms": 23,
+    "charge": 0,
+    "mult": 1,
+    "family": "propylene",
+    "file": "propylene/polypropylene_n2.xyz",
+    "xtb_gfn2_steps": 7
+  },
+  "polypropylene_n3": {
+    "atoms": 32,
+    "charge": 0,
+    "mult": 1,
+    "family": "propylene",
+    "file": "propylene/polypropylene_n3.xyz",
+    "xtb_gfn2_steps": 9
+  },
+  "polypropylene_n4": {
+    "atoms": 41,
+    "charge": 0,
+    "mult": 1,
+    "family": "propylene",
+    "file": "propylene/polypropylene_n4.xyz",
+    "xtb_gfn2_steps": 9
+  },
+  "polypropylene_n5": {
+    "atoms": 50,
+    "charge": 0,
+    "mult": 1,
+    "family": "propylene",
+    "file": "propylene/polypropylene_n5.xyz",
+    "xtb_gfn2_steps": 9
+  },
+  "polypropylene_n6": {
+    "atoms": 59,
+    "charge": 0,
+    "mult": 1,
+    "family": "propylene",
+    "file": "propylene/polypropylene_n6.xyz",
+    "xtb_gfn2_steps": 9
+  },
+  "polypropylene_n7": {
+    "atoms": 68,
+    "charge": 0,
+    "mult": 1,
+    "family": "propylene",
+    "file": "propylene/polypropylene_n7.xyz",
+    "xtb_gfn2_steps": 9
+  },
+  "polypropylene_n8": {
+    "atoms": 77,
+    "charge": 0,
+    "mult": 1,
+    "family": "propylene",
+    "file": "propylene/polypropylene_n8.xyz",
+    "xtb_gfn2_steps": 7
+  },
+  "polyserine_n1": {
+    "atoms": 23,
+    "charge": 0,
+    "mult": 1,
+    "family": "serine",
+    "file": "serine/polyserine_n1.xyz",
+    "xtb_gfn2_steps": 21
+  },
+  "polyserine_n2": {
+    "atoms": 34,
+    "charge": 0,
+    "mult": 1,
+    "family": "serine",
+    "file": "serine/polyserine_n2.xyz",
+    "xtb_gfn2_steps": 35
+  },
+  "polyserine_n3": {
+    "atoms": 45,
+    "charge": 0,
+    "mult": 1,
+    "family": "serine",
+    "file": "serine/polyserine_n3.xyz",
+    "xtb_gfn2_steps": 55
+  },
+  "polyserine_n4": {
+    "atoms": 56,
+    "charge": 0,
+    "mult": 1,
+    "family": "serine",
+    "file": "serine/polyserine_n4.xyz",
+    "xtb_gfn2_steps": 44
+  },
+  "polyserine_n5": {
+    "atoms": 67,
+    "charge": 0,
+    "mult": 1,
+    "family": "serine",
+    "file": "serine/polyserine_n5.xyz",
+    "xtb_gfn2_steps": 82
+  },
+  "polyserine_n6": {
+    "atoms": 78,
+    "charge": 0,
+    "mult": 1,
+    "family": "serine",
+    "file": "serine/polyserine_n6.xyz",
+    "xtb_gfn2_steps": 61
+  },
+  "polyserine_n7": {
+    "atoms": 89,
+    "charge": 0,
+    "mult": 1,
+    "family": "serine",
+    "file": "serine/polyserine_n7.xyz",
+    "xtb_gfn2_steps": 60
+  },
+  "polyserine_n8": {
+    "atoms": 100,
+    "charge": 0,
+    "mult": 1,
+    "family": "serine",
+    "file": "serine/polyserine_n8.xyz",
+    "xtb_gfn2_steps": 72
+  },
+  "polyyne_n10": {
+    "atoms": 22,
+    "charge": 0,
+    "mult": 1,
+    "family": "polyynes",
+    "file": "polyynes/polyyne_n10.xyz",
+    "xtb_gfn2_steps": 8
+  },
+  "polyyne_n3": {
+    "atoms": 8,
+    "charge": 0,
+    "mult": 1,
+    "family": "polyynes",
+    "file": "polyynes/polyyne_n3.xyz",
+    "xtb_gfn2_steps": 7
+  },
+  "polyyne_n4": {
+    "atoms": 10,
+    "charge": 0,
+    "mult": 1,
+    "family": "polyynes",
+    "file": "polyynes/polyyne_n4.xyz",
+    "xtb_gfn2_steps": 8
+  },
+  "polyyne_n5": {
+    "atoms": 12,
+    "charge": 0,
+    "mult": 1,
+    "family": "polyynes",
+    "file": "polyynes/polyyne_n5.xyz",
+    "xtb_gfn2_steps": 7
+  },
+  "polyyne_n6": {
+    "atoms": 14,
+    "charge": 0,
+    "mult": 1,
+    "family": "polyynes",
+    "file": "polyynes/polyyne_n6.xyz",
+    "xtb_gfn2_steps": 7
+  },
+  "polyyne_n7": {
+    "atoms": 16,
+    "charge": 0,
+    "mult": 1,
+    "family": "polyynes",
+    "file": "polyynes/polyyne_n7.xyz",
+    "xtb_gfn2_steps": 6
+  },
+  "polyyne_n8": {
+    "atoms": 18,
+    "charge": 0,
+    "mult": 1,
+    "family": "polyynes",
+    "file": "polyynes/polyyne_n8.xyz",
+    "xtb_gfn2_steps": 7
+  },
+  "polyyne_n9": {
+    "atoms": 20,
+    "charge": 0,
+    "mult": 1,
+    "family": "polyynes",
+    "file": "polyynes/polyyne_n9.xyz",
+    "xtb_gfn2_steps": 8
+  },
+  "tetracene": {
+    "atoms": 30,
+    "charge": 0,
+    "mult": 1,
+    "family": "acenes",
+    "file": "acenes/tetracene.xyz",
+    "xtb_gfn2_steps": 8
+  },
+  "thiophene_n1": {
+    "atoms": 9,
+    "charge": 0,
+    "mult": 1,
+    "family": "thiophene",
+    "file": "thiophene/thiophene_n1.xyz",
+    "xtb_gfn2_steps": 9
+  },
+  "thiophene_n2": {
+    "atoms": 16,
+    "charge": 0,
+    "mult": 1,
+    "family": "thiophene",
+    "file": "thiophene/thiophene_n2.xyz",
+    "xtb_gfn2_steps": 9
+  },
+  "thiophene_n3": {
+    "atoms": 23,
+    "charge": 0,
+    "mult": 1,
+    "family": "thiophene",
+    "file": "thiophene/thiophene_n3.xyz",
+    "xtb_gfn2_steps": 9
+  },
+  "thiophene_n4": {
+    "atoms": 30,
+    "charge": 0,
+    "mult": 1,
+    "family": "thiophene",
+    "file": "thiophene/thiophene_n4.xyz",
+    "xtb_gfn2_steps": 12
+  },
+  "thiophene_n5": {
+    "atoms": 37,
+    "charge": 0,
+    "mult": 1,
+    "family": "thiophene",
+    "file": "thiophene/thiophene_n5.xyz",
+    "xtb_gfn2_steps": 11
+  },
+  "thiophene_n6": {
+    "atoms": 44,
+    "charge": 0,
+    "mult": 1,
+    "family": "thiophene",
+    "file": "thiophene/thiophene_n6.xyz",
+    "xtb_gfn2_steps": 10
+  },
+  "thiophene_n7": {
+    "atoms": 51,
+    "charge": 0,
+    "mult": 1,
+    "family": "thiophene",
+    "file": "thiophene/thiophene_n7.xyz",
+    "xtb_gfn2_steps": 12
+  },
+  "thiophene_n8": {
+    "atoms": 58,
+    "charge": 0,
+    "mult": 1,
+    "family": "thiophene",
+    "file": "thiophene/thiophene_n8.xyz",
+    "xtb_gfn2_steps": 15
+  }
+}

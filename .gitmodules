@@ -1,0 +1,3 @@
+[submodule "external/oligomer-benchmarks"]
+	path = external/oligomer-benchmarks
+	url = https://github.com/ghutchis/oligomer-benchmarks
