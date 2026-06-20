@@ -240,6 +240,16 @@ def plot(results, out_fig):
         ax.plot(x, y, '-', color='tab:blue', lw=1.5)
         nodes = r['node_idx']
         ax.plot(x[nodes], y[nodes], 'o', color='tab:red', ms=6, zorder=5)
+        for xi, yi in zip(x[nodes], y[nodes]):
+            ax.annotate(
+                f'{yi:.1f}',
+                (xi, yi),
+                textcoords='offset points',
+                xytext=(0, 6),
+                ha='center',
+                fontsize=7,
+                color='tab:red',
+            )
         ax.set_title(f"{name}  ({r['n_minima']} minima, {r['atoms']} at.)", fontsize=9)
         ax.set_xlabel('path coord. (cum. RMSD, A)', fontsize=8)
         ax.set_ylabel('E - E_min (kcal/mol)', fontsize=8)

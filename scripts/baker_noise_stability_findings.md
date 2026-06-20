@@ -122,14 +122,75 @@ and confined to the most aggressive amplitude tested.
    expected breakdown when the start is displaced far enough to alter
    connectivity.
 
+## Interpolated energy paths through the multiple minima
+
+For every molecule that reached more than one distinct minimum,
+`scripts/minima_paths.py` rediscovers those minima *with their geometries*
+(clustering converged structures by Kabsch-aligned RMSD, not energy, so
+convergence scatter is not counted as a new basin), orders them by energy,
+aligns them head-to-tail, joins consecutive minima by linear interpolation of
+the Cartesian coordinates, and evaluates GFN2-xTB single points along the
+resulting single piecewise-linear path. The figure
+(`artifacts/minima_paths.png`) shows energy vs a cumulative-RMSD path
+coordinate, one panel per molecule, with the minima marked and labelled
+(kcal/mol relative to the lowest located minimum).
+
+| molecule | minima | rel. energies (kcal/mol) | family |
+|---|---:|---|---|
+| benzidine | 4 | 0, 24.3, 33.7, 80.5 | high-E broken (0.3 A) |
+| caffeine | 4 | 0, 0.06, 0.06, 0.42 | near-degenerate conformers |
+| difuropyrazine | 3 | 0, 77.4, 143.6 | high-E broken (0.3 A) |
+| ethanol | 3 | 0, 0.0, 1.55 | conformers |
+| histidine | 3 | 0, 2.0, 53.8 | conformer + high-E broken |
+| naphthalene | 3 | 0, 41.2, 108.2 | high-E broken (0.3 A) |
+| acanil01 | 2 | 0, 0.75 | conformer |
+| achtar10 | 2 | 0, 0.04 | (near-)degenerate conformer |
+| benzaldehyde | 2 | 0, 112.2 | high-E broken (0.3 A) |
+| benzene | 2 | 0, 18.9 | high-E broken (0.3 A) |
+| difluorobenzene_13 | 2 | 0, 33.8 | high-E broken (0.3 A) |
+| furan | 2 | 0, 88.8 | high-E broken (0.3 A) |
+| hydroxybicyclopentane_2 | 2 | 0, 8.7 | conformer |
+| mesityl_oxide | 2 | 0, 1.3 | conformer |
+| methylamine | 2 | 0, 6.24 | conformer (the frustrated reference) |
+| neopentane | 2 | 0, 3.8 | conformer / mild distortion |
+| trifluorobenzene_135 | 2 | 0, 33.1 | high-E broken (0.3 A) |
+
+The paths fall into two clear families, matching the two noise regimes:
+
+* **Low-lying conformers (< ~10 kcal/mol)** — methylamine (6.2), hydroxy-
+  bicyclopentane (8.7), neopentane (3.8), mesityl_oxide (1.3), ethanol (1.6),
+  histidine's second basin (2.0), acanil01 (0.75), achtar10 (~0), and
+  caffeine's near-degenerate quartet. The interpolation barriers are modest
+  (e.g. methylamine ~7 kcal/mol over its own endpoint), confirming these are
+  genuine neighbouring minima reachable from low-amplitude noise.
+* **High-energy "broken" structures (18-144 kcal/mol)** — the aromatics
+  (benzene, the halobenzenes, furan, benzaldehyde, naphthalene, difuropyrazine,
+  benzidine). These appear only from the extreme 0.3 A noise, and the linear
+  path between them and the true minimum climbs through very large barriers
+  (hundreds of kcal/mol, since linear Cartesian interpolation stretches bonds
+  rather than following a minimum-energy path). They are unambiguously
+  separate, non-physical basins, not the same minimum.
+
+Two caveats on reading the plot: the barrier *heights* are upper bounds (linear
+Cartesian interpolation is not a minimum-energy path), and the specific broken
+structure recovered for a given molecule varies with the random seed (e.g.
+difluorobenzene came back at +33.8 kcal/mol here vs +87.7 in the sweep) — at
+0.3 A there is a whole family of broken stationary points, not one.
+
 ## Reproduce
 
 ```sh
+# Convergence/minimum stability sweep (~44 min, 1 core)
 scripts/noise_stability.py --benchmark baker --seeds 6 \
     --sigmas 0.02 0.05 0.1 0.2 0.3 \
     --out artifacts/baker_noise_stability.md \
     --out-json artifacts/baker_noise_stability.json
+
+# Interpolated energy paths through the multiple minima (~25 min, 1 core)
+scripts/minima_paths.py \
+    --out-fig artifacts/minima_paths.png \
+    --out-json artifacts/minima_paths.json
 ```
 
-(~44 min wall on one core; the high-sigma trials on the larger flexible
-molecules dominate. Reduce `--seeds` / drop `0.3` for a quick pass.)
+(The high-sigma trials on the larger flexible molecules dominate runtime;
+reduce `--seeds` / drop `0.3` for a quick pass.)
