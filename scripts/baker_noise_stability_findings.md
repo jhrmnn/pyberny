@@ -131,9 +131,12 @@ convergence scatter is not counted as a new basin), orders them by energy,
 aligns them head-to-tail, joins consecutive minima by linear interpolation of
 the Cartesian coordinates, and evaluates GFN2-xTB single points along the
 resulting single piecewise-linear path. The figure
-(`artifacts/minima_paths.png`) shows energy vs a cumulative-RMSD path
-coordinate, one panel per molecule, with the minima marked and labelled
-(kcal/mol relative to the lowest located minimum).
+(`artifacts/minima_paths.png`) shows energy (log scale, kcal/mol from the
+lowest located minimum) vs a cumulative-RMSD path coordinate, one panel per
+molecule, with every minimum marked and labelled and the no-noise (reference)
+minimum highlighted by a gold star. For methylamine, ethanol, and histidine
+the gold star sits *above* another minimum -- the unperturbed run did not reach
+the lowest basin.
 
 | molecule | minima | rel. energies (kcal/mol) | family |
 |---|---:|---|---|

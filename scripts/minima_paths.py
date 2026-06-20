@@ -101,15 +101,22 @@ def target_minima_counts(json_path, tol_kcal=0.3):
 
 
 def discover_minima(name, geom, ref, expected_n, rmsd_tol, schedule):
-    """Return a list of structurally distinct minima ``[(energy, geom), ...]``.
+    """Discover structurally distinct minima for ``name``.
+
+    Returns ``(minima, clean_energy)`` where ``minima`` is a list of distinct
+    ``(energy, geom)`` sorted by energy and ``clean_energy`` is the energy of
+    the unperturbed (no-noise) optimization (or ``None`` if it didn't
+    converge).
 
     Seeds the clean optimization, then sweeps noisy starts per ``schedule`` (a
     list of ``(sigma, n_seed)``), adding any converged structure whose aligned
     RMSD to every known minimum exceeds ``rmsd_tol``. Stops once ``expected_n``
     distinct minima are in hand."""
     minima = []
+    clean_energy = None
     conv, e, g = optimize(geom, ref)
     if conv:
+        clean_energy = e
         minima.append((e, g))
     for sigma, n_seed in schedule:
         if len(minima) >= expected_n:
@@ -132,7 +139,7 @@ def discover_minima(name, geom, ref, expected_n, rmsd_tol, schedule):
             if all(rmsd_to(g.coords, m[1].coords) > rmsd_tol for m in minima):
                 minima.append((e, g))
     minima.sort(key=lambda m: m[0])
-    return minima
+    return minima, clean_energy
 
 
 def build_path(minima, per_segment):
@@ -192,7 +199,9 @@ def main(argv=None):
     for name, geom, ref in iter_molecules(args.benchmark, candidates):
         expected = counts.get(name, 2)
         print(f'==> {name} (expect up to {expected} minima)', flush=True)
-        minima = discover_minima(name, geom, ref, expected, args.rmsd_tol, schedule)
+        minima, clean_energy = discover_minima(
+            name, geom, ref, expected, args.rmsd_tol, schedule
+        )
         if len(minima) < 2:
             print(f'    only {len(minima)} distinct minimum found; skipping')
             continue
@@ -203,6 +212,7 @@ def main(argv=None):
             'atoms': ref['atoms'],
             'n_minima': len(minima),
             'minimum_energies': [float(m[0]) for m in minima],
+            'clean_energy': None if clean_energy is None else float(clean_energy),
             'node_idx': node_idx,
             'x': x.tolist(),
             'energy': energies.tolist(),
@@ -225,38 +235,73 @@ def plot(results, out_fig):
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
 
+    # Log y-axis spans the >4 orders of magnitude between the sub-kcal/mol
+    # conformer barriers and the >100 kcal/mol broken-aromatic ones. Energies
+    # are measured from the lowest located minimum, so that minimum sits at
+    # zero; floor it (and any other exactly-degenerate node) to a small
+    # positive value so it still renders on a log axis.
+    floor = 1e-2  # kcal/mol
+
     names = sorted(results, key=lambda n: -results[n]['n_minima'])
     n = len(names)
     ncol = 4
     nrow = math.ceil(n / ncol)
     fig, axes = plt.subplots(nrow, ncol, figsize=(4 * ncol, 3 * nrow))
     axes = np.atleast_1d(axes).ravel()
+    clean_handle = None
     for ax, name in zip(axes, names):
         r = results[name]
         x = np.array(r['x'])
         e = np.array(r['energy'])
-        e0 = e[r['node_idx']].min()
-        y = (e - e0) * H2KCAL
+        nodes = np.array(r['node_idx'])
+        node_e = e[nodes]
+        e0 = node_e.min()
+        y = np.clip((e - e0) * H2KCAL, floor, None)
         ax.plot(x, y, '-', color='tab:blue', lw=1.5)
-        nodes = r['node_idx']
         ax.plot(x[nodes], y[nodes], 'o', color='tab:red', ms=6, zorder=5)
-        for xi, yi in zip(x[nodes], y[nodes]):
+        # Highlight the minimum reached by the unperturbed (no-noise) run.
+        clean_energy = r.get('clean_energy')
+        clean_k = None
+        if clean_energy is not None:
+            clean_k = int(np.argmin(np.abs(node_e - clean_energy)))
+        for k, (xi, yi) in enumerate(zip(x[nodes], y[nodes])):
+            if k == clean_k:
+                h = ax.plot(
+                    xi,
+                    yi,
+                    '*',
+                    color='gold',
+                    markeredgecolor='black',
+                    markeredgewidth=0.6,
+                    ms=15,
+                    zorder=6,
+                )[0]
+                clean_handle = clean_handle or h
             ax.annotate(
-                f'{yi:.1f}',
+                f'{yi:.2f}' if yi < 1 else f'{yi:.1f}',
                 (xi, yi),
                 textcoords='offset points',
-                xytext=(0, 6),
+                xytext=(0, 7),
                 ha='center',
                 fontsize=7,
-                color='tab:red',
+                color='black' if k == clean_k else 'tab:red',
             )
+        ax.set_yscale('log')
+        ax.set_ylim(bottom=floor)
         ax.set_title(f"{name}  ({r['n_minima']} minima, {r['atoms']} at.)", fontsize=9)
         ax.set_xlabel('path coord. (cum. RMSD, A)', fontsize=8)
-        ax.set_ylabel('E - E_min (kcal/mol)', fontsize=8)
+        ax.set_ylabel('E - E_min (kcal/mol, log)', fontsize=8)
         ax.tick_params(labelsize=7)
-        ax.grid(alpha=0.3)
+        ax.grid(alpha=0.3, which='both')
     for ax in axes[n:]:
         ax.set_visible(False)
+    if clean_handle is not None:
+        fig.legend(
+            [clean_handle],
+            ['no-noise (reference) minimum'],
+            loc='upper right',
+            fontsize=9,
+        )
     fig.suptitle(
         'Linearly interpolated energy paths through Baker minima found under '
         'start-geometry noise (GFN2-xTB)',
