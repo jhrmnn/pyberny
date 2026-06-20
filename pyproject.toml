@@ -85,9 +85,8 @@ module = "tblite.*"
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-# Turn warnings into errors (Python's -W error) so CI fails on new warnings;
-# the later filter keeps the pre-existing PendingDeprecationWarning ignored.
-filterwarnings = ["error", "ignore::PendingDeprecationWarning"]
+# Turn warnings into errors (Python's -W error) so CI fails on new warnings.
+filterwarnings = ["error"]
 testpaths = ["tests"]
 
 [tool.ruff]
