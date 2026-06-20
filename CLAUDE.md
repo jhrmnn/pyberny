@@ -43,8 +43,9 @@ The session-start hook checks the `reports` branch out as a git worktree at
 `./reports` (ignored via `.gitignore`), so past reports are available locally
 in every session. To add one, create a new dated folder under `./reports`,
 commit it on the `reports` branch from that worktree, push, and open a PR
-**against `reports`** (not `master`). PRs that only add a report should target
-`reports`; code changes target `master` as usual.
+**against `reports`** (not `master`), and add the `report` label to it. PRs that
+only add a report should target `reports` and carry the `report` label; code
+changes target `master` as usual.
 
 ## CHANGELOG
 
