@@ -44,7 +44,9 @@ def _symtext(geom: Geometry) -> Any:
     import molsym
 
     species = list(geom.species)
-    coords = np.asarray(geom.coords, dtype=float)
+    # NB: a copy, not np.asarray -- MolSym recenters/reorients the molecule in
+    # place, which would otherwise mutate the caller's geometry.
+    coords = np.array(geom.coords, dtype=float)
     masses = np.array([float(get_property(sp, 'mass')) for sp in species])
     mol = molsym.Molecule(species, coords, masses)
     return molsym.Symtext.from_molecule(mol)
@@ -110,7 +112,7 @@ def break_symmetry(geom: Geometry, eps: float = SYMMETRY_EPS) -> Geometry:
         return geom
     direction = np.asarray(nonsym, dtype=float).sum(axis=0)
     rms = float(np.sqrt(np.mean(direction**2)))
-    if rms == 0:
+    if rms == 0:  # pragma: no cover - a nonzero SALC basis sum always has rms > 0
         return geom
     displacement = (direction * (eps / rms)).reshape(-1, 3)
     coords = np.asarray(geom.coords, dtype=float)

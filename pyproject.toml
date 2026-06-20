@@ -37,12 +37,18 @@ toml = { version = ">=0.10", optional = true }
 pyscf = { version = ">=2.5", optional = true }
 matplotlib = { version = ">=3.5", optional = true }
 tblite = { version = ">=0.3", optional = true }
+# Point-group detection + symmetry-adapted displacement coordinates for the
+# `symmetry` argument of Berny. Tracked on a fork branch with qcelemental made
+# optional so the dependency stays numpy-only; swap for a PyPI version spec once
+# MolSym publishes the change.
+molsym = { git = "https://github.com/jhrmnn/molsym.git", branch = "claude/qcelemental-optional-iosjwj", optional = true }
 
 [tool.poetry.extras]
 test = ["pytest", "coverage"]
 doc = ["sphinx", "sphinxcontrib-katex", "sphinx-multiversion", "toml"]
 benchmark = ["pyscf", "tblite"]
 plot = ["matplotlib"]
+symmetry = ["molsym"]
 
 [tool.poetry.group.dev.dependencies]
 ruff = ">=0.6"

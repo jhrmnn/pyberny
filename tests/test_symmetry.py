@@ -66,6 +66,15 @@ def test_detect_periodic_short_circuits_to_c1():
     assert detect_point_group(geom) == 'C1'
 
 
+def test_detect_without_molsym_degrades_to_c1(monkeypatch):
+    # Detection is optional: with molsym unavailable it must quietly report C1
+    # (no warning fires) rather than raise.
+    import sys
+
+    monkeypatch.setitem(sys.modules, 'molsym', None)
+    assert detect_point_group(water()) == 'C1'
+
+
 # -- break_symmetry (targeted, deterministic) --------------------------------
 
 
@@ -100,6 +109,14 @@ def test_break_symmetry_realizes_requested_rms():
     eps = 0.05
     disp = break_symmetry(geom, eps=eps).coords - geom.coords
     assert np.sqrt(np.mean(disp**2)) == pytest.approx(eps)
+
+
+@molsym_required
+def test_break_symmetry_is_noop_for_asymmetric():
+    # A C1 geometry has no non-symmetric modes, so breaking it returns the very
+    # same object unchanged.
+    geom = c1_geom()
+    assert break_symmetry(geom) is geom
 
 
 def test_break_symmetry_without_molsym_raises(monkeypatch):
@@ -155,6 +172,14 @@ def test_break_perturbs_the_optimized_geometry():
     b = Berny(geom, symmetry='break')
     expected = break_symmetry(geom, SYMMETRY_EPS)
     assert np.array_equal(b._state.geom.coords, expected.coords)
+
+
+@molsym_required
+def test_break_is_noop_for_asymmetric_start():
+    # symmetry='break' on a C1 start leaves the geometry untouched.
+    geom = c1_geom()
+    b = Berny(geom, symmetry='break')
+    assert np.array_equal(b._state.geom.coords, geom.coords)
 
 
 # -- end-to-end --------------------------------------------------------------
