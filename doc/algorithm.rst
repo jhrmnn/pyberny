@@ -27,6 +27,19 @@ Sketch of the algorithm
 10. Transform back to Cartesian coordinates [PengJCC96]_.
 11. If convergence is not reached (criteria from the SM), go to 3.
 
+Symmetric start geometries
+--------------------------
+
+A gradient-following optimizer cannot leave the symmetric subspace of an exactly
+symmetric start geometry: the gradient along every non-totally-symmetric mode
+vanishes by symmetry, so the optimization can converge to a symmetric *saddle*
+rather than a minimum (issue #148). By default :class:`~berny.Berny` detects the
+point group of the start and warns when it is not ``C1``; pass
+``symmetry='break'`` to displace the start off its symmetry elements with a
+small, deterministic, symmetry-targeted kick (the equal-weight sum of the
+non-totally-symmetric Cartesian symmetry-adapted displacement coordinates) so
+the optimizer can relax to the true minimum.
+
 Redundant internal coordinates
 ------------------------------
 

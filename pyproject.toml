@@ -28,6 +28,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.10"
 numpy = ">=1.21,<3"
+pointgroup = ">=0.4"
 pytest = { version = ">=6", optional = true }
 coverage = { version = ">=6", optional = true }
 sphinx = { version = ">=5,<8", optional = true }
@@ -82,6 +83,18 @@ enable_error_code = [
 # runtime, so let mypy treat the module as untyped.
 [[tool.mypy.overrides]]
 module = "tblite.*"
+ignore_missing_imports = true
+
+# pointgroup ships no type stubs; symmetry.py imports it lazily and uses it only
+# at runtime, so let mypy treat the module as untyped.
+[[tool.mypy.overrides]]
+module = "pointgroup.*"
+ignore_missing_imports = true
+
+# molsym ships no type stubs; symmetry.break_symmetry imports it lazily and uses
+# it only at runtime, so let mypy treat the module as untyped.
+[[tool.mypy.overrides]]
+module = "molsym.*"
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
