@@ -10,3 +10,5 @@
 /htmlcov/
 /poetry.lock
 /fort*
+# git worktree for the `reports` orphan branch, set up by the session-start hook
+/reports/

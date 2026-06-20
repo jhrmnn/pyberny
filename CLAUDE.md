@@ -26,6 +26,26 @@ batch drifting past tolerance is flaky. Report these and move on; do not add
 coverage-gate config, loosen tolerances, or rewrite reference values to make
 them green.
 
+## Investigation reports
+
+Longer-form investigations — benchmark studies, root-cause write-ups, anything
+that produces a standalone report with prose, figures, and throwaway analysis
+scripts — do **not** live on `master`. They go on the `reports` orphan branch,
+which shares no history with `master` and holds nothing but the reports
+themselves, so the package tree stays free of one-off scratch material.
+
+Layout on `reports`: one top-level folder per report, named
+`YYYY-MM-DD-<slug>`, with the main content as `README.md` and all supporting
+files (figures, data, scripts) alongside it in that same folder. Keep each
+report self-contained in its folder.
+
+The session-start hook checks the `reports` branch out as a git worktree at
+`./reports` (ignored via `.gitignore`), so past reports are available locally
+in every session. To add one, create a new dated folder under `./reports`,
+commit it on the `reports` branch from that worktree, push, and open a PR
+**against `reports`** (not `master`). PRs that only add a report should target
+`reports`; code changes target `master` as usual.
+
 ## CHANGELOG
 
 `CHANGELOG.md` is reserved for important user-facing changes — new features,
