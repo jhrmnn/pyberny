@@ -65,19 +65,31 @@ climbs straight back out. *Right:* a linear zoom on the basin — a clean
 parabolic well whose minimum is exactly the endpoint. Regenerate with
 `./interpolation_plot.py`.
 
+**The stationary-point signature is there — it is just under-resolved.** The
+motivating worry was sharper than "no well": at *any* stationary point the
+gradient is zero, so its projection onto *any* direction — including the
+interpolation line — must vanish, and the energy-vs-path curve must flatten to
+zero slope at the node. Measuring the slope `dE/ds` (kcal/mol per Å of path)
+and the gradient along the line shows exactly that:
+
 | `t` | 0.90 | 0.97 | **1.00 (pseudo-min)** | 1.03 | 1.10 |
 |---|---:|---:|---:|---:|---:|
-| E (kcal/mol) | 52.3 | 34.0 | **32.3** | 34.0 | 51.3 |
+| E − E$_{benzene}$ (kcal/mol) | 52.5 | 34.1 | **32.3** | 34.0 | 51.4 |
+| gmax (Ha/bohr) | 1.6e-1 | 4.5e-2 | **2.3e-5** | 4.7e-2 | 1.7e-1 |
+| slope dE/ds (kcal·mol⁻¹·Å⁻¹) | −802 | −233 | **+0.1** | +227 | +747 |
 
-The energy rises symmetrically on both sides of `t=1` — the structure sits at
-the bottom of a local well along that very line. Two effects hide it in the
-figure: (1) **scale** — linear interpolation breaks/reforms bonds, so the
-*midpoint* is ≈ +323 kcal/mol, against which the ~2 kcal/mol-wide basin is
-invisible on a log axis; and (2) **direction** — the straight line approaches
-along the bond-breaking coordinate (the steepest, least physical way in), not a
-minimum-energy path. The rigorous minimum-vs-saddle statement is the Hessian
-below, not the interpolation slice — consistent with the #147 caveat that those
-barrier heights are upper bounds and linear interpolation is not an MEP.
+The slope passes cleanly through **zero at the endpoint** (−233 → +0.1 → +227,
+a sign change) and the gradient collapses to gmax = 2.3e-5 there — a textbook
+stationary point. So the point *is* stationary and the curve *does* flatten at
+it. The #147 panel fails to show this for two mundane reasons, not because the
+point is non-stationary: (1) the path **terminates at the node**, so only the
+large-slope approach side (`t<1`) is drawn and the zero-crossing is never
+reached on the plot; and (2) the turnover lives in the **final, unsampled
+sub-segment** — at #147's 16-points-per-segment resolution the energy moves
+< 2 kcal/mol over the last ~3 % of the path, sub-pixel on a log axis near
+30 kcal/mol. Sampling finely near the node and continuing past it (the figure
+above) resolves the flattening; measuring the gradient settles it outright. The
+rigorous minimum-vs-saddle statement is the Hessian below.
 
 ## 2. What is the structure? → fulvene (not puckered benzene)
 

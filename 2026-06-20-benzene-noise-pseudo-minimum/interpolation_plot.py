@@ -46,6 +46,16 @@ def energy(syms, xyz_ang):
     return float(calc.singlepoint().get('energy'))
 
 
+def energy_gradient(syms, xyz_ang):
+    """Energy (Ha) and gradient (Ha/bohr) from GFN2-xTB."""
+    num = np.array([int(get_property(s, 'number')) for s in syms])
+    calc = Calculator('GFN2-xTB', num, xyz_ang * A2B, charge=0.0, uhf=0)
+    calc.set('verbosity', 0)
+    calc.set('accuracy', 1e-4)  # tight, for a clean gradient/slope
+    res = calc.singlepoint()
+    return float(res.get('energy')), np.array(res.get('gradient'))
+
+
 def kabsch(P, Q):
     """Rotate/translate Q onto P (both N-by-3); return aligned Q."""
     Pc = P - P.mean(0)
@@ -122,6 +132,15 @@ def main():
     fig.savefig(out, dpi=140)
     print(f'benzene→fulvene RMSD = {rmsd_full:.3f} Å, pseudo-min = +{de[i1]:.1f} kcal/mol')
     print(f'wrote {out}')
+
+    # The stationary-point signature: gradient and the slope of E along the
+    # line (dE/ds, kcal/mol per Å of path) must vanish at the endpoint t=1.
+    disp_bohr = (xf - xb) * A2B
+    print('\n  t     E−Eb(kcal/mol)   gmax(Ha/bohr)   slope dE/ds (kcal/mol·Å⁻¹)')
+    for t in (0.90, 0.97, 1.00, 1.03, 1.10):
+        e, g = energy_gradient(syms, xb + t * (xf - xb))
+        slope = float((g * disp_bohr).sum()) / rmsd_full * HA2KCAL
+        print(f'  {t:4.2f}  {(e - eb) * HA2KCAL:12.1f}     {np.abs(g).max():.2e}      {slope:12.1f}')
 
 
 if __name__ == '__main__':
