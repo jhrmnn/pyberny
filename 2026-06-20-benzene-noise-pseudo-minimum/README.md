@@ -57,6 +57,14 @@ only ever see the approach side, so *any* minimum sampled this way looks like
 the top of a ramp. Extending the *same* straight line past the endpoint
 (`t>1`, GFN2-xTB, energies relative to benzene) shows the dip is really there:
 
+![Interpolation path, extended past the endpoint](interpolation_path.png)
+
+*Left:* the full Kabsch-aligned interpolation (as in #147) on a log scale — the
+solid curve descends into the pseudo-minimum and the dashed extension (`t>1`)
+climbs straight back out. *Right:* a linear zoom on the basin — a clean
+parabolic well whose minimum is exactly the endpoint. Regenerate with
+`./interpolation_plot.py`.
+
 | `t` | 0.90 | 0.97 | **1.00 (pseudo-min)** | 1.03 | 1.10 |
 |---|---:|---:|---:|---:|---:|
 | E (kcal/mol) | 52.3 | 34.0 | **32.3** | 34.0 | 51.3 |
