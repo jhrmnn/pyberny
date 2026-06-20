@@ -1,5 +1,5 @@
 import importlib.util
-import warnings
+import logging
 
 import numpy as np
 import pytest
@@ -113,23 +113,30 @@ def test_break_symmetry_without_molsym_raises(monkeypatch):
 # -- Berny symmetry policy ---------------------------------------------------
 
 
-def test_default_warns_on_symmetric_start():
-    with pytest.warns(UserWarning, match='C2v'):
+def _warning_records(caplog):
+    return [r for r in caplog.records if r.levelno >= logging.WARNING]
+
+
+def test_default_logs_warning_on_symmetric_start(caplog):
+    # The default notice is a logging warning (not a Python UserWarning), so it
+    # never trips downstream test suites run with -W error.
+    with caplog.at_level(logging.INFO, logger='berny.berny'):
         Berny(water())
+    assert any('C2v' in r.getMessage() for r in _warning_records(caplog))
 
 
-def test_nowarn_is_silent_but_still_checks():
-    with warnings.catch_warnings():
-        warnings.simplefilter('error')
+def test_nowarn_is_silent_but_still_checks(caplog):
+    with caplog.at_level(logging.INFO, logger='berny.berny'):
         b = Berny(water(), symmetry='nowarn')
-    # Geometry is left untouched in 'nowarn' mode.
+    # No warning-level record, and the geometry is left untouched.
+    assert not _warning_records(caplog)
     assert np.array_equal(b._state.geom.coords, water().coords)
 
 
-def test_no_warning_for_asymmetric_start():
-    with warnings.catch_warnings():
-        warnings.simplefilter('error')
+def test_no_warning_for_asymmetric_start(caplog):
+    with caplog.at_level(logging.INFO, logger='berny.berny'):
         Berny(c1_geom())
+    assert not _warning_records(caplog)
 
 
 def test_invalid_symmetry_mode_rejected():

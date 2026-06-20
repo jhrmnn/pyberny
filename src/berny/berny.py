@@ -6,7 +6,6 @@ from __future__ import annotations
 import json
 import logging
 import os
-import warnings
 from collections.abc import Generator, Iterable
 from dataclasses import dataclass, fields
 from pathlib import Path
@@ -107,8 +106,8 @@ class Berny(Generator):  # type: ignore[type-arg]
         logger: alternative logger to use
         symmetry: how to handle a symmetric start geometry, whose exact symmetry
             a gradient optimizer cannot break (it may converge to a symmetric
-            saddle, see issue #148). ``None`` (default) emits a
-            :class:`UserWarning` when the detected point group is not ``C1``;
+            saddle, see issue #148). ``None`` (default) logs a warning when the
+            detected point group is not ``C1``;
             ``'nowarn'`` runs the same check but only logs an info message;
             ``'break'`` displaces the start off its symmetry elements with a
             small deterministic, symmetry-targeted kick
@@ -204,7 +203,7 @@ class Berny(Generator):  # type: ignore[type-arg]
         if symmetry == 'nowarn':
             self._log.info(msg)
         else:
-            warnings.warn(msg, UserWarning, stacklevel=3)
+            self._log.warning(msg)
         return geom
 
     def _build_coord_state(
