@@ -73,7 +73,8 @@ def main():
         rmsd.append(np.sqrt(((x - xb) ** 2).sum(1).mean()))
     de = np.array(de)
     rmsd = np.array(rmsd)
-    i1 = int(np.argmin(np.abs(ts - 1.0)))  # endpoint index
+    i1 = int(np.argmin(np.abs(ts - 1.0)))  # endpoint (pseudo-min) index
+    i0 = int(np.argmin(np.abs(ts - 0.0)))  # benzene index (t=0, E-Eb≈0)
 
     fig, (axL, axR) = plt.subplots(1, 2, figsize=(11, 4.4))
 
@@ -84,10 +85,15 @@ def main():
                  label='benzene → pseudo-min (as in #147)')
     axL.semilogy(rmsd[beyond], np.clip(de[beyond], 1e-2, None), '--', color='C3',
                  label='extension past the endpoint (t > 1)')
-    axL.plot(0, max(de[0], 1e-2), '*', ms=16, color='gold', mec='k',
-             zorder=5, label='benzene (true min)')
+    axL.plot(rmsd[i0], max(de[i0], 1e-2), '*', ms=16, color='gold', mec='k',
+             zorder=6, label='benzene (true min)')
     axL.plot(rmsd[i1], de[i1], 'o', ms=9, color='C3', zorder=5,
              label=f'pseudo-min (fulvene, +{de[i1]:.1f})')
+    ipk = int(np.argmax(de[ts <= 1.0]))
+    axL.annotate('linear-interp. clash\n(bond-breaking, barrier = upper bound)',
+                 xy=(rmsd[ipk], de[ipk]), xytext=(rmsd[ipk] + 0.04, de[ipk] * 0.12),
+                 fontsize=7.5, ha='left', color='dimgray',
+                 arrowprops=dict(arrowstyle='->', color='dimgray', lw=0.7))
     axL.set_xlabel('path coord. (RMSD from benzene, Å)')
     axL.set_ylabel('E − E$_{benzene}$ (kcal/mol, log)')
     axL.set_title('Full interpolation — endpoint looks like a ramp')
