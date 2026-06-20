@@ -1,0 +1,17 @@
+{
+  "_comment": "Conformer energies for the two #154 genuine-minimum cases, from crosscheck.py / hf_geoms.py. Energies in Hartree; gaps = E(lower_min basin) - E(reference_min basin), in kcal/mol. 'reference_min' is the no-noise Baker-start basin minimum; 'lower_min' is the conformer a noisy GFN2 start falls into.",
+  "ethanol": {
+    "atoms": 9,
+    "gfn2": {"reference_min": -11.39186730, "lower_min": -11.39433932, "gap_kcal": -1.55},
+    "hf_631gpp": {"reference_min": -154.08958513, "lower_min": -154.08945064, "gap_kcal": 0.08},
+    "reference_conformer": "anti (H-O-C-C = 180 deg, Cs-planar)",
+    "lower_conformer": "gauche (H-O-C-C = -64 deg)"
+  },
+  "histidine": {
+    "atoms": 20,
+    "gfn2": {"reference_min": -34.33890509, "lower_min": -34.34205918, "gap_kcal": -1.98},
+    "hf_631gpp": {"reference_min": -545.55088585, "lower_min": -545.55104139, "gap_kcal": -0.10},
+    "reference_conformer": "Baker-start side-chain/backbone arrangement",
+    "lower_conformer": "alternative side-chain/backbone rotamer"
+  }
+}
