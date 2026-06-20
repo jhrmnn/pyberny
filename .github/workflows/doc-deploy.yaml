@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Check all CI passed
         id: gate
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const trigger = context.payload.workflow_run;
@@ -57,7 +57,7 @@ jobs:
             core.setOutput('ok', 'true');
       - name: Download docs artifact
         if: steps.gate.outputs.ok == 'true'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: docs
           path: doc/build
@@ -65,10 +65,10 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload pages artifact
         if: steps.gate.outputs.ok == 'true'
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: doc/build
       - name: Deploy
         if: steps.gate.outputs.ok == 'true'
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
