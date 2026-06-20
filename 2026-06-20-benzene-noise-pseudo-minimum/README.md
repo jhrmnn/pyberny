@@ -46,6 +46,31 @@ This also explains why it converges *tighter* than benzene (gmax 2.3e-5 vs
 1.4e-4): nothing pathological is happening; it is simply a different local
 optimization that happened to drive the gradient further down.
 
+### Aside: why the #147 interpolation path shows a ramp, not a well
+
+The benzene panel of `minima_paths.png` (#147) plots a linear-Cartesian
+interpolation from benzene (`t=0`) to the noise-found structure (`t=1`) and
+*stops* at `t=1`, so the pseudo-minimum appears as the end of a steep ramp with
+no visible well — which is what prompted the "doesn't look like a minimum"
+worry. But an **endpoint of a one-sided path can never render as a well**: you
+only ever see the approach side, so *any* minimum sampled this way looks like
+the top of a ramp. Extending the *same* straight line past the endpoint
+(`t>1`, GFN2-xTB, energies relative to benzene) shows the dip is really there:
+
+| `t` | 0.90 | 0.97 | **1.00 (pseudo-min)** | 1.03 | 1.10 |
+|---|---:|---:|---:|---:|---:|
+| E (kcal/mol) | 52.3 | 34.0 | **32.3** | 34.0 | 51.3 |
+
+The energy rises symmetrically on both sides of `t=1` — the structure sits at
+the bottom of a local well along that very line. Two effects hide it in the
+figure: (1) **scale** — linear interpolation breaks/reforms bonds, so the
+*midpoint* is ≈ +323 kcal/mol, against which the ~2 kcal/mol-wide basin is
+invisible on a log axis; and (2) **direction** — the straight line approaches
+along the bond-breaking coordinate (the steepest, least physical way in), not a
+minimum-energy path. The rigorous minimum-vs-saddle statement is the Hessian
+below, not the interpolation slice — consistent with the #147 caveat that those
+barrier heights are upper bounds and linear interpolation is not an MEP.
+
 ## 2. What is the structure? → fulvene (not puckered benzene)
 
 The pseudo-minimum is **planar** (best-fit-plane out-of-plane RMS ≈ 1e-4 Å),
