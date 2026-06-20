@@ -69,6 +69,16 @@ whole Baker set is only ~3 s of compute under xTB; it runs as a single CI shard
 (``scripts/plan_batches.py --benchmark baker --solvers xtb --nbins 1``) -- extra
 shards would be dominated by per-job setup overhead.
 
+The ``.xyz`` start geometries are the canonical published Baker structures and
+are kept as-is. Note that GFN2-xTB can exaggerate small conformer-energy
+differences by ~1-2 kcal/mol relative to the HF/6-31G** reference, so a
+perturbed start occasionally relaxes to a *lower* GFN2 conformer than the
+unperturbed run (seen for ethanol and histidine). This reflects GFN2's
+conformer energetics, not a defect in the start geometries or step baselines:
+at the HF/6-31G** reference method the gap collapses to ~0.1 kcal/mol and, for
+ethanol, the bundled start's basin is the lower conformer outright. See
+issues #148/#154 for the full analysis.
+
 Coordinate data is treated as factual and is redistributed under
 pyberny's MPL-2.0 license, with attribution to Shajan et al. via this
 file and via the citation embedded in the comment line of each ``.xyz``.
