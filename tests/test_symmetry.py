@@ -43,14 +43,17 @@ def methylamine():
 # -- detect_point_group ------------------------------------------------------
 
 
+@molsym_required
 def test_detect_water_is_c2v():
     assert detect_point_group(water()) == 'C2v'
 
 
+@molsym_required
 def test_detect_methylamine_start_is_cs():
     assert detect_point_group(methylamine()) == 'Cs'
 
 
+@molsym_required
 def test_detect_asymmetric_is_c1():
     assert detect_point_group(c1_geom()) == 'C1'
 
@@ -117,6 +120,7 @@ def _warning_records(caplog):
     return [r for r in caplog.records if r.levelno >= logging.WARNING]
 
 
+@molsym_required
 def test_default_logs_warning_on_symmetric_start(caplog):
     # The default notice is a logging warning (not a Python UserWarning), so it
     # never trips downstream test suites run with -W error.
@@ -125,6 +129,7 @@ def test_default_logs_warning_on_symmetric_start(caplog):
     assert any('C2v' in r.getMessage() for r in _warning_records(caplog))
 
 
+@molsym_required
 def test_nowarn_is_silent_but_still_checks(caplog):
     with caplog.at_level(logging.INFO, logger='berny.berny'):
         b = Berny(water(), symmetry='nowarn')

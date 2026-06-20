@@ -6,11 +6,11 @@
 A gradient-following optimizer cannot leave the symmetric subspace of an exactly
 symmetric start geometry: the gradient along every non-totally-symmetric mode is
 zero by symmetry, so the run can converge to a symmetric *saddle* rather than a
-minimum (issue #148). This module detects the point group (via the optional
-``pointgroup`` package) and can apply a small, deterministic symmetry-breaking
-displacement (via the optional ``molsym`` package) confined to the
+minimum (issue #148). This module detects the point group and can apply a small,
+deterministic symmetry-breaking displacement confined to the
 non-totally-symmetric subspace, so the optimizer is no longer seeded exactly on a
-symmetry element.
+symmetry element. Both use the optional ``molsym`` package
+(``pip install 'pyberny[symmetry]'``).
 """
 
 from __future__ import annotations
@@ -19,7 +19,6 @@ import logging
 from typing import Any
 
 import numpy as np
-from numpy.typing import NDArray
 
 from .geomlib import Geometry
 from .species_data import get_property
@@ -27,8 +26,6 @@ from .species_data import get_property
 __all__ = ['SYMMETRY_EPS', 'break_symmetry', 'detect_point_group']
 
 log = logging.getLogger(__name__)
-
-FloatArray = NDArray[np.floating[Any]]
 
 #: Default RMS amplitude (Å, per Cartesian component) of the symmetry-breaking
 #: displacement. Calibrated as roughly the smallest amplitude that lets
@@ -38,36 +35,43 @@ FloatArray = NDArray[np.floating[Any]]
 SYMMETRY_EPS = 0.02
 
 
-def detect_point_group(
-    geom: Geometry,
-    tolerance_eig: float = 0.01,
-    tolerance_ang: float = 4.0,
-) -> str:
+def _symtext(geom: Geometry) -> Any:
+    """Build a MolSym ``Symtext`` (point group + symmetry operations) for ``geom``.
+
+    Imports ``molsym`` lazily and propagates :class:`ImportError` when it is
+    missing; the caller decides how to degrade.
+    """
+    import molsym
+
+    species = list(geom.species)
+    coords = np.asarray(geom.coords, dtype=float)
+    masses = np.array([float(get_property(sp, 'mass')) for sp in species])
+    mol = molsym.Molecule(species, coords, masses)
+    return molsym.Symtext.from_molecule(mol)
+
+
+def detect_point_group(geom: Geometry) -> str:
     """Return the Schoenflies point-group symbol of a molecular ``geom``.
 
     Periodic geometries (those carrying lattice vectors) always return ``'C1'``
-    -- point groups apply to finite molecules. Requires the optional
-    ``pointgroup`` package; if it cannot be imported the detection is skipped and
-    ``'C1'`` is returned so an optimization never fails for want of it.
+    -- point groups apply to finite molecules. Detection uses the optional
+    ``molsym`` package; if it is not installed (or detection fails for any
+    reason) ``'C1'`` is returned so an optimization never breaks for want of it.
 
     :param geom: geometry to classify
-    :param float tolerance_eig: ``pointgroup`` inertia-eigenvalue tolerance
-    :param float tolerance_ang: ``pointgroup`` angular tolerance (degrees)
     """
     if geom.lattice is not None:
         return 'C1'
     try:
-        from pointgroup import PointGroup
+        import molsym  # noqa: F401
     except ImportError:
-        log.info('pointgroup is not installed; skipping symmetry detection')
+        log.info('molsym is not installed; skipping symmetry detection')
         return 'C1'
-    pg = PointGroup(
-        positions=np.asarray(geom.coords, dtype=float),
-        symbols=list(geom.species),
-        tolerance_eig=tolerance_eig,
-        tolerance_ang=tolerance_ang,
-    )
-    return str(pg.get_point_group())
+    try:
+        return str(_symtext(geom).pg)
+    except Exception as e:  # pragma: no cover - defensive, detection is optional
+        log.debug('symmetry detection failed (%s); assuming C1', e)
+        return 'C1'
 
 
 def break_symmetry(geom: Geometry, eps: float = SYMMETRY_EPS) -> Geometry:
@@ -81,8 +85,8 @@ def break_symmetry(geom: Geometry, eps: float = SYMMETRY_EPS) -> Geometry:
     a gradient optimizer is otherwise blind to (issue #148), unlike an isotropic
     random kick whose overlap is a seed-dependent lottery. Translations and
     rotations are excluded via MolSym's Eckart projection. The input ``geom`` is
-    not modified; for a geometry MolSym finds to have no non-symmetric modes
-    (e.g. already ``C1``) it is returned unchanged.
+    not modified; a geometry MolSym finds to have no non-symmetric modes (e.g.
+    already ``C1``) is returned unchanged.
 
     Requires the optional ``molsym`` package (``pip install 'pyberny[symmetry]'``).
 
@@ -90,19 +94,15 @@ def break_symmetry(geom: Geometry, eps: float = SYMMETRY_EPS) -> Geometry:
     :param float eps: RMS displacement per Cartesian component (Å)
     """
     try:
-        import molsym
         from molsym.salcs.cartesian_coordinates import CartesianCoordinates
         from molsym.salcs.projection_op import ProjectionOp
+
+        symtext = _symtext(geom)
     except ImportError as e:
         raise ImportError(
             "symmetry='break' requires the molsym package; install it with "
             f"`pip install 'pyberny[symmetry]'` (underlying import error: {e})"
         ) from e
-    species = list(geom.species)
-    coords = np.asarray(geom.coords, dtype=float)
-    masses = np.array([float(get_property(sp, 'mass')) for sp in species])
-    mol = molsym.Molecule(species, coords, masses)
-    symtext = molsym.Symtext.from_molecule(mol)
     salcs = ProjectionOp(symtext, CartesianCoordinates(symtext), project_Eckart=True)
     totally_symmetric = symtext.irreps[0].symbol
     nonsym = [salc.coeffs for salc in salcs if salc.irrep.symbol != totally_symmetric]
@@ -113,4 +113,5 @@ def break_symmetry(geom: Geometry, eps: float = SYMMETRY_EPS) -> Geometry:
     if rms == 0:
         return geom
     displacement = (direction * (eps / rms)).reshape(-1, 3)
-    return Geometry(species, coords + displacement, geom.lattice)
+    coords = np.asarray(geom.coords, dtype=float)
+    return Geometry(list(geom.species), coords + displacement, geom.lattice)
