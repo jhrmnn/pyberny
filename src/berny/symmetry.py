@@ -25,7 +25,7 @@ from molsym.salcs.projection_op import ProjectionOp
 from .geomlib import Geometry
 from .species_data import get_property
 
-__all__ = ['SYMMETRY_EPS', 'break_symmetry']
+__all__ = ['SYMMETRY_EPS', 'break_symmetry', 'detect_point_group']
 
 log = logging.getLogger(__name__)
 
