@@ -7,7 +7,7 @@ import pytest
 from berny import Berny, Geometry, break_symmetry
 from berny.benchmarks import iter_molecules
 from berny.solvers import XTBSolver
-from berny.symmetry import SYMMETRY_EPS, detect
+from berny.symmetry import SYMMETRY_EPS, detect_point_group
 
 xtb_required = pytest.mark.skipif(
     importlib.util.find_spec('tblite') is None, reason='tblite not installed'
@@ -37,19 +37,19 @@ def methylamine():
     return geom
 
 
-# -- detection (detect) ------------------------------------------------------
+# -- detection (detect_point_group) ------------------------------------------
 
 
 def test_detect_water_is_c2v():
-    assert detect(water())[0] == 'C2v'
+    assert detect_point_group(water())[0] == 'C2v'
 
 
 def test_detect_methylamine_start_is_cs():
-    assert detect(methylamine())[0] == 'Cs'
+    assert detect_point_group(methylamine())[0] == 'Cs'
 
 
 def test_detect_asymmetric_is_c1():
-    assert detect(c1_geom())[0] == 'C1'
+    assert detect_point_group(c1_geom())[0] == 'C1'
 
 
 def test_detect_periodic_short_circuits_to_c1():
@@ -57,7 +57,7 @@ def test_detect_periodic_short_circuits_to_c1():
     # report C1 without ever invoking the detector.
     geom = water()
     geom.lattice = np.eye(3) * 10.0
-    assert detect(geom)[0] == 'C1'
+    assert detect_point_group(geom)[0] == 'C1'
 
 
 # -- break_symmetry (targeted, deterministic) --------------------------------
@@ -74,7 +74,7 @@ def test_break_symmetry_changes_geometry_and_lowers_symmetry():
     geom = methylamine()
     broken = break_symmetry(geom, eps=0.05)
     assert not np.allclose(broken.coords, geom.coords)
-    assert detect(broken)[0] == 'C1'
+    assert detect_point_group(broken)[0] == 'C1'
 
 
 def test_break_symmetry_is_deterministic():

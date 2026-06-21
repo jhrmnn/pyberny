@@ -19,7 +19,7 @@ from numpy.typing import NDArray
 from . import Math
 from .coords import InternalCoords
 from .geomlib import Geometry
-from .symmetry import SYMMETRY_EPS, break_symmetry, detect
+from .symmetry import SYMMETRY_EPS, break_symmetry, detect_point_group
 
 __all__ = ['Berny', 'BernyParams']
 
@@ -184,7 +184,7 @@ class Berny(Generator):  # type: ignore[type-arg]
             )
         # Detect once for every mode; break reuses the symtext rather than
         # rebuilding it.
-        group, symtext = detect(geom)
+        group, symtext = detect_point_group(geom)
         if group == 'C1':
             return geom
         if symmetry == 'break':

@@ -48,7 +48,7 @@ def _symtext(geom: Geometry) -> Any:
     return molsym.Symtext.from_molecule(mol)
 
 
-def detect(geom: Geometry) -> tuple[str, Any]:
+def detect_point_group(geom: Geometry) -> tuple[str, Any]:
     """Return ``(point_group_symbol, symtext)`` for ``geom``.
 
     ``symtext`` is the reusable MolSym object behind the detection -- a caller
