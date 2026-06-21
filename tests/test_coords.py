@@ -91,7 +91,7 @@ def test_linear_bends_replace_singular_angle_co2():
 
 
 def test_linear_bends_acetylene():
-    # H-C#C-H: two linear triples (H-C-C and C-C-H), four dummies, eight angles.
+    # H-C#C-H: two linear triples (H-C-C and C-C-H), four dummies, eight angles.  # noqa: ERA001
     geom = Geometry(
         ['H', 'C', 'C', 'H'],
         [[0, 0, -1.7], [0, 0, -0.6], [0, 0, 0.6], [0, 0, 1.7]],

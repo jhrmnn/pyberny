@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_python_intersphinx_mapping_has_local_fallback_inventory():
     conf = (ROOT / 'doc' / 'conf.py').read_text()
     assert 'https://docs.python.org/3/objects.inv' in conf
-    assert 'os.path.join(_HERE, \'python-objects.inv\')' in conf
+    assert "str(_HERE / 'python-objects.inv')" in conf
     assert 'python-objects.inv' in conf
 
 

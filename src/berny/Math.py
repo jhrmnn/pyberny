@@ -146,4 +146,4 @@ def findroot(f: Callable[[float], float], lim: float) -> float:
         if err_new >= err:
             return x
         err = err_new
-    raise FindrootError()
+    raise FindrootError

@@ -5,11 +5,10 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 from collections.abc import Generator, Iterable
 from dataclasses import dataclass, fields
 from pathlib import Path
-from typing import Any, NamedTuple
+from typing import TYPE_CHECKING, Any, NamedTuple
 
 import numpy as np
 from numpy import dot, eye
@@ -18,8 +17,12 @@ from numpy.typing import NDArray
 
 from . import Math
 from .coords import InternalCoords
-from .geomlib import Geometry
 from .symmetry import SYMMETRY_EPS, break_symmetry, detect_point_group
+
+if TYPE_CHECKING:
+    import os
+
+    from .geomlib import Geometry
 
 __all__ = ['Berny', 'BernyParams']
 
@@ -390,7 +393,7 @@ class Berny(Generator):  # type: ignore[type-arg]
         assert self._trace_path is not None
         tmp = self._trace_path.with_suffix(self._trace_path.suffix + '.tmp')
         tmp.write_text(json.dumps(self._trace, indent=2) + '\n', encoding='utf-8')
-        os.replace(tmp, self._trace_path)
+        tmp.replace(self._trace_path)
 
     def throw(self, *args: Any, **kwargs: Any) -> Any:
         return Generator.throw(self, *args, **kwargs)

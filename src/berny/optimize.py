@@ -3,12 +3,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from __future__ import annotations
 
-from collections.abc import Generator
 from contextlib import ExitStack
+from typing import TYPE_CHECKING
 
-from .berny import Berny
-from .geomlib import Geometry
-from .solvers import SolverInput, SolverOutput
+if TYPE_CHECKING:
+    from collections.abc import Generator
+
+    from .berny import Berny
+    from .geomlib import Geometry
+    from .solvers import SolverInput, SolverOutput
 
 
 def optimize(
@@ -40,7 +43,11 @@ def optimize(
             optimizer.send((energy, gradients))
     """
     with ExitStack() as stack:
-        traj_fp = stack.enter_context(open(trajectory, 'w')) if trajectory else None
+        traj_fp = (
+            stack.enter_context(open(trajectory, 'w', encoding='utf-8'))
+            if trajectory
+            else None
+        )
         next(solver)
         for geom in optimizer:
             energy, gradients = solver.send((list(geom), geom.lattice))

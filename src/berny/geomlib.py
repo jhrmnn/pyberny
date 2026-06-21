@@ -3,11 +3,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from __future__ import annotations
 
-import os
-from collections.abc import Iterable, Iterator
 from io import StringIO
 from itertools import chain, groupby, product, repeat
-from typing import IO, Any
+from pathlib import Path
+from typing import IO, TYPE_CHECKING, Any
 
 import numpy as np
 from numpy import pi
@@ -15,6 +14,9 @@ from numpy.linalg import inv, norm
 from numpy.typing import ArrayLike, NDArray
 
 from .species_data import get_property
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Iterator
 
 __all__ = ['Geometry', 'loads', 'readfile']
 
@@ -102,7 +104,7 @@ class Geometry:
         :param file f: file object
         :param str fmt: geometry format, one of ``""``, ``"xyz"``, ``"aims"``.
         """
-        if fmt == '':
+        if not fmt:
             f.write(repr(self))
         elif fmt == 'xyz':
             f.write(f'{len(self)}\n')
@@ -136,14 +138,14 @@ class Geometry:
         Args:
             filename: path that will be overwritten.
         """
-        ext = os.path.splitext(filename)[1]
+        ext = Path(filename).suffix
         if ext == '.xyz':
             fmt = 'xyz'
-        elif ext == '.aims' or os.path.basename(filename) == 'geometry.in':
+        elif ext == '.aims' or Path(filename).name == 'geometry.in':
             fmt = 'aims'
         else:
             raise ValueError('Unknown file extension')
-        with open(filename, 'w') as f:
+        with open(filename, 'w', encoding='utf-8') as f:
             self.dump(f, fmt)
 
     def super_circum(self, radius: float) -> IntArray | None:
@@ -302,7 +304,7 @@ def load(fp: IO[str], fmt: str) -> Geometry:
         lattice: list[list[float]] = []
         while True:
             line = fp.readline()
-            if line == '':
+            if not line:
                 break
             line = line.strip()
             if not line or line.startswith('#'):
@@ -340,12 +342,12 @@ def readfile(path: str, fmt: str | None = None) -> Geometry:
         fmt: format; if not given, derived from the file extension.
     """
     if not fmt:
-        ext = os.path.splitext(path)[1]
+        ext = Path(path).suffix
         if ext == '.xyz':
             fmt = 'xyz'
-        elif ext == '.aims' or os.path.basename(path) == 'geometry.in':
+        elif ext == '.aims' or Path(path).name == 'geometry.in':
             fmt = 'aims'
         else:
             raise ValueError(f'Cannot infer format from path {path!r}')
-    with open(path) as f:
+    with open(path, encoding='utf-8') as f:
         return load(f, fmt)

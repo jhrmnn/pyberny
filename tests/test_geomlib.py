@@ -133,7 +133,7 @@ def test_load_from_file_object(tmp_path):
     g = Geometry(['H', 'H'], [[0.0, 0.0, 0.0], [0.74, 0.0, 0.0]])
     path = tmp_path / 'mol.xyz'
     path.write_text(format(g, 'xyz'))
-    with open(path) as f:
+    with open(path, encoding='utf-8') as f:
         loaded = load(f, 'xyz')
     assert loaded.species == g.species
     assert np.allclose(loaded.coords, g.coords)

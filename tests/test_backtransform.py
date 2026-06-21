@@ -130,7 +130,7 @@ def _rng_displacement(geom, magnitude, seed):
 # Core parametrized round-trip tests
 # ---------------------------------------------------------------------------
 
-# Cases: (id, factory, dx_factory, tol_q, max_iters)
+# Cases: (id, factory, dx_factory, tol_q, max_iters)  # noqa: ERA001
 _CASES = [
     ('zero', _water, lambda g: np.zeros_like(g.coords), 1e-12, 1),
     ('water-small', _water, lambda g: _rng_displacement(g, 1e-3, 1), 1e-8, 5),

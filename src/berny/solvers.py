@@ -38,7 +38,7 @@ _TBLITE_METHODS = {
 def _tblite_method(method: str) -> str:
     """Normalise an ``XTBSolver`` method name to a ``tblite`` method string."""
     key = str(method).lower().replace('-', '').replace('_', '').replace(' ', '')
-    if key in ('1', '2'):
+    if key in {'1', '2'}:
         key = f'gfn{key}'
     try:
         return _TBLITE_METHODS[key]

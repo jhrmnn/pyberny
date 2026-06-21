@@ -50,7 +50,10 @@ benchmark = ["pyscf", "tblite"]
 plot = ["matplotlib"]
 
 [tool.poetry.group.dev.dependencies]
-ruff = ">=0.6"
+# Pinned because the ruff lint config enables preview rules, whose set changes
+# between releases; an unpinned ruff would flag/clear rules inconsistently
+# across machines. Keep in sync with .github/workflows/lint.yaml.
+ruff = "==0.15.18"
 black = ">=22"
 mypy = ">=1"
 
@@ -102,29 +105,68 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 80
 target-version = "py310"
+# Opt into preview rules; the unstable rules that don't suit numerical code are
+# turned off individually in `ignore` below.
+preview = true
 
 [tool.ruff.lint]
+# Broad, curated allowlist: we enable nearly every rule family that makes sense
+# for a typed, numpy-based numerical library and disable individual rules that
+# clash with numerical idioms or the black formatter (see `ignore`). A few
+# families are deliberately *not* selected:
+#   * D / DOC  - would require docstringing the whole codebase, a separate effort
+#   * Q, COM   - quote/comma style is owned by black (skip-string-normalization)
+#   * EM, TRY003 (below) - force a verbose exception-message style we don't want
+#   * FBT      - flagging bool arguments would mean API (keyword-only) churn
+#   * S        - bandit adds little to a pure numerical optimizer and flags every
+#                `assert`, which we use liberally in the algorithm and tests
+#   * ARG      - the polymorphic coordinate classes and solver callbacks share
+#                signatures, so "unused" args are interface/API symmetry
+#   * CPY      - copyright headers are present but not in CPY's expected format
 select = [
-    "E",
-    "F",
-    "W",
-    "C90",
-    "N",
-    "B",
-    "C4",
-    "I",
-    "UP",
-    "SIM",
-    "PIE",
-    "RET",
-    "PT",
-    "RUF",
-    "NPY",
-    "ANN",
+    "F",     # pyflakes
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "C90",   # mccabe complexity
+    "N",     # pep8-naming
+    "I",     # isort
+    "UP",    # pyupgrade
+    "YTT",   # flake8-2020
+    "ANN",   # flake8-annotations
+    "A",     # flake8-builtins
+    "BLE",   # flake8-blind-except
+    "B",     # flake8-bugbear
+    "C4",    # flake8-comprehensions
+    "FA",    # flake8-future-annotations
+    "ICN",   # flake8-import-conventions
+    "LOG",   # flake8-logging
+    "G",     # flake8-logging-format
+    "INP",   # flake8-no-pep420
+    "PIE",   # flake8-pie
+    "PYI",   # flake8-pyi
+    "PT",    # flake8-pytest-style
+    "RSE",   # flake8-raise
+    "RET",   # flake8-return
+    "SLOT",  # flake8-slots
+    "SIM",   # flake8-simplify
+    "TID",   # flake8-tidy-imports
+    "TC",    # flake8-type-checking
+    "PTH",   # flake8-use-pathlib
+    "T10",   # flake8-debugger
+    "ISC",   # flake8-implicit-str-concat
+    "FLY",   # flynt
+    "ERA",   # eradicate (commented-out code)
+    "PGH",   # pygrep-hooks
+    "PL",    # pylint
+    "TRY",   # tryceratops
+    "FURB",  # refurb
+    "PERF",  # perflint
+    "RUF",   # ruff-specific
+    "NPY",   # numpy-specific
 ]
 ignore = [
     "E501",  # line length handled by black
-    "E741",  # ambiguous variable name
+    "E741",  # ambiguous variable name (l, etc. are standard math notation)
     "E203",  # whitespace before punctuation (black-compatible)
     "N802",  # function name should be lowercase
     "N803",  # argument name should be lowercase
@@ -137,6 +179,29 @@ ignore = [
     "SIM108",  # use ternary; hurts readability in numeric branches
     "PT018",  # composite assertions are often clearer as one line
     "ANN401",  # Any in annotations (kept consistent with mypy not disallowing Any)
+    "ISC001",  # single-line implicit string concat (conflicts with black)
+    "PLR2004",  # magic-value-comparison: numeric thresholds/literals are pervasive
+    "PLR6104",  # non-augmented-assignment: `x = x + y` must stay out-of-place for
+                # numpy arrays (in-place `+=` mutates shared/aliased buffers)
+    "PLR0911",  # too-many-return-statements
+    "PLR0912",  # too-many-branches
+    "PLR0913",  # too-many-arguments
+    "PLR0914",  # too-many-locals
+    "PLR0915",  # too-many-statements
+    "PLR0916",  # too-many-boolean-expressions
+    "PLR0917",  # too-many-positional-arguments
+    "PLR1702",  # too-many-nested-blocks
+                # ^ structural size limits; numerical kernels are naturally large
+                #   and overall complexity is already bounded by C90 (mccabe)
+    "PLR6301",  # no-self-use: methods are kept on classes for interface symmetry
+    "PLC0415",  # import-outside-top-level: optional deps (tblite, matplotlib,
+                # pyscf) are imported lazily on purpose
+    "TRY003",  # raise-vanilla-args: long inline exception messages are fine here
+    "PTH123",  # builtin-open: plain open() is clear and idiomatic
+    "RUF067",  # non-empty-init-module: the benchmarks package legitimately holds
+               # data-loading logic in its __init__, not just re-exports
+    "RUF069",  # float-equality-comparison: exact comparisons against 0/sentinels
+               # are intentional in the numerical kernels
 ]
 
 [tool.ruff.lint.mccabe]
@@ -161,9 +226,21 @@ typing = ["typing", "typing_extensions"]
 # ANN (flake8-annotations) is only enforced on the importable library;
 # tests, scripts, and the docs config aren't subject to mypy --strict and
 # are kept annotation-light.
-"tests/**" = ["ANN"]
-"scripts/**" = ["ANN"]
-"doc/**" = ["ANN"]
+"tests/**" = [
+    "ANN",
+    "PLC2701",  # tests import private (_-prefixed) helpers to exercise them
+    "PLW2901",  # reusing a loop variable is harmless in test bodies
+]
+"scripts/**" = [
+    "ANN",
+    "BLE001",  # batch runners catch Exception so one bad case can't abort the run
+    "PLW0603",  # module-level globals are fine in small one-off CLI scripts
+]
+"doc/**" = [
+    "ANN",
+    "INP001",  # the Sphinx config dir is intentionally not a package
+    "A001",  # `copyright` is a Sphinx-mandated config variable name
+]
 
 [tool.coverage.run]
 branch = true

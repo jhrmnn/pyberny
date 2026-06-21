@@ -26,9 +26,9 @@ import json
 import sys
 from pathlib import Path
 
-import matplotlib
+import matplotlib as mpl
 
-matplotlib.use('Agg')
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -63,8 +63,8 @@ def load_trajectories(results_dir, benchmark, solver):
 
 def plot(benchmark, solver, trajectories, out):
     fig, ax = plt.subplots(figsize=(9, 6))
-    for name, energies in sorted(trajectories.items()):
-        energies = np.array(energies, dtype=float)
+    for name, raw_energies in sorted(trajectories.items()):
+        energies = np.array(raw_energies, dtype=float)
         delta = (energies - energies.min()) * HARTREE_TO_KCAL
         steps = np.arange(len(energies))
         mask = delta > 0

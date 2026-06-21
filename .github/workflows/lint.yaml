@@ -12,7 +12,11 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install dependencies
-        run: pip install ruff
+        # Pinned: the lint config enables ruff preview rules, which change
+        # between releases, so an unpinned install would break CI on unrelated
+        # PRs whenever a new ruff ships. Bump deliberately (keep in sync with
+        # the dev dependency in pyproject.toml).
+        run: pip install ruff==0.15.18
       - run: ruff check .
   black:
     runs-on: ubuntu-latest

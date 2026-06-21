@@ -5,9 +5,8 @@ from __future__ import annotations
 
 import math
 from collections import OrderedDict
-from collections.abc import Callable, Iterable, Iterator
 from itertools import combinations, product
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 from numpy import dot, pi
@@ -15,8 +14,12 @@ from numpy.linalg import norm
 from numpy.typing import NDArray
 
 from . import Math
-from .geomlib import Geometry
 from .species_data import get_property
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable, Iterator
+
+    from .geomlib import Geometry
 
 __all__ = ()
 
@@ -118,7 +121,7 @@ class Angle(InternalCoord):
 
     def __init__(self, i: int, j: int, k: int, **kwargs: Any) -> None:
         if i > k:
-            i, j, k = k, j, i
+            i, k = k, i
         self.i = i
         self.j = j
         self.k = k
@@ -856,8 +859,6 @@ class InternalCoords:
     ) -> tuple[FloatArray, Geometry]:
         geom = geom.copy()
         thre = 1e-6
-        # target = CartIter(q=q+dq)
-        # prev = CartIter(geom.coords, q, dq)
         keep_first: tuple[Geometry, FloatArray, float | None, float | None]
         keep_first = (geom.copy(), q, None, None)
         msg = 'Transformation did not converge in {} iterations'
