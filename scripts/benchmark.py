@@ -105,8 +105,13 @@ def run_pyscf(name, ref, data_dir, trace=None):
             state['energies'].append(float(energy))
 
     # pyscf's berny_solver.kernel forwards unknown kwargs to the underlying
-    # Berny constructor, so ``trace=`` is propagated straight through.
-    kwargs = {'trace': str(trace)} if trace is not None else {}
+    # Berny constructor, so ``trace=`` and ``symmetry=`` are propagated
+    # straight through. ``symmetry='break'`` kicks an exactly symmetric start
+    # off its symmetry elements so the optimizer is not seeded on a symmetric
+    # saddle (issue #148).
+    kwargs = {'symmetry': 'break'}
+    if trace is not None:
+        kwargs['trace'] = str(trace)
     converged, _ = berny_solver.kernel(mf, callback=callback, **kwargs)
     return converged, state['n'], state['energies']
 
@@ -127,7 +132,10 @@ def run_xtb(name, ref, data_dir, trace=None):
     from berny.solvers import XTBSolver
 
     geom = geomlib.readfile(str(data_dir / ref.get('file', f'{name}.xyz')))
-    berny = Berny(geom, trace=trace)
+    # symmetry='break' kicks an exactly symmetric start off its symmetry
+    # elements so the optimizer is not seeded on a symmetric saddle (issue
+    # #148).
+    berny = Berny(geom, trace=trace, symmetry='break')
     solver = XTBSolver(charge=ref['charge'], mult=ref['mult'])
     energies = _optimize_recording_energies(berny, solver)
     return berny.converged, berny._n, energies
