@@ -3,7 +3,7 @@ from .berny import Berny, BernyParams
 from .coords import angstrom
 from .geomlib import Geometry
 from .optimize import optimize
-from .symmetry import break_symmetry, detect_point_group
+from .symmetry import break_symmetry
 
 __all__ = [
     'Berny',
@@ -11,7 +11,6 @@ __all__ = [
     'Geometry',
     'angstrom',
     'break_symmetry',
-    'detect_point_group',
     'geomlib',
     'optimize',
 ]

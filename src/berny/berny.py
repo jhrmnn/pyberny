@@ -197,13 +197,14 @@ class Berny(Generator):  # type: ignore[type-arg]
         msg = (
             f'start geometry has {group} symmetry, which a gradient optimizer '
             'cannot break -- it may converge to a symmetric saddle rather than '
-            "a minimum. Pass symmetry='break' to perturb the start, or "
-            "symmetry='nowarn' to silence this warning (issue #148)."
+            "a minimum. Pass symmetry='break' to perturb the start"
         )
         if symmetry == 'nowarn':
-            self._log.info(msg)
+            self._log.info(f'{msg} (issue #148).')
         else:
-            self._log.warning(msg)
+            self._log.warning(
+                f"{msg}, or symmetry='nowarn' to silence this warning " '(issue #148).'
+            )
         return geom
 
     def _build_coord_state(

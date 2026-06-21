@@ -25,7 +25,7 @@ from molsym.salcs.projection_op import ProjectionOp
 from .geomlib import Geometry
 from .species_data import get_property
 
-__all__ = ['SYMMETRY_EPS', 'break_symmetry', 'detect_point_group']
+__all__ = ['SYMMETRY_EPS', 'break_symmetry']
 
 log = logging.getLogger(__name__)
 
@@ -66,18 +66,6 @@ def _detect(geom: Geometry) -> tuple[str, Any]:
         log.debug('symmetry detection failed (%s); assuming C1', e)
         return 'C1', None
     return str(symtext.pg), symtext
-
-
-def detect_point_group(geom: Geometry) -> str:
-    """Return the Schoenflies point-group symbol of a molecular ``geom``.
-
-    Periodic geometries (those carrying lattice vectors) always return ``'C1'``
-    -- point groups apply to finite molecules. Detection uses MolSym; should it
-    fail for any reason ``'C1'`` is returned rather than propagating the error.
-
-    :param geom: geometry to classify
-    """
-    return _detect(geom)[0]
 
 
 def break_symmetry(
