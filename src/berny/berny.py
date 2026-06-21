@@ -19,10 +19,14 @@ from numpy.typing import NDArray
 from . import Math
 from .coords import InternalCoords
 from .geomlib import Geometry
+from .symmetry import SYMMETRY_EPS, break_symmetry, detect_point_group
 
 __all__ = ['Berny', 'BernyParams']
 
 log = logging.getLogger(__name__)
+
+#: Accepted values of the :class:`Berny` ``symmetry`` argument.
+_SYMMETRY_MODES = (None, 'nowarn', 'break')
 
 FloatArray = NDArray[np.floating[Any]]
 
@@ -100,6 +104,18 @@ class Berny(Generator):  # type: ignore[type-arg]
         restart: state captured from a previous run with ``debug=True``
         maxsteps: abort after maximum number of steps
         logger: alternative logger to use
+        symmetry: how to handle a symmetric start geometry, whose exact symmetry
+            a gradient optimizer cannot break (it may converge to a symmetric
+            saddle, see issue #148). ``None`` (default) logs a warning when the
+            detected point group is not ``C1``;
+            ``'nowarn'`` runs the same check but only logs an info message;
+            ``'break'`` displaces the start off its symmetry elements with a
+            small deterministic, symmetry-targeted kick
+            (:func:`~berny.symmetry.break_symmetry`) so the optimizer is not
+            seeded on a symmetry element. Both detection and breaking use the
+            ``molsym`` package and never evaluate the energy.
+        symmetry_eps: RMS amplitude (Å) of the ``symmetry='break'`` displacement;
+            :data:`None` uses :data:`~berny.symmetry.SYMMETRY_EPS`
         trace: optional path to a JSON file. When given, a structured
             dict-like record is captured for every optimization step
             (mirroring the textual log output) and the full list of
@@ -123,6 +139,8 @@ class Berny(Generator):  # type: ignore[type-arg]
         maxsteps: int = 100,
         logger: logging.Logger | None = None,
         trace: str | os.PathLike[str] | None = None,
+        symmetry: str | None = None,
+        symmetry_eps: float | None = None,
         **params: Any,
     ) -> None:
         self._debug = debug
@@ -136,6 +154,7 @@ class Berny(Generator):  # type: ignore[type-arg]
             self._state = BernyState(**restart)
             return
         bparams = BernyParams(**params)
+        geom = self._apply_symmetry(geom, symmetry, symmetry_eps)
         coords, H, weights, future = self._build_coord_state(geom, bparams)
         self._state = BernyState(
             geom=geom,
@@ -146,6 +165,47 @@ class Berny(Generator):  # type: ignore[type-arg]
             weights=weights,
             future=future,
         )
+
+    def _apply_symmetry(
+        self,
+        geom: Geometry,
+        symmetry: str | None,
+        eps: float | None,
+    ) -> Geometry:
+        """Detect the start geometry's point group and act per ``symmetry``.
+
+        Returns the geometry to optimize: unchanged for ``None``/``'nowarn'``
+        (which only warn/log on a symmetric start), or a perturbed copy for
+        ``'break'``. See the ``symmetry`` argument of :class:`Berny`.
+        """
+        if symmetry not in _SYMMETRY_MODES:
+            raise ValueError(
+                f'symmetry must be one of {_SYMMETRY_MODES}, got {symmetry!r}'
+            )
+        # Detect once for every mode; break reuses the symtext rather than
+        # rebuilding it.
+        group, symtext = detect_point_group(geom)
+        if group == 'C1':
+            return geom
+        if symmetry == 'break':
+            eps_val = SYMMETRY_EPS if eps is None else eps
+            self._log.info(
+                f'Broke {group} start-geometry symmetry with a targeted '
+                f'RMS {eps_val} Å displacement'
+            )
+            return break_symmetry(geom, eps_val, symtext=symtext)
+        msg = (
+            f'start geometry has {group} symmetry, which a gradient optimizer '
+            'cannot break -- it may converge to a symmetric saddle rather than '
+            "a minimum. Pass symmetry='break' to perturb the start"
+        )
+        if symmetry == 'nowarn':
+            self._log.info(f'{msg} (issue #148).')
+        else:
+            self._log.warning(
+                f"{msg}, or symmetry='nowarn' to silence this warning " '(issue #148).'
+            )
+        return geom
 
     def _build_coord_state(
         self, geom: Geometry, params: BernyParams

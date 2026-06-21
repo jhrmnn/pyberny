@@ -87,7 +87,9 @@ smv_tag_whitelist = r'^\d+\.\d+\.\d+$'
 smv_remote_whitelist = r'^origin$'
 
 autodoc_default_options = {'special-members': '__call__'}
-autodoc_mock_imports = ['numpy']
+# molsym is imported at module top by berny.symmetry and runs numpy at import
+# time; mock it (like numpy) so autodoc can import berny without executing it.
+autodoc_mock_imports = ['numpy', 'molsym']
 todo_include_todos = True
 pygments_style = 'sphinx'
 napoleon_numpy_docstring = False

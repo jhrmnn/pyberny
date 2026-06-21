@@ -37,6 +37,11 @@ toml = { version = ">=0.10", optional = true }
 pyscf = { version = ">=2.5", optional = true }
 matplotlib = { version = ">=3.5", optional = true }
 tblite = { version = ">=0.3", optional = true }
+# Point-group detection + symmetry-adapted displacement coordinates for the
+# `symmetry` argument of Berny. Tracked on a fork branch with qcelemental made
+# optional so the dependency stays numpy-only. NB: this git URL blocks a clean
+# PyPI upload of pyberny; swap it for a version spec once MolSym is on PyPI.
+molsym = { git = "https://github.com/jhrmnn/molsym.git", branch = "claude/qcelemental-optional-iosjwj" }
 
 [tool.poetry.extras]
 test = ["pytest", "coverage"]
@@ -82,6 +87,11 @@ enable_error_code = [
 # runtime, so let mypy treat the module as untyped.
 [[tool.mypy.overrides]]
 module = "tblite.*"
+ignore_missing_imports = true
+
+# molsym ships no type stubs, so let mypy treat the module as untyped.
+[[tool.mypy.overrides]]
+module = "molsym.*"
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
