@@ -50,7 +50,10 @@ benchmark = ["pyscf", "tblite"]
 plot = ["matplotlib"]
 
 [tool.poetry.group.dev.dependencies]
-ruff = ">=0.6"
+# Pinned because the ruff lint config enables preview rules, whose set changes
+# between releases; an unpinned ruff would flag/clear rules inconsistently
+# across machines. Keep in sync with .github/workflows/lint.yaml.
+ruff = "==0.15.18"
 black = ">=22"
 mypy = ">=1"
 

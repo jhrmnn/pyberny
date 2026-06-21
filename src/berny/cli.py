@@ -26,7 +26,10 @@ def berny_unpickled(berny: Berny | None = None) -> Iterator[Berny]:
     if not berny:
         with open(picklefile, 'rb') as f:
             berny = pickle.load(f)
-    yield berny
+    # If the wrapped block raises, deliberately skip re-pickling: the optimizer
+    # state may be half-updated and saving it would corrupt a restart. RUF075
+    # wants the yield guarded; not saving on error is the intended behaviour.
+    yield berny  # noqa: RUF075
     with open(picklefile, 'wb') as f:
         pickle.dump(berny, f)
 
