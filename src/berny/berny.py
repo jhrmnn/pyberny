@@ -19,7 +19,7 @@ from numpy.typing import NDArray
 from . import Math
 from .coords import InternalCoords
 from .geomlib import Geometry
-from .symmetry import SYMMETRY_EPS, break_symmetry, detect_point_group
+from .symmetry import SYMMETRY_EPS, _detect, break_symmetry
 
 __all__ = ['Berny', 'BernyParams']
 
@@ -182,20 +182,18 @@ class Berny(Generator):  # type: ignore[type-arg]
             raise ValueError(
                 f'symmetry must be one of {_SYMMETRY_MODES}, got {symmetry!r}'
             )
-        if symmetry == 'break':
-            # break_symmetry does its own detection and returns the input
-            # unchanged for a geometry with no non-symmetric modes.
-            eps_val = SYMMETRY_EPS if eps is None else eps
-            broken = break_symmetry(geom, eps_val)
-            if broken is not geom:
-                self._log.info(
-                    'Broke start-geometry symmetry with a targeted '
-                    f'RMS {eps_val} Å displacement'
-                )
-            return broken
-        group = detect_point_group(geom)
+        # Detect once for every mode; break reuses the symtext rather than
+        # rebuilding it.
+        group, symtext = _detect(geom)
         if group == 'C1':
             return geom
+        if symmetry == 'break':
+            eps_val = SYMMETRY_EPS if eps is None else eps
+            self._log.info(
+                f'Broke {group} start-geometry symmetry with a targeted '
+                f'RMS {eps_val} Å displacement'
+            )
+            return break_symmetry(geom, eps_val, symtext=symtext)
         msg = (
             f'start geometry has {group} symmetry, which a gradient optimizer '
             'cannot break -- it may converge to a symmetric saddle rather than '

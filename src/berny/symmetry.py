@@ -48,26 +48,41 @@ def _symtext(geom: Geometry) -> Any:
     return molsym.Symtext.from_molecule(mol)
 
 
+def _detect(geom: Geometry) -> tuple[str, Any]:
+    """Return ``(point_group_symbol, symtext)`` for ``geom``.
+
+    ``symtext`` is the reusable MolSym object behind the detection -- a caller
+    that goes on to break the symmetry can pass it back to :func:`break_symmetry`
+    instead of rebuilding it. It is ``None`` when detection does not apply
+    (periodic geometry) or fails; in both cases the symbol is ``'C1'``. Detection
+    runs by default on every optimization, so a failure degrades to ``'C1'``
+    rather than breaking the run.
+    """
+    if geom.lattice is not None:
+        return 'C1', None
+    try:
+        symtext = _symtext(geom)
+    except Exception as e:  # pragma: no cover - defensive, never break a run
+        log.debug('symmetry detection failed (%s); assuming C1', e)
+        return 'C1', None
+    return str(symtext.pg), symtext
+
+
 def detect_point_group(geom: Geometry) -> str:
     """Return the Schoenflies point-group symbol of a molecular ``geom``.
 
     Periodic geometries (those carrying lattice vectors) always return ``'C1'``
-    -- point groups apply to finite molecules. Detection runs by default on every
-    optimization, so should it fail for any reason ``'C1'`` is returned rather
-    than propagating the error and breaking the run.
+    -- point groups apply to finite molecules. Detection uses MolSym; should it
+    fail for any reason ``'C1'`` is returned rather than propagating the error.
 
     :param geom: geometry to classify
     """
-    if geom.lattice is not None:
-        return 'C1'
-    try:
-        return str(_symtext(geom).pg)
-    except Exception as e:  # pragma: no cover - defensive, never break a run
-        log.debug('symmetry detection failed (%s); assuming C1', e)
-        return 'C1'
+    return _detect(geom)[0]
 
 
-def break_symmetry(geom: Geometry, eps: float = SYMMETRY_EPS) -> Geometry:
+def break_symmetry(
+    geom: Geometry, eps: float = SYMMETRY_EPS, *, symtext: Any = None
+) -> Geometry:
     """Return a copy of ``geom`` displaced off its symmetry elements.
 
     The displacement is **deterministic** and **targeted**: it is the
@@ -83,8 +98,10 @@ def break_symmetry(geom: Geometry, eps: float = SYMMETRY_EPS) -> Geometry:
 
     :param geom: geometry to perturb
     :param float eps: RMS displacement per Cartesian component (Å)
+    :param symtext: precomputed MolSym ``Symtext`` for ``geom``; built when omitted
     """
-    symtext = _symtext(geom)
+    if symtext is None:
+        symtext = _symtext(geom)
     salcs = ProjectionOp(symtext, CartesianCoordinates(symtext), project_Eckart=True)
     totally_symmetric = symtext.irreps[0].symbol
     nonsym = [salc.coeffs for salc in salcs if salc.irrep.symbol != totally_symmetric]
