@@ -70,7 +70,7 @@ class DihedralFromLinear(ModelPotential):
         coords = np.asarray(coords, dtype=float)
         e = 0.0
         for i, j, r0 in [(0, 1, self.r_ab), (1, 2, self.r_bc), (2, 3, self.r_cd)]:
-            e += 0.5 * self.k_bond * (norm(coords[j] - coords[i]) - r0) ** 2
+            e += 0.5 * self.k_bond * float(norm(coords[j] - coords[i]) - r0) ** 2
         for i, j, k, cos0 in self._bends:
             cos = _cos_with_grads(coords[i], coords[j], coords[k])[0]
             e += 0.5 * self.k_bend * (cos - cos0) ** 2
@@ -100,10 +100,10 @@ class DihedralFromLinear(ModelPotential):
         """Assert ``coords`` match the known minimum (bond lengths and angles)."""
         coords = np.asarray(coords, dtype=float)
         a, b, c, d = coords
-        residuals = {
-            'r_ab': norm(b - a) - self.r_ab,
-            'r_bc': norm(c - b) - self.r_bc,
-            'r_cd': norm(d - c) - self.r_cd,
+        residuals: dict[str, float] = {
+            'r_ab': float(norm(b - a)) - self.r_ab,
+            'r_bc': float(norm(c - b)) - self.r_bc,
+            'r_cd': float(norm(d - c)) - self.r_cd,
             'angle_abc_deg': math.degrees(_angle(a, b, c) - self.theta_abc),
             'angle_bcd_deg': math.degrees(_angle(b, c, d) - self.theta_bcd),
         }

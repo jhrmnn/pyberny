@@ -100,10 +100,10 @@ class LinearBendCrossover(ModelPotential):
         """Assert ``coords`` match the known minimum (bond lengths and angles)."""
         coords = np.asarray(coords, dtype=float)
         a, b, c, d = coords
-        residuals = {
-            'r_ab': norm(b - a) - self.r_ab,
-            'r_bc': norm(c - b) - self.r_bc,
-            'r_cd': norm(d - c) - self.r_cd,
+        residuals: dict[str, float] = {
+            'r_ab': float(norm(b - a)) - self.r_ab,
+            'r_bc': float(norm(c - b)) - self.r_bc,
+            'r_cd': float(norm(d - c)) - self.r_cd,
             'angle_abc_deg': math.degrees(_angle(a, b, c)) - 180.0,
             'angle_bcd_deg': (
                 math.degrees(_angle(b, c, d)) - math.degrees(self.theta_bcd)
