@@ -12,9 +12,6 @@ from berny.symmetry import SYMMETRY_EPS
 xtb_required = pytest.mark.skipif(
     importlib.util.find_spec('tblite') is None, reason='tblite not installed'
 )
-molsym_required = pytest.mark.skipif(
-    importlib.util.find_spec('molsym') is None, reason='molsym not installed'
-)
 
 
 def water():
@@ -43,17 +40,14 @@ def methylamine():
 # -- detect_point_group ------------------------------------------------------
 
 
-@molsym_required
 def test_detect_water_is_c2v():
     assert detect_point_group(water()) == 'C2v'
 
 
-@molsym_required
 def test_detect_methylamine_start_is_cs():
     assert detect_point_group(methylamine()) == 'Cs'
 
 
-@molsym_required
 def test_detect_asymmetric_is_c1():
     assert detect_point_group(c1_geom()) == 'C1'
 
@@ -66,19 +60,9 @@ def test_detect_periodic_short_circuits_to_c1():
     assert detect_point_group(geom) == 'C1'
 
 
-def test_detect_without_molsym_degrades_to_c1(monkeypatch):
-    # Detection is optional: with molsym unavailable it must quietly report C1
-    # (no warning fires) rather than raise.
-    import sys
-
-    monkeypatch.setitem(sys.modules, 'molsym', None)
-    assert detect_point_group(water()) == 'C1'
-
-
 # -- break_symmetry (targeted, deterministic) --------------------------------
 
 
-@molsym_required
 def test_break_symmetry_does_not_mutate_input():
     geom = methylamine()
     before = geom.coords.copy()
@@ -86,7 +70,6 @@ def test_break_symmetry_does_not_mutate_input():
     assert np.array_equal(geom.coords, before)
 
 
-@molsym_required
 def test_break_symmetry_changes_geometry_and_lowers_symmetry():
     geom = methylamine()
     broken = break_symmetry(geom, eps=0.05)
@@ -94,7 +77,6 @@ def test_break_symmetry_changes_geometry_and_lowers_symmetry():
     assert detect_point_group(broken) == 'C1'
 
 
-@molsym_required
 def test_break_symmetry_is_deterministic():
     # No seed: repeated calls must be bit-for-bit identical.
     geom = methylamine()
@@ -103,7 +85,6 @@ def test_break_symmetry_is_deterministic():
     assert np.array_equal(a.coords, b.coords)
 
 
-@molsym_required
 def test_break_symmetry_realizes_requested_rms():
     geom = methylamine()
     eps = 0.05
@@ -111,23 +92,11 @@ def test_break_symmetry_realizes_requested_rms():
     assert np.sqrt(np.mean(disp**2)) == pytest.approx(eps)
 
 
-@molsym_required
 def test_break_symmetry_is_noop_for_asymmetric():
     # A C1 geometry has no non-symmetric modes, so breaking it returns the very
     # same object unchanged.
     geom = c1_geom()
     assert break_symmetry(geom) is geom
-
-
-def test_break_symmetry_without_molsym_raises(monkeypatch):
-    # When molsym is unavailable, symmetry='break' must fail with an actionable
-    # message rather than a bare ImportError deep in the stack.
-    if importlib.util.find_spec('molsym') is not None:
-        import sys
-
-        monkeypatch.setitem(sys.modules, 'molsym', None)
-    with pytest.raises(ImportError, match=r"pyberny\[symmetry\]"):
-        break_symmetry(water())
 
 
 # -- Berny symmetry policy ---------------------------------------------------
@@ -137,7 +106,6 @@ def _warning_records(caplog):
     return [r for r in caplog.records if r.levelno >= logging.WARNING]
 
 
-@molsym_required
 def test_default_logs_warning_on_symmetric_start(caplog):
     # The default notice is a logging warning (not a Python UserWarning), so it
     # never trips downstream test suites run with -W error.
@@ -146,7 +114,6 @@ def test_default_logs_warning_on_symmetric_start(caplog):
     assert any('C2v' in r.getMessage() for r in _warning_records(caplog))
 
 
-@molsym_required
 def test_nowarn_is_silent_but_still_checks(caplog):
     with caplog.at_level(logging.INFO, logger='berny.berny'):
         b = Berny(water(), symmetry='nowarn')
@@ -166,7 +133,6 @@ def test_invalid_symmetry_mode_rejected():
         Berny(water(), symmetry='bogus')
 
 
-@molsym_required
 def test_break_perturbs_the_optimized_geometry():
     geom = water()
     b = Berny(geom, symmetry='break')
@@ -174,7 +140,6 @@ def test_break_perturbs_the_optimized_geometry():
     assert np.array_equal(b._state.geom.coords, expected.coords)
 
 
-@molsym_required
 def test_break_is_noop_for_asymmetric_start():
     # symmetry='break' on a C1 start leaves the geometry untouched.
     geom = c1_geom()
@@ -186,7 +151,6 @@ def test_break_is_noop_for_asymmetric_start():
 
 
 @xtb_required
-@molsym_required
 def test_break_escapes_methylamine_saddle():
     # The planar (Cs) methylamine start is the umbrella-inversion saddle; the
     # default symmetry handling leaves it there, while symmetry='break' falls to

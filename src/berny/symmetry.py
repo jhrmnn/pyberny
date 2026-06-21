@@ -9,8 +9,7 @@ zero by symmetry, so the run can converge to a symmetric *saddle* rather than a
 minimum (issue #148). This module detects the point group and can apply a small,
 deterministic symmetry-breaking displacement confined to the
 non-totally-symmetric subspace, so the optimizer is no longer seeded exactly on a
-symmetry element. Both use the optional ``molsym`` package
-(``pip install 'pyberny[symmetry]'``).
+symmetry element. Both use the ``molsym`` package.
 """
 
 from __future__ import annotations
@@ -18,7 +17,10 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+import molsym
 import numpy as np
+from molsym.salcs.cartesian_coordinates import CartesianCoordinates
+from molsym.salcs.projection_op import ProjectionOp
 
 from .geomlib import Geometry
 from .species_data import get_property
@@ -36,13 +38,7 @@ SYMMETRY_EPS = 0.02
 
 
 def _symtext(geom: Geometry) -> Any:
-    """Build a MolSym ``Symtext`` (point group + symmetry operations) for ``geom``.
-
-    Imports ``molsym`` lazily and propagates :class:`ImportError` when it is
-    missing; the caller decides how to degrade.
-    """
-    import molsym
-
+    """Build a MolSym ``Symtext`` (point group + symmetry operations) for ``geom``."""
     species = list(geom.species)
     # NB: a copy, not np.asarray -- MolSym recenters/reorients the molecule in
     # place, which would otherwise mutate the caller's geometry.
@@ -56,22 +52,17 @@ def detect_point_group(geom: Geometry) -> str:
     """Return the Schoenflies point-group symbol of a molecular ``geom``.
 
     Periodic geometries (those carrying lattice vectors) always return ``'C1'``
-    -- point groups apply to finite molecules. Detection uses the optional
-    ``molsym`` package; if it is not installed (or detection fails for any
-    reason) ``'C1'`` is returned so an optimization never breaks for want of it.
+    -- point groups apply to finite molecules. Detection runs by default on every
+    optimization, so should it fail for any reason ``'C1'`` is returned rather
+    than propagating the error and breaking the run.
 
     :param geom: geometry to classify
     """
     if geom.lattice is not None:
         return 'C1'
     try:
-        import molsym  # noqa: F401
-    except ImportError:
-        log.info('molsym is not installed; skipping symmetry detection')
-        return 'C1'
-    try:
         return str(_symtext(geom).pg)
-    except Exception as e:  # pragma: no cover - defensive, detection is optional
+    except Exception as e:  # pragma: no cover - defensive, never break a run
         log.debug('symmetry detection failed (%s); assuming C1', e)
         return 'C1'
 
@@ -90,21 +81,10 @@ def break_symmetry(geom: Geometry, eps: float = SYMMETRY_EPS) -> Geometry:
     not modified; a geometry MolSym finds to have no non-symmetric modes (e.g.
     already ``C1``) is returned unchanged.
 
-    Requires the optional ``molsym`` package (``pip install 'pyberny[symmetry]'``).
-
     :param geom: geometry to perturb
     :param float eps: RMS displacement per Cartesian component (Å)
     """
-    try:
-        from molsym.salcs.cartesian_coordinates import CartesianCoordinates
-        from molsym.salcs.projection_op import ProjectionOp
-
-        symtext = _symtext(geom)
-    except ImportError as e:
-        raise ImportError(
-            "symmetry='break' requires the molsym package; install it with "
-            f"`pip install 'pyberny[symmetry]'` (underlying import error: {e})"
-        ) from e
+    symtext = _symtext(geom)
     salcs = ProjectionOp(symtext, CartesianCoordinates(symtext), project_Eckart=True)
     totally_symmetric = symtext.irreps[0].symbol
     nonsym = [salc.coeffs for salc in salcs if salc.irrep.symbol != totally_symmetric]

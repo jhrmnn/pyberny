@@ -113,9 +113,7 @@ class Berny(Generator):  # type: ignore[type-arg]
             small deterministic, symmetry-targeted kick
             (:func:`~berny.symmetry.break_symmetry`) so the optimizer is not
             seeded on a symmetry element. Both detection and breaking use the
-            optional ``molsym`` package (``pip install 'pyberny[symmetry]'``) and
-            never evaluate the energy; without it the check is skipped (no
-            warning) and ``'break'`` raises.
+            ``molsym`` package and never evaluate the energy.
         symmetry_eps: RMS amplitude (Å) of the ``symmetry='break'`` displacement;
             :data:`None` uses :data:`~berny.symmetry.SYMMETRY_EPS`
         trace: optional path to a JSON file. When given, a structured
@@ -185,9 +183,8 @@ class Berny(Generator):  # type: ignore[type-arg]
                 f'symmetry must be one of {_SYMMETRY_MODES}, got {symmetry!r}'
             )
         if symmetry == 'break':
-            # break_symmetry does its own detection and requires molsym (it
-            # raises a clear error if missing); it returns the input unchanged
-            # for a geometry with no non-symmetric modes.
+            # break_symmetry does its own detection and returns the input
+            # unchanged for a geometry with no non-symmetric modes.
             eps_val = SYMMETRY_EPS if eps is None else eps
             broken = break_symmetry(geom, eps_val)
             if broken is not geom:
