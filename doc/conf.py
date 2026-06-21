@@ -1,7 +1,7 @@
 import datetime
-import os
 import sys
 from importlib.metadata import version as get_version
+from pathlib import Path
 
 import sphinxcontrib.katex as _katex
 import toml
@@ -17,11 +17,11 @@ from docutils.parsers.rst import roles
 katex_prerender = True
 _katex.KATEX_DEFAULT_OPTIONS['throwOnError'] = True
 
-sys.path.insert(0, os.path.abspath('../src'))
-with open('../pyproject.toml') as f:
+sys.path.insert(0, str(Path('../src').resolve()))
+with open('../pyproject.toml', encoding='utf-8') as f:
     metadata = toml.load(f)['tool']['poetry']
 
-_HERE = os.path.abspath(os.path.dirname(__file__))
+_HERE = Path(__file__).parent.resolve()
 
 project = 'PyBerny'
 author = ' '.join(metadata['authors'][0].split()[:-1])
@@ -52,7 +52,7 @@ intersphinx_mapping = {
         'https://docs.python.org/3',
         (
             'https://docs.python.org/3/objects.inv',
-            os.path.join(_HERE, 'python-objects.inv'),
+            str(_HERE / 'python-objects.inv'),
         ),
     ),
 }

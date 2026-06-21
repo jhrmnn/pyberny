@@ -2,7 +2,7 @@
 
 import pytest
 
-import berny.benchmarks as benchmarks
+from berny import benchmarks
 from berny.benchmarks import (
     BENCHMARKS,
     data_dir,

@@ -8,12 +8,14 @@ import json
 import pickle
 import sys
 from argparse import ArgumentParser
-from collections.abc import Iterator
 from contextlib import contextmanager
 from socket import AF_INET, SOCK_STREAM, socket
-from typing import IO
+from typing import IO, TYPE_CHECKING
 
 from berny import Berny, geomlib
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 __all__ = ()
 
@@ -24,10 +26,7 @@ def berny_unpickled(berny: Berny | None = None) -> Iterator[Berny]:
     if not berny:
         with open(picklefile, 'rb') as f:
             berny = pickle.load(f)
-    try:
-        yield berny
-    except Exception:
-        raise
+    yield berny
     with open(picklefile, 'wb') as f:
         pickle.dump(berny, f)
 
@@ -47,7 +46,7 @@ def handler(berny: Berny, f: IO[str]) -> geomlib.Geometry | None:
 def get_berny(args: argparse.Namespace) -> Berny:
     geom = geomlib.load(sys.stdin, args.format)
     if args.paramfile:
-        with open(args.paramfile) as f:
+        with open(args.paramfile, encoding='utf-8') as f:
             params = json.load(f)
     else:
         params = {}

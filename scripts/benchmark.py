@@ -31,20 +31,18 @@ contribute to the script's exit code.
 # numpy / pyscf below. Cloud VMs (and GitHub Actions runners) typically
 # expose SMT-doubled vCPUs; BLAS / MKL / OpenMP default to one thread per
 # logical CPU and contend for cache. Honor user overrides.
-import glob
 import os
+from pathlib import Path
 
 
 def _physical_cores():
     # core_id is only unique within a CPU package; pair with physical_package_id
     # so multi-socket machines don't undercount.
     ids = set()
-    for base in glob.glob('/sys/devices/system/cpu/cpu*/topology'):
+    for base in Path('/sys/devices/system/cpu').glob('cpu*/topology'):
         try:
-            with open(f'{base}/core_id') as f:
-                core = f.read().strip()
-            with open(f'{base}/physical_package_id') as f:
-                pkg = f.read().strip()
+            core = (base / 'core_id').read_text(encoding='utf-8').strip()
+            pkg = (base / 'physical_package_id').read_text(encoding='utf-8').strip()
         except OSError:
             continue
         ids.add((pkg, core))
@@ -66,7 +64,6 @@ import importlib.util  # noqa: E402
 import json  # noqa: E402
 import sys  # noqa: E402
 import time  # noqa: E402
-from pathlib import Path  # noqa: E402
 
 from berny import Berny, geomlib  # noqa: E402
 from berny.benchmarks import (  # noqa: E402
@@ -188,8 +185,10 @@ def format_table(rows, kind, reference):
     """
     ref_key = REF_STEPS_KEY[kind]
     out = [
-        f'| Molecule | Atoms | Paper | Ref ({kind}) '
-        f'| pyberny ({kind}) | Converged | Wall (s) |',
+        (
+            f'| Molecule | Atoms | Paper | Ref ({kind}) '
+            f'| pyberny ({kind}) | Converged | Wall (s) |'
+        ),
         '|---|---:|---:|---:|---:|---|---:|',
     ]
     for row in rows:
@@ -216,8 +215,7 @@ def format_errors(rows):
     if not bad:
         return ''
     lines = ['', '### Failures', '']
-    for row in bad:
-        lines.append(f"- **{row['name']}**: {row['error']}")
+    lines.extend(f"- **{row['name']}**: {row['error']}" for row in bad)
     return '\n'.join(lines) + '\n'
 
 

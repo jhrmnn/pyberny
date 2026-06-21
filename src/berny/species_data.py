@@ -29,7 +29,7 @@ _GHOST_ROW: dict[str, SpeciesValue] = {
 }
 
 
-def get_property(idx: str | int | float, name: str) -> SpeciesValue:
+def get_property(idx: str | float, name: str) -> SpeciesValue:
     if isinstance(idx, str):
         if _is_ghost(idx):
             return _GHOST_ROW[name]
@@ -44,7 +44,9 @@ def get_property(idx: str | int | float, name: str) -> SpeciesValue:
             )
         except StopIteration:
             raise KeyError(f'No species with number {idx!r}') from None
-    if value == '':
+    # '' is the missing-data sentinel; a numeric 0 is valid data, so the
+    # `not value` simplification PLC1901 suggests would be wrong here.
+    if value == '':  # noqa: PLC1901
         raise KeyError(f'No {name!r} data for species {idx!r}')
     return value
 

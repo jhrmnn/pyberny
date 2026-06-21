@@ -29,7 +29,7 @@ def collect_molecules(data_dir):
     atom order is preserved so a label equals its 0-based array index).
     """
     data_dir = Path(data_dir)
-    with open(data_dir / 'reference.json') as f:
+    with open(data_dir / 'reference.json', encoding='utf-8') as f:
         reference = json.load(f)
     molecules = []
     for mol_id, meta in reference.items():
@@ -56,7 +56,7 @@ def build_html(data_dir=DATA_DIR, template=TEMPLATE):
     """Render the gallery HTML with the benchmark geometries embedded inline."""
     molecules = collect_molecules(data_dir)
     data_js = json.dumps(molecules, separators=(',', ':'))
-    return Path(template).read_text().replace(PLACEHOLDER, data_js)
+    return Path(template).read_text(encoding='utf-8').replace(PLACEHOLDER, data_js)
 
 
 def main(argv=None):
