@@ -62,7 +62,8 @@ def detect_point_group(geom: Geometry) -> tuple[str, Any]:
         return 'C1', None
     try:
         symtext = _symtext(geom)
-    except Exception as e:  # pragma: no cover - defensive, never break a run
+    except Exception as e:  # noqa: BLE001  # pragma: no cover
+        # Defensive: never let symmetry detection break a run; assume C1.
         log.debug('symmetry detection failed (%s); assuming C1', e)
         return 'C1', None
     return str(symtext.pg), symtext
