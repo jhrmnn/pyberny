@@ -1,0 +1,971 @@
+{
+  "baker": [
+    {
+      "name": "acanil01",
+      "pg": "Cs",
+      "ref": 6,
+      "none_steps": 6,
+      "none_conv": true,
+      "break_steps": 43,
+      "break_conv": true,
+      "dE_kcal": -0.752
+    },
+    {
+      "name": "acetone",
+      "pg": "C2v",
+      "ref": 5,
+      "none_steps": 5,
+      "none_conv": true,
+      "break_steps": 7,
+      "break_conv": true,
+      "dE_kcal": -0.0
+    },
+    {
+      "name": "acetylene",
+      "pg": "C1",
+      "ref": 4,
+      "none_steps": 4,
+      "none_conv": true,
+      "break_steps": 4,
+      "break_conv": true,
+      "dE_kcal": 0.0
+    },
+    {
+      "name": "achtar10",
+      "pg": "C1",
+      "ref": 30,
+      "none_steps": 30,
+      "none_conv": true,
+      "break_steps": 30,
+      "break_conv": true,
+      "dE_kcal": 0.0
+    },
+    {
+      "name": "allene",
+      "pg": "D2d",
+      "ref": 5,
+      "none_steps": 5,
+      "none_conv": true,
+      "break_steps": 10,
+      "break_conv": true,
+      "dE_kcal": 0.0
+    },
+    {
+      "name": "ammonia",
+      "pg": "C3v",
+      "ref": 4,
+      "none_steps": 4,
+      "none_conv": true,
+      "break_steps": 4,
+      "break_conv": true,
+      "dE_kcal": 0.0
+    },
+    {
+      "name": "benzaldehyde",
+      "pg": "Cs",
+      "ref": 5,
+      "none_steps": 5,
+      "none_conv": true,
+      "break_steps": 10,
+      "break_conv": true,
+      "dE_kcal": -0.0
+    },
+    {
+      "name": "benzene",
+      "pg": "D6h",
+      "ref": 3,
+      "none_steps": 3,
+      "none_conv": true,
+      "break_steps": 10,
+      "break_conv": true,
+      "dE_kcal": -0.0
+    },
+    {
+      "name": "benzidine",
+      "pg": "D2",
+      "ref": 8,
+      "none_steps": 8,
+      "none_conv": true,
+      "break_steps": 17,
+      "break_conv": true,
+      "dE_kcal": -1.279
+    },
+    {
+      "name": "caffeine",
+      "pg": "Cs",
+      "ref": 7,
+      "none_steps": 7,
+      "none_conv": true,
+      "break_steps": 47,
+      "break_conv": true,
+      "dE_kcal": -0.36
+    },
+    {
+      "name": "difluorobenzene_13",
+      "pg": "C2v",
+      "ref": 4,
+      "none_steps": 4,
+      "none_conv": true,
+      "break_steps": 9,
+      "break_conv": true,
+      "dE_kcal": -0.0
+    },
+    {
+      "name": "difluoronaphthalene_15",
+      "pg": "C2h",
+      "ref": 4,
+      "none_steps": 4,
+      "none_conv": true,
+      "break_steps": 10,
+      "break_conv": true,
+      "dE_kcal": -0.002
+    },
+    {
+      "name": "difuropyrazine",
+      "pg": "C2h",
+      "ref": 7,
+      "none_steps": 7,
+      "none_conv": true,
+      "break_steps": 12,
+      "break_conv": true,
+      "dE_kcal": -0.0
+    },
+    {
+      "name": "dimethylpentane",
+      "pg": "C1",
+      "ref": 12,
+      "none_steps": 12,
+      "none_conv": true,
+      "break_steps": 12,
+      "break_conv": true,
+      "dE_kcal": -0.0
+    },
+    {
+      "name": "disilyl_ether",
+      "pg": "C2v",
+      "ref": 16,
+      "none_steps": 16,
+      "none_conv": true,
+      "break_steps": 16,
+      "break_conv": true,
+      "dE_kcal": -0.0
+    },
+    {
+      "name": "ethane",
+      "pg": "D3d",
+      "ref": 4,
+      "none_steps": 4,
+      "none_conv": true,
+      "break_steps": 5,
+      "break_conv": true,
+      "dE_kcal": -0.0
+    },
+    {
+      "name": "ethanol",
+      "pg": "Cs",
+      "ref": 5,
+      "none_steps": 5,
+      "none_conv": true,
+      "break_steps": 7,
+      "break_conv": true,
+      "dE_kcal": -0.0
+    },
+    {
+      "name": "furan",
+      "pg": "C2v",
+      "ref": 5,
+      "none_steps": 5,
+      "none_conv": true,
+      "break_steps": 8,
+      "break_conv": true,
+      "dE_kcal": -0.0
+    },
+    {
+      "name": "histidine",
+      "pg": "C1",
+      "ref": 19,
+      "none_steps": 19,
+      "none_conv": true,
+      "break_steps": 19,
+      "break_conv": true,
+      "dE_kcal": 0.0
+    },
+    {
+      "name": "hydroxybicyclopentane_2",
+      "pg": "C1",
+      "ref": 9,
+      "none_steps": 9,
+      "none_conv": true,
+      "break_steps": 9,
+      "break_conv": true,
+      "dE_kcal": -0.0
+    },
+    {
+      "name": "hydroxysulfane",
+      "pg": "C1",
+      "ref": 7,
+      "none_steps": 7,
+      "none_conv": true,
+      "break_steps": 7,
+      "break_conv": true,
+      "dE_kcal": 0.0
+    },
+    {
+      "name": "menthone",
+      "pg": "C1",
+      "ref": 13,
+      "none_steps": 13,
+      "none_conv": true,
+      "break_steps": 13,
+      "break_conv": true,
+      "dE_kcal": 0.0
+    },
+    {
+      "name": "mesityl_oxide",
+      "pg": "Cs",
+      "ref": 6,
+      "none_steps": 6,
+      "none_conv": true,
+      "break_steps": 65,
+      "break_conv": true,
+      "dE_kcal": -1.305
+    },
+    {
+      "name": "methylamine",
+      "pg": "Cs",
+      "ref": 5,
+      "none_steps": 5,
+      "none_conv": true,
+      "break_steps": 11,
+      "break_conv": true,
+      "dE_kcal": -6.241
+    },
+    {
+      "name": "naphthalene",
+      "pg": "D2h",
+      "ref": 4,
+      "none_steps": 4,
+      "none_conv": true,
+      "break_steps": 9,
+      "break_conv": true,
+      "dE_kcal": -0.001
+    },
+    {
+      "name": "neopentane",
+      "pg": "Td",
+      "ref": 3,
+      "none_steps": 3,
+      "none_conv": true,
+      "break_steps": 6,
+      "break_conv": true,
+      "dE_kcal": -0.0
+    },
+    {
+      "name": "pterin",
+      "pg": "Cs",
+      "ref": 7,
+      "none_steps": 7,
+      "none_conv": true,
+      "break_steps": 27,
+      "break_conv": true,
+      "dE_kcal": -0.031
+    },
+    {
+      "name": "trifluorobenzene_135",
+      "pg": "D3h",
+      "ref": 4,
+      "none_steps": 4,
+      "none_conv": true,
+      "break_steps": 10,
+      "break_conv": true,
+      "dE_kcal": 0.0
+    },
+    {
+      "name": "trisilacyclohexane_135",
+      "pg": "C3v",
+      "ref": 7,
+      "none_steps": 7,
+      "none_conv": true,
+      "break_steps": 8,
+      "break_conv": true,
+      "dE_kcal": -0.0
+    },
+    {
+      "name": "water",
+      "pg": "C2v",
+      "ref": 4,
+      "none_steps": 4,
+      "none_conv": true,
+      "break_steps": 4,
+      "break_conv": true,
+      "dE_kcal": 0.0
+    }
+  ],
+  "birkholz": [
+    {
+      "name": "artemisinin",
+      "pg": "C1",
+      "ref": 27,
+      "no_op": true
+    },
+    {
+      "name": "avobenzone",
+      "pg": "C1",
+      "ref": 48,
+      "no_op": true
+    },
+    {
+      "name": "azadirachtin",
+      "pg": "C1",
+      "ref": 60,
+      "no_op": true
+    },
+    {
+      "name": "bisphenol_a",
+      "pg": "C1",
+      "ref": null,
+      "no_op": true
+    },
+    {
+      "name": "cetirizine",
+      "pg": "C1",
+      "ref": 51,
+      "no_op": true
+    },
+    {
+      "name": "codeine",
+      "pg": "C1",
+      "ref": 36,
+      "no_op": true
+    },
+    {
+      "name": "diisobutyl_phthalate",
+      "pg": "C1",
+      "ref": 34,
+      "no_op": true
+    },
+    {
+      "name": "easc",
+      "pg": "C1",
+      "ref": 38,
+      "no_op": true
+    },
+    {
+      "name": "estradiol",
+      "pg": "C1",
+      "ref": 27,
+      "no_op": true
+    },
+    {
+      "name": "inosine_cation",
+      "pg": "C1",
+      "ref": 58,
+      "no_op": true
+    },
+    {
+      "name": "maltose",
+      "pg": "C1",
+      "ref": null,
+      "no_op": true
+    },
+    {
+      "name": "mg_porphin",
+      "pg": "C1",
+      "ref": 16,
+      "no_op": true
+    },
+    {
+      "name": "ochratoxin_a",
+      "pg": "C1",
+      "ref": 56,
+      "no_op": true
+    },
+    {
+      "name": "penicillin_v",
+      "pg": "C1",
+      "ref": null,
+      "no_op": true
+    },
+    {
+      "name": "raffinose",
+      "pg": "C1",
+      "ref": 47,
+      "no_op": true
+    },
+    {
+      "name": "sphingomyelin",
+      "pg": "C1",
+      "ref": 83,
+      "no_op": true
+    },
+    {
+      "name": "tamoxifen",
+      "pg": "C1",
+      "ref": 45,
+      "no_op": true
+    },
+    {
+      "name": "vitamin_c",
+      "pg": "C1",
+      "ref": 30,
+      "no_op": true
+    },
+    {
+      "name": "zn_edta",
+      "pg": "C1",
+      "ref": 40,
+      "no_op": true
+    }
+  ],
+  "oligomers": [
+    {
+      "name": "PEG_n1",
+      "pg": "C1",
+      "ref": 7,
+      "no_op": true
+    },
+    {
+      "name": "PEG_n2",
+      "pg": "C1",
+      "ref": 6,
+      "no_op": true
+    },
+    {
+      "name": "PEG_n3",
+      "pg": "C1",
+      "ref": 8,
+      "no_op": true
+    },
+    {
+      "name": "PEG_n4",
+      "pg": "C1",
+      "ref": 6,
+      "no_op": true
+    },
+    {
+      "name": "PEG_n5",
+      "pg": "C1",
+      "ref": 8,
+      "no_op": true
+    },
+    {
+      "name": "PEG_n6",
+      "pg": "C1",
+      "ref": 6,
+      "no_op": true
+    },
+    {
+      "name": "PEG_n7",
+      "pg": "C1",
+      "ref": 8,
+      "no_op": true
+    },
+    {
+      "name": "PEG_n8",
+      "pg": "C1",
+      "ref": 6,
+      "no_op": true
+    },
+    {
+      "name": "PPE_n1",
+      "pg": "C1",
+      "ref": 8,
+      "no_op": true
+    },
+    {
+      "name": "PPE_n2",
+      "pg": "C1",
+      "ref": 7,
+      "no_op": true
+    },
+    {
+      "name": "PPE_n3",
+      "pg": "C1",
+      "ref": 10,
+      "no_op": true
+    },
+    {
+      "name": "PPE_n4",
+      "pg": "C1",
+      "ref": 10,
+      "no_op": true
+    },
+    {
+      "name": "PPE_n5",
+      "pg": "C1",
+      "ref": 8,
+      "no_op": true
+    },
+    {
+      "name": "PPE_n6",
+      "pg": "C1",
+      "ref": 8,
+      "no_op": true
+    },
+    {
+      "name": "PPE_n7",
+      "pg": "C1",
+      "ref": 9,
+      "no_op": true
+    },
+    {
+      "name": "PPE_n8",
+      "pg": "C1",
+      "ref": null,
+      "no_op": true
+    },
+    {
+      "name": "anthracene",
+      "pg": "C1",
+      "ref": 7,
+      "no_op": true
+    },
+    {
+      "name": "decacene",
+      "pg": "C1",
+      "ref": 21,
+      "no_op": true
+    },
+    {
+      "name": "diacetylene",
+      "pg": "C1",
+      "ref": 6,
+      "no_op": true
+    },
+    {
+      "name": "dodecacene",
+      "pg": "C1",
+      "ref": 39,
+      "no_op": true
+    },
+    {
+      "name": "heptacene",
+      "pg": "C1",
+      "ref": 22,
+      "no_op": true
+    },
+    {
+      "name": "hexacene",
+      "pg": "C1",
+      "ref": 10,
+      "no_op": true
+    },
+    {
+      "name": "naphthalene",
+      "pg": "C1",
+      "ref": 8,
+      "no_op": true
+    },
+    {
+      "name": "nonacene",
+      "pg": "C1",
+      "ref": 16,
+      "no_op": true
+    },
+    {
+      "name": "nylon6_n1",
+      "pg": "C1",
+      "ref": 11,
+      "no_op": true
+    },
+    {
+      "name": "nylon6_n2",
+      "pg": "C1",
+      "ref": 14,
+      "no_op": true
+    },
+    {
+      "name": "nylon6_n3",
+      "pg": "C1",
+      "ref": 16,
+      "no_op": true
+    },
+    {
+      "name": "nylon6_n4",
+      "pg": "C1",
+      "ref": 43,
+      "no_op": true
+    },
+    {
+      "name": "nylon6_n5",
+      "pg": "C1",
+      "ref": null,
+      "no_op": true
+    },
+    {
+      "name": "nylon6_n6",
+      "pg": "C1",
+      "ref": null,
+      "no_op": true
+    },
+    {
+      "name": "nylon6_n7",
+      "pg": "C1",
+      "ref": 44,
+      "no_op": true
+    },
+    {
+      "name": "nylon6_n8",
+      "pg": "C1",
+      "ref": null,
+      "no_op": true
+    },
+    {
+      "name": "octacene",
+      "pg": "C1",
+      "ref": 23,
+      "no_op": true
+    },
+    {
+      "name": "pentacene",
+      "pg": "C1",
+      "ref": 7,
+      "no_op": true
+    },
+    {
+      "name": "polyalanine_n1",
+      "pg": "C1",
+      "ref": 22,
+      "no_op": true
+    },
+    {
+      "name": "polyalanine_n2",
+      "pg": "C1",
+      "ref": 19,
+      "no_op": true
+    },
+    {
+      "name": "polyalanine_n3",
+      "pg": "C1",
+      "ref": 35,
+      "no_op": true
+    },
+    {
+      "name": "polyalanine_n4",
+      "pg": "C1",
+      "ref": 21,
+      "no_op": true
+    },
+    {
+      "name": "polyalanine_n5",
+      "pg": "C1",
+      "ref": 27,
+      "no_op": true
+    },
+    {
+      "name": "polyalanine_n6",
+      "pg": "C1",
+      "ref": 68,
+      "no_op": true
+    },
+    {
+      "name": "polyalanine_n7",
+      "pg": "C1",
+      "ref": 24,
+      "no_op": true
+    },
+    {
+      "name": "polyalanine_n8",
+      "pg": "C1",
+      "ref": 31,
+      "no_op": true
+    },
+    {
+      "name": "polyethylene_n1",
+      "pg": "C1",
+      "ref": 4,
+      "no_op": true
+    },
+    {
+      "name": "polyethylene_n2",
+      "pg": "C1",
+      "ref": 4,
+      "no_op": true
+    },
+    {
+      "name": "polyethylene_n3",
+      "pg": "C1",
+      "ref": 4,
+      "no_op": true
+    },
+    {
+      "name": "polyethylene_n4",
+      "pg": "C1",
+      "ref": 4,
+      "no_op": true
+    },
+    {
+      "name": "polyethylene_n5",
+      "pg": "C1",
+      "ref": 4,
+      "no_op": true
+    },
+    {
+      "name": "polyethylene_n6",
+      "pg": "C1",
+      "ref": 4,
+      "no_op": true
+    },
+    {
+      "name": "polyethylene_n7",
+      "pg": "C1",
+      "ref": 4,
+      "no_op": true
+    },
+    {
+      "name": "polyethylene_n8",
+      "pg": "C1",
+      "ref": 4,
+      "no_op": true
+    },
+    {
+      "name": "polyglycine_n1",
+      "pg": "C1",
+      "ref": 7,
+      "no_op": true
+    },
+    {
+      "name": "polyglycine_n2",
+      "pg": "C1",
+      "ref": 23,
+      "no_op": true
+    },
+    {
+      "name": "polyglycine_n3",
+      "pg": "C1",
+      "ref": 34,
+      "no_op": true
+    },
+    {
+      "name": "polyglycine_n4",
+      "pg": "C1",
+      "ref": 41,
+      "no_op": true
+    },
+    {
+      "name": "polyglycine_n5",
+      "pg": "C1",
+      "ref": 50,
+      "no_op": true
+    },
+    {
+      "name": "polyglycine_n6",
+      "pg": "C1",
+      "ref": 66,
+      "no_op": true
+    },
+    {
+      "name": "polyglycine_n7",
+      "pg": "C1",
+      "ref": 52,
+      "no_op": true
+    },
+    {
+      "name": "polyglycine_n8",
+      "pg": "C1",
+      "ref": null,
+      "no_op": true
+    },
+    {
+      "name": "polypropylene_n1",
+      "pg": "Cs",
+      "ref": 3,
+      "none_steps": 3,
+      "break_steps": 7,
+      "dE_kcal": -0.0008,
+      "no_op": false
+    },
+    {
+      "name": "polypropylene_n2",
+      "pg": "C1",
+      "ref": 7,
+      "no_op": true
+    },
+    {
+      "name": "polypropylene_n3",
+      "pg": "C1",
+      "ref": 9,
+      "no_op": true
+    },
+    {
+      "name": "polypropylene_n4",
+      "pg": "C1",
+      "ref": 9,
+      "no_op": true
+    },
+    {
+      "name": "polypropylene_n5",
+      "pg": "C1",
+      "ref": 9,
+      "no_op": true
+    },
+    {
+      "name": "polypropylene_n6",
+      "pg": "C1",
+      "ref": 9,
+      "no_op": true
+    },
+    {
+      "name": "polypropylene_n7",
+      "pg": "C1",
+      "ref": 9,
+      "no_op": true
+    },
+    {
+      "name": "polypropylene_n8",
+      "pg": "C1",
+      "ref": 7,
+      "no_op": true
+    },
+    {
+      "name": "polyserine_n1",
+      "pg": "C1",
+      "ref": 21,
+      "no_op": true
+    },
+    {
+      "name": "polyserine_n2",
+      "pg": "C1",
+      "ref": 35,
+      "no_op": true
+    },
+    {
+      "name": "polyserine_n3",
+      "pg": "C1",
+      "ref": 55,
+      "no_op": true
+    },
+    {
+      "name": "polyserine_n4",
+      "pg": "C1",
+      "ref": 44,
+      "no_op": true
+    },
+    {
+      "name": "polyserine_n5",
+      "pg": "C1",
+      "ref": 82,
+      "no_op": true
+    },
+    {
+      "name": "polyserine_n6",
+      "pg": "C1",
+      "ref": 61,
+      "no_op": true
+    },
+    {
+      "name": "polyserine_n7",
+      "pg": "C1",
+      "ref": 60,
+      "no_op": true
+    },
+    {
+      "name": "polyserine_n8",
+      "pg": "C1",
+      "ref": 72,
+      "no_op": true
+    },
+    {
+      "name": "polyyne_n10",
+      "pg": "C1",
+      "ref": 8,
+      "no_op": true
+    },
+    {
+      "name": "polyyne_n3",
+      "pg": "C1",
+      "ref": 7,
+      "no_op": true
+    },
+    {
+      "name": "polyyne_n4",
+      "pg": "C1",
+      "ref": 8,
+      "no_op": true
+    },
+    {
+      "name": "polyyne_n5",
+      "pg": "C1",
+      "ref": 7,
+      "no_op": true
+    },
+    {
+      "name": "polyyne_n6",
+      "pg": "C1",
+      "ref": 7,
+      "no_op": true
+    },
+    {
+      "name": "polyyne_n7",
+      "pg": "C1",
+      "ref": 6,
+      "no_op": true
+    },
+    {
+      "name": "polyyne_n8",
+      "pg": "C1",
+      "ref": 7,
+      "no_op": true
+    },
+    {
+      "name": "polyyne_n9",
+      "pg": "C1",
+      "ref": 8,
+      "no_op": true
+    },
+    {
+      "name": "tetracene",
+      "pg": "C1",
+      "ref": 8,
+      "no_op": true
+    },
+    {
+      "name": "thiophene_n1",
+      "pg": "C1",
+      "ref": 9,
+      "no_op": true
+    },
+    {
+      "name": "thiophene_n2",
+      "pg": "C1",
+      "ref": 9,
+      "no_op": true
+    },
+    {
+      "name": "thiophene_n3",
+      "pg": "C1",
+      "ref": 9,
+      "no_op": true
+    },
+    {
+      "name": "thiophene_n4",
+      "pg": "C1",
+      "ref": 12,
+      "no_op": true
+    },
+    {
+      "name": "thiophene_n5",
+      "pg": "C1",
+      "ref": 11,
+      "no_op": true
+    },
+    {
+      "name": "thiophene_n6",
+      "pg": "C1",
+      "ref": 10,
+      "no_op": true
+    },
+    {
+      "name": "thiophene_n7",
+      "pg": "C1",
+      "ref": 12,
+      "no_op": true
+    },
+    {
+      "name": "thiophene_n8",
+      "pg": "C1",
+      "ref": 15,
+      "no_op": true
+    }
+  ]
+}
