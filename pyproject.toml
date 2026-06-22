@@ -56,6 +56,11 @@ plot = ["matplotlib"]
 ruff = "==0.15.18"
 black = ">=22"
 mypy = ">=1"
+# numpy capped <2.5 for the mypy type check: numpy 2.5's bundled stubs use a
+# PEP 695 `type` statement that mypy rejects under python_version=3.10. 2.4.x
+# stubs type-check cleanly; runtime is unconstrained by the main dependency.
+# Keep in sync with the mypy job in .github/workflows/lint.yaml.
+numpy = "<2.5"
 
 [tool.poetry.scripts]
 berny = "berny.cli:main"

@@ -38,5 +38,11 @@ jobs:
       - name: Install dependencies
         # Install the package so mypy picks up bundled NumPy stubs and our own
         # type hints via the installed module rather than just the source tree.
-        run: pip install -e . mypy
+        # numpy is capped <2.5 for the type check only: numpy 2.5's bundled
+        # stubs use a PEP 695 `type` statement that mypy rejects under our
+        # python_version=3.10 target (which is what keeps the codebase
+        # 3.10-compatible; 2.4.x stubs type-check cleanly). Runtime and the test
+        # matrix still run unpinned numpy. Keep in sync with the dev group in
+        # pyproject.toml.
+        run: pip install -e . mypy 'numpy<2.5'
       - run: mypy
