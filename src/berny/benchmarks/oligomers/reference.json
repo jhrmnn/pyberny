@@ -469,7 +469,7 @@
     "mult": 1,
     "family": "propylene",
     "file": "propylene/polypropylene_n1.xyz",
-    "xtb_gfn2_steps": 3
+    "xtb_gfn2_steps": 7
   },
   "polypropylene_n2": {
     "atoms": 23,

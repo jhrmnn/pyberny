@@ -8,7 +8,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 7,
-    "xtb_gfn2_steps": 6
+    "xtb_gfn2_steps": 43
   },
   "acetone": {
     "atoms": 10,
@@ -19,7 +19,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 5,
-    "xtb_gfn2_steps": 5
+    "xtb_gfn2_steps": 7
   },
   "acetylene": {
     "atoms": 4,
@@ -52,7 +52,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 4,
-    "xtb_gfn2_steps": 5
+    "xtb_gfn2_steps": 10
   },
   "ammonia": {
     "atoms": 4,
@@ -74,7 +74,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 6,
-    "xtb_gfn2_steps": 5
+    "xtb_gfn2_steps": 10
   },
   "benzene": {
     "atoms": 12,
@@ -85,7 +85,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 3,
-    "xtb_gfn2_steps": 3
+    "xtb_gfn2_steps": 10
   },
   "benzidine": {
     "atoms": 26,
@@ -96,7 +96,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 8,
-    "xtb_gfn2_steps": 8
+    "xtb_gfn2_steps": 17
   },
   "caffeine": {
     "atoms": 24,
@@ -107,7 +107,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 10,
-    "xtb_gfn2_steps": 7
+    "xtb_gfn2_steps": 47
   },
   "difluorobenzene_13": {
     "atoms": 12,
@@ -118,7 +118,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 4,
-    "xtb_gfn2_steps": 4
+    "xtb_gfn2_steps": 9
   },
   "difluoronaphthalene_15": {
     "atoms": 18,
@@ -129,7 +129,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 5,
-    "xtb_gfn2_steps": 4
+    "xtb_gfn2_steps": 10
   },
   "difuropyrazine": {
     "atoms": 16,
@@ -140,7 +140,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 7,
-    "xtb_gfn2_steps": 7
+    "xtb_gfn2_steps": 12
   },
   "dimethylpentane": {
     "atoms": 23,
@@ -173,7 +173,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 4,
-    "xtb_gfn2_steps": 4
+    "xtb_gfn2_steps": 5
   },
   "ethanol": {
     "atoms": 9,
@@ -184,7 +184,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 5,
-    "xtb_gfn2_steps": 5
+    "xtb_gfn2_steps": 7
   },
   "furan": {
     "atoms": 9,
@@ -195,7 +195,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 5,
-    "xtb_gfn2_steps": 5
+    "xtb_gfn2_steps": 8
   },
   "histidine": {
     "atoms": 20,
@@ -250,7 +250,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 7,
-    "xtb_gfn2_steps": 6
+    "xtb_gfn2_steps": 65
   },
   "methylamine": {
     "atoms": 7,
@@ -261,7 +261,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 4,
-    "xtb_gfn2_steps": 5
+    "xtb_gfn2_steps": 11
   },
   "naphthalene": {
     "atoms": 18,
@@ -272,7 +272,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 5,
-    "xtb_gfn2_steps": 4
+    "xtb_gfn2_steps": 9
   },
   "neopentane": {
     "atoms": 17,
@@ -283,7 +283,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 4,
-    "xtb_gfn2_steps": 3
+    "xtb_gfn2_steps": 6
   },
   "pterin": {
     "atoms": 17,
@@ -294,7 +294,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 8,
-    "xtb_gfn2_steps": 7
+    "xtb_gfn2_steps": 27
   },
   "trifluorobenzene_135": {
     "atoms": 12,
@@ -305,7 +305,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 4,
-    "xtb_gfn2_steps": 4
+    "xtb_gfn2_steps": 10
   },
   "trisilacyclohexane_135": {
     "atoms": 18,
@@ -316,7 +316,7 @@
     "paper_steps_basis": "6-31G**",
     "paper_steps_method": "HF",
     "pyberny_steps": 7,
-    "xtb_gfn2_steps": 7
+    "xtb_gfn2_steps": 8
   },
   "water": {
     "atoms": 3,
