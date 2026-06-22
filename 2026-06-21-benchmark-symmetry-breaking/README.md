@@ -116,19 +116,20 @@ describe what the benchmark does: they were measured against symmetric-saddle
 convergence, which for six molecules was convergence to the *wrong* stationary
 point.
 
-Two coherent options, a maintainer decision (not taken in #164):
+**Resolved (#164): re-seed the baselines** against the broken-start runs, so the
+benchmark going forward measures honest convergence-to-a-minimum — the natural
+partner to making `symmetry='break'` the benchmark default. #164 updates the 20
+moved baker baselines and `polypropylene_n1` to the broken-start step counts
+measured on the dispatched CI runs (birkholz needs no change). The considered
+alternative — keeping the flag off and treating #162 as a user-facing option
+only, leaving the benchmark as a regression tracker on the saddle-converging
+starts — was not taken.
 
-- **Re-seed the baselines** against the broken-start runs, so the benchmark
-  going forward measures honest convergence-to-a-minimum. This is the natural
-  partner to making `symmetry='break'` the benchmark default.
-- **Keep the flag off in the benchmark** and treat #162 purely as a user-facing
-  option, leaving the benchmark as a step-count regression tracker on the
-  (saddle-converging) shipped starts.
-
-The data above is the input to that choice. Re-seeding also wants a second look
-at the six saddle escapers' expensive descents (mesityl_oxide, caffeine,
-acanil01) — whether 40–65 steps is the honest cost or a sign the post-kick path
-could be shorter with a larger initial kick than the 0.02 Å floor.
+One thing the re-seed leaves open: the six saddle escapers' expensive descents
+(mesityl_oxide 65, caffeine 47, acanil01 43 steps) — whether 40–65 steps is the
+honest cost or a sign the post-kick path could be shorter with a larger initial
+kick than the 0.02 Å floor. The re-seeded baselines bank the current cost; that
+question is for a later look.
 
 ## Reproduce
 
