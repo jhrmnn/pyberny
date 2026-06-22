@@ -79,7 +79,12 @@ files = ["src/berny"]
 strict = true
 warn_unreachable = true
 extra_checks = true
+# Treat bytes/bytearray/memoryview as distinct (the mypy 2.0 default, opted
+# into early).
+strict_bytes = true
 disallow_any_unimported = true
+# Flag implicit Any leaking in through untyped decorators.
+disallow_any_decorated = true
 enable_error_code = [
     "redundant-self",
     "redundant-expr",
@@ -88,6 +93,12 @@ enable_error_code = [
     "truthy-iterable",
     "ignore-without-code",
     "unused-awaitable",
+    # Error on use of @deprecated-marked symbols (PEP 702).
+    "deprecated",
+    # Require match statements over enums/literals/unions to be exhaustive.
+    "exhaustive-match",
+    # Flag reveal_type/reveal_locals left in without an explicit import.
+    "unimported-reveal",
 ]
 
 # tblite ships no type stubs; XTBSolver imports it lazily and uses it only at
