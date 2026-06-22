@@ -477,7 +477,7 @@ def update_trust(
         r = 1.0
     log(f"Trust update: Fletcher's parameter: {r:.3}")
     if r < 0.25:
-        new_trust = norm(dq) / 4
+        new_trust = float(norm(dq) / 4)
     elif r > 0.75 and abs(norm(dq) - trust) < 1e-10:
         new_trust = 2 * trust
     else:

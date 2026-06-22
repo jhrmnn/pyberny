@@ -70,7 +70,11 @@ target-version = ["py310"]
 skip-string-normalization = true
 
 [tool.mypy]
-python_version = "3.10"
+# `python_version` is intentionally unset so mypy targets whichever
+# interpreter runs it (the lint CI job, currently 3.12). Pinning it to our
+# floor (3.10) instead would desync the target from the installed NumPy:
+# NumPy >=2.5 is 3.12-only and ships PEP 695 `type` stubs that mypy can only
+# parse when targeting >=3.12, so a 3.10 target on a 3.12 runner fails.
 files = ["src/berny"]
 strict = true
 warn_unreachable = true
