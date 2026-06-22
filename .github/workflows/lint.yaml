@@ -34,12 +34,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with:
-          # Match the interpreter to mypy's target (`python_version` in
-          # pyproject.toml), our lowest supported version. The installed NumPy
-          # then matches that floor too: newer NumPy (>=2.5) is 3.12-only and
-          # ships PEP 695 `type` stubs that mypy rejects when targeting 3.10,
-          # so checking on a newer interpreter pulls stubs mypy can't parse.
-          python-version: "3.10"
+          python-version: "3.12"
       - name: Install dependencies
         # Install the package so mypy picks up bundled NumPy stubs and our own
         # type hints via the installed module rather than just the source tree.
