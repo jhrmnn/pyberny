@@ -1,0 +1,588 @@
+{
+  "benchmark": "birkholz",
+  "sigmas": [
+    0.02,
+    0.05,
+    0.1
+  ],
+  "data": {
+    "artemisinin": {
+      "clean_steps": 27,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            27,
+            25,
+            26
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            26,
+            26,
+            28
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            29,
+            27,
+            30
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        }
+      }
+    },
+    "avobenzone": {
+      "clean_steps": 48,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            48,
+            41,
+            45
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            39,
+            38,
+            47
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            37,
+            49,
+            48
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        }
+      }
+    },
+    "azadirachtin": {
+      "clean_steps": 60,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            57,
+            57,
+            59
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            64,
+            60
+          ],
+          "diff_basin": 1,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [],
+          "diff_basin": 3,
+          "errors": 0
+        }
+      }
+    },
+    "bisphenol_a": {
+      "clean_steps": 72,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            54,
+            33,
+            37
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            26,
+            33,
+            27
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            27,
+            29,
+            25
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        }
+      }
+    },
+    "cetirizine": {
+      "clean_steps": 51,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            40,
+            40
+          ],
+          "diff_basin": 1,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            38
+          ],
+          "diff_basin": 2,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            36
+          ],
+          "diff_basin": 2,
+          "errors": 0
+        }
+      }
+    },
+    "codeine": {
+      "clean_steps": 36,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            36,
+            38,
+            36
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            36,
+            37,
+            41
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            36,
+            39,
+            53
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        }
+      }
+    },
+    "diisobutyl_phthalate": {
+      "clean_steps": 34,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            35
+          ],
+          "diff_basin": 2,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            34
+          ],
+          "diff_basin": 2,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            35
+          ],
+          "diff_basin": 2,
+          "errors": 0
+        }
+      }
+    },
+    "easc": {
+      "clean_steps": 38,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            35,
+            33,
+            33
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            33,
+            36,
+            36
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            47,
+            34
+          ],
+          "diff_basin": 1,
+          "errors": 0
+        }
+      }
+    },
+    "estradiol": {
+      "clean_steps": 27,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            28,
+            28,
+            28
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            29,
+            30,
+            29
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            33,
+            34,
+            32
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        }
+      }
+    },
+    "inosine_cation": {
+      "clean_steps": 58,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [],
+          "diff_basin": 3,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [],
+          "diff_basin": 3,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [],
+          "diff_basin": 3,
+          "errors": 0
+        }
+      }
+    },
+    "maltose": {
+      "clean_steps": 77,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [],
+          "diff_basin": 3,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            61
+          ],
+          "diff_basin": 2,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            71,
+            94
+          ],
+          "diff_basin": 1,
+          "errors": 0
+        }
+      }
+    },
+    "mg_porphin": {
+      "clean_steps": 16,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            20,
+            20,
+            17
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            21,
+            21,
+            22
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            24,
+            25,
+            24
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        }
+      }
+    },
+    "ochratoxin_a": {
+      "clean_steps": 56,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            60
+          ],
+          "diff_basin": 2,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            49,
+            45
+          ],
+          "diff_basin": 1,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            61,
+            50,
+            67
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        }
+      }
+    },
+    "penicillin_v": {
+      "clean_steps": 52,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            45,
+            55,
+            55
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            54,
+            47,
+            49
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            43,
+            64,
+            64
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        }
+      }
+    },
+    "raffinose": {
+      "clean_steps": 47,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            59,
+            52
+          ],
+          "diff_basin": 1,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [],
+          "diff_basin": 3,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            51,
+            56
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        }
+      }
+    },
+    "sphingomyelin": {
+      "clean_steps": 83,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            87,
+            84,
+            86
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            88,
+            86
+          ],
+          "diff_basin": 1,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            97
+          ],
+          "diff_basin": 2,
+          "errors": 0
+        }
+      }
+    },
+    "tamoxifen": {
+      "clean_steps": 45,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            46,
+            44,
+            36
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            35,
+            43,
+            37
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            65,
+            47
+          ],
+          "diff_basin": 1,
+          "errors": 0
+        }
+      }
+    },
+    "vitamin_c": {
+      "clean_steps": 30,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            35,
+            31,
+            37
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            31,
+            31,
+            37
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            32,
+            43,
+            40
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        }
+      }
+    },
+    "zn_edta": {
+      "clean_steps": 40,
+      "clean_converged": true,
+      "by_sigma": {
+        "0.02": {
+          "steps": [
+            53,
+            39,
+            40
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.05": {
+          "steps": [
+            39,
+            43,
+            34
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.1": {
+          "steps": [
+            39,
+            62,
+            32
+          ],
+          "diff_basin": 0,
+          "errors": 0
+        }
+      }
+    }
+  }
+}

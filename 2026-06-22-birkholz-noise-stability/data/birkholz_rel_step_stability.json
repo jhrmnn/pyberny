@@ -1,0 +1,545 @@
+{
+  "benchmark": "birkholz",
+  "fracs": [
+    0.1,
+    0.2,
+    0.4
+  ],
+  "data": {
+    "easc": {
+      "clean_steps": 38,
+      "Rsm": 0.8247544067789991,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.04761721787691853,
+          "steps": [
+            37,
+            41,
+            40,
+            41,
+            33,
+            33
+          ],
+          "noise_rmsd_mean": 0.07699056575446729,
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.09523443575383705,
+          "steps": [
+            37,
+            47,
+            34
+          ],
+          "noise_rmsd_mean": 0.16483915316721195,
+          "diff_basin": 3,
+          "errors": 0
+        },
+        "0.4": {
+          "sigma": 0.1904688715076741,
+          "steps": [
+            44,
+            45,
+            60
+          ],
+          "noise_rmsd_mean": 0.30912635116351944,
+          "diff_basin": 3,
+          "errors": 0
+        }
+      }
+    },
+    "vitamin_c": {
+      "clean_steps": 30,
+      "Rsm": 1.612908522505879,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.0931213169647011,
+          "steps": [
+            29,
+            34,
+            43,
+            32,
+            55
+          ],
+          "noise_rmsd_mean": 0.14670066476588656,
+          "diff_basin": 1,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.1862426339294022,
+          "steps": [
+            51,
+            59,
+            42,
+            48,
+            86
+          ],
+          "noise_rmsd_mean": 0.32778701447086656,
+          "diff_basin": 1,
+          "errors": 0
+        },
+        "0.4": {
+          "sigma": 0.3724852678588044,
+          "steps": [],
+          "noise_rmsd_mean": 0.5787046545719835,
+          "diff_basin": 4,
+          "errors": 2
+        }
+      }
+    },
+    "mg_porphin": {
+      "clean_steps": 16,
+      "Rsm": 0.6257523702906833,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.03612782994333724,
+          "steps": [
+            18,
+            20,
+            19,
+            19,
+            21,
+            23
+          ],
+          "noise_rmsd_mean": 0.06080947399638709,
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.07225565988667448,
+          "steps": [
+            24,
+            21,
+            23,
+            22,
+            22,
+            25
+          ],
+          "noise_rmsd_mean": 0.12379374703079667,
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.4": {
+          "sigma": 0.14451131977334897,
+          "steps": [
+            29,
+            30,
+            27,
+            28,
+            31,
+            26
+          ],
+          "noise_rmsd_mean": 0.23846485534685594,
+          "diff_basin": 0,
+          "errors": 0
+        }
+      }
+    },
+    "diisobutyl_phthalate": {
+      "clean_steps": 34,
+      "Rsm": 1.3840666093035674,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.07990912294577873,
+          "steps": [
+            37
+          ],
+          "noise_rmsd_mean": 0.1322589128415461,
+          "diff_basin": 5,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.15981824589155746,
+          "steps": [],
+          "noise_rmsd_mean": 0.27196811533097615,
+          "diff_basin": 5,
+          "errors": 1
+        }
+      }
+    },
+    "avobenzone": {
+      "clean_steps": 48,
+      "Rsm": 2.4369861755181628,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.1406994624446808,
+          "steps": [
+            58,
+            44,
+            42,
+            88,
+            52,
+            45
+          ],
+          "noise_rmsd_mean": 0.23581270604148818,
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.2813989248893616,
+          "steps": [
+            102,
+            70,
+            70
+          ],
+          "noise_rmsd_mean": 0.47844120271056706,
+          "diff_basin": 3,
+          "errors": 0
+        }
+      }
+    },
+    "codeine": {
+      "clean_steps": 36,
+      "Rsm": 0.9795785860469146,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.05655599603465793,
+          "steps": [
+            44,
+            65,
+            58,
+            38,
+            40,
+            50
+          ],
+          "noise_rmsd_mean": 0.09448857175715634,
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.11311199206931585,
+          "steps": [
+            43,
+            51,
+            64,
+            47,
+            58,
+            40
+          ],
+          "noise_rmsd_mean": 0.19361834121081145,
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.4": {
+          "sigma": 0.2262239841386317,
+          "steps": [
+            64,
+            56,
+            82,
+            56
+          ],
+          "noise_rmsd_mean": 0.36997953865287575,
+          "diff_basin": 1,
+          "errors": 1
+        }
+      }
+    },
+    "bisphenol_a": {
+      "clean_steps": 72,
+      "Rsm": 0.8848654351697485,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.05108772971918497,
+          "steps": [
+            32,
+            69,
+            31,
+            42,
+            27,
+            26
+          ],
+          "noise_rmsd_mean": 0.08521289253378596,
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.10217545943836993,
+          "steps": [
+            49,
+            26,
+            26,
+            27,
+            39,
+            24
+          ],
+          "noise_rmsd_mean": 0.17733557810972955,
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.4": {
+          "sigma": 0.20435091887673987,
+          "steps": [
+            39,
+            47,
+            37,
+            38,
+            37
+          ],
+          "noise_rmsd_mean": 0.33531120736502434,
+          "diff_basin": 0,
+          "errors": 1
+        }
+      }
+    },
+    "estradiol": {
+      "clean_steps": 27,
+      "Rsm": 0.6214588511871658,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.03587994350231858,
+          "steps": [
+            28,
+            28,
+            27,
+            29,
+            27,
+            29
+          ],
+          "noise_rmsd_mean": 0.05980028578089552,
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.07175988700463716,
+          "steps": [
+            31,
+            29,
+            30,
+            27,
+            27,
+            32
+          ],
+          "noise_rmsd_mean": 0.12280697579392308,
+          "diff_basin": 0,
+          "errors": 0
+        }
+      }
+    },
+    "maltose": {
+      "clean_steps": 77,
+      "Rsm": 0.9287311444008886,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.05362031762246423,
+          "steps": [
+            68,
+            52
+          ],
+          "noise_rmsd_mean": 0.08886221224514934,
+          "diff_basin": 4,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.10724063524492845,
+          "steps": [
+            102
+          ],
+          "noise_rmsd_mean": 0.18269039281227192,
+          "diff_basin": 5,
+          "errors": 0
+        },
+        "0.4": {
+          "sigma": 0.2144812704898569,
+          "steps": [
+            91,
+            75
+          ],
+          "noise_rmsd_mean": 0.35265942612155343,
+          "diff_basin": 3,
+          "errors": 1
+        }
+      }
+    },
+    "zn_edta": {
+      "clean_steps": 40,
+      "Rsm": 0.6487859901652909,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.037457676606838866,
+          "steps": [
+            36,
+            35,
+            41,
+            43,
+            35,
+            41
+          ],
+          "noise_rmsd_mean": 0.062367142999795254,
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.07491535321367773,
+          "steps": [
+            35,
+            40,
+            38,
+            41,
+            43,
+            35
+          ],
+          "noise_rmsd_mean": 0.13008491768747968,
+          "diff_basin": 0,
+          "errors": 0
+        }
+      }
+    },
+    "artemisinin": {
+      "clean_steps": 27,
+      "Rsm": 1.1213706752751431,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.06474236612314564,
+          "steps": [
+            26,
+            27,
+            26,
+            26,
+            29,
+            29
+          ],
+          "noise_rmsd_mean": 0.10718341690487855,
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.12948473224629128,
+          "steps": [
+            34,
+            29,
+            29,
+            33,
+            32
+          ],
+          "noise_rmsd_mean": 0.2209088953184054,
+          "diff_basin": 1,
+          "errors": 0
+        }
+      }
+    },
+    "ochratoxin_a": {
+      "clean_steps": 56,
+      "Rsm": 1.0255615174276165,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.05921082181573555,
+          "steps": [
+            52,
+            50,
+            60,
+            37
+          ],
+          "noise_rmsd_mean": 0.09838684194987786,
+          "diff_basin": 2,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.1184216436314711,
+          "steps": [
+            53,
+            53,
+            53,
+            41
+          ],
+          "noise_rmsd_mean": 0.20222685464025136,
+          "diff_basin": 2,
+          "errors": 0
+        },
+        "0.4": {
+          "sigma": 0.2368432872629422,
+          "steps": [
+            80,
+            46
+          ],
+          "noise_rmsd_mean": 0.38789227509502755,
+          "diff_basin": 4,
+          "errors": 0
+        }
+      }
+    },
+    "penicillin_v": {
+      "clean_steps": 52,
+      "Rsm": 1.6956776375784541,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.09789999405147494,
+          "steps": [
+            61,
+            50,
+            43,
+            57,
+            50,
+            51
+          ],
+          "noise_rmsd_mean": 0.1618793582106977,
+          "diff_basin": 0,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.19579998810294988,
+          "steps": [
+            52,
+            119
+          ],
+          "noise_rmsd_mean": 0.33213627168423115,
+          "diff_basin": 4,
+          "errors": 0
+        }
+      }
+    },
+    "inosine_cation": {
+      "clean_steps": 58,
+      "Rsm": 1.4609868449823178,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.08435011482330433,
+          "steps": [],
+          "noise_rmsd_mean": 0.1382476233418721,
+          "diff_basin": 6,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.16870022964660866,
+          "steps": [],
+          "noise_rmsd_mean": 0.29076425900116115,
+          "diff_basin": 6,
+          "errors": 0
+        },
+        "0.4": {
+          "sigma": 0.3374004592932173,
+          "steps": [],
+          "noise_rmsd_mean": 0.551778611782937,
+          "diff_basin": 5,
+          "errors": 1
+        }
+      }
+    },
+    "cetirizine": {
+      "clean_steps": 51,
+      "Rsm": 1.7244731151262853,
+      "by_frac": {
+        "0.1": {
+          "sigma": 0.09956250172284334,
+          "steps": [
+            31,
+            46,
+            38
+          ],
+          "noise_rmsd_mean": 0.16474692611144906,
+          "diff_basin": 3,
+          "errors": 0
+        },
+        "0.2": {
+          "sigma": 0.19912500344568668,
+          "steps": [
+            77,
+            61
+          ],
+          "noise_rmsd_mean": 0.3401861936121795,
+          "diff_basin": 4,
+          "errors": 0
+        }
+      }
+    }
+  }
+}

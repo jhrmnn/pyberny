@@ -1,0 +1,4321 @@
+{
+  "benchmark": "birkholz",
+  "solver": "xtb",
+  "sigmas": [
+    0.02,
+    0.05,
+    0.1,
+    0.2,
+    0.3
+  ],
+  "seeds": 3,
+  "raw": {
+    "artemisinin": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 27,
+        "energy": -63.670275640725094,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 27,
+        "energy": -63.670275649672654,
+        "error": null,
+        "denergy_kcal": -5.614678128866594e-06
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 25,
+        "energy": -63.670275382694825,
+        "error": null,
+        "denergy_kcal": 0.00016191643848747798
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 26,
+        "energy": -63.670275544834396,
+        "error": null,
+        "denergy_kcal": 6.017232150002446e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 26,
+        "energy": -63.67027550509673,
+        "error": null,
+        "denergy_kcal": 8.51080820280649e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 26,
+        "energy": -63.670275543131744,
+        "error": null,
+        "denergy_kcal": 6.124075191255018e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 28,
+        "energy": -63.67027568460448,
+        "error": null,
+        "denergy_kcal": -2.753473232061639e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 29,
+        "energy": -63.670275625493844,
+        "error": null,
+        "denergy_kcal": 9.557754258633038e-06
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 27,
+        "energy": -63.670275588624435,
+        "error": null,
+        "denergy_kcal": 3.2693657620933905e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 30,
+        "energy": -63.670275679171965,
+        "error": null,
+        "denergy_kcal": -2.4125775534568653e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "CoordinateError: Cannot build dihedrals through a near-linear chain with a branching terminus: the linear-chain extension supports at most one near-linear neighbour per end (center=[9, 10], linear_l=[36, 37], linear_r=[]). This typically arises in fully linear-rich systems such as long poly(phenylene-ethynylene) chains.",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "LinAlgError: SVD did not converge",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 60,
+        "energy": -63.672962929195975,
+        "error": null,
+        "denergy_kcal": -1.6862989750182709
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "LinAlgError: SVD did not converge",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "unconverged",
+        "steps": 100,
+        "energy": -63.508584763931104,
+        "error": null,
+        "denergy_kcal": 101.46255705779842
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "converged",
+        "steps": 94,
+        "energy": -63.67235721851587,
+        "error": null,
+        "denergy_kcal": -1.3062097847110692
+      }
+    ],
+    "avobenzone": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 48,
+        "energy": -66.22759511776889,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 48,
+        "energy": -66.22759518512078,
+        "error": null,
+        "denergy_kcal": -4.22639498085984e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 41,
+        "energy": -66.22759514838418,
+        "error": null,
+        "denergy_kcal": -1.921138889631749e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 45,
+        "energy": -66.22759522215367,
+        "error": null,
+        "denergy_kcal": -6.550243946931887e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 39,
+        "energy": -66.22759521721596,
+        "error": null,
+        "denergy_kcal": -6.240398369316516e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 38,
+        "energy": -66.22759521189072,
+        "error": null,
+        "denergy_kcal": -5.9062340248009324e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 47,
+        "energy": -66.22759517653404,
+        "error": null,
+        "denergy_kcal": -3.687569009159053e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 37,
+        "energy": -66.22759520530978,
+        "error": null,
+        "denergy_kcal": -5.493274235964644e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 49,
+        "energy": -66.22759513188217,
+        "error": null,
+        "denergy_kcal": -8.856218784305025e-06
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 48,
+        "energy": -66.22759522411991,
+        "error": null,
+        "denergy_kcal": -6.673627512838804e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 54,
+        "energy": -66.22759503395726,
+        "error": null,
+        "denergy_kcal": 5.259259051885511e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "converged",
+        "steps": 68,
+        "energy": -66.22759517613099,
+        "error": null,
+        "denergy_kcal": -3.6622773489036936e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 64,
+        "energy": -66.22759519751128,
+        "error": null,
+        "denergy_kcal": -5.003910661816357e-05
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "converged",
+        "steps": 75,
+        "energy": -66.12723653176053,
+        "error": null,
+        "denergy_kcal": 62.97596352381903
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "converged",
+        "steps": 78,
+        "energy": -66.2275952046473,
+        "error": null,
+        "denergy_kcal": -5.451702886349514e-05
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "LinAlgError: SVD did not converge",
+        "denergy_kcal": null
+      }
+    ],
+    "azadirachtin": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 60,
+        "energy": -162.36257802729804,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 57,
+        "energy": -162.3625777589527,
+        "error": null,
+        "denergy_kcal": 0.00016838923798315338
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 57,
+        "energy": -162.36257793080145,
+        "error": null,
+        "denergy_kcal": 6.05525257263299e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 59,
+        "energy": -162.36257791114315,
+        "error": null,
+        "denergy_kcal": 7.288829625769089e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 64,
+        "energy": -162.36257793899847,
+        "error": null,
+        "denergy_kcal": 5.540881804755733e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 59,
+        "energy": -162.3621954290216,
+        "error": null,
+        "denergy_kcal": 0.24008404322968793
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 60,
+        "energy": -162.36257785690765,
+        "error": null,
+        "denergy_kcal": 0.00010692158611666218
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 88,
+        "energy": -162.36466159702022,
+        "error": null,
+        "denergy_kcal": -1.3074597405353072
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 60,
+        "energy": -162.36219471373016,
+        "error": null,
+        "denergy_kcal": 0.24053289538184888
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 68,
+        "energy": -162.36219552184687,
+        "error": null,
+        "denergy_kcal": 0.24002579449045772
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "unconverged",
+        "steps": 100,
+        "energy": -162.36770625316854,
+        "error": null,
+        "denergy_kcal": -3.218010318869844
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "LinAlgError: SVD did not converge",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 89,
+        "energy": -162.36659338514153,
+        "error": null,
+        "denergy_kcal": -2.5196750885406605
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "CoordinateError: Cannot build dihedrals through a near-linear chain with a branching terminus: the linear-chain extension supports at most one near-linear neighbour per end (center=[6, 54], linear_l=[4, 53], linear_r=[]). This typically arises in fully linear-rich systems such as long poly(phenylene-ethynylene) chains.",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "TBLiteRuntimeError: SCF not converged in 250 cycles",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "TBLiteRuntimeError: SCF not converged in 250 cycles",
+        "denergy_kcal": null
+      }
+    ],
+    "bisphenol_a": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 72,
+        "energy": -48.408223800931886,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 54,
+        "energy": -48.40822388525622,
+        "error": null,
+        "denergy_kcal": -5.291431859322327e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 33,
+        "energy": -48.40822387626626,
+        "error": null,
+        "denergy_kcal": -4.727303526431018e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 37,
+        "energy": -48.40808144477774,
+        "error": null,
+        "denergy_kcal": 0.0893298354158761
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 26,
+        "energy": -48.40822380942864,
+        "error": null,
+        "denergy_kcal": -5.331794449136451e-06
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 33,
+        "energy": -48.40822387377492,
+        "error": null,
+        "denergy_kcal": -4.570969551798846e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 27,
+        "energy": -48.408223817240824,
+        "error": null,
+        "denergy_kcal": -1.0234013232363837e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 27,
+        "energy": -48.40808144122007,
+        "error": null,
+        "denergy_kcal": 0.08933206788955682
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 29,
+        "energy": -48.40808144020678,
+        "error": null,
+        "denergy_kcal": 0.08933270373912415
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 25,
+        "energy": -48.40822386020433,
+        "error": null,
+        "denergy_kcal": -3.719402061904476e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 39,
+        "energy": -48.40808139642148,
+        "error": null,
+        "denergy_kcal": 0.089360179429035
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "LinAlgError: SVD did not converge",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 28,
+        "energy": -48.408081313490996,
+        "error": null,
+        "denergy_kcal": 0.08941221909331659
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "converged",
+        "steps": 60,
+        "energy": -48.4082236615715,
+        "error": null,
+        "denergy_kcal": 8.744996385337408e-05
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "LinAlgError: SVD did not converge",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "converged",
+        "steps": 54,
+        "energy": -48.40822387673406,
+        "error": null,
+        "denergy_kcal": -4.7566584209418436e-05
+      }
+    ],
+    "cetirizine": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 51,
+        "energy": -80.31786226713243,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 40,
+        "energy": -80.31786237591787,
+        "error": null,
+        "denergy_kcal": -6.826389604488364e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 40,
+        "energy": -80.31786234618768,
+        "error": null,
+        "denergy_kcal": -4.960792135325722e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 43,
+        "energy": -80.31724234158732,
+        "error": null,
+        "denergy_kcal": 0.3890091527698599
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 34,
+        "energy": -80.3172424819513,
+        "error": null,
+        "denergy_kcal": 0.3889210730425961
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 35,
+        "energy": -80.31724253555149,
+        "error": null,
+        "denergy_kcal": 0.3888874384160766
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 38,
+        "energy": -80.31786231465043,
+        "error": null,
+        "denergy_kcal": -2.9817995314852803e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 36,
+        "energy": -80.31724232244447,
+        "error": null,
+        "denergy_kcal": 0.38902116508679113
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 36,
+        "energy": -80.31786221390253,
+        "error": null,
+        "denergy_kcal": 3.34022646299148e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 32,
+        "energy": -80.31724220077739,
+        "error": null,
+        "denergy_kcal": 0.38909751233549567
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 85,
+        "energy": -80.31724242786238,
+        "error": null,
+        "denergy_kcal": 0.3889550143489999
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "converged",
+        "steps": 58,
+        "energy": -80.32020077009423,
+        "error": null,
+        "denergy_kcal": -1.467432763657564
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 46,
+        "energy": -80.31724242157796,
+        "error": null,
+        "denergy_kcal": 0.3889589578843781
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "converged",
+        "steps": 95,
+        "energy": -80.31724250165068,
+        "error": null,
+        "denergy_kcal": 0.38890871149172845
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "TBLiteRuntimeError: SCF not converged in 250 cycles",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "CoordinateError: Cannot build dihedrals through a near-linear chain with a branching terminus: the linear-chain extension supports at most one near-linear neighbour per end (center=[16, 22], linear_l=[13, 15], linear_r=[13]). This typically arises in fully linear-rich systems such as long poly(phenylene-ethynylene) chains.",
+        "denergy_kcal": null
+      }
+    ],
+    "codeine": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 36,
+        "energy": -64.40691127976174,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 36,
+        "energy": -64.40691135632851,
+        "error": null,
+        "denergy_kcal": -4.804636955485215e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 38,
+        "energy": -64.40691134508583,
+        "error": null,
+        "denergy_kcal": -4.099148377359445e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 36,
+        "energy": -64.406911348379,
+        "error": null,
+        "denergy_kcal": -4.305797703250987e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 36,
+        "energy": -64.40691138770998,
+        "error": null,
+        "denergy_kcal": -6.77385425505518e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 37,
+        "energy": -64.40691115155573,
+        "error": null,
+        "denergy_kcal": 8.045048662264056e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 41,
+        "energy": -64.40691127311626,
+        "error": null,
+        "denergy_kcal": 4.170100927951008e-06
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 36,
+        "energy": -64.40691093678588,
+        "error": null,
+        "denergy_kcal": 0.00021522060552482144
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 39,
+        "energy": -64.40691137689664,
+        "error": null,
+        "denergy_kcal": -6.0953070646889086e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 53,
+        "energy": -64.40691133425229,
+        "error": null,
+        "denergy_kcal": -3.419333126176478e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 52,
+        "energy": -64.4069114340387,
+        "error": null,
+        "denergy_kcal": -9.681025464720754e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "converged",
+        "steps": 61,
+        "energy": -64.40691143998967,
+        "error": null,
+        "denergy_kcal": -0.00010054454215579464
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 49,
+        "energy": -64.4069110724525,
+        "error": null,
+        "denergy_kcal": 0.00013008851327348683
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "converged",
+        "steps": 52,
+        "energy": -64.4069112789307,
+        "error": null,
+        "denergy_kcal": 5.21483322781592e-07
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "converged",
+        "steps": 60,
+        "energy": -64.32707382595301,
+        "error": null,
+        "denergy_kcal": 50.09875865005688
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "TBLiteRuntimeError: SCF not converged in 250 cycles",
+        "denergy_kcal": null
+      }
+    ],
+    "diisobutyl_phthalate": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 34,
+        "energy": -61.7824196393716,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 44,
+        "energy": -61.783908179574,
+        "error": null,
+        "denergy_kcal": -0.9340730795311083
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 56,
+        "energy": -61.78390818014745,
+        "error": null,
+        "denergy_kcal": -0.9340734393768054
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 35,
+        "energy": -61.782419394982504,
+        "error": null,
+        "denergy_kcal": 0.00015335647063440962
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 34,
+        "energy": -61.782393138623576,
+        "error": null,
+        "denergy_kcal": 0.016629470452878624
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 46,
+        "energy": -61.783908242644074,
+        "error": null,
+        "denergy_kcal": -0.9341126566009419
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 42,
+        "energy": -61.783908238385834,
+        "error": null,
+        "denergy_kcal": -0.9341099845150098
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 49,
+        "energy": -61.78390787172467,
+        "error": null,
+        "denergy_kcal": -0.9338799011621611
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 35,
+        "energy": -61.78241928637849,
+        "error": null,
+        "denergy_kcal": 0.00022150651764661568
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 55,
+        "energy": -61.78390823482956,
+        "error": null,
+        "denergy_kcal": -0.9341077529196975
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "TBLiteRuntimeError: SCF not converged in 250 cycles",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "unconverged",
+        "steps": 100,
+        "energy": -61.7836216249834,
+        "error": null,
+        "denergy_kcal": -0.7542573590921461
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "LinAlgError: SVD did not converge",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "converged",
+        "steps": 80,
+        "energy": -61.7731315661323,
+        "error": null,
+        "denergy_kcal": 5.8283539534508355
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "unconverged",
+        "steps": 100,
+        "energy": -61.65043004086129,
+        "error": null,
+        "denergy_kcal": 82.82472354300359
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "unconverged",
+        "steps": 100,
+        "energy": -61.697115536059066,
+        "error": null,
+        "denergy_kcal": 53.52913300507055
+      }
+    ],
+    "easc": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 38,
+        "energy": -36.49622596461755,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 35,
+        "energy": -36.496225550769076,
+        "error": null,
+        "denergy_kcal": 0.00025969383919590306
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 33,
+        "energy": -36.49622517311554,
+        "error": null,
+        "denergy_kcal": 0.0004966750103913308
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 33,
+        "energy": -36.496224909409996,
+        "error": null,
+        "denergy_kcal": 0.0006621527379356105
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 33,
+        "energy": -36.49622565656447,
+        "error": null,
+        "denergy_kcal": 0.0001933062272874305
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 36,
+        "energy": -36.49622594343178,
+        "error": null,
+        "denergy_kcal": 1.3294271128712218e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 36,
+        "energy": -36.496225968316,
+        "error": null,
+        "denergy_kcal": -2.3208099004860413e-06
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 47,
+        "energy": -36.49622441733753,
+        "error": null,
+        "denergy_kcal": 0.0009709328724828536
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 44,
+        "energy": -36.495965337253445,
+        "error": null,
+        "denergy_kcal": 0.16354614017683997
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 34,
+        "energy": -36.496226051434824,
+        "error": null,
+        "denergy_kcal": -5.4478661552216426e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 91,
+        "energy": -36.49622525194671,
+        "error": null,
+        "denergy_kcal": 0.0004472077037848251
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "converged",
+        "steps": 92,
+        "energy": -36.496226171421334,
+        "error": null,
+        "denergy_kcal": -0.00012977133309656253
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 46,
+        "energy": -36.49622547213024,
+        "error": null,
+        "denergy_kcal": 0.00030904045262995046
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "converged",
+        "steps": 86,
+        "energy": -36.49622615174024,
+        "error": null,
+        "denergy_kcal": -0.00011742125898186834
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "converged",
+        "steps": 53,
+        "energy": -36.496226188977865,
+        "error": null,
+        "denergy_kcal": -0.00014078822228665442
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "converged",
+        "steps": 91,
+        "energy": -36.49596516015708,
+        "error": null,
+        "denergy_kcal": 0.16365726982545206
+      }
+    ],
+    "estradiol": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 27,
+        "energy": -58.973687800763656,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 28,
+        "energy": -58.97368779181944,
+        "error": null,
+        "denergy_kcal": 5.612582529064038e-06
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 28,
+        "energy": -58.973687987540416,
+        "error": null,
+        "denergy_kcal": -0.00011720418605338442
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 28,
+        "energy": -58.97368792598624,
+        "error": null,
+        "denergy_kcal": -7.857835801605072e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 29,
+        "energy": -58.97368802402448,
+        "error": null,
+        "denergy_kcal": -0.00014009828395080822
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 30,
+        "energy": -58.973688009156184,
+        "error": null,
+        "denergy_kcal": -0.00013076828572092917
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 29,
+        "energy": -58.97368803664255,
+        "error": null,
+        "denergy_kcal": -0.00014801624028138713
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 33,
+        "energy": -58.973687898765824,
+        "error": null,
+        "denergy_kcal": -6.149728899816692e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 34,
+        "energy": -58.973688061930154,
+        "error": null,
+        "denergy_kcal": -0.00016388445193184223
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 32,
+        "energy": -58.97368788814878,
+        "error": null,
+        "denergy_kcal": -5.483499377566466e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 39,
+        "energy": -58.97368802094547,
+        "error": null,
+        "denergy_kcal": -0.00013816617214391247
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "converged",
+        "steps": 51,
+        "energy": -58.97368800874913,
+        "error": null,
+        "denergy_kcal": -0.0001305128543986125
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 38,
+        "energy": -58.97368803726875,
+        "error": null,
+        "denergy_kcal": -0.0001484091875379813
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "converged",
+        "steps": 64,
+        "energy": -58.973687848167444,
+        "error": null,
+        "denergy_kcal": -2.9746325801605386e-05
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "converged",
+        "steps": 91,
+        "energy": -58.91298545522142,
+        "error": null,
+        "denergy_kcal": 38.091296925607146
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "TBLiteRuntimeError: SCF not converged in 250 cycles",
+        "denergy_kcal": null
+      }
+    ],
+    "inosine_cation": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 58,
+        "energy": -58.27037394022629,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 35,
+        "energy": -58.269090086778554,
+        "error": null,
+        "denergy_kcal": 0.8056302017642838
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 37,
+        "energy": -58.26909052231333,
+        "error": null,
+        "denergy_kcal": 0.805356899568136
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 36,
+        "energy": -58.26909043338491,
+        "error": null,
+        "denergy_kcal": 0.8054127029920851
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 37,
+        "energy": -58.272948280782146,
+        "error": null,
+        "denergy_kcal": -1.615423088262579
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 37,
+        "energy": -58.272948872303154,
+        "error": null,
+        "denergy_kcal": -1.6157942732993165
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 32,
+        "energy": -58.2729071806489,
+        "error": null,
+        "denergy_kcal": -1.5896323652659547
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 37,
+        "energy": -58.269077422464065,
+        "error": null,
+        "denergy_kcal": 0.8135771790889854
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 32,
+        "energy": -58.26802066883485,
+        "error": null,
+        "denergy_kcal": 1.4767000931715313
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 38,
+        "energy": -58.269090497911016,
+        "error": null,
+        "denergy_kcal": 0.805372212249655
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 57,
+        "energy": -58.27294894158317,
+        "error": null,
+        "denergy_kcal": -1.6158377471637353
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "converged",
+        "steps": 65,
+        "energy": -58.268886200868465,
+        "error": null,
+        "denergy_kcal": 0.93357054197326
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 63,
+        "energy": -58.26909054783096,
+        "error": null,
+        "denergy_kcal": 0.8053408870097877
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "converged",
+        "steps": 79,
+        "energy": -58.316480742024815,
+        "error": null,
+        "denergy_kcal": -28.932454947322555
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "unconverged",
+        "steps": 100,
+        "energy": -58.15503673515544,
+        "error": null,
+        "denergy_kcal": 72.37518889391775
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "converged",
+        "steps": 51,
+        "energy": -58.248809565390374,
+        "error": null,
+        "denergy_kcal": 13.531849511786731
+      }
+    ],
+    "maltose": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 77,
+        "energy": -81.65391877518795,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 53,
+        "energy": -81.65753885266587,
+        "error": null,
+        "denergy_kcal": -2.2716329142365788
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 33,
+        "energy": -81.64826914401503,
+        "error": null,
+        "denergy_kcal": 3.5451970859662847
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 38,
+        "energy": -81.64826931400816,
+        "error": null,
+        "denergy_kcal": 3.5450904136673698
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 61,
+        "energy": -81.65391857150124,
+        "error": null,
+        "denergy_kcal": 0.0001278153403693636
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 58,
+        "energy": -81.65753880073612,
+        "error": null,
+        "denergy_kcal": -2.2716003278290806
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 48,
+        "energy": -81.6575388335129,
+        "error": null,
+        "denergy_kcal": -2.2716208955704262
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 71,
+        "energy": -81.6539187785708,
+        "error": null,
+        "denergy_kcal": -2.1227712604215126e-06
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 94,
+        "energy": -81.65391876139235,
+        "error": null,
+        "denergy_kcal": 8.656869279683153e-06
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 46,
+        "energy": -81.65753882118045,
+        "error": null,
+        "denergy_kcal": -2.2716131568413833
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 90,
+        "energy": -81.6575385307494,
+        "error": null,
+        "denergy_kcal": -2.271430908608253
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "converged",
+        "steps": 94,
+        "energy": -81.6482689242433,
+        "error": null,
+        "denergy_kcal": 3.5453349948121486
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 62,
+        "energy": -81.65753871385687,
+        "error": null,
+        "denergy_kcal": -2.2715458102740875
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "converged",
+        "steps": 65,
+        "energy": -81.6616164956265,
+        "error": null,
+        "denergy_kcal": -4.830392503883741
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "converged",
+        "steps": 65,
+        "energy": -81.65694683823587,
+        "error": null,
+        "denergy_kcal": -1.9001382506309001
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "unconverged",
+        "steps": 100,
+        "energy": -81.61556911125133,
+        "error": null,
+        "denergy_kcal": 24.064777447361486
+      }
+    ],
+    "mg_porphin": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 16,
+        "energy": -61.28925869904444,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 20,
+        "energy": -61.28925845412648,
+        "error": null,
+        "denergy_kcal": 0.00015368833784484376
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 20,
+        "energy": -61.2892587313862,
+        "error": null,
+        "denergy_kcal": -2.0294760489563148e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 17,
+        "energy": -61.28925787248548,
+        "error": null,
+        "denergy_kcal": 0.0005186735782361087
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 21,
+        "energy": -61.28925876736671,
+        "error": null,
+        "denergy_kcal": -4.2872873147822394e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 21,
+        "energy": -61.28925860404992,
+        "error": null,
+        "denergy_kcal": 5.9609960604924074e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 22,
+        "energy": -61.28925846990725,
+        "error": null,
+        "denergy_kcal": 0.00014378575486806162
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 24,
+        "energy": -61.28925864697346,
+        "error": null,
+        "denergy_kcal": 3.267503353502906e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 25,
+        "energy": -61.289258670972075,
+        "error": null,
+        "denergy_kcal": 1.761567436240777e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 24,
+        "energy": -61.28925865595954,
+        "error": null,
+        "denergy_kcal": 2.703618021014234e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 45,
+        "energy": -61.289258574796236,
+        "error": null,
+        "denergy_kcal": 7.796692441578664e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "converged",
+        "steps": 34,
+        "energy": -61.28925828012633,
+        "error": null,
+        "denergy_kcal": 0.00026287508008170367
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 33,
+        "energy": -61.28925877894035,
+        "error": null,
+        "denergy_kcal": -5.0135441786959365e-05
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "converged",
+        "steps": 92,
+        "energy": -60.993404776719736,
+        "error": null,
+        "denergy_kcal": 185.6511391974796
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "converged",
+        "steps": 48,
+        "energy": -61.18477144258648,
+        "error": null,
+        "denergy_kcal": 65.56674334622932
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "converged",
+        "steps": 63,
+        "energy": -60.80263487286731,
+        "error": null,
+        "denergy_kcal": 305.3610612309843
+      }
+    ],
+    "ochratoxin_a": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 56,
+        "energy": -79.86191316469916,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 93,
+        "energy": -79.86512411793275,
+        "error": null,
+        "denergy_kcal": -2.014903574851827
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 27,
+        "energy": -79.8581357567913,
+        "error": null,
+        "denergy_kcal": 2.370359249584046
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 60,
+        "energy": -79.86191316836332,
+        "error": null,
+        "denergy_kcal": -2.2992921033644766e-06
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 49,
+        "energy": -79.86191282677505,
+        "error": null,
+        "denergy_kcal": 0.00021205057832732597
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 45,
+        "energy": -79.86191305370156,
+        "error": null,
+        "denergy_kcal": 6.965204810643466e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 25,
+        "energy": -79.85813610579795,
+        "error": null,
+        "denergy_kcal": 2.3701402446017186
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 61,
+        "energy": -79.86191315868396,
+        "error": null,
+        "denergy_kcal": 3.7745943643639223e-06
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 50,
+        "energy": -79.86191310285048,
+        "error": null,
+        "denergy_kcal": 3.881063318758124e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 67,
+        "energy": -79.86191320191492,
+        "error": null,
+        "denergy_kcal": -2.3353239355440848e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 72,
+        "energy": -79.8619131759118,
+        "error": null,
+        "denergy_kcal": -7.036034300480667e-06
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "converged",
+        "steps": 51,
+        "energy": -79.8619131952646,
+        "error": null,
+        "denergy_kcal": -1.918010649586061e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "TBLiteRuntimeError: SCF not converged in 250 cycles",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "CoordinateError: Cannot build dihedrals through a near-linear chain with a branching terminus: the linear-chain extension supports at most one near-linear neighbour per end (center=[28, 42], linear_l=[41, 44], linear_r=[]). This typically arises in fully linear-rich systems such as long poly(phenylene-ethynylene) chains.",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "converged",
+        "steps": 97,
+        "energy": -79.82030625053974,
+        "error": null,
+        "denergy_kcal": 26.108732821563947
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "unconverged",
+        "steps": 100,
+        "energy": -79.86553182530182,
+        "error": null,
+        "denergy_kcal": -2.270743811584711
+      }
+    ],
+    "penicillin_v": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 52,
+        "energy": -72.87263668819692,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 45,
+        "energy": -72.8726367044106,
+        "error": null,
+        "denergy_kcal": -1.017423513331518e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 55,
+        "energy": -72.87263660130846,
+        "error": null,
+        "denergy_kcal": 5.452333349779474e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 55,
+        "energy": -72.87263674442207,
+        "error": null,
+        "denergy_kcal": -3.5281812551550285e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 54,
+        "energy": -72.87263675541934,
+        "error": null,
+        "denergy_kcal": -4.218270295838101e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 47,
+        "energy": -72.87263667033822,
+        "error": null,
+        "denergy_kcal": 1.1206500843716376e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 49,
+        "energy": -72.87263658137302,
+        "error": null,
+        "denergy_kcal": 6.703301206042999e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 43,
+        "energy": -72.8726367592752,
+        "error": null,
+        "denergy_kcal": -4.460229140785817e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 64,
+        "energy": -72.8726366467709,
+        "error": null,
+        "denergy_kcal": 2.599521998992203e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 64,
+        "energy": -72.87263629192525,
+        "error": null,
+        "denergy_kcal": 0.0002486642292691373
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 99,
+        "energy": -72.87263673469886,
+        "error": null,
+        "denergy_kcal": -2.918040684556364e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "converged",
+        "steps": 45,
+        "energy": -72.87263673035419,
+        "error": null,
+        "denergy_kcal": -2.6454085007114054e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 70,
+        "energy": -72.872636358202,
+        "error": null,
+        "denergy_kcal": 0.0002070749377527184
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "converged",
+        "steps": 64,
+        "energy": -72.87263664678612,
+        "error": null,
+        "denergy_kcal": 2.5985669405289954e-05
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "converged",
+        "steps": 49,
+        "energy": -72.87739826734436,
+        "error": null,
+        "denergy_kcal": -2.9879360265207473
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "unconverged",
+        "steps": 100,
+        "energy": -72.63932008348252,
+        "error": null,
+        "denergy_kcal": 146.4083799145234
+      }
+    ],
+    "raffinose": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 47,
+        "energy": -119.93912135820895,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 59,
+        "energy": -119.93912142311558,
+        "error": null,
+        "denergy_kcal": -4.0729524880828975e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 57,
+        "energy": -119.93666444879672,
+        "error": null,
+        "denergy_kcal": 1.5417339330899507
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 52,
+        "energy": -119.93911692458182,
+        "error": null,
+        "denergy_kcal": 0.0027821430259510564
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 63,
+        "energy": -119.93666448371596,
+        "error": null,
+        "denergy_kcal": 1.541712020936616
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 52,
+        "energy": -119.93666456022447,
+        "error": null,
+        "denergy_kcal": 1.5416640111196722
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 62,
+        "energy": -119.93666437305653,
+        "error": null,
+        "denergy_kcal": 1.5417814607762608
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 51,
+        "energy": -119.9391213138392,
+        "error": null,
+        "denergy_kcal": 2.7842442169922346e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 56,
+        "energy": -119.93912132488893,
+        "error": null,
+        "denergy_kcal": 2.090862855257657e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "unconverged",
+        "steps": 100,
+        "energy": -119.94669246667404,
+        "error": null,
+        "denergy_kcal": -4.750942291000951
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "unconverged",
+        "steps": 100,
+        "energy": -119.94691892812985,
+        "error": null,
+        "denergy_kcal": -4.8930490000318905
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "converged",
+        "steps": 50,
+        "energy": -119.93912131252951,
+        "error": null,
+        "denergy_kcal": 2.866428290780901e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 77,
+        "energy": -119.94947716668825,
+        "error": null,
+        "denergy_kcal": -6.498367932346006
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "converged",
+        "steps": 98,
+        "energy": -119.80835977732077,
+        "error": null,
+        "denergy_kcal": 82.05413085079905
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "timeout",
+        "steps": null,
+        "energy": null,
+        "error": "wall-clock abort: >10 min, runaway non-convergence at sigma=0.3",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "converged",
+        "steps": 97,
+        "energy": -119.93110797953827,
+        "error": null,
+        "denergy_kcal": 5.028471035108385
+      }
+    ],
+    "sphingomyelin": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 83,
+        "energy": -108.40644064774821,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 87,
+        "energy": -108.40644075279107,
+        "error": null,
+        "denergy_kcal": -6.591538855721999e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 84,
+        "energy": -108.40644072822916,
+        "error": null,
+        "denergy_kcal": -5.050255520258331e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 86,
+        "energy": -108.40644064690999,
+        "error": null,
+        "denergy_kcal": 5.259955504415637e-07
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 88,
+        "energy": -108.40644072161824,
+        "error": null,
+        "denergy_kcal": -4.6354141503227264e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 87,
+        "energy": -108.40672577261088,
+        "error": null,
+        "denergy_kcal": -0.17891855261710715
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 86,
+        "energy": -108.40644059439457,
+        "error": null,
+        "denergy_kcal": 3.3479917749406956e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 97,
+        "energy": -108.40644075860037,
+        "error": null,
+        "denergy_kcal": -6.956077804694887e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 81,
+        "energy": -108.40532742185569,
+        "error": null,
+        "denergy_kcal": 0.6985597943314008
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 80,
+        "energy": -108.40034301051894,
+        "error": null,
+        "denergy_kcal": 3.8263251307694666
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 78,
+        "energy": -108.40738010365786,
+        "error": null,
+        "denergy_kcal": -0.5895174837667728
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "unconverged",
+        "steps": 100,
+        "energy": -108.40441125969893,
+        "error": null,
+        "denergy_kcal": 1.2734602274736966
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "unconverged",
+        "steps": 100,
+        "energy": -108.41341270870558,
+        "error": null,
+        "denergy_kcal": -4.375034304492905
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "timeout",
+        "steps": null,
+        "energy": null,
+        "error": "wall-clock abort: >10 min, runaway non-convergence at sigma=0.3",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "timeout",
+        "steps": null,
+        "energy": null,
+        "error": "wall-clock abort: >10 min, runaway non-convergence at sigma=0.3",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "converged",
+        "steps": 86,
+        "energy": -108.40057964583518,
+        "error": null,
+        "denergy_kcal": 3.677834227929996
+      }
+    ],
+    "tamoxifen": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 45,
+        "energy": -77.41503773352645,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 46,
+        "energy": -77.41503792789649,
+        "error": null,
+        "denergy_kcal": -0.00012196904495763874
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 44,
+        "energy": -77.41503799260335,
+        "error": null,
+        "denergy_kcal": -0.000162573208383045
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 36,
+        "energy": -77.4150377504133,
+        "error": null,
+        "denergy_kcal": -1.0596663466280635e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 35,
+        "energy": -77.41503782035757,
+        "error": null,
+        "denergy_kcal": -5.4487351603312554e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 43,
+        "energy": -77.41513449132863,
+        "error": null,
+        "denergy_kcal": -0.060716437559279586
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 37,
+        "energy": -77.41503779956388,
+        "error": null,
+        "denergy_kcal": -4.143911280886638e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 72,
+        "energy": -77.41774794378723,
+        "error": null,
+        "denergy_kcal": -1.7006826153468637
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 65,
+        "energy": -77.41503783817251,
+        "error": null,
+        "denergy_kcal": -6.566639563089246e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 47,
+        "energy": -77.41503759260654,
+        "error": null,
+        "denergy_kcal": 8.842857775010686e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 84,
+        "energy": -77.4150375597918,
+        "error": null,
+        "denergy_kcal": 0.00010902013759383372
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "converged",
+        "steps": 61,
+        "energy": -77.41503571109058,
+        "error": null,
+        "denergy_kcal": 0.0012690976659732354
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 49,
+        "energy": -77.41503792179094,
+        "error": null,
+        "denergy_kcal": -0.0001181377534718082
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "CoordinateError: Cannot build dihedrals through a near-linear chain with a branching terminus: the linear-chain extension supports at most one near-linear neighbour per end (center=[49, 52], linear_l=[54, 56], linear_r=[]). This typically arises in fully linear-rich systems such as long poly(phenylene-ethynylene) chains.",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "CoordinateError: Cannot build dihedrals through a near-linear chain with a branching terminus: the linear-chain extension supports at most one near-linear neighbour per end (center=[34, 37], linear_l=[6], linear_r=[6, 39]). This typically arises in fully linear-rich systems such as long poly(phenylene-ethynylene) chains.",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "converged",
+        "steps": 60,
+        "energy": -77.41503800475388,
+        "error": null,
+        "denergy_kcal": -0.00017019778519998906
+      }
+    ],
+    "vitamin_c": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 30,
+        "energy": -41.3178273477396,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 35,
+        "energy": -41.317827234755704,
+        "error": null,
+        "denergy_kcal": 7.089846628176515e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 31,
+        "energy": -41.31782729846838,
+        "error": null,
+        "denergy_kcal": 3.091815845885681e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 37,
+        "energy": -41.31782731145788,
+        "error": null,
+        "denergy_kcal": 2.2767122384280848e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 31,
+        "energy": -41.31782730387368,
+        "error": null,
+        "denergy_kcal": 2.7526283040561404e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 31,
+        "energy": -41.31782730315276,
+        "error": null,
+        "denergy_kcal": 2.7978665074534455e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 37,
+        "energy": -41.3178273483659,
+        "error": null,
+        "denergy_kcal": -3.930096787159548e-07
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 32,
+        "energy": -41.317826851345096,
+        "error": null,
+        "denergy_kcal": 0.00031149225535298823
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 43,
+        "energy": -41.31782729533394,
+        "error": null,
+        "denergy_kcal": 3.2885048305029045e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 40,
+        "energy": -41.31782729567533,
+        "error": null,
+        "denergy_kcal": 3.2670824500532014e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 59,
+        "energy": -41.31782732739022,
+        "error": null,
+        "denergy_kcal": 1.2769430387523552e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "converged",
+        "steps": 46,
+        "energy": -41.31782733413594,
+        "error": null,
+        "denergy_kcal": 8.53642579571199e-06
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 83,
+        "energy": -41.31782730845019,
+        "error": null,
+        "denergy_kcal": 2.4654477529861602e-05
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "converged",
+        "steps": 49,
+        "energy": -41.31782705532057,
+        "error": null,
+        "denergy_kcal": 0.0001834957124815483
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "converged",
+        "steps": 64,
+        "energy": -41.31482336361036,
+        "error": null,
+        "denergy_kcal": 1.8850285010355006
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "converged",
+        "steps": 55,
+        "energy": -41.31482339391063,
+        "error": null,
+        "denergy_kcal": 1.8850094873285466
+      }
+    ],
+    "zn_edta": [
+      {
+        "sigma": 0.0,
+        "seed": null,
+        "status": "converged",
+        "steps": 40,
+        "energy": -67.06557783933911,
+        "error": null,
+        "denergy_kcal": 0.0
+      },
+      {
+        "sigma": 0.02,
+        "seed": 0,
+        "status": "converged",
+        "steps": 53,
+        "energy": -67.06557734919153,
+        "error": null,
+        "denergy_kcal": 0.0003075722531146648
+      },
+      {
+        "sigma": 0.02,
+        "seed": 1,
+        "status": "converged",
+        "steps": 39,
+        "energy": -67.06557772621883,
+        "error": null,
+        "denergy_kcal": 7.098404701072315e-05
+      },
+      {
+        "sigma": 0.02,
+        "seed": 2,
+        "status": "converged",
+        "steps": 40,
+        "energy": -67.06557776889144,
+        "error": null,
+        "denergy_kcal": 4.420657974301381e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 0,
+        "status": "converged",
+        "steps": 39,
+        "energy": -67.06557753284449,
+        "error": null,
+        "denergy_kcal": 0.00019232828219914534
+      },
+      {
+        "sigma": 0.05,
+        "seed": 1,
+        "status": "converged",
+        "steps": 43,
+        "energy": -67.06557787794569,
+        "error": null,
+        "denergy_kcal": -2.4225989792360672e-05
+      },
+      {
+        "sigma": 0.05,
+        "seed": 2,
+        "status": "converged",
+        "steps": 34,
+        "energy": -67.06557723938613,
+        "error": null,
+        "denergy_kcal": 0.00037647618100903295
+      },
+      {
+        "sigma": 0.1,
+        "seed": 0,
+        "status": "converged",
+        "steps": 39,
+        "energy": -67.06557720950565,
+        "error": null,
+        "denergy_kcal": 0.0003952264666092203
+      },
+      {
+        "sigma": 0.1,
+        "seed": 1,
+        "status": "converged",
+        "steps": 62,
+        "energy": -67.06557794794699,
+        "error": null,
+        "denergy_kcal": -6.815247255750945e-05
+      },
+      {
+        "sigma": 0.1,
+        "seed": 2,
+        "status": "converged",
+        "steps": 32,
+        "energy": -67.06557499844612,
+        "error": null,
+        "denergy_kcal": 0.0017826872655836675
+      },
+      {
+        "sigma": 0.2,
+        "seed": 0,
+        "status": "converged",
+        "steps": 42,
+        "energy": -67.06557788170475,
+        "error": null,
+        "denergy_kcal": -2.658484151734758e-05
+      },
+      {
+        "sigma": 0.2,
+        "seed": 1,
+        "status": "converged",
+        "steps": 50,
+        "energy": -67.06557716813484,
+        "error": null,
+        "denergy_kcal": 0.00042118704232155544
+      },
+      {
+        "sigma": 0.2,
+        "seed": 2,
+        "status": "converged",
+        "steps": 37,
+        "energy": -67.06557766411699,
+        "error": null,
+        "denergy_kcal": 0.00010995354449823008
+      },
+      {
+        "sigma": 0.3,
+        "seed": 0,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "TBLiteRuntimeError: SCF not converged in 250 cycles",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 1,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "TBLiteRuntimeError: SCF not converged in 250 cycles",
+        "denergy_kcal": null
+      },
+      {
+        "sigma": 0.3,
+        "seed": 2,
+        "status": "error",
+        "steps": null,
+        "energy": null,
+        "error": "CoordinateError: Cannot build dihedrals through a near-linear chain with a branching terminus: the linear-chain extension supports at most one near-linear neighbour per end (center=[1, 16], linear_l=[18, 26], linear_r=[]). This typically arises in fully linear-rich systems such as long poly(phenylene-ethynylene) chains.",
+        "denergy_kcal": null
+      }
+    ]
+  },
+  "summaries": [
+    {
+      "name": "artemisinin",
+      "atoms": 42,
+      "ref_status": "converged",
+      "ref_steps": 27,
+      "n_trials": 15,
+      "n_converged": 11,
+      "n_error": 3,
+      "n_unconverged": 1,
+      "n_diff_basin": 2,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 25,
+          "steps_max": 27,
+          "steps_mean": 26,
+          "max_denergy_kcal": 0.00016191643848747798
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 26,
+          "steps_max": 28,
+          "steps_mean": 26.666666666666668,
+          "max_denergy_kcal": 8.51080820280649e-05
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 27,
+          "steps_max": 30,
+          "steps_mean": 28.666666666666668,
+          "max_denergy_kcal": 3.2693657620933905e-05
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 1,
+          "n_error": 2,
+          "n_unconverged": 0,
+          "n_same_basin": 0,
+          "n_diff_basin": 1,
+          "steps_min": 60,
+          "steps_max": 60,
+          "steps_mean": 60,
+          "max_denergy_kcal": 1.6862989750182709
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 1,
+          "n_error": 1,
+          "n_unconverged": 1,
+          "n_same_basin": 0,
+          "n_diff_basin": 1,
+          "steps_min": 94,
+          "steps_max": 94,
+          "steps_mean": 94,
+          "max_denergy_kcal": 1.3062097847110692
+        }
+      ],
+      "_error_examples": [
+        "CoordinateError: Cannot build dihedrals through a near-linear chain with a branching terminus: the linear-chain extension supports at most one near-linear neighbour per end (center=[9, 10], linear_l=[36, 37], linear_r=[]). This typically arises in fully linear-rich systems such as long poly(phenylene-ethynylene) chains.",
+        "LinAlgError: SVD did not converge"
+      ]
+    },
+    {
+      "name": "avobenzone",
+      "atoms": 45,
+      "ref_status": "converged",
+      "ref_steps": 48,
+      "n_trials": 15,
+      "n_converged": 14,
+      "n_error": 1,
+      "n_unconverged": 0,
+      "n_diff_basin": 1,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 41,
+          "steps_max": 48,
+          "steps_mean": 44.666666666666664,
+          "max_denergy_kcal": 6.550243946931887e-05
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 38,
+          "steps_max": 47,
+          "steps_mean": 41.333333333333336,
+          "max_denergy_kcal": 6.240398369316516e-05
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 37,
+          "steps_max": 49,
+          "steps_mean": 44.666666666666664,
+          "max_denergy_kcal": 6.673627512838804e-05
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 54,
+          "steps_max": 68,
+          "steps_mean": 62,
+          "max_denergy_kcal": 5.259259051885511e-05
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 2,
+          "n_error": 1,
+          "n_unconverged": 0,
+          "n_same_basin": 1,
+          "n_diff_basin": 1,
+          "steps_min": 75,
+          "steps_max": 78,
+          "steps_mean": 76.5,
+          "max_denergy_kcal": 62.97596352381903
+        }
+      ],
+      "_error_examples": [
+        "LinAlgError: SVD did not converge"
+      ]
+    },
+    {
+      "name": "azadirachtin",
+      "atoms": 95,
+      "ref_status": "converged",
+      "ref_steps": 60,
+      "n_trials": 15,
+      "n_converged": 10,
+      "n_error": 4,
+      "n_unconverged": 1,
+      "n_diff_basin": 5,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 57,
+          "steps_max": 59,
+          "steps_mean": 57.666666666666664,
+          "max_denergy_kcal": 0.00016838923798315338
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 2,
+          "n_diff_basin": 1,
+          "steps_min": 59,
+          "steps_max": 64,
+          "steps_mean": 61,
+          "max_denergy_kcal": 0.24008404322968793
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 0,
+          "n_diff_basin": 3,
+          "steps_min": 60,
+          "steps_max": 88,
+          "steps_mean": 72,
+          "max_denergy_kcal": 1.3074597405353072
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 1,
+          "n_error": 1,
+          "n_unconverged": 1,
+          "n_same_basin": 0,
+          "n_diff_basin": 1,
+          "steps_min": 89,
+          "steps_max": 89,
+          "steps_mean": 89,
+          "max_denergy_kcal": 2.5196750885406605
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 0,
+          "n_error": 3,
+          "n_unconverged": 0,
+          "n_same_basin": 0,
+          "n_diff_basin": 0,
+          "steps_min": null,
+          "steps_max": null,
+          "steps_mean": null,
+          "max_denergy_kcal": 0.0
+        }
+      ],
+      "_error_examples": [
+        "CoordinateError: Cannot build dihedrals through a near-linear chain with a branching terminus: the linear-chain extension supports at most one near-linear neighbour per end (center=[6, 54], linear_l=[4, 53], linear_r=[]). This typically arises in fully linear-rich systems such as long poly(phenylene-ethynylene) chains.",
+        "LinAlgError: SVD did not converge",
+        "TBLiteRuntimeError: SCF not converged in 250 cycles"
+      ]
+    },
+    {
+      "name": "bisphenol_a",
+      "atoms": 33,
+      "ref_status": "converged",
+      "ref_steps": 72,
+      "n_trials": 15,
+      "n_converged": 13,
+      "n_error": 2,
+      "n_unconverged": 0,
+      "n_diff_basin": 0,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 33,
+          "steps_max": 54,
+          "steps_mean": 41.333333333333336,
+          "max_denergy_kcal": 0.0893298354158761
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 26,
+          "steps_max": 33,
+          "steps_mean": 28.666666666666668,
+          "max_denergy_kcal": 4.570969551798846e-05
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 25,
+          "steps_max": 29,
+          "steps_mean": 27,
+          "max_denergy_kcal": 0.08933270373912415
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 2,
+          "n_error": 1,
+          "n_unconverged": 0,
+          "n_same_basin": 2,
+          "n_diff_basin": 0,
+          "steps_min": 28,
+          "steps_max": 39,
+          "steps_mean": 33.5,
+          "max_denergy_kcal": 0.08941221909331659
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 2,
+          "n_error": 1,
+          "n_unconverged": 0,
+          "n_same_basin": 2,
+          "n_diff_basin": 0,
+          "steps_min": 54,
+          "steps_max": 60,
+          "steps_mean": 57,
+          "max_denergy_kcal": 8.744996385337408e-05
+        }
+      ],
+      "_error_examples": [
+        "LinAlgError: SVD did not converge"
+      ]
+    },
+    {
+      "name": "cetirizine",
+      "atoms": 52,
+      "ref_status": "converged",
+      "ref_steps": 51,
+      "n_trials": 15,
+      "n_converged": 13,
+      "n_error": 2,
+      "n_unconverged": 0,
+      "n_diff_basin": 9,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 2,
+          "n_diff_basin": 1,
+          "steps_min": 40,
+          "steps_max": 43,
+          "steps_mean": 41,
+          "max_denergy_kcal": 0.3890091527698599
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 1,
+          "n_diff_basin": 2,
+          "steps_min": 34,
+          "steps_max": 38,
+          "steps_mean": 35.666666666666664,
+          "max_denergy_kcal": 0.3889210730425961
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 1,
+          "n_diff_basin": 2,
+          "steps_min": 32,
+          "steps_max": 36,
+          "steps_mean": 34.666666666666664,
+          "max_denergy_kcal": 0.38909751233549567
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 0,
+          "n_diff_basin": 3,
+          "steps_min": 46,
+          "steps_max": 85,
+          "steps_mean": 63,
+          "max_denergy_kcal": 1.467432763657564
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 1,
+          "n_error": 2,
+          "n_unconverged": 0,
+          "n_same_basin": 0,
+          "n_diff_basin": 1,
+          "steps_min": 95,
+          "steps_max": 95,
+          "steps_mean": 95,
+          "max_denergy_kcal": 0.38890871149172845
+        }
+      ],
+      "_error_examples": [
+        "CoordinateError: Cannot build dihedrals through a near-linear chain with a branching terminus: the linear-chain extension supports at most one near-linear neighbour per end (center=[16, 22], linear_l=[13, 15], linear_r=[13]). This typically arises in fully linear-rich systems such as long poly(phenylene-ethynylene) chains.",
+        "TBLiteRuntimeError: SCF not converged in 250 cycles"
+      ]
+    },
+    {
+      "name": "codeine",
+      "atoms": 43,
+      "ref_status": "converged",
+      "ref_steps": 36,
+      "n_trials": 15,
+      "n_converged": 14,
+      "n_error": 1,
+      "n_unconverged": 0,
+      "n_diff_basin": 1,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 36,
+          "steps_max": 38,
+          "steps_mean": 36.666666666666664,
+          "max_denergy_kcal": 4.804636955485215e-05
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 36,
+          "steps_max": 41,
+          "steps_mean": 38,
+          "max_denergy_kcal": 8.045048662264056e-05
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 36,
+          "steps_max": 53,
+          "steps_mean": 42.666666666666664,
+          "max_denergy_kcal": 0.00021522060552482144
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 49,
+          "steps_max": 61,
+          "steps_mean": 54,
+          "max_denergy_kcal": 0.00013008851327348683
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 2,
+          "n_error": 1,
+          "n_unconverged": 0,
+          "n_same_basin": 1,
+          "n_diff_basin": 1,
+          "steps_min": 52,
+          "steps_max": 60,
+          "steps_mean": 56,
+          "max_denergy_kcal": 50.09875865005688
+        }
+      ],
+      "_error_examples": [
+        "TBLiteRuntimeError: SCF not converged in 250 cycles"
+      ]
+    },
+    {
+      "name": "diisobutyl_phthalate",
+      "atoms": 42,
+      "ref_status": "converged",
+      "ref_steps": 34,
+      "n_trials": 15,
+      "n_converged": 10,
+      "n_error": 2,
+      "n_unconverged": 3,
+      "n_diff_basin": 7,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 1,
+          "n_diff_basin": 2,
+          "steps_min": 35,
+          "steps_max": 56,
+          "steps_mean": 45,
+          "max_denergy_kcal": 0.9340734393768054
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 1,
+          "n_diff_basin": 2,
+          "steps_min": 34,
+          "steps_max": 46,
+          "steps_mean": 40.666666666666664,
+          "max_denergy_kcal": 0.9341126566009419
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 1,
+          "n_diff_basin": 2,
+          "steps_min": 35,
+          "steps_max": 55,
+          "steps_mean": 46.333333333333336,
+          "max_denergy_kcal": 0.9341077529196975
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 0,
+          "n_error": 2,
+          "n_unconverged": 1,
+          "n_same_basin": 0,
+          "n_diff_basin": 0,
+          "steps_min": null,
+          "steps_max": null,
+          "steps_mean": null,
+          "max_denergy_kcal": 0.0
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 1,
+          "n_error": 0,
+          "n_unconverged": 2,
+          "n_same_basin": 0,
+          "n_diff_basin": 1,
+          "steps_min": 80,
+          "steps_max": 80,
+          "steps_mean": 80,
+          "max_denergy_kcal": 5.8283539534508355
+        }
+      ],
+      "_error_examples": [
+        "LinAlgError: SVD did not converge",
+        "TBLiteRuntimeError: SCF not converged in 250 cycles"
+      ]
+    },
+    {
+      "name": "easc",
+      "atoms": 26,
+      "ref_status": "converged",
+      "ref_steps": 38,
+      "n_trials": 15,
+      "n_converged": 15,
+      "n_error": 0,
+      "n_unconverged": 0,
+      "n_diff_basin": 2,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 33,
+          "steps_max": 35,
+          "steps_mean": 33.666666666666664,
+          "max_denergy_kcal": 0.0006621527379356105
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 33,
+          "steps_max": 36,
+          "steps_mean": 35,
+          "max_denergy_kcal": 0.0001933062272874305
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 2,
+          "n_diff_basin": 1,
+          "steps_min": 34,
+          "steps_max": 47,
+          "steps_mean": 41.666666666666664,
+          "max_denergy_kcal": 0.16354614017683997
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 46,
+          "steps_max": 92,
+          "steps_mean": 76.33333333333333,
+          "max_denergy_kcal": 0.0004472077037848251
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 2,
+          "n_diff_basin": 1,
+          "steps_min": 53,
+          "steps_max": 91,
+          "steps_mean": 76.66666666666667,
+          "max_denergy_kcal": 0.16365726982545206
+        }
+      ],
+      "_error_examples": []
+    },
+    {
+      "name": "estradiol",
+      "atoms": 44,
+      "ref_status": "converged",
+      "ref_steps": 27,
+      "n_trials": 15,
+      "n_converged": 14,
+      "n_error": 1,
+      "n_unconverged": 0,
+      "n_diff_basin": 1,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 28,
+          "steps_max": 28,
+          "steps_mean": 28,
+          "max_denergy_kcal": 0.00011720418605338442
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 29,
+          "steps_max": 30,
+          "steps_mean": 29.333333333333332,
+          "max_denergy_kcal": 0.00014801624028138713
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 32,
+          "steps_max": 34,
+          "steps_mean": 33,
+          "max_denergy_kcal": 0.00016388445193184223
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 38,
+          "steps_max": 51,
+          "steps_mean": 42.666666666666664,
+          "max_denergy_kcal": 0.0001484091875379813
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 2,
+          "n_error": 1,
+          "n_unconverged": 0,
+          "n_same_basin": 1,
+          "n_diff_basin": 1,
+          "steps_min": 64,
+          "steps_max": 91,
+          "steps_mean": 77.5,
+          "max_denergy_kcal": 38.091296925607146
+        }
+      ],
+      "_error_examples": [
+        "TBLiteRuntimeError: SCF not converged in 250 cycles"
+      ]
+    },
+    {
+      "name": "inosine_cation",
+      "atoms": 31,
+      "ref_status": "converged",
+      "ref_steps": 58,
+      "n_trials": 15,
+      "n_converged": 14,
+      "n_error": 0,
+      "n_unconverged": 1,
+      "n_diff_basin": 14,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 0,
+          "n_diff_basin": 3,
+          "steps_min": 35,
+          "steps_max": 37,
+          "steps_mean": 36,
+          "max_denergy_kcal": 0.8056302017642838
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 0,
+          "n_diff_basin": 3,
+          "steps_min": 32,
+          "steps_max": 37,
+          "steps_mean": 35.333333333333336,
+          "max_denergy_kcal": 1.6157942732993165
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 0,
+          "n_diff_basin": 3,
+          "steps_min": 32,
+          "steps_max": 38,
+          "steps_mean": 35.666666666666664,
+          "max_denergy_kcal": 1.4767000931715313
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 0,
+          "n_diff_basin": 3,
+          "steps_min": 57,
+          "steps_max": 65,
+          "steps_mean": 61.666666666666664,
+          "max_denergy_kcal": 1.6158377471637353
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 2,
+          "n_error": 0,
+          "n_unconverged": 1,
+          "n_same_basin": 0,
+          "n_diff_basin": 2,
+          "steps_min": 51,
+          "steps_max": 79,
+          "steps_mean": 65,
+          "max_denergy_kcal": 28.932454947322555
+        }
+      ],
+      "_error_examples": []
+    },
+    {
+      "name": "maltose",
+      "atoms": 45,
+      "ref_status": "converged",
+      "ref_steps": 77,
+      "n_trials": 15,
+      "n_converged": 14,
+      "n_error": 0,
+      "n_unconverged": 1,
+      "n_diff_basin": 11,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 0,
+          "n_diff_basin": 3,
+          "steps_min": 33,
+          "steps_max": 53,
+          "steps_mean": 41.333333333333336,
+          "max_denergy_kcal": 3.5451970859662847
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 1,
+          "n_diff_basin": 2,
+          "steps_min": 48,
+          "steps_max": 61,
+          "steps_mean": 55.666666666666664,
+          "max_denergy_kcal": 2.2716208955704262
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 2,
+          "n_diff_basin": 1,
+          "steps_min": 46,
+          "steps_max": 94,
+          "steps_mean": 70.33333333333333,
+          "max_denergy_kcal": 2.2716131568413833
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 0,
+          "n_diff_basin": 3,
+          "steps_min": 62,
+          "steps_max": 94,
+          "steps_mean": 82,
+          "max_denergy_kcal": 3.5453349948121486
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 2,
+          "n_error": 0,
+          "n_unconverged": 1,
+          "n_same_basin": 0,
+          "n_diff_basin": 2,
+          "steps_min": 65,
+          "steps_max": 65,
+          "steps_mean": 65,
+          "max_denergy_kcal": 4.830392503883741
+        }
+      ],
+      "_error_examples": []
+    },
+    {
+      "name": "mg_porphin",
+      "atoms": 37,
+      "ref_status": "converged",
+      "ref_steps": 16,
+      "n_trials": 15,
+      "n_converged": 15,
+      "n_error": 0,
+      "n_unconverged": 0,
+      "n_diff_basin": 3,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 17,
+          "steps_max": 20,
+          "steps_mean": 19,
+          "max_denergy_kcal": 0.0005186735782361087
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 21,
+          "steps_max": 22,
+          "steps_mean": 21.333333333333332,
+          "max_denergy_kcal": 0.00014378575486806162
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 24,
+          "steps_max": 25,
+          "steps_mean": 24.333333333333332,
+          "max_denergy_kcal": 3.267503353502906e-05
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 33,
+          "steps_max": 45,
+          "steps_mean": 37.333333333333336,
+          "max_denergy_kcal": 0.00026287508008170367
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 0,
+          "n_diff_basin": 3,
+          "steps_min": 48,
+          "steps_max": 92,
+          "steps_mean": 67.66666666666667,
+          "max_denergy_kcal": 305.3610612309843
+        }
+      ],
+      "_error_examples": []
+    },
+    {
+      "name": "ochratoxin_a",
+      "atoms": 45,
+      "ref_status": "converged",
+      "ref_steps": 56,
+      "n_trials": 15,
+      "n_converged": 12,
+      "n_error": 2,
+      "n_unconverged": 1,
+      "n_diff_basin": 4,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 1,
+          "n_diff_basin": 2,
+          "steps_min": 27,
+          "steps_max": 93,
+          "steps_mean": 60,
+          "max_denergy_kcal": 2.370359249584046
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 2,
+          "n_diff_basin": 1,
+          "steps_min": 25,
+          "steps_max": 49,
+          "steps_mean": 39.666666666666664,
+          "max_denergy_kcal": 2.3701402446017186
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 50,
+          "steps_max": 67,
+          "steps_mean": 59.333333333333336,
+          "max_denergy_kcal": 3.881063318758124e-05
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 2,
+          "n_error": 1,
+          "n_unconverged": 0,
+          "n_same_basin": 2,
+          "n_diff_basin": 0,
+          "steps_min": 51,
+          "steps_max": 72,
+          "steps_mean": 61.5,
+          "max_denergy_kcal": 1.918010649586061e-05
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 1,
+          "n_error": 1,
+          "n_unconverged": 1,
+          "n_same_basin": 0,
+          "n_diff_basin": 1,
+          "steps_min": 97,
+          "steps_max": 97,
+          "steps_mean": 97,
+          "max_denergy_kcal": 26.108732821563947
+        }
+      ],
+      "_error_examples": [
+        "CoordinateError: Cannot build dihedrals through a near-linear chain with a branching terminus: the linear-chain extension supports at most one near-linear neighbour per end (center=[28, 42], linear_l=[41, 44], linear_r=[]). This typically arises in fully linear-rich systems such as long poly(phenylene-ethynylene) chains.",
+        "TBLiteRuntimeError: SCF not converged in 250 cycles"
+      ]
+    },
+    {
+      "name": "penicillin_v",
+      "atoms": 42,
+      "ref_status": "converged",
+      "ref_steps": 52,
+      "n_trials": 15,
+      "n_converged": 14,
+      "n_error": 0,
+      "n_unconverged": 1,
+      "n_diff_basin": 1,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 45,
+          "steps_max": 55,
+          "steps_mean": 51.666666666666664,
+          "max_denergy_kcal": 5.452333349779474e-05
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 47,
+          "steps_max": 54,
+          "steps_mean": 50,
+          "max_denergy_kcal": 6.703301206042999e-05
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 43,
+          "steps_max": 64,
+          "steps_mean": 57,
+          "max_denergy_kcal": 0.0002486642292691373
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 45,
+          "steps_max": 99,
+          "steps_mean": 71.33333333333333,
+          "max_denergy_kcal": 0.0002070749377527184
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 2,
+          "n_error": 0,
+          "n_unconverged": 1,
+          "n_same_basin": 1,
+          "n_diff_basin": 1,
+          "steps_min": 49,
+          "steps_max": 64,
+          "steps_mean": 56.5,
+          "max_denergy_kcal": 2.9879360265207473
+        }
+      ],
+      "_error_examples": []
+    },
+    {
+      "name": "raffinose",
+      "atoms": 66,
+      "ref_status": "converged",
+      "ref_steps": 47,
+      "n_trials": 15,
+      "n_converged": 12,
+      "n_error": 0,
+      "n_unconverged": 3,
+      "n_diff_basin": 7,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 2,
+          "n_diff_basin": 1,
+          "steps_min": 52,
+          "steps_max": 59,
+          "steps_mean": 56,
+          "max_denergy_kcal": 1.5417339330899507
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 0,
+          "n_diff_basin": 3,
+          "steps_min": 52,
+          "steps_max": 63,
+          "steps_mean": 59,
+          "max_denergy_kcal": 1.5417814607762608
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 2,
+          "n_error": 0,
+          "n_unconverged": 1,
+          "n_same_basin": 2,
+          "n_diff_basin": 0,
+          "steps_min": 51,
+          "steps_max": 56,
+          "steps_mean": 53.5,
+          "max_denergy_kcal": 2.7842442169922346e-05
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 2,
+          "n_error": 0,
+          "n_unconverged": 1,
+          "n_same_basin": 1,
+          "n_diff_basin": 1,
+          "steps_min": 50,
+          "steps_max": 77,
+          "steps_mean": 63.5,
+          "max_denergy_kcal": 6.498367932346006
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 2,
+          "n_error": 0,
+          "n_unconverged": 1,
+          "n_same_basin": 0,
+          "n_diff_basin": 2,
+          "steps_min": 97,
+          "steps_max": 98,
+          "steps_mean": 97.5,
+          "max_denergy_kcal": 82.05413085079905
+        }
+      ],
+      "_error_examples": []
+    },
+    {
+      "name": "sphingomyelin",
+      "atoms": 84,
+      "ref_status": "converged",
+      "ref_steps": 83,
+      "n_trials": 15,
+      "n_converged": 11,
+      "n_error": 0,
+      "n_unconverged": 4,
+      "n_diff_basin": 5,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 84,
+          "steps_max": 87,
+          "steps_mean": 85.66666666666667,
+          "max_denergy_kcal": 6.591538855721999e-05
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 2,
+          "n_diff_basin": 1,
+          "steps_min": 86,
+          "steps_max": 88,
+          "steps_mean": 87,
+          "max_denergy_kcal": 0.17891855261710715
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 1,
+          "n_diff_basin": 2,
+          "steps_min": 80,
+          "steps_max": 97,
+          "steps_mean": 86,
+          "max_denergy_kcal": 3.8263251307694666
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 1,
+          "n_error": 0,
+          "n_unconverged": 2,
+          "n_same_basin": 0,
+          "n_diff_basin": 1,
+          "steps_min": 78,
+          "steps_max": 78,
+          "steps_mean": 78,
+          "max_denergy_kcal": 0.5895174837667728
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 1,
+          "n_error": 0,
+          "n_unconverged": 2,
+          "n_same_basin": 0,
+          "n_diff_basin": 1,
+          "steps_min": 86,
+          "steps_max": 86,
+          "steps_mean": 86,
+          "max_denergy_kcal": 3.677834227929996
+        }
+      ],
+      "_error_examples": []
+    },
+    {
+      "name": "tamoxifen",
+      "atoms": 57,
+      "ref_status": "converged",
+      "ref_steps": 45,
+      "n_trials": 15,
+      "n_converged": 13,
+      "n_error": 2,
+      "n_unconverged": 0,
+      "n_diff_basin": 1,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 36,
+          "steps_max": 46,
+          "steps_mean": 42,
+          "max_denergy_kcal": 0.000162573208383045
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 35,
+          "steps_max": 43,
+          "steps_mean": 38.333333333333336,
+          "max_denergy_kcal": 0.060716437559279586
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 2,
+          "n_diff_basin": 1,
+          "steps_min": 47,
+          "steps_max": 72,
+          "steps_mean": 61.333333333333336,
+          "max_denergy_kcal": 1.7006826153468637
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 49,
+          "steps_max": 84,
+          "steps_mean": 64.66666666666667,
+          "max_denergy_kcal": 0.0012690976659732354
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 1,
+          "n_error": 2,
+          "n_unconverged": 0,
+          "n_same_basin": 1,
+          "n_diff_basin": 0,
+          "steps_min": 60,
+          "steps_max": 60,
+          "steps_mean": 60,
+          "max_denergy_kcal": 0.00017019778519998906
+        }
+      ],
+      "_error_examples": [
+        "CoordinateError: Cannot build dihedrals through a near-linear chain with a branching terminus: the linear-chain extension supports at most one near-linear neighbour per end (center=[34, 37], linear_l=[6], linear_r=[6, 39]). This typically arises in fully linear-rich systems such as long poly(phenylene-ethynylene) chains.",
+        "CoordinateError: Cannot build dihedrals through a near-linear chain with a branching terminus: the linear-chain extension supports at most one near-linear neighbour per end (center=[49, 52], linear_l=[54, 56], linear_r=[]). This typically arises in fully linear-rich systems such as long poly(phenylene-ethynylene) chains."
+      ]
+    },
+    {
+      "name": "vitamin_c",
+      "atoms": 20,
+      "ref_status": "converged",
+      "ref_steps": 30,
+      "n_trials": 15,
+      "n_converged": 15,
+      "n_error": 0,
+      "n_unconverged": 0,
+      "n_diff_basin": 2,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 31,
+          "steps_max": 37,
+          "steps_mean": 34.333333333333336,
+          "max_denergy_kcal": 7.089846628176515e-05
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 31,
+          "steps_max": 37,
+          "steps_mean": 33,
+          "max_denergy_kcal": 2.7978665074534455e-05
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 32,
+          "steps_max": 43,
+          "steps_mean": 38.333333333333336,
+          "max_denergy_kcal": 0.00031149225535298823
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 46,
+          "steps_max": 83,
+          "steps_mean": 62.666666666666664,
+          "max_denergy_kcal": 2.4654477529861602e-05
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 1,
+          "n_diff_basin": 2,
+          "steps_min": 49,
+          "steps_max": 64,
+          "steps_mean": 56,
+          "max_denergy_kcal": 1.8850285010355006
+        }
+      ],
+      "_error_examples": []
+    },
+    {
+      "name": "zn_edta",
+      "atoms": 33,
+      "ref_status": "converged",
+      "ref_steps": 40,
+      "n_trials": 15,
+      "n_converged": 12,
+      "n_error": 3,
+      "n_unconverged": 0,
+      "n_diff_basin": 0,
+      "per_sigma": [
+        {
+          "sigma": 0.02,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 39,
+          "steps_max": 53,
+          "steps_mean": 44,
+          "max_denergy_kcal": 0.0003075722531146648
+        },
+        {
+          "sigma": 0.05,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 34,
+          "steps_max": 43,
+          "steps_mean": 38.666666666666664,
+          "max_denergy_kcal": 0.00037647618100903295
+        },
+        {
+          "sigma": 0.1,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 32,
+          "steps_max": 62,
+          "steps_mean": 44.333333333333336,
+          "max_denergy_kcal": 0.0017826872655836675
+        },
+        {
+          "sigma": 0.2,
+          "n": 3,
+          "n_converged": 3,
+          "n_error": 0,
+          "n_unconverged": 0,
+          "n_same_basin": 3,
+          "n_diff_basin": 0,
+          "steps_min": 37,
+          "steps_max": 50,
+          "steps_mean": 43,
+          "max_denergy_kcal": 0.00042118704232155544
+        },
+        {
+          "sigma": 0.3,
+          "n": 3,
+          "n_converged": 0,
+          "n_error": 3,
+          "n_unconverged": 0,
+          "n_same_basin": 0,
+          "n_diff_basin": 0,
+          "steps_min": null,
+          "steps_max": null,
+          "steps_mean": null,
+          "max_denergy_kcal": 0.0
+        }
+      ],
+      "_error_examples": [
+        "CoordinateError: Cannot build dihedrals through a near-linear chain with a branching terminus: the linear-chain extension supports at most one near-linear neighbour per end (center=[1, 16], linear_l=[18, 26], linear_r=[]). This typically arises in fully linear-rich systems such as long poly(phenylene-ethynylene) chains.",
+        "TBLiteRuntimeError: SCF not converged in 250 cycles"
+      ]
+    }
+  ]
+}
