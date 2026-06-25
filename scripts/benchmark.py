@@ -96,6 +96,12 @@ def run_pyscf(name, ref, data_dir, trace=None):
         mf.xc = 'b3lyp'
     else:
         raise ValueError(f'unsupported paper method {method!r}')
+    # Approximate the four-center two-electron integrals with the RI /
+    # density-fitting expansion (auto-generated auxiliary basis for the chosen
+    # orbital basis). This cuts the per-SCF-and-gradient cost substantially; the
+    # benchmark records how the resulting (slightly different) PES affects
+    # pyberny's step counts versus the conventional integrals run on master.
+    mf = mf.density_fit()
     state = {'n': 0, 'energies': []}
 
     def callback(loc):
