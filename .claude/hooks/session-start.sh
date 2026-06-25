@@ -6,6 +6,23 @@ if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
 fi
 
 cd "$CLAUDE_PROJECT_DIR"
+
+# The web sandbox routes every github.com URL through a repo-scoped git relay
+# (a catch-all `url.<relay>.insteadOf = https://github.com/`). That relay 403s
+# every repo except this one, which breaks the `molsym` git dependency pulled in
+# by the pip install below. Narrow the rewrite to just `origin` so all other
+# github.com URLs fall through to the egress proxy (which permits them). The
+# `case` guard means we only act on a real relay URL and never write a malformed
+# empty-section entry when `git remote get-url origin` returns nothing.
+origin_url=$(git remote get-url origin 2>/dev/null || true)
+case "$origin_url" in
+  *//*/git/*)
+    repo_path=${origin_url##*/git/}
+    git config --global --unset-all url."${origin_url%"$repo_path"}".insteadOf 2>/dev/null || true
+    git config --global url."$origin_url".insteadOf "https://github.com/$repo_path"
+    ;;
+esac
+
 # [doc] is needed for the sphinx-build step in scripts/check.sh. The Sphinx
 # step relies on `node` for sphinxcontrib-katex's server-side prerender; the
 # Claude Code on the web base image ships node, so no extra install is required
