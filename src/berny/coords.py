@@ -34,10 +34,6 @@ IntArray = NDArray[np.integer[Any]]
 EvalReturn = float | tuple[float, list[FloatArray]]
 
 
-class CoordinateError(Exception):
-    """Raised when internal-coordinate construction hits an unsupported case."""
-
-
 class InternalCoord:
     #: 0-based atom indices that define this coordinate. Set by each
     #: subclass's ``__init__``.
@@ -916,15 +912,6 @@ def get_dihedrals(
     linear_r = [
         n for n, ang in zip(neigh_r, angles_r) if ang >= pi - lin_thre or ang < lin_thre
     ]
-    if len(linear_l) > 1 or len(linear_r) > 1:
-        raise CoordinateError(
-            'Cannot build dihedrals through a near-linear chain with a '
-            'branching terminus: the linear-chain extension supports at most '
-            f'one near-linear neighbour per end (center={center}, '
-            f'linear_l={linear_l}, linear_r={linear_r}). This typically '
-            'arises in fully linear-rich systems such as long poly(phenylene-'
-            'ethynylene) chains.'
-        )
     dihedrals: list[Dihedral] = []
     if center[0] < center[-1]:
         nweak = len(
@@ -954,7 +941,14 @@ def get_dihedrals(
     if len(center) > 3:
         pass
     elif linear_l and not linear_r:
-        dihedrals.extend(get_dihedrals(linear_l + center, coords, bondmatrix, C))
+        # Extend the chain through every near-linear neighbour to reach a
+        # non-linear reference beyond it. A branching terminus (more than one
+        # near-linear neighbour, e.g. a noisy aryl-C#C-aryl junction in a long
+        # poly(phenylene-ethynylene) chain) is handled by following each branch
+        # independently rather than aborting the whole build.
+        for n in linear_l:
+            dihedrals.extend(get_dihedrals([n, *center], coords, bondmatrix, C))
     elif linear_r and not linear_l:
-        dihedrals.extend(get_dihedrals(center + linear_r, coords, bondmatrix, C))
+        for n in linear_r:
+            dihedrals.extend(get_dihedrals([*center, n], coords, bondmatrix, C))
     return dihedrals

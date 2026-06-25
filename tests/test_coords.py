@@ -4,7 +4,6 @@ import pytest
 from berny.coords import (
     Angle,
     Bond,
-    CoordinateError,
     Dihedral,
     InternalCoords,
     _DummySpec,
@@ -385,11 +384,14 @@ def _methoxy_h(hco_angle_deg):
     return Geometry(['H', 'C', 'H', 'H', 'O', 'H'], _methoxy_h_coords(hco_angle_deg))
 
 
-def test_get_dihedrals_branching_linear_terminus_raises_diagnostic():
+def test_get_dihedrals_branching_linear_terminus_does_not_abort():
     # A center terminus with two near-linear neighbours breaks the assumption
-    # of the single-chain linear extension. The bare ``assert`` this used to
-    # hit surfaced as an opaque ``AssertionError`` (issue #130, PPE_n6); it now
-    # raises a contextual ``CoordinateError``.
+    # of the single-chain linear extension. This used to raise a hard
+    # ``CoordinateError`` and abort the whole build (issue #130, PPE_n6;
+    # issue #173, poly(phenylene-ethynylene) under start-geometry noise). The
+    # builder now follows each near-linear branch independently instead of
+    # giving up: it returns a (possibly empty) list rather than raising, so the
+    # optimization can still start from the remaining redundant coordinates.
     coords = np.array(
         [
             [0.0, 0.0, 0.0],  # 0: center start
@@ -402,8 +404,38 @@ def test_get_dihedrals_branching_linear_terminus_raises_diagnostic():
     for i, j in [(0, 1), (0, 2), (0, 3)]:
         bondmatrix[i, j] = bondmatrix[j, i] = True
     C = bondmatrix.copy()
-    with pytest.raises(CoordinateError, match='branching terminus'):
-        get_dihedrals([0, 1], coords, bondmatrix, C)
+    dihedrals = get_dihedrals([0, 1], coords, bondmatrix, C)
+    assert isinstance(dihedrals, list)
+
+
+def test_get_dihedrals_branching_terminus_recovers_via_branch():
+    # When one of the near-linear branches at a terminus continues on to a
+    # non-linear reference, the per-branch extension recovers a genuine
+    # dihedral that the old all-or-nothing builder discarded when it bailed.
+    # Layout (all in the z=0 plane): a near-linear chain 0-1-2-3 whose middle
+    # atom 2 has a *branching* terminus — both neighbour 1 (the real backbone)
+    # and the decoy 4 are near-linear with the 2-3 bond — plus non-linear
+    # references 5 (off 0) and 6 (off 3) at the two ends. The old builder hit
+    # ``len(linear_l) > 1`` at atom 2 and aborted; the extension now follows the
+    # backbone branch through to atoms 0 and 3 and emits the spanning dihedral.
+    coords = np.array(
+        [
+            [0.0, 0.0, 0.0],  # 0: far-left end of the near-linear chain
+            [1.3, 0.0, 0.0],  # 1: backbone, near-linear at atom 2
+            [2.6, 0.0, 0.0],  # 2: branching terminus (seeds the 2-3 bond)
+            [3.9, 0.0, 0.0],  # 3: right end of the near-linear chain
+            [1.3, 0.1, 0.0],  # 4: decoy near-linear neighbour of 2
+            [-0.7, 0.9, 0.0],  # 5: non-linear reference off 0
+            [4.6, 0.9, 0.0],  # 6: non-linear reference off 3
+        ]
+    )
+    bondmatrix = np.zeros((7, 7), dtype=bool)
+    for i, j in [(0, 1), (1, 2), (2, 3), (2, 4), (0, 5), (3, 6)]:
+        bondmatrix[i, j] = bondmatrix[j, i] = True
+    C = bondmatrix.copy()
+    dihedrals = get_dihedrals([2, 3], coords, bondmatrix, C)
+    # The dihedral spanning the recovered near-linear backbone is built.
+    assert any(d.idx == (5, 0, 3, 6) for d in dihedrals)
 
 
 def test_near_linear_angle_dropped_on_non_sp_centre():
