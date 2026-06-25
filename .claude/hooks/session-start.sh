@@ -13,6 +13,16 @@ cd "$CLAUDE_PROJECT_DIR"
 # berny.solvers.XTBSolver, so its tests run rather than skip.
 pip install -e ".[test,doc,benchmark]"
 
+# molsym (the `symmetry` extra) lives behind a git URL on a separate repo. This
+# session's scoped git credential only covers pyberny, so cloning it 403s; that
+# is why it is optional and installed best-effort here. When it fails the
+# session still comes up with the full test/doc/benchmark toolchain -- only the
+# symmetry feature is unavailable (berny imports molsym lazily and degrades to
+# no-op C1 handling), and its tests skip. Add jhrmnn/molsym to the session's
+# repo scope to get it.
+pip install -e ".[symmetry]" \
+  || echo "molsym unavailable (repo out of scope); symmetry feature disabled this session"
+
 pip install ruff black
 
 # Standalone investigation reports live on the `reports` orphan branch (one

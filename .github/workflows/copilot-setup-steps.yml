@@ -33,9 +33,10 @@ jobs:
 
       # The benchmark extra pulls in tblite (the GFN-xTB backend for
       # berny.solvers.XTBSolver) and pyscf, so both are importable in agent
-      # sessions.
-      - name: Install project with test, doc, and benchmark extras
-        run: pip install -e ".[test,doc,benchmark]"
+      # sessions. The symmetry extra pulls in molsym (point-group detection);
+      # GitHub Actions can reach its git URL, so it installs here.
+      - name: Install project with test, doc, benchmark, and symmetry extras
+        run: pip install -e ".[test,doc,benchmark,symmetry]"
 
       # Lint tools used by .github/workflows/lint.yaml so `ruff`, `black`,
       # and `mypy` are available without a network round-trip.

@@ -38,16 +38,23 @@ pyscf = { version = ">=2.5", optional = true }
 matplotlib = { version = ">=3.5", optional = true }
 tblite = { version = ">=0.3", optional = true }
 # Point-group detection + symmetry-adapted displacement coordinates for the
-# `symmetry` argument of Berny. Tracked on a fork branch with qcelemental made
-# optional so the dependency stays numpy-only. NB: this git URL blocks a clean
-# PyPI upload of pyberny; swap it for a version spec once MolSym is on PyPI.
-molsym = { git = "https://github.com/jhrmnn/molsym.git", branch = "claude/qcelemental-optional-iosjwj" }
+# `symmetry` argument of Berny. Optional (exposed via the `symmetry` extra) and
+# imported lazily by berny.symmetry, so a plain `pip install` still succeeds --
+# and `import berny` still works -- in environments that can't reach this git
+# URL. That matters for sandboxed cloud sessions whose scoped git credential
+# only covers pyberny: cloning a second repo there 403s, which as a hard
+# dependency aborted the whole install. Without molsym, point-group detection
+# degrades to no-op C1 handling. Tracked on a fork branch with qcelemental made
+# optional so the dependency stays numpy-only. NB: this git URL still blocks a
+# clean PyPI upload of pyberny; swap it for a version spec once MolSym is on PyPI.
+molsym = { git = "https://github.com/jhrmnn/molsym.git", branch = "claude/qcelemental-optional-iosjwj", optional = true }
 
 [tool.poetry.extras]
 test = ["pytest", "coverage"]
 doc = ["sphinx", "sphinxcontrib-katex", "sphinx-multiversion", "toml"]
 benchmark = ["pyscf", "tblite"]
 plot = ["matplotlib"]
+symmetry = ["molsym"]
 
 [tool.poetry.group.dev.dependencies]
 # Pinned because the ruff lint config enables preview rules, whose set changes

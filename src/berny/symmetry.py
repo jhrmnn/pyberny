@@ -17,10 +17,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import molsym
 import numpy as np
-from molsym.salcs.cartesian_coordinates import CartesianCoordinates
-from molsym.salcs.projection_op import ProjectionOp
 
 from .geomlib import Geometry
 from .species_data import get_property
@@ -28,6 +25,26 @@ from .species_data import get_property
 __all__ = ['SYMMETRY_EPS', 'break_symmetry', 'detect_point_group']
 
 log = logging.getLogger(__name__)
+
+# molsym is an optional dependency (the `symmetry` extra). It is imported lazily
+# here -- not at module top -- so `import berny` works without it; only the
+# symmetry features below need it. detect_point_group catches the resulting
+# ImportError and degrades to C1, while break_symmetry (an explicit request)
+# surfaces this message.
+_MOLSYM_MISSING = (
+    "the optional 'molsym' package is required for symmetry detection and "
+    "breaking; install it with: pip install 'pyberny[symmetry]'"
+)
+
+
+def _require_molsym() -> Any:
+    """Import and return the ``molsym`` module, or raise a helpful ImportError."""
+    try:
+        import molsym
+    except ImportError as e:  # pragma: no cover - exercised only without molsym
+        raise ImportError(_MOLSYM_MISSING) from e
+    return molsym
+
 
 #: Default RMS amplitude (Å, per Cartesian component) of the symmetry-breaking
 #: displacement. Calibrated as roughly the smallest amplitude that lets
@@ -39,6 +56,7 @@ SYMMETRY_EPS = 0.02
 
 def _symtext(geom: Geometry) -> Any:
     """Build a MolSym ``Symtext`` (point group + symmetry operations) for ``geom``."""
+    molsym = _require_molsym()
     species = list(geom.species)
     # NB: a copy, not np.asarray -- MolSym recenters/reorients the molecule in
     # place, which would otherwise mutate the caller's geometry.
@@ -89,6 +107,10 @@ def break_symmetry(
     :param float eps: RMS displacement per Cartesian component (Å)
     :param symtext: precomputed MolSym ``Symtext`` for ``geom``; built when omitted
     """
+    _require_molsym()
+    from molsym.salcs.cartesian_coordinates import CartesianCoordinates
+    from molsym.salcs.projection_op import ProjectionOp
+
     if symtext is None:
         symtext = _symtext(geom)
     salcs = ProjectionOp(symtext, CartesianCoordinates(symtext), project_Eckart=True)

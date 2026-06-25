@@ -24,9 +24,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
       # tblite (the GFN-xTB backend behind berny.solvers.XTBSolver) lives in the
       # benchmark extra alongside pyscf; both ship wheels for every supported
-      # Python, so the live XTBSolver tests run across the whole matrix.
+      # Python, so the live XTBSolver tests run across the whole matrix. molsym
+      # is the optional `symmetry` extra: installed here (CI can reach its git
+      # URL) so the symmetry tests run rather than skip.
       - name: Install
-        run: pip install -e ".[test,benchmark]"
+        run: pip install -e ".[test,benchmark,symmetry]"
       - name: Test
         run: coverage run -m pytest -v
       - name: Upload to Codecov

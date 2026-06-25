@@ -40,6 +40,13 @@ small, deterministic, symmetry-targeted kick (the equal-weight sum of the
 non-totally-symmetric Cartesian symmetry-adapted displacement coordinates) so
 the optimizer can relax to the true minimum.
 
+Point-group detection and breaking are provided by the `molsym
+<https://github.com/jhrmnn/molsym>`_ package, an optional dependency shipped in
+the ``symmetry`` extra (``pip install pyberny[symmetry]``). Without it pyberny
+still imports and optimizes normally, but detection is skipped and every start
+is treated as ``C1`` (no symmetry warning, and ``symmetry='break'`` becomes a
+no-op).
+
 Redundant internal coordinates
 ------------------------------
 

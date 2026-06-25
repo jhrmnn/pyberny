@@ -9,6 +9,13 @@ from berny.benchmarks import iter_molecules
 from berny.solvers import XTBSolver
 from berny.symmetry import SYMMETRY_EPS, detect_point_group
 
+# molsym is the optional `symmetry` extra; every test here exercises detection
+# or breaking, so skip the whole module when it is absent (it is installed in
+# CI). berny itself imports it lazily and still imports without it.
+pytestmark = pytest.mark.skipif(
+    importlib.util.find_spec('molsym') is None, reason='molsym not installed'
+)
+
 xtb_required = pytest.mark.skipif(
     importlib.util.find_spec('tblite') is None, reason='tblite not installed'
 )
