@@ -1,0 +1,57 @@
+name: Publish
+# Reacts to a completed "Build distributions" run rather than triggering on the
+# release directly. Like the doc-deploy trigger, workflow_run keeps this
+# privileged workflow off of pull requests entirely, so PRs never show skipped
+# publish checks. The job only acts when the build it is reacting to was for a
+# published GitHub Release that succeeded.
+on:
+  workflow_run:
+    workflows: [Build distributions]
+    types: [completed]
+jobs:
+  publish:
+    name: Publish to PyPI and GitHub Release
+    if: >-
+      github.repository == 'jhrmnn/pyberny' &&
+      github.event.workflow_run.event == 'release' &&
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/pyberny/
+    permissions:
+      # Mint a short-lived OIDC token for PyPI trusted publishing; no API token
+      # secret is stored in the repository.
+      id-token: write
+      # Attach the source archives to the GitHub Release.
+      contents: write
+      # Download the build artifacts from the triggering workflow run.
+      actions: read
+    steps:
+      # Artifacts live in the triggering run, so they must be fetched by its id
+      # (workflow_run does not carry them across automatically).
+      - name: Download distributions
+        uses: actions/download-artifact@v8
+        with:
+          name: pyberny-dist
+          path: dist
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      # PyPI uploads are immutable, but the GitHub Release asset step below can
+      # still fail transiently. skip-existing keeps the whole workflow safely
+      # re-runnable: a re-run no-ops the already-published files instead of
+      # erroring, so it can get through to (re)attach the release assets.
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
+      # Mirror the sdist and wheel onto the GitHub Release alongside GitHub's
+      # auto-generated source code archives. The release build ran on the tag,
+      # so the triggering run's head_branch is the release tag. GH_REPO lets gh
+      # find the repo without a checkout.
+      - name: Attach distributions to the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.event.workflow_run.head_branch }}
+        run: gh release upload "$TAG" dist/* --clobber

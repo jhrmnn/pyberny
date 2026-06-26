@@ -1,0 +1,44 @@
+name: Build distributions
+on:
+  # Validate packaging changes on PRs and master, and build the release
+  # artifacts when a GitHub Release is published. The Publish workflow reacts
+  # to a successful release build via workflow_run and uploads the result.
+  pull_request:
+    paths:
+      - '.github/workflows/build-dist.yaml'
+      - 'pyproject.toml'
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/build-dist.yaml'
+      - 'pyproject.toml'
+  release:
+    types: [published]
+  workflow_dispatch:
+jobs:
+  build:
+    name: Build
+    if: github.repository == 'jhrmnn/pyberny' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # poetry-dynamic-versioning derives the version from Git tags, so the
+          # full history (and tags) must be available.
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+      - name: Install build tooling
+        run: python -m pip install --upgrade build twine
+      # pyberny is pure Python, so a single sdist + universal wheel built here
+      # serves every supported interpreter and is what gets uploaded to PyPI.
+      - name: Build sdist and wheel
+        run: python -m build --outdir dist
+      - name: Check metadata
+        run: twine check --strict dist/*
+      - name: Upload distributions
+        uses: actions/upload-artifact@v7
+        with:
+          name: pyberny-dist
+          path: dist/*
