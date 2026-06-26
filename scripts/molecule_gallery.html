@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Birkholz benchmark molecules &mdash; PyBerny</title>
+    <title>Benchmark molecules &mdash; PyBerny</title>
     <script src="https://cdn.jsdelivr.net/npm/3dmol@2.4.2/build/3Dmol-min.js"></script>
     <style>
       :root {
@@ -25,7 +25,7 @@
         border-bottom: 1px solid var(--border);
       }
       header h1 {
-        margin: 0 0 0.25rem;
+        margin: 0 0 0.5rem;
         font-size: 1.25rem;
       }
       header p {
@@ -36,9 +36,17 @@
       header a {
         color: var(--accent);
       }
+      .benchmark-picker {
+        margin: 0 0 0.5rem;
+        font-size: 0.9rem;
+      }
+      .benchmark-picker select {
+        font-size: 0.9rem;
+        padding: 0.2rem 0.4rem;
+      }
       .layout {
         display: flex;
-        height: calc(100vh - 5rem);
+        height: calc(100vh - 8rem);
         min-height: 28rem;
       }
       #list {
@@ -103,13 +111,15 @@
   </head>
   <body>
     <header>
-      <h1>Birkholz benchmark molecules</h1>
+      <h1>Benchmark molecules</h1>
+      <p class="benchmark-picker">
+        <label for="benchmark-select">Benchmark:</label>
+        <select id="benchmark-select"></select>
+      </p>
       <p>
-        Starting geometries of the benchmark set from Birkholz &amp; Schlegel,
-        <em>Theor. Chem. Acc.</em> <strong>135</strong>, 84 (2016). Drag to
-        rotate, scroll to zoom. Atom labels are the
-        <strong>0-based</strong> indices used by PyBerny's internal
-        coordinates.
+        <span id="description"></span> Drag to rotate, scroll to zoom. Atom
+        labels are the <strong>0-based</strong> indices used by PyBerny's
+        internal coordinates.
       </p>
     </header>
     <div class="layout">
@@ -128,11 +138,13 @@
     </div>
 
     <script id="mol-data">
-      window.BIRKHOLZ_MOLECULES = __BIRKHOLZ_DATA__;
+      window.GALLERY = __GALLERY_DATA__;
     </script>
     <script>
       (function () {
-        var molecules = window.BIRKHOLZ_MOLECULES || [];
+        var gallery = window.GALLERY || { order: [], benchmarks: {} };
+        var selectEl = document.getElementById('benchmark-select');
+        var descriptionEl = document.getElementById('description');
         var listEl = document.getElementById('list');
         var metaEl = document.getElementById('meta');
         var labelsToggle = document.getElementById('labels-toggle');
@@ -140,10 +152,6 @@
           backgroundColor: 'white',
         });
         var current = null;
-
-        function dash(value) {
-          return value === null || value === undefined ? '—' : value;
-        }
 
         function drawLabels() {
           viewer.removeAllLabels();
@@ -166,23 +174,7 @@
 
         function showMeta(mol) {
           metaEl.innerHTML = '';
-          var fields = [
-            ['Name', mol.name],
-            ['Atoms', mol.atoms],
-            ['Charge', mol.charge],
-            ['Multiplicity', mol.mult],
-            [
-              'Paper steps',
-              dash(mol.paper_steps) +
-                ' (' +
-                mol.paper_steps_method +
-                '/' +
-                mol.paper_steps_basis +
-                ')',
-            ],
-            ['PyBerny steps', dash(mol.pyberny_steps)],
-            ['xTB GFN2 steps', dash(mol.xtb_gfn2_steps)],
-          ];
+          var fields = [['Name', mol.name]].concat(mol.fields);
           fields.forEach(function (field) {
             var span = document.createElement('span');
             span.innerHTML = '<strong>' + field[0] + ':</strong> ' + field[1];
@@ -209,17 +201,40 @@
           showMeta(mol);
         }
 
-        molecules.forEach(function (mol, index) {
-          var button = document.createElement('button');
-          button.type = 'button';
-          button.textContent = mol.name;
-          button.addEventListener('click', function () {
-            select(mol, button);
-          });
-          listEl.appendChild(button);
-          if (index === 0) {
-            select(mol, button);
+        function showBenchmark(name) {
+          var benchmark = gallery.benchmarks[name];
+          if (!benchmark) {
+            return;
           }
+          descriptionEl.innerHTML = benchmark.description;
+          listEl.innerHTML = '';
+          current = null;
+          benchmark.molecules.forEach(function (mol, index) {
+            var button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = mol.name;
+            button.addEventListener('click', function () {
+              select(mol, button);
+            });
+            listEl.appendChild(button);
+            if (index === 0) {
+              select(mol, button);
+            }
+          });
+        }
+
+        gallery.order.forEach(function (name) {
+          var option = document.createElement('option');
+          option.value = name;
+          option.textContent =
+            gallery.benchmarks[name].label +
+            ' (' +
+            gallery.benchmarks[name].molecules.length +
+            ')';
+          selectEl.appendChild(option);
+        });
+        selectEl.addEventListener('change', function () {
+          showBenchmark(selectEl.value);
         });
 
         labelsToggle.addEventListener('change', drawLabels);
@@ -229,6 +244,11 @@
             viewer.zoomTo();
             viewer.render();
           });
+
+        if (gallery.order.length) {
+          selectEl.value = gallery.order[0];
+          showBenchmark(gallery.order[0]);
+        }
       })();
     </script>
   </body>
