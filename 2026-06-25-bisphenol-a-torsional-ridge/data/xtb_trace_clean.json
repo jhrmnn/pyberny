@@ -1,0 +1,4422 @@
+[
+  {
+    "step": 1,
+    "energy": -48.37821712149013,
+    "coord_rebuild": false,
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.3,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.005360209873175639,
+      "lambda": -0.039066776004272004,
+      "step_rms": 0.02287478554989589,
+      "step_max": 0.07993291537373153,
+      "predicted_energy_change": -0.010719142566859675
+    },
+    "total_step": {
+      "rms": 0.022874785549895874,
+      "max": 0.07993291537373137
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.006196505009512847,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.03248565091366033,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 2,
+    "energy": -48.38782201980706,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.001281025980249877,
+      "max_change": 0.03515286548772117
+    },
+    "trust_update": {
+      "fletcher": 0.8960509907408085,
+      "trust": 0.6,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.38782201980706,
+      "E1": -48.37821712149013,
+      "g0": 0.0013072265252041771,
+      "g1": 0.017922276077763276,
+      "method": "quartic",
+      "t": -0.07898026304178876,
+      "interpolated_energy": -48.38787363750952
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 0.6,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.00536020863397894,
+      "lambda": -0.006559030161372849,
+      "step_rms": 0.03933739024222502,
+      "step_max": 0.32555009007995234,
+      "predicted_energy_change": -0.004152384277222941
+    },
+    "total_step": {
+      "rms": 0.04005275374659329,
+      "max": 0.33186312806310836
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.002320961138755956,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.013552192994265671,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.04005300520072136,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.3319965542130823,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 3,
+    "energy": -48.3918923951491,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0012413208466342835,
+      "max_change": 0.022409802529335696
+    },
+    "trust_update": {
+      "fletcher": 0.9802501575691366,
+      "trust": 0.6,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.3918923951491,
+      "E1": -48.38782201980706,
+      "g0": 0.001356086565073315,
+      "g1": 0.006633596052256692,
+      "method": "quartic",
+      "t": -0.23190800191192462,
+      "interpolated_energy": -48.39205063075856
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.6,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.003505377760695029,
+      "lambda": -0.005893913835118035,
+      "step_rms": 0.04574957109964482,
+      "step_max": 0.4062661300724358,
+      "predicted_energy_change": -0.0037436709274520407
+    },
+    "total_step": {
+      "rms": 0.05371165894729782,
+      "max": 0.4742147951867493
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.001580035831277959,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.00641304297565767,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 4,
+    "energy": -48.395251268420346,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.000869948671546228,
+      "max_change": 0.013571084574991869
+    },
+    "trust_update": {
+      "fletcher": 0.8972138140183601,
+      "trust": 1.2,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.395251268420346,
+      "E1": -48.3918923951491,
+      "g0": 0.0009460338509426878,
+      "g1": 0.005350242496961565,
+      "method": "quartic",
+      "t": -0.1586710567714447,
+      "interpolated_energy": -48.395327305348694
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 1.2,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.004540198719738624,
+      "lambda": -0.001559067641738739,
+      "step_rms": 0.02407381251835849,
+      "step_max": 0.1470156499020099,
+      "predicted_energy_change": -0.0008572395709213624
+    },
+    "total_step": {
+      "rms": 0.031107388698986934,
+      "max": 0.22227959672872885
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0011782484593916294,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0051410095625318624,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.031107549225402913,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.2222888350494637,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 5,
+    "energy": -48.39578143263194,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0008509456928789685,
+      "max_change": 0.010977394478856288
+    },
+    "trust_update": {
+      "fletcher": 0.6184551315428154,
+      "trust": 1.2,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39578143263194,
+      "E1": -48.395251268420346,
+      "g0": -0.0006524011613253737,
+      "g1": 0.0017061619224933448,
+      "method": "quartic",
+      "t": 0.2749432164527311,
+      "interpolated_energy": -48.395871050810975
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 1.2,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.00440749411808893,
+      "lambda": -0.0005574350135870794,
+      "step_rms": 0.016077762272914464,
+      "step_max": 0.044463741771802796,
+      "predicted_energy_change": -0.00029110957800449795
+    },
+    "total_step": {
+      "rms": 0.014183867385395716,
+      "max": 0.050607582905211945
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0008275424116284216,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0042996042972512725,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.01418408579606504,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.05058204860837101,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 6,
+    "energy": -48.395993078049585,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0005249147029724667,
+      "max_change": 0.012190887961086621
+    },
+    "trust_update": {
+      "fletcher": 0.7270300726325948,
+      "trust": 1.2,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.395993078049585,
+      "E1": -48.39578143263194,
+      "g0": -0.0003193040986472386,
+      "g1": 0.0007440741841909709,
+      "method": "quartic",
+      "t": 0.30115135037520746,
+      "interpolated_energy": -48.39604117765106
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 1.2,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.004751468667606448,
+      "lambda": -0.000163796571408948,
+      "step_rms": 0.00928787149047964,
+      "step_max": 0.05829581456530535,
+      "predicted_energy_change": -8.311345183254547e-05
+    },
+    "total_step": {
+      "rms": 0.011181636357285986,
+      "max": 0.05281257509032385
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0002660587561110489,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0008071238605686809,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.0111816980160041,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.052811926016756355,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 7,
+    "energy": -48.39602956101207,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.00036255397913757955,
+      "max_change": 0.005347102061409753
+    },
+    "trust_update": {
+      "fletcher": 0.43895376359325494,
+      "trust": 1.2,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39602956101207,
+      "E1": -48.395993078049585,
+      "g0": -0.00018645488025703527,
+      "g1": 0.0002594247712919082,
+      "method": "quartic",
+      "t": 0.4181796018345846,
+      "interpolated_energy": -48.39606854697088
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 1.2,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.004787917867024167,
+      "lambda": -6.482108286081223e-05,
+      "step_rms": 0.004409250087881373,
+      "step_max": 0.020717103169673637,
+      "predicted_energy_change": -3.251892024577965e-05
+    },
+    "total_step": {
+      "rms": 0.00549059162208519,
+      "max": 0.027361313760120076
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0003200453668703306,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0017559936628675013,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.0054905724912283765,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.02735609815574147,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 8,
+    "energy": -48.39607739469972,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.00031502638013998334,
+      "max_change": 0.0062155331076488435
+    },
+    "trust_update": {
+      "fletcher": 1.4709494438417776,
+      "trust": 1.2,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39607739469972,
+      "E1": -48.39602956101207,
+      "g0": -4.776264484915119e-05,
+      "g1": 0.0001428331356099921,
+      "method": "quartic",
+      "t": 0.24883906530397648,
+      "interpolated_energy": -48.39608333269094
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 1.2,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.004638935588061451,
+      "lambda": -4.666971636933405e-05,
+      "step_rms": 0.006318509179474145,
+      "step_max": 0.026568810189373182,
+      "predicted_energy_change": -2.3495095227507094e-05
+    },
+    "total_step": {
+      "rms": 0.006411656061934654,
+      "max": 0.028724662398362716
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00011501576164145281,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.000529999838886118,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.006411673129867701,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.02872405483168734,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 9,
+    "energy": -48.39608373330867,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.00025688440348570993,
+      "max_change": 0.004726420146073003
+    },
+    "trust_update": {
+      "fletcher": 0.2697843483351727,
+      "trust": 1.2,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39608373330867,
+      "E1": -48.39607739469972,
+      "g0": -4.598690547781966e-05,
+      "g1": 5.864484279604008e-05,
+      "method": "quartic",
+      "t": 0.43937579385291076,
+      "interpolated_energy": -48.39609383525739
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 1.2,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.003703185824348881,
+      "lambda": -3.7661789000890796e-05,
+      "step_rms": 0.006220977915204792,
+      "step_max": 0.05314268503900925,
+      "predicted_energy_change": -1.8956242321386623e-05
+    },
+    "total_step": {
+      "rms": 0.005232022849518993,
+      "max": 0.04286113329003549
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00013007049361622556,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0006111013656361869,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.005232010464455281,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.042860523341760715,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 10,
+    "energy": -48.39614327364236,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.007447032749209726,
+      "max_change": 0.201920396672821
+    },
+    "trust_update": {
+      "fletcher": 3.1409354595276486,
+      "trust": 1.2,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39614327364236,
+      "E1": -48.39608373330867,
+      "g0": 6.10916749696901e-05,
+      "g1": 5.7938479939092706e-05,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.39614327364236
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 1.2,
+      "n_negative_eigenvalues": 1,
+      "lowest_eigenvalue": -1.0731099080524205,
+      "lambda": -1.0737227853163178,
+      "step_rms": 0.09149914219839807,
+      "step_max": 0.458284193334366,
+      "predicted_energy_change": -0.7735222841897761
+    },
+    "total_step": {
+      "rms": 0.09149914219839808,
+      "max": 0.458284193334366
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00010579099182700087,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0007170774488278543,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 11,
+    "energy": -47.91077429805915,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.018784561128791566,
+      "max_change": 1.0080350944558085
+    },
+    "trust_update": {
+      "fletcher": -0.627478982188091,
+      "trust": 0.29999999999618115,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -47.91077429805915,
+      "E1": -48.39614327364236,
+      "g0": -1.991116514348793,
+      "g1": 0.0008837574209455363,
+      "method": "quartic",
+      "t": 0.9027033599830822,
+      "interpolated_energy": -48.39621092375326
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 0.29999999999618115,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 3.5540741578701796e-05,
+      "lambda": -0.01856836516531365,
+      "step_rms": 0.008815699005137078,
+      "step_max": 0.044346256623460305,
+      "predicted_energy_change": -0.009408286539036585
+    },
+    "total_step": {
+      "rms": 0.08986858423569533,
+      "max": 0.4584645350038692
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.17066547674920807,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 1.3006918390854412,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.08987731404687253,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.458455508987927,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 12,
+    "energy": -48.39622838062565,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.16803432495085152,
+      "max_change": 4.131956584022968
+    },
+    "trust_update": {
+      "fletcher": 51.59856479204353,
+      "trust": 0.29999999999618115,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39622838062565,
+      "E1": -48.39614327364236,
+      "g0": 8.534262462579137e-05,
+      "g1": 8.486844063302334e-05,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.39622838062565
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.29999999999618115,
+      "n_negative_eigenvalues": 1,
+      "lowest_eigenvalue": -28.494361751266904,
+      "lambda": -28.505166816854718,
+      "step_rms": 0.0228747855496301,
+      "step_max": 0.11252544499906568,
+      "predicted_energy_change": -1.2832187642183936
+    },
+    "total_step": {
+      "rms": 0.022874785549630097,
+      "max": 0.1125254449990658
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00026631040354539124,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0012174542487331848,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 13,
+    "energy": -48.37927470647984,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.1679067183840335,
+      "max_change": 4.066574509076709
+    },
+    "trust_update": {
+      "fletcher": -0.013211834660270648,
+      "trust": 0.07499999999914554,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.37927470647984,
+      "E1": -48.39622838062565,
+      "g0": -0.03367076163113277,
+      "g1": 0.0009725147030937794,
+      "method": "quartic",
+      "t": 0.9745660873666615,
+      "interpolated_energy": -48.396240737598156
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.07499999999914554,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 9.01725707167303e-08,
+      "lambda": -0.02078999360960181,
+      "step_rms": 0.005718696387424424,
+      "step_max": 0.05261106138394472,
+      "predicted_energy_change": -0.0001188900937200423
+    },
+    "total_step": {
+      "rms": 0.022212006473019474,
+      "max": 0.10915387807265642
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.009056358728013148,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.04490845958535531,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 14,
+    "energy": -48.39638139411112,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.008440730284839704,
+      "max_change": 0.2671096099646926
+    },
+    "trust_update": {
+      "fletcher": 143.8865686493428,
+      "trust": 0.14999999999829108,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39638139411112,
+      "E1": -48.39622838062565,
+      "g0": 0.0001594680962676108,
+      "g1": 0.00014620179600440556,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.39638139411112
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.14999999999829108,
+      "n_negative_eigenvalues": 1,
+      "lowest_eigenvalue": -1.0072161544559153,
+      "lambda": -1.0147542610329425,
+      "step_rms": 0.011437392774825788,
+      "step_max": 0.06387204717789827,
+      "predicted_energy_change": -0.011503432894602586
+    },
+    "total_step": {
+      "rms": 0.011437392774825781,
+      "max": 0.0638720471778984
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00020519376787750895,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0015816137711318397,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 15,
+    "energy": -48.3911307107874,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.008802816187573377,
+      "max_change": 0.28579140516245705
+    },
+    "trust_update": {
+      "fletcher": -0.4564449040408663,
+      "trust": 0.03749999999960797,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.3911307107874,
+      "E1": -48.39638139411112,
+      "g0": -0.010895912962318772,
+      "g1": 0.00017489491258547657,
+      "method": "quartic",
+      "t": 0.9832301337219587,
+      "interpolated_energy": -48.39638286109606
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.03749999999960797,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 6.886515836745932e-09,
+      "lambda": -0.05992064564268063,
+      "step_rms": 0.00285934819370899,
+      "step_max": 0.026409187716680917,
+      "predicted_energy_change": -8.570566779871832e-05
+    },
+    "total_step": {
+      "rms": 0.011202812287349598,
+      "max": 0.06310872623900954
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.005783242264119881,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.033465064144438283,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 16,
+    "energy": -48.396473327195785,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.004888772404820001,
+      "max_change": 0.13264848042819435
+    },
+    "trust_update": {
+      "fletcher": 62.33679225096999,
+      "trust": 0.07499999999921594,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.396473327195785,
+      "E1": -48.39638139411112,
+      "g0": 9.475243943738392e-05,
+      "g1": 8.90975382849608e-05,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.396473327195785
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.07499999999921594,
+      "n_negative_eigenvalues": 1,
+      "lowest_eigenvalue": -0.3437762971112442,
+      "lambda": -0.3522140388024065,
+      "step_rms": 0.005718696387406595,
+      "step_max": 0.025809159182789754,
+      "predicted_energy_change": -0.0010228578428010517
+    },
+    "total_step": {
+      "rms": 0.005718696387406592,
+      "max": 0.02580915918278981
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0002038594953984416,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0017868858552680417,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 17,
+    "energy": -48.39548853732341,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.004562978932447147,
+      "max_change": 0.12106543945538573
+    },
+    "trust_update": {
+      "fletcher": -0.9627827359489055,
+      "trust": 0.018749999999783332,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39548853732341,
+      "E1": -48.396473327195785,
+      "g0": -0.0020158614991716496,
+      "g1": 6.451137954205945e-05,
+      "method": "quartic",
+      "t": 0.9697644463254148,
+      "interpolated_energy": -48.39647430220927
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.018749999999783332,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 7.305805714737101e-09,
+      "lambda": -0.13523997808809166,
+      "step_rms": 0.0014296740968518541,
+      "step_max": 0.01318170137783052,
+      "predicted_energy_change": -4.814847901598059e-05
+    },
+    "total_step": {
+      "rms": 0.005414820081974636,
+      "max": 0.025474900350652696
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.002407063083265622,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.012638165504840539,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 18,
+    "energy": -48.3965239233752,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0064196727723917265,
+      "max_change": 0.2838354010151693
+    },
+    "trust_update": {
+      "fletcher": 21.50402407148092,
+      "trust": 0.037499999999566665,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.3965239233752,
+      "E1": -48.396473327195785,
+      "g0": 5.1714159881814344e-05,
+      "g1": 4.9488899786376535e-05,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.3965239233752
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.037499999999566665,
+      "n_negative_eigenvalues": 1,
+      "lowest_eigenvalue": -0.05122911447483114,
+      "lambda": -0.09421240994934868,
+      "step_rms": 0.0028593481937054764,
+      "step_max": 0.024887060206444708,
+      "predicted_energy_change": -0.00011313913815418428
+    },
+    "total_step": {
+      "rms": 0.002859348193705468,
+      "max": 0.0248870602064446
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00021305578246511497,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0018937727220267003,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 19,
+    "energy": -48.39658794898562,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.003276017534254177,
+      "max_change": 0.0626547353447819
+    },
+    "trust_update": {
+      "fletcher": 0.5659015214635714,
+      "trust": 0.037499999999566665,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39658794898562,
+      "E1": -48.3965239233752,
+      "g0": 3.410410554302263e-05,
+      "g1": 9.37921149420264e-05,
+      "method": "quartic",
+      "t": -0.5644739406452216,
+      "interpolated_energy": -48.39659758844907
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.037499999999566665,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 4.76022912424684e-08,
+      "lambda": -0.07732871609392267,
+      "step_rms": 0.002859348193705955,
+      "step_max": 0.024776189320546507,
+      "predicted_energy_change": -0.00016345383891704462
+    },
+    "total_step": {
+      "rms": 0.004189174389073095,
+      "max": 0.038694162323356096
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0004824735426549225,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.002066769539951995,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 20,
+    "energy": -48.396784221523866,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.00818215927179022,
+      "max_change": 0.17338538109324217
+    },
+    "trust_update": {
+      "fletcher": 1.2007826769271737,
+      "trust": 0.07499999999913333,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.396784221523866,
+      "E1": -48.39658794898562,
+      "g0": 0.00019982011694154113,
+      "g1": 0.00019263681280234313,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.396784221523866
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.07499999999913333,
+      "n_negative_eigenvalues": 1,
+      "lowest_eigenvalue": -0.860400772142379,
+      "lambda": -0.8930146429006464,
+      "step_rms": 0.005718696387405819,
+      "step_max": 0.026550745749597468,
+      "predicted_energy_change": -0.002611430107972787
+    },
+    "total_step": {
+      "rms": 0.005718696387405818,
+      "max": 0.026550745749597482
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00035188462647250674,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.002362246354244355,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 21,
+    "energy": -48.39574824033812,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0075778066983073315,
+      "max_change": 0.1661271207285709
+    },
+    "trust_update": {
+      "fletcher": -0.3967102862833724,
+      "trust": 0.018749999999780793,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39574824033812,
+      "E1": -48.396784221523866,
+      "g0": -0.00224863633945664,
+      "g1": 0.00019965283958089838,
+      "method": "quartic",
+      "t": 0.9205202780136089,
+      "interpolated_energy": -48.39679214985663
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.018749999999780793,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 9.1995056364369e-09,
+      "lambda": -0.17909307889199022,
+      "step_rms": 0.0014296740968519097,
+      "step_max": 0.013220015298813012,
+      "predicted_energy_change": -6.32491919335012e-05
+    },
+    "total_step": {
+      "rms": 0.005542052038905012,
+      "max": 0.024344353279611486
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0023766100388652733,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.011027211326226612,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 22,
+    "energy": -48.39685658517783,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0006098047427307803,
+      "max_change": 0.013089236241875718
+    },
+    "trust_update": {
+      "fletcher": 17.52346244835271,
+      "trust": 0.037499999999561585,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39685658517783,
+      "E1": -48.396784221523866,
+      "g0": 6.368605185838221e-05,
+      "g1": 8.108181868295798e-05,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.39685658517783
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.037499999999561585,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 5.884585522857033e-09,
+      "lambda": -0.09277864620339532,
+      "step_rms": 0.002859348193706141,
+      "step_max": 0.026481342768506555,
+      "predicted_energy_change": -0.0001305870016590829
+    },
+    "total_step": {
+      "rms": 0.002859348193706143,
+      "max": 0.026481342768506666
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00026724447979645363,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0024646544963807327,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 23,
+    "energy": -48.39699150101293,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.003424358466124336,
+      "max_change": 0.13653272534108152
+    },
+    "trust_update": {
+      "fletcher": 1.0331490376999417,
+      "trust": 0.07499999999912317,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39699150101293,
+      "E1": -48.39685658517783,
+      "g0": 0.00013910953270400648,
+      "g1": 0.00013070407924974708,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.39699150101293
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.07499999999912317,
+      "n_negative_eigenvalues": 1,
+      "lowest_eigenvalue": -0.0076695618837062576,
+      "lambda": -0.05748790491049293,
+      "step_rms": 0.0057186963873942665,
+      "step_max": 0.05303906361730909,
+      "predicted_energy_change": -0.00030278000491664326
+    },
+    "total_step": {
+      "rms": 0.005718696387394264,
+      "max": 0.053039063617309035
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00028917034737016784,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.002654962114471489,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 24,
+    "energy": -48.397284466741255,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0014659924135002403,
+      "max_change": 0.027746878348501213
+    },
+    "trust_update": {
+      "fletcher": 0.9675861139159289,
+      "trust": 0.14999999999824634,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.397284466741255,
+      "E1": -48.39699150101293,
+      "g0": 0.000303266429180004,
+      "g1": 0.00028218944374814404,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.397284466741255
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.14999999999824634,
+      "n_negative_eigenvalues": 1,
+      "lowest_eigenvalue": -0.19069234203448254,
+      "lambda": -0.20949418172325673,
+      "step_rms": 0.01143739277480475,
+      "step_max": 0.04617437468898457,
+      "predicted_energy_change": -0.0025977049624235317
+    },
+    "total_step": {
+      "rms": 0.011437392774804742,
+      "max": 0.04617437468898444
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0003542857561318122,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0029892584350465004,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 25,
+    "energy": -48.394681344496774,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0030617022560979557,
+      "max_change": 0.05925022179334987
+    },
+    "trust_update": {
+      "fletcher": -1.002085410827023,
+      "trust": 0.037499999999538985,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.394681344496774,
+      "E1": -48.397284466741255,
+      "g0": -0.0056744538588960804,
+      "g1": 0.0004817898485718718,
+      "method": "quartic",
+      "t": 0.9222148152966257,
+      "interpolated_energy": -48.39730320159191
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.037499999999538985,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 3.2216465356040003e-07,
+      "lambda": -0.11288447247696581,
+      "step_rms": 0.002859348193700073,
+      "step_max": 0.026491891701309802,
+      "predicted_energy_change": -0.00016167278472438418
+    },
+    "total_step": {
+      "rms": 0.010161991484790092,
+      "max": 0.04372001686060445
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.003462468249860653,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.01654779778202525,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 26,
+    "energy": -48.39747014332558,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0038204139583276927,
+      "max_change": 0.09055880438569358
+    },
+    "trust_update": {
+      "fletcher": 17.249649243677723,
+      "trust": 0.07499999999907797,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39747014332558,
+      "E1": -48.397284466741255,
+      "g0": 0.00018224369349301785,
+      "g1": 0.0001890690306386833,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.39747014332558
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.07499999999907797,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 3.3632303935750285e-08,
+      "lambda": -0.058587848368329115,
+      "step_rms": 0.005718696387404678,
+      "step_max": 0.05294302325195703,
+      "predicted_energy_change": -0.00033029963704982125
+    },
+    "total_step": {
+      "rms": 0.0057186963874046644,
+      "max": 0.05294302325195699
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00034614065409900466,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0031817818682756184,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 27,
+    "energy": -48.39780888043225,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0068647635576428775,
+      "max_change": 0.1623255958470276
+    },
+    "trust_update": {
+      "fletcher": 1.0255448952341761,
+      "trust": 0.14999999999815594,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39780888043225,
+      "E1": -48.39747014332558,
+      "g0": 0.0003458779099470922,
+      "g1": 0.00033104128436601415,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.39780888043225
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.14999999999815594,
+      "n_negative_eigenvalues": 1,
+      "lowest_eigenvalue": -0.1385050652205291,
+      "lambda": -0.16746879902345185,
+      "step_rms": 0.011437392774803302,
+      "step_max": 0.04852700251949706,
+      "predicted_energy_change": -0.0022469642787941208
+    },
+    "total_step": {
+      "rms": 0.011437392774803299,
+      "max": 0.04852700251949704
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0004454912663382747,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0034888581143151308,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 28,
+    "energy": -48.39536446767847,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0029600447781164673,
+      "max_change": 0.05696250347925967
+    },
+    "trust_update": {
+      "fletcher": -1.0878734374410626,
+      "trust": 0.03749999999953425,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39536446767847,
+      "E1": -48.39780888043225,
+      "g0": -0.005674653096195252,
+      "g1": 0.0007258781505033343,
+      "method": "quartic",
+      "t": 0.8837137764337486,
+      "interpolated_energy": -48.39785113179606
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.03749999999953425,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 1.8646401429836187e-06,
+      "lambda": -0.1293907276217005,
+      "step_rms": 0.0028593481937027824,
+      "step_max": 0.026401432573688544,
+      "predicted_energy_change": -0.00018941106862531182
+    },
+    "total_step": {
+      "rms": 0.009595761779812815,
+      "max": 0.03993429455431796
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0035965755427370657,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.016341231466197485,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 29,
+    "energy": -48.39804592411522,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0013360758448127928,
+      "max_change": 0.04488868614653566
+    },
+    "trust_update": {
+      "fletcher": 14.156809611063508,
+      "trust": 0.0749999999990685,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39804592411522,
+      "E1": -48.39780888043225,
+      "g0": 0.0002215937175871979,
+      "g1": 0.00025240182608896267,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.39804592411522
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.0749999999990685,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 6.781069910649293e-07,
+      "lambda": -0.0661822767031903,
+      "step_rms": 0.0057186963873986935,
+      "step_max": 0.05327905597743414,
+      "predicted_energy_change": -0.00037644553333073644
+    },
+    "total_step": {
+      "rms": 0.005718696387398702,
+      "max": 0.0532790559774341
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0003970740273328549,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0036354168878903158,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 30,
+    "energy": -48.398436413019084,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.001669835033253825,
+      "max_change": 0.049228938130868566
+    },
+    "trust_update": {
+      "fletcher": 1.037305185699862,
+      "trust": 0.149999999998137,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.398436413019084,
+      "E1": -48.39804592411522,
+      "g0": 0.00039975826557149026,
+      "g1": 0.00038061423421554793,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.398436413019084
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.149999999998137,
+      "n_negative_eigenvalues": 1,
+      "lowest_eigenvalue": -0.005433584932699299,
+      "lambda": -0.0415955591947838,
+      "step_rms": 0.01143739277482048,
+      "step_max": 0.10570412330968984,
+      "predicted_energy_change": -0.0008852846041092705
+    },
+    "total_step": {
+      "rms": 0.011437392774820483,
+      "max": 0.10570412330968981
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00045463473331411607,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0038656922396841137,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 31,
+    "energy": -48.39929672026198,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.001130670025722138,
+      "max_change": 0.0307361240146388
+    },
+    "trust_update": {
+      "fletcher": 0.9717860662005846,
+      "trust": 0.299999999996274,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.39929672026198,
+      "E1": -48.398436413019084,
+      "g0": 0.0008798571558315206,
+      "g1": 0.0008346676558426971,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.39929672026198
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.299999999996274,
+      "n_negative_eigenvalues": 1,
+      "lowest_eigenvalue": -0.013959626499708163,
+      "lambda": -0.02962210464757217,
+      "step_rms": 0.022874785549683842,
+      "step_max": 0.20359165911945848,
+      "predicted_energy_change": -0.002192049234936679
+    },
+    "total_step": {
+      "rms": 0.022874785549683835,
+      "max": 0.20359165911945842
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00045928483118742446,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0042410788936303795,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 32,
+    "energy": -48.400488818366334,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0021833091385097827,
+      "max_change": 0.051761440054706044
+    },
+    "trust_update": {
+      "fletcher": 0.5438281610448105,
+      "trust": 0.299999999996274,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.400488818366334,
+      "E1": -48.39929672026198,
+      "g0": 0.0006273358429631048,
+      "g1": 0.0017181156344662518,
+      "method": "quartic",
+      "t": -0.49375538237309347,
+      "interpolated_energy": -48.400646211305414
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.299999999996274,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 7.719384463866774e-07,
+      "lambda": -0.01961957375895389,
+      "step_rms": 0.022874785549537407,
+      "step_max": 0.1974286654347518,
+      "predicted_energy_change": -0.0025442357543258394
+    },
+    "total_step": {
+      "rms": 0.031900780490009065,
+      "max": 0.2917847388714936
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.001545375782581516,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.007191155844298229,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 33,
+    "energy": -48.403196948139964,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.00247105519215441,
+      "max_change": 0.05881205776801138
+    },
+    "trust_update": {
+      "fletcher": 1.0644177800830803,
+      "trust": 0.599999999992548,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.403196948139964,
+      "E1": -48.400488818366334,
+      "g0": 0.002213475599314474,
+      "g1": 0.003057258480612228,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.403196948139964
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.599999999992548,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 5.595624328660551e-06,
+      "lambda": -0.004523828960582524,
+      "step_rms": 0.04574957109903003,
+      "step_max": 0.43662093729887014,
+      "predicted_energy_change": -0.002497092237675592
+    },
+    "total_step": {
+      "rms": 0.04574957109903003,
+      "max": 0.43662093729887014
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0008914612249210999,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.003797801149115832,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 34,
+    "energy": -48.40462661498613,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.00047179225214199794,
+      "max_change": 0.01234743810164389
+    },
+    "trust_update": {
+      "fletcher": 0.5725326540180051,
+      "trust": 0.599999999992548,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40462661498613,
+      "E1": -48.403196948139964,
+      "g0": -0.0007357446134033472,
+      "g1": 0.0033656308183932318,
+      "method": "quartic",
+      "t": 0.1567757791090959,
+      "interpolated_energy": -48.40468381502986
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.599999999992548,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 5.533002841763557e-06,
+      "lambda": -0.004525210081675546,
+      "step_rms": 0.04574957109970827,
+      "step_max": 0.37055935503115744,
+      "predicted_energy_change": -0.0018794031740188843
+    },
+    "total_step": {
+      "rms": 0.041096634753097605,
+      "max": 0.30985362559766516
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0010075252189664,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0053952901335458684,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 35,
+    "energy": -48.40095372759813,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0010723148061358523,
+      "max_change": 0.027814384165538344
+    },
+    "trust_update": {
+      "fletcher": -1.954283912456964,
+      "trust": 0.14999999999976024,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40095372759813,
+      "E1": -48.40462661498613,
+      "g0": -0.009894826799262891,
+      "g1": 0.0024368692504599552,
+      "method": "quartic",
+      "t": 0.7980024883875682,
+      "interpolated_energy": -48.40487319302495
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.14999999999976024,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 4.349547847292204e-05,
+      "lambda": -0.005545335843205768,
+      "step_rms": 0.011437392775072107,
+      "step_max": 0.10267884615207043,
+      "predicted_energy_change": -0.00017399821252069052
+    },
+    "total_step": {
+      "rms": 0.041003565184378074,
+      "max": 0.33292000379544495
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0035740671282844614,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.020501044199549866,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 36,
+    "energy": -48.40482266637191,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.000638079960827315,
+      "max_change": 0.015344069660254225
+    },
+    "trust_update": {
+      "fletcher": 22.23550873202354,
+      "trust": 0.2999999999995205,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40482266637191,
+      "E1": -48.40462661498613,
+      "g0": -0.0003582447832025136,
+      "g1": 0.0007621819436872822,
+      "method": "quartic",
+      "t": 0.32669693542275374,
+      "interpolated_energy": -48.40488138923176
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.2999999999995205,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 4.193874327359029e-05,
+      "lambda": -0.0024341604448750932,
+      "step_rms": 0.022874785550240383,
+      "step_max": 0.19112597894820624,
+      "predicted_energy_change": -0.0002447582997884471
+    },
+    "total_step": {
+      "rms": 0.02399404056535886,
+      "max": 0.20764616217125026
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00046172339242334895,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0024797197887673,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 37,
+    "energy": -48.40465471583755,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0013291150621792466,
+      "max_change": 0.03454251980364297
+    },
+    "trust_update": {
+      "fletcher": -0.6861893325315153,
+      "trust": 0.07500000000114651,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40465471583755,
+      "E1": -48.40482266637191,
+      "g0": -0.0007143671654711195,
+      "g1": 0.00037574633763763106,
+      "method": "quartic",
+      "t": 0.6536205681131544,
+      "interpolated_energy": -48.40488779814925
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.07500000000114651,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.000781055722219497,
+      "lambda": -0.01914442673326629,
+      "step_rms": 0.005718696387564258,
+      "step_max": 0.02812162541267815,
+      "predicted_energy_change": -0.00016561970919375243
+    },
+    "total_step": {
+      "rms": 0.018541525017834667,
+      "max": 0.15396851903478748
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00037368205086245966,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0018341125068415728,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 38,
+    "energy": -48.40471099534655,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0013804496501593445,
+      "max_change": 0.03965820572481879
+    },
+    "trust_update": {
+      "fletcher": 0.33981166414531394,
+      "trust": 0.07500000000114651,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40471099534655,
+      "E1": -48.40482266637191,
+      "g0": -0.0006541156953578424,
+      "g1": 0.0004099898678498993,
+      "method": "quartic",
+      "t": 0.6006822574894236,
+      "interpolated_energy": -48.404905174521666
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.07500000000114651,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0006446881560118883,
+      "lambda": -0.0060130781389668075,
+      "step_rms": 0.005718696387522629,
+      "step_max": 0.04610929338312011,
+      "predicted_energy_change": -4.4370545669511594e-05
+    },
+    "total_step": {
+      "rms": 0.004608689571876125,
+      "max": 0.020771733909231926
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0009163940895234894,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.005012867367288888,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 39,
+    "energy": -48.40491894373772,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.000710609235673689,
+      "max_change": 0.015158717260864173
+    },
+    "trust_update": {
+      "fletcher": 4.686631368845104,
+      "trust": 0.15000000000229302,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40491894373772,
+      "E1": -48.40482266637191,
+      "g0": -8.950569215376295e-06,
+      "g1": 0.00020040224143855008,
+      "method": "quartic",
+      "t": 0.04211432616623705,
+      "interpolated_energy": -48.40491913216981
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.15000000000229302,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0010341760486773863,
+      "lambda": -0.0006608304920583224,
+      "step_rms": 0.011437392775252919,
+      "step_max": 0.07335180358933488,
+      "predicted_energy_change": -4.12213521392865e-05
+    },
+    "total_step": {
+      "rms": 0.011613307475082733,
+      "max": 0.07585021932394032
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0001398887944245843,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0006830871081357154,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 40,
+    "energy": -48.40480625941551,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0010561246079696513,
+      "max_change": 0.020162184018035354
+    },
+    "trust_update": {
+      "fletcher": -2.7336396395805083,
+      "trust": 0.037500000001008435,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40480625941551,
+      "E1": -48.40491894373772,
+      "g0": -0.0002936416397740128,
+      "g1": 6.773094962735667e-05,
+      "method": "quartic",
+      "t": 0.8118861514848176,
+      "interpolated_energy": -48.40492531610335
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.037500000001008435,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.003714910773574255,
+      "lambda": -0.0037944349072852254,
+      "step_rms": 0.0028593481938294267,
+      "step_max": 0.012222191577250434,
+      "predicted_energy_change": -9.909752394722158e-06
+    },
+    "total_step": {
+      "rms": 0.010077230035341417,
+      "max": 0.07378449691218636
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00046955830964099244,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.002043734220779778,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 41,
+    "energy": -48.40492732882809,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.001100428878824457,
+      "max_change": 0.02655647326558652
+    },
+    "trust_update": {
+      "fletcher": 12.21719855135545,
+      "trust": 0.07500000000201687,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40492732882809,
+      "E1": -48.40491894373772,
+      "g0": -1.0755760350544118e-05,
+      "g1": 2.751684126348986e-05,
+      "method": "quartic",
+      "t": 0.2808862060650784,
+      "interpolated_energy": -48.404928839299586
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 0.07500000000201687,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.00292294202315846,
+      "lambda": -1.6620217006811667e-05,
+      "step_rms": 0.0050969490421207235,
+      "step_max": 0.021419973900557887,
+      "predicted_energy_change": -8.347241147979494e-06
+    },
+    "total_step": {
+      "rms": 0.004495512797593703,
+      "max": 0.020846209742861
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0001264374708482173,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.000692326967185881,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.004495513529795185,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.020845861895201878,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 42,
+    "energy": -48.40493707840229,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0009206440241764073,
+      "max_change": 0.024809156427109735
+    },
+    "trust_update": {
+      "fletcher": 1.167999585729886,
+      "trust": 0.07500000000201687,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40493707840229,
+      "E1": -48.40492732882809,
+      "g0": -1.4198198113887083e-07,
+      "g1": 1.965171450884796e-05,
+      "method": "quartic",
+      "t": 0.007184530120185872,
+      "interpolated_energy": -48.40493707891233
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.07500000000201687,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0014213550637208422,
+      "lambda": -0.000954643341387172,
+      "step_rms": 0.0057186963874996735,
+      "step_max": 0.022602903334994373,
+      "predicted_energy_change": -1.5849396852212872e-05
+    },
+    "total_step": {
+      "rms": 0.005693274435741918,
+      "max": 0.02250213246023336
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0001182027163692524,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0005152344613332435,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 43,
+    "energy": -48.404962383436356,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.007326521704448318,
+      "max_change": 0.2676930289096723
+    },
+    "trust_update": {
+      "fletcher": 1.5965928735172956,
+      "trust": 0.15000000000403374,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.404962383436356,
+      "E1": -48.40493707840229,
+      "g0": 2.424099447620796e-05,
+      "g1": 2.635385198432312e-05,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.404962383436356
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.15000000000403374,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 1.9452837070604335e-05,
+      "lambda": -0.0022894564552272305,
+      "step_rms": 0.011437392776093628,
+      "step_max": 0.04584347794893443,
+      "predicted_energy_change": -5.972588309648259e-05
+    },
+    "total_step": {
+      "rms": 0.011437392776093628,
+      "max": 0.04584347794893445
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 9.604359902034502e-05,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0003277376972163054,
+          "threshold": 0.00045,
+          "matched": true
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 44,
+    "energy": -48.405023279233724,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.007016128795012803,
+      "max_change": 0.23923753333506334
+    },
+    "trust_update": {
+      "fletcher": 1.0195880614846973,
+      "trust": 0.3000000000080675,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.405023279233724,
+      "E1": -48.404962383436356,
+      "g0": 5.2960767554975844e-05,
+      "g1": 6.793895699335538e-05,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.405023279233724
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.3000000000080675,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 9.59158238956169e-06,
+      "lambda": -0.0012373475051542023,
+      "step_rms": 0.022874785551572303,
+      "step_max": 0.09271883913721915,
+      "predicted_energy_change": -0.00011762992206294285
+    },
+    "total_step": {
+      "rms": 0.022874785551572307,
+      "max": 0.09271883913721912
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00035703790897440783,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.002162862241241245,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 45,
+    "energy": -48.40515103110396,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.1253867833830254,
+      "max_change": 4.417303435247552
+    },
+    "trust_update": {
+      "fletcher": 1.0860490935834535,
+      "trust": 0.600000000016135,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40515103110396,
+      "E1": -48.405023279233724,
+      "g0": 0.00012237204178715443,
+      "g1": 0.0001238992226231929,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.40515103110396
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.600000000016135,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 3.6864632119796256e-07,
+      "lambda": -0.0007116974025730026,
+      "step_rms": 0.04574957109823995,
+      "step_max": 0.18950350946083616,
+      "predicted_energy_change": -0.00028144172058002794
+    },
+    "total_step": {
+      "rms": 0.04574957109823994,
+      "max": 0.18950350946083638
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0008024059332695162,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0048684562931156404,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 46,
+    "energy": -48.40513995801805,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.012260825773850388,
+      "max_change": 0.4600367191462188
+    },
+    "trust_update": {
+      "fletcher": -0.0393441522884102,
+      "trust": 0.14999999999494598,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40513995801805,
+      "E1": -48.40515103110396,
+      "g0": -0.0004367794175318562,
+      "g1": 0.00030667079628411947,
+      "method": "quartic",
+      "t": 0.47844621875730925,
+      "interpolated_energy": -48.405237851004685
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.14999999999494598,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 2.9487745766346163e-06,
+      "lambda": -0.001905891149756451,
+      "step_rms": 0.01143739277498338,
+      "step_max": 0.04435189509408431,
+      "predicted_energy_change": -7.260705829268339e-05
+    },
+    "total_step": {
+      "rms": 0.01704693464565856,
+      "max": 0.07760946175646266
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.001494061929250896,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.007808051673219608,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 47,
+    "energy": -48.405242221475405,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.00721978552563453,
+      "max_change": 0.24512720569048
+    },
+    "trust_update": {
+      "fletcher": 1.408450634990489,
+      "trust": 0.29999999998989196,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.405242221475405,
+      "E1": -48.40515103110396,
+      "g0": -1.414637112678942e-05,
+      "g1": 0.00016289418680085456,
+      "method": "quartic",
+      "t": 0.0502917833169742,
+      "interpolated_energy": -48.405242574463976
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.29999999998989196,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 2.016462755841324e-05,
+      "lambda": -0.0023498956365295975,
+      "step_rms": 0.02287478554905426,
+      "step_max": 0.13548485185561687,
+      "predicted_energy_change": -0.0002862833918849491
+    },
+    "total_step": {
+      "rms": 0.022177631224363302,
+      "max": 0.13589127281998348
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0015442399675795837,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.009712915564649482,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 48,
+    "energy": -48.40490403844314,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.014346061189242547,
+      "max_change": 0.558902108832877
+    },
+    "trust_update": {
+      "fletcher": -1.1812876396129335,
+      "trust": 0.07499999999725752,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40490403844314,
+      "E1": -48.405242221475405,
+      "g0": -0.0010323029241339295,
+      "g1": 0.00036893020386730927,
+      "method": "quartic",
+      "t": 0.7420470898190379,
+      "interpolated_energy": -48.40528969212468
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.07499999999725752,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 4.156120219954079e-05,
+      "lambda": -0.00042330861179351456,
+      "step_rms": 0.005718696387417487,
+      "step_max": 0.01809440687123529,
+      "predicted_energy_change": -2.332396215215514e-05
+    },
+    "total_step": {
+      "rms": 0.019785491716761375,
+      "max": 0.11347477678148676
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0012862621998326312,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.005516042720301798,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 49,
+    "energy": -48.405298170539076,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.016636312298518047,
+      "max_change": 0.6485682874877091
+    },
+    "trust_update": {
+      "fletcher": 16.89816221350923,
+      "trust": 0.14999999999451505,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.405298170539076,
+      "E1": -48.405242221475405,
+      "g0": -3.0252172187223814e-05,
+      "g1": 0.00014244807725009027,
+      "method": "quartic",
+      "t": 0.17592104791738067,
+      "interpolated_energy": -48.405300832344885
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.14999999999451505,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 4.142248236600754e-05,
+      "lambda": -0.0010669791366226145,
+      "step_rms": 0.01143739277517526,
+      "step_max": 0.041699996944210956,
+      "predicted_energy_change": -5.3072420319600884e-05
+    },
+    "total_step": {
+      "rms": 0.011464091343475678,
+      "max": 0.041753230874026936
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0013457846987555836,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.007808138326895235,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 50,
+    "energy": -48.40531941283911,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.02846700481429726,
+      "max_change": 0.9599732224205836
+    },
+    "trust_update": {
+      "fletcher": 0.4002512021796997,
+      "trust": 0.14999999999451505,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40531941283911,
+      "E1": -48.405298170539076,
+      "g0": -4.5671270457293704e-05,
+      "g1": 8.747494184581794e-05,
+      "method": "quartic",
+      "t": 0.33957235829820576,
+      "interpolated_energy": -48.4053271537909
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.14999999999451505,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 6.172536664084996e-05,
+      "lambda": -7.435115123785367e-05,
+      "step_rms": 0.011437392771185483,
+      "step_max": 0.044272058722856646,
+      "predicted_energy_change": -2.3342582103344863e-05
+    },
+    "total_step": {
+      "rms": 0.0086636852621979,
+      "max": 0.032508173127753726
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0014382524668667498,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.008041582195340945,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 51,
+    "energy": -48.40534950518416,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.033890440457226764,
+      "max_change": 1.034489355440955
+    },
+    "trust_update": {
+      "fletcher": 1.2891609384052258,
+      "trust": 0.2999999999890301,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40534950518416,
+      "E1": -48.40531941283911,
+      "g0": -1.3800474741678575e-06,
+      "g1": 6.11285569613065e-05,
+      "method": "quartic",
+      "t": 0.021633173751189883,
+      "interpolated_energy": -48.40534952010933
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.2999999999890301,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0001837854914636859,
+      "lambda": -0.0012469230900257586,
+      "step_rms": 0.022874785550311073,
+      "step_max": 0.0914238610508137,
+      "predicted_energy_change": -0.00020479026020147337
+    },
+    "total_step": {
+      "rms": 0.022989233756290983,
+      "max": 0.0920309604400533
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0016468531383654387,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.009718220673843392,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 52,
+    "energy": -48.405340036928266,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.014534805591950667,
+      "max_change": 0.5057459189824973
+    },
+    "trust_update": {
+      "fletcher": -0.046233917020578594,
+      "trust": 0.07500000000137826,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.405340036928266,
+      "E1": -48.40534950518416,
+      "g0": -0.00031029445001659904,
+      "g1": 0.0002968293860603186,
+      "method": "quartic",
+      "t": 0.5178407626734435,
+      "interpolated_energy": -48.40542075590206
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.07500000000137826,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0007247023661474568,
+      "lambda": -0.005770484903763724,
+      "step_rms": 0.005718696387563277,
+      "step_max": 0.025694705660471703,
+      "predicted_energy_change": -0.00012173112129077897
+    },
+    "total_step": {
+      "rms": 0.01520342754658273,
+      "max": 0.05907852539907532
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0013296500820602895,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.008160240957611992,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 53,
+    "energy": -48.40560108392759,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.006904878011129479,
+      "max_change": 0.24728421180761898
+    },
+    "trust_update": {
+      "fletcher": 2.1444557197971177,
+      "trust": 0.1500000000027565,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40560108392759,
+      "E1": -48.40534950518416,
+      "g0": 0.00011952420198022914,
+      "g1": 0.0003824009713377674,
+      "method": "quartic",
+      "t": -0.4455790232414032,
+      "interpolated_energy": -48.405627767728916
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.1500000000027565,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0007297464782751012,
+      "lambda": -0.0029510975612615296,
+      "step_rms": 0.011437392775458204,
+      "step_max": 0.04671022768089351,
+      "predicted_energy_change": -0.0002220478208997407
+    },
+    "total_step": {
+      "rms": 0.011718352723981704,
+      "max": 0.044363110930411453
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.001393145518792661,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.008498110004673959,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 54,
+    "energy": -48.40591733841576,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.004715366234085362,
+      "max_change": 0.1699889042613799
+    },
+    "trust_update": {
+      "fletcher": 1.4242629668219875,
+      "trust": 0.300000000005513,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40591733841576,
+      "E1": -48.40560108392759,
+      "g0": 0.00019794985265084804,
+      "g1": 0.00043555721808626925,
+      "method": "quartic",
+      "t": -0.8528983408041526,
+      "interpolated_energy": -48.40600144795795
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.300000000005513,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0004702214383677972,
+      "lambda": -0.0035434696386134118,
+      "step_rms": 0.022874785550158143,
+      "step_max": 0.10077811036557814,
+      "predicted_energy_change": -0.0005716567945175125
+    },
+    "total_step": {
+      "rms": 0.0294454388927741,
+      "max": 0.13458898141061115
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.001074347617768933,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0061757226780135245,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 55,
+    "energy": -48.40667444773998,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0016020526022520853,
+      "max_change": 0.03913787408540695
+    },
+    "trust_update": {
+      "fletcher": 1.3244123597881352,
+      "trust": 0.600000000011026,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40667444773998,
+      "E1": -48.40591733841576,
+      "g0": 0.0005885881740650378,
+      "g1": 0.0009150556401422031,
+      "method": "none-new",
+      "t": 0.0,
+      "interpolated_energy": -48.40667444773998
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.600000000011026,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0002520418717364359,
+      "lambda": -0.0022304375364233524,
+      "step_rms": 0.04574957109870678,
+      "step_max": 0.1824728815872058,
+      "predicted_energy_change": -0.0010283042717298262
+    },
+    "total_step": {
+      "rms": 0.04574957109870678,
+      "max": 0.18247288158720587
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0006421844572953575,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0031571509703582786,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 56,
+    "energy": -48.40760648636922,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0007805604730532791,
+      "max_change": 0.023989294620654293
+    },
+    "trust_update": {
+      "fletcher": 0.9063840877286348,
+      "trust": 1.200000000022052,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40760648636922,
+      "E1": -48.40667444773998,
+      "g0": 0.00048219538545439766,
+      "g1": 0.0012536508362312917,
+      "method": "quartic",
+      "t": -0.3526940944912877,
+      "interpolated_energy": -48.407695302246495
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 1.200000000022052,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0005767767580710465,
+      "lambda": -0.0008390306316157679,
+      "step_rms": 0.04219565957359543,
+      "step_max": 0.16247892138279155,
+      "predicted_energy_change": -0.0005479883045239132
+    },
+    "total_step": {
+      "rms": 0.05696636817576186,
+      "max": 0.22376673100158584
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0005019109984495774,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.003191794207001718,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.056966437025594015,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.22381985272178273,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 57,
+    "energy": -48.40764617857761,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.00042983816651060884,
+      "max_change": 0.016897116017002903
+    },
+    "trust_update": {
+      "fletcher": 0.07243258307086155,
+      "trust": 0.13834772182311358,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40764617857761,
+      "E1": -48.40760648636922,
+      "g0": -0.0011347355655554087,
+      "g1": 0.0009963839009241389,
+      "method": "quartic",
+      "t": 0.4560798344272224,
+      "interpolated_energy": -48.40789374763432
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.13834772182311358,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0018880639653904418,
+      "lambda": -0.005256693464925805,
+      "step_rms": 0.010548914893457101,
+      "step_max": 0.0428991628833432,
+      "predicted_energy_change": -0.00023505729458578867
+    },
+    "total_step": {
+      "rms": 0.027153570069251953,
+      "max": 0.12059648412639157
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0008336872624846818,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.004355487090177093,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 58,
+    "energy": -48.40805018443116,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0005187126193350625,
+      "max_change": 0.012122754683059272
+    },
+    "trust_update": {
+      "fletcher": 1.7187548008700773,
+      "trust": 0.27669544364622717,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40805018443116,
+      "E1": -48.40764617857761,
+      "g0": -0.0001223801149636048,
+      "g1": 0.0009834496566108043,
+      "method": "quartic",
+      "t": 0.12626241602846752,
+      "interpolated_energy": -48.40805796047195
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 0.27669544364622717,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.00195365030184166,
+      "lambda": -0.00028647828409841136,
+      "step_rms": 0.014976948768395594,
+      "step_max": 0.05089471260391774,
+      "predicted_energy_change": -0.00014876547244016777
+    },
+    "total_step": {
+      "rms": 0.01602268559890719,
+      "max": 0.05039094771551822
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00038795467016493665,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0013915902866308305,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.016022836378542307,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.05044353549021663,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 59,
+    "energy": -48.407958386155464,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.000583854855386201,
+      "max_change": 0.00862339094529525
+    },
+    "trust_update": {
+      "fletcher": -0.6170670801000803,
+      "trust": 0.04910521041518732,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.407958386155464,
+      "E1": -48.40805018443116,
+      "g0": -0.00048249630507098443,
+      "g1": 0.00029922269697067305,
+      "method": "quartic",
+      "t": 0.6175174743142051,
+      "interpolated_energy": -48.40810739911908
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.04910521041518732,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0016265772522807247,
+      "lambda": -0.009422344056624038,
+      "step_rms": 0.0037442371921135396,
+      "step_max": 0.013156466932412634,
+      "predicted_energy_change": -4.084673084975587e-05
+    },
+    "total_step": {
+      "rms": 0.010334025262669166,
+      "max": 0.03815714519440873
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0004346400793174049,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.002222194219572195,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 60,
+    "energy": -48.40814766392038,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0008362284945043677,
+      "max_change": 0.015360242624724664
+    },
+    "trust_update": {
+      "fletcher": 4.63385345633352,
+      "trust": 0.09821042083037464,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40814766392038,
+      "E1": -48.40805018443116,
+      "g0": 2.420876177841809e-05,
+      "g1": 0.000170948613296796,
+      "method": "quartic",
+      "t": -0.16576049890301242,
+      "interpolated_energy": -48.40814966989787
+    },
+    "quadratic_step": {
+      "step_type": "sphere",
+      "on_sphere": true,
+      "trust_radius": 0.09821042083037464,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0015692759187006227,
+      "lambda": -0.001919022999860145,
+      "step_rms": 0.007488474384022543,
+      "step_max": 0.029288278706551284,
+      "predicted_energy_change": -3.568227482320372e-05
+    },
+    "total_step": {
+      "rms": 0.008411136042119927,
+      "max": 0.030939056004460674
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.0002452841068727101,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0017354469920205528,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Minimization on sphere",
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 61,
+    "energy": -48.40818424710974,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0017988851441709153,
+      "max_change": 0.08332250717591753
+    },
+    "trust_update": {
+      "fletcher": 1.0252482371261746,
+      "trust": 0.19642084166074927,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40818424710974,
+      "E1": -48.40814766392038,
+      "g0": 1.8299799273647954e-05,
+      "g1": 5.467351620469818e-05,
+      "method": "quartic",
+      "t": -0.49137463681052557,
+      "interpolated_energy": -48.408188754727036
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 0.19642084166074927,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0015090522199176712,
+      "lambda": -4.3437882928747324e-05,
+      "step_rms": 0.008011089438521106,
+      "step_max": 0.022961517283778963,
+      "predicted_energy_change": -2.19586868790373e-05
+    },
+    "total_step": {
+      "rms": 0.011574596691692725,
+      "max": 0.035819917762530684
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00021822070802894242,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0014112977349112449,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.01157459557203668,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.035818864816557605,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 62,
+    "energy": -48.408193602107445,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0009449686308624569,
+      "max_change": 0.03851344470812032
+    },
+    "trust_update": {
+      "fletcher": 0.42602719185288124,
+      "trust": 0.19642084166074927,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.408193602107445,
+      "E1": -48.40818424710974,
+      "g0": -3.3682289348215784e-05,
+      "g1": 5.244252432159625e-05,
+      "method": "quartic",
+      "t": 0.39150380862015405,
+      "interpolated_energy": -48.40820019698631
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 0.19642084166074927,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0016039349445994059,
+      "lambda": -2.2395790293014127e-05,
+      "step_rms": 0.00479789437989808,
+      "step_max": 0.01696139919607669,
+      "predicted_energy_change": -1.1242232124563569e-05
+    },
+    "total_step": {
+      "rms": 0.003318350633482869,
+      "max": 0.011718624197184144
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00020546379858692269,
+          "threshold": 0.00015,
+          "matched": false
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0012442010220757346,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.003318354231966048,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.011719459317235299,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 63,
+    "energy": -48.40820677406372,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.001076848751895586,
+      "max_change": 0.042378416153723
+    },
+    "trust_update": {
+      "fletcher": 1.1716495556788717,
+      "trust": 0.19642084166074927,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40820677406372,
+      "E1": -48.408193602107445,
+      "g0": -9.281793150125066e-06,
+      "g1": 3.563037343084595e-05,
+      "method": "quartic",
+      "t": 0.20671657817066716,
+      "interpolated_energy": -48.408207733434594
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 0.19642084166074927,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.001602029868729763,
+      "lambda": -1.5091908118394034e-05,
+      "step_rms": 0.0040046891099803795,
+      "step_max": 0.01234197767756311,
+      "predicted_energy_change": -7.566769218820985e-06
+    },
+    "total_step": {
+      "rms": 0.004042744501047596,
+      "max": 0.012236393983930949
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00014299669663357683,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0009195337272830059,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.0040427449108220844,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.012237125899447587,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 64,
+    "energy": -48.40821275180376,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0011108193001811496,
+      "max_change": 0.041958874629669886
+    },
+    "trust_update": {
+      "fletcher": 0.7899989895561916,
+      "trust": 0.19642084166074927,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40821275180376,
+      "E1": -48.40820677406372,
+      "g0": -5.013611748891285e-06,
+      "g1": 1.701005401373165e-05,
+      "method": "quartic",
+      "t": 0.22863009924864985,
+      "interpolated_energy": -48.408213325179275
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 0.19642084166074927,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.001676875873539318,
+      "lambda": -9.356656920658255e-06,
+      "step_rms": 0.0020726376346732623,
+      "step_max": 0.0064322223641005176,
+      "predicted_energy_change": -4.6817852206945e-06
+    },
+    "total_step": {
+      "rms": 0.0019175198913988542,
+      "max": 0.007735901658878533
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 0.00010072344275847155,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.0005178153775661198,
+          "threshold": 0.00045,
+          "matched": false
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.001917520529161147,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.007736154845487569,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 65,
+    "energy": -48.40821771361436,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0008841782196595247,
+      "max_change": 0.02315807773012964
+    },
+    "trust_update": {
+      "fletcher": 1.059811667820881,
+      "trust": 0.19642084166074927,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40821771361436,
+      "E1": -48.40821275180376,
+      "g0": -5.776410134166361e-07,
+      "g1": 1.0499267843906092e-05,
+      "method": "quartic",
+      "t": 0.05212152588361546,
+      "interpolated_energy": -48.408217728667985
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 0.19642084166074927,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.001707956621861774,
+      "lambda": -8.905023124520128e-06,
+      "step_rms": 0.0024821424396932173,
+      "step_max": 0.009744998072633215,
+      "predicted_energy_change": -4.457229852001217e-06
+    },
+    "total_step": {
+      "rms": 0.002468208231878144,
+      "max": 0.009616057988928395
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 7.442028035973367e-05,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.00040278816053737485,
+          "threshold": 0.00045,
+          "matched": true
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.002468208446130798,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.009615365989050995,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 66,
+    "energy": -48.408221394314936,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0005755902025010459,
+      "max_change": 0.01832885093366282
+    },
+    "trust_update": {
+      "fletcher": 0.8257820882685649,
+      "trust": 0.19642084166074927,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.408221394314936,
+      "E1": -48.40821771361436,
+      "g0": -1.5672227656421767e-06,
+      "g1": 8.935181542807785e-06,
+      "method": "quartic",
+      "t": 0.14946321503547547,
+      "interpolated_energy": -48.40822151144695
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 0.19642084166074927,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0017173687233755352,
+      "lambda": -4.26322421956484e-06,
+      "step_rms": 0.00141251367110849,
+      "step_max": 0.004560414296371924,
+      "predicted_energy_change": -2.132343611301162e-06
+    },
+    "total_step": {
+      "rms": 0.0013119876160408996,
+      "max": 0.004867221574839164
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 5.265878094660288e-05,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 0.00032012390397098635,
+          "threshold": 0.00045,
+          "matched": true
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.0013119877365958441,
+          "threshold": 0.0012,
+          "matched": false
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.004866915598613646,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 67,
+    "energy": -48.40822322500198,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.00033601774779697086,
+      "max_change": 0.007753298225813023
+    },
+    "trust_update": {
+      "fletcher": 0.8585328549267819,
+      "trust": 0.19642084166074927,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40822322500198,
+      "E1": -48.408221394314936,
+      "g0": -8.361397604767949e-07,
+      "g1": 4.497237897283601e-06,
+      "method": "quartic",
+      "t": 0.15675438484682797,
+      "interpolated_energy": -48.40822329053574
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 0.19642084166074927,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0017432610330282386,
+      "lambda": -1.527135485247958e-06,
+      "step_rms": 0.0011715270645146984,
+      "step_max": 0.0038093610449733925,
+      "predicted_energy_change": -7.637479448847298e-07
+    },
+    "total_step": {
+      "rms": 0.0011549927742611442,
+      "max": 0.004476165925622006
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 1.8648898560625776e-05,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 8.61499011161368e-05,
+          "threshold": 0.00045,
+          "matched": true
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.0011549928003092558,
+          "threshold": 0.0012,
+          "matched": true
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.004475792977613277,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 68,
+    "energy": -48.40822353181765,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.00022529401735872485,
+      "max_change": 0.003595520365980767
+    },
+    "trust_update": {
+      "fletcher": 0.4017237203863015,
+      "trust": 0.19642084166074927,
+      "below_noise": false
+    },
+    "linear_search": {
+      "E0": -48.40822353181765,
+      "E1": -48.40822322500198,
+      "g0": -1.0463409542607707e-06,
+      "g1": 1.658221109958376e-06,
+      "method": "cubic",
+      "t": 0.3864194360620632,
+      "interpolated_energy": -48.40822373393036
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 0.19642084166074927,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0017018280057429073,
+      "lambda": -3.7002968440477926e-07,
+      "step_rms": 0.0006065234609414562,
+      "step_max": 0.002185289455055653,
+      "predicted_energy_change": -1.8502651238540085e-07
+    },
+    "total_step": {
+      "rms": 0.0005604307686444565,
+      "max": 0.0020595496073318453
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 1.6807156122012433e-05,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 7.651707728026198e-05,
+          "threshold": 0.00045,
+          "matched": true
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.0005604315532690291,
+          "threshold": 0.0012,
+          "matched": true
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.0020595289794610797,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 69,
+    "energy": -48.40822380793924,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.00027583852400502,
+      "max_change": 0.005486713304452274
+    },
+    "trust_update": {
+      "fletcher": null,
+      "trust": 0.19642084166074927,
+      "below_noise": true
+    },
+    "linear_search": {
+      "E0": -48.40822380793924,
+      "E1": -48.40822353181765,
+      "g0": -2.2311906642096024e-07,
+      "g1": 7.748360786905805e-07,
+      "method": "cubic",
+      "t": 0.2233019141515615,
+      "interpolated_energy": -48.40822383284777
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 0.19642084166074927,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.001720013115418947,
+      "lambda": -1.8402405287187064e-07,
+      "step_rms": 0.0003288462735571736,
+      "step_max": 0.0016357863098605814,
+      "predicted_energy_change": -9.201374277559287e-08
+    },
+    "total_step": {
+      "rms": 0.0003514948494578578,
+      "max": 0.0019647829725236497
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 9.408681375403555e-06,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 6.0482168525823174e-05,
+          "threshold": 0.00045,
+          "matched": true
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.00035149497048923796,
+          "threshold": 0.0012,
+          "matched": true
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.001964755370785285,
+          "threshold": 0.0018,
+          "matched": false
+        }
+      ],
+      "all_matched": false
+    },
+    "converged": false,
+    "max_steps_reached": false
+  },
+  {
+    "step": 70,
+    "energy": -48.40822383720927,
+    "coord_rebuild": false,
+    "hessian_update": {
+      "rms_change": 0.0002348471336063721,
+      "max_change": 0.007594731901823341
+    },
+    "trust_update": {
+      "fletcher": null,
+      "trust": 0.19642084166074927,
+      "below_noise": true
+    },
+    "linear_search": {
+      "E0": -48.40822383720927,
+      "E1": -48.40822380793924,
+      "g0": -1.7473120622024478e-07,
+      "g1": 2.339078990227965e-07,
+      "method": "cubic",
+      "t": 0.42873766691335086,
+      "interpolated_energy": -48.40822387469128
+    },
+    "quadratic_step": {
+      "step_type": "rfo",
+      "on_sphere": false,
+      "trust_radius": 0.19642084166074927,
+      "n_negative_eigenvalues": 0,
+      "lowest_eigenvalue": 0.0016823079639726455,
+      "lambda": -5.823865594409348e-08,
+      "step_rms": 0.00019357741719398862,
+      "step_max": 0.0006451115497235155,
+      "predicted_energy_change": -2.9119610347274178e-08
+    },
+    "total_step": {
+      "rms": 0.0002367771191474325,
+      "max": 0.0011140790788001505
+    },
+    "convergence": {
+      "criteria": [
+        {
+          "name": "Gradient RMS",
+          "value": 5.0331995558914206e-06,
+          "threshold": 0.00015,
+          "matched": true
+        },
+        {
+          "name": "Gradient maximum",
+          "value": 2.0172538838973365e-05,
+          "threshold": 0.00045,
+          "matched": true
+        },
+        {
+          "name": "Step RMS",
+          "value": 0.0002367771930690723,
+          "threshold": 0.0012,
+          "matched": true
+        },
+        {
+          "name": "Step maximum",
+          "value": 0.001114071276495395,
+          "threshold": 0.0018,
+          "matched": true
+        }
+      ],
+      "all_matched": true
+    },
+    "converged": true,
+    "max_steps_reached": false
+  }
+]
