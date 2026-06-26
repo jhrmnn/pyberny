@@ -1,0 +1,219 @@
+{
+  "canonical_case": {
+    "molecule": "PPE_n5",
+    "sigma": 0.2,
+    "seed": 94,
+    "rmsd_A": 0.30346742482197736,
+    "n_covalent_fragments": 4,
+    "error_center": [
+      1,
+      40
+    ],
+    "bridge_bonds_added": [
+      [
+        0,
+        40
+      ],
+      [
+        1,
+        40
+      ],
+      [
+        1,
+        41
+      ],
+      [
+        2,
+        41
+      ],
+      [
+        3,
+        41
+      ],
+      [
+        4,
+        41
+      ],
+      [
+        5,
+        41
+      ],
+      [
+        27,
+        54
+      ],
+      [
+        28,
+        54
+      ],
+      [
+        29,
+        54
+      ],
+      [
+        32,
+        54
+      ],
+      [
+        33,
+        54
+      ],
+      [
+        41,
+        42
+      ],
+      [
+        53,
+        54
+      ]
+    ],
+    "center_bond": {
+      "pair": [
+        "C1",
+        "H40"
+      ],
+      "distance_A": 2.593933158557858,
+      "covalent_cutoff_A": 1.4949999999999999,
+      "covalently_bonded": false
+    },
+    "left_terminus_neighbours": [
+      {
+        "neighbour": "C0",
+        "distance_to_center0_A": 1.0178017386743192,
+        "covalently_bonded_to_center0": true,
+        "angle_nbr_c0_c1_deg_noisy": 2.5516198604856455,
+        "angle_nbr_c0_c1_deg_clean": 0.13782570904471933,
+        "classed_linear": true
+      },
+      {
+        "neighbour": "C2",
+        "distance_to_center0_A": 1.5160810164160308,
+        "covalently_bonded_to_center0": true,
+        "angle_nbr_c0_c1_deg_noisy": 175.3620429727198,
+        "angle_nbr_c0_c1_deg_clean": 179.5213758367129,
+        "classed_linear": true
+      },
+      {
+        "neighbour": "H41",
+        "distance_to_center0_A": 2.952772459912627,
+        "covalently_bonded_to_center0": false,
+        "angle_nbr_c0_c1_deg_noisy": 126.29875205120803,
+        "angle_nbr_c0_c1_deg_clean": 126.62583058225434,
+        "classed_linear": false
+      }
+    ]
+  },
+  "per_sigma": {
+    "0.02": {
+      "trials": 320,
+      "coordinate_errors": 0,
+      "fragmented_geoms": 0
+    },
+    "0.05": {
+      "trials": 320,
+      "coordinate_errors": 0,
+      "fragmented_geoms": 0
+    },
+    "0.1": {
+      "trials": 320,
+      "coordinate_errors": 1,
+      "fragmented_geoms": 9
+    },
+    "0.15": {
+      "trials": 320,
+      "coordinate_errors": 0,
+      "fragmented_geoms": 149
+    },
+    "0.2": {
+      "trials": 320,
+      "coordinate_errors": 2,
+      "fragmented_geoms": 286
+    },
+    "0.25": {
+      "trials": 320,
+      "coordinate_errors": 6,
+      "fragmented_geoms": 308
+    },
+    "0.3": {
+      "trials": 320,
+      "coordinate_errors": 16,
+      "fragmented_geoms": 315
+    }
+  },
+  "coordinate_error_by_fragment_count": {
+    "2": 2,
+    "3": 1,
+    "4": 1,
+    "5": 1,
+    "6": 1,
+    "7": 3,
+    "8": 2,
+    "9": 2,
+    "10": 1,
+    "12": 3,
+    "13": 2,
+    "14": 1,
+    "15": 2,
+    "17": 1,
+    "18": 1,
+    "20": 1
+  },
+  "threshold_vs_length": [
+    {
+      "molecule": "PPE_n1",
+      "atoms": 14,
+      "n_angles_gt_170": 2,
+      "n_within_2deg_of_175": 0,
+      "min_gap_to_175_deg": 4.9911822747111785
+    },
+    {
+      "molecule": "PPE_n2",
+      "atoms": 26,
+      "n_angles_gt_170": 4,
+      "n_within_2deg_of_175": 0,
+      "min_gap_to_175_deg": 4.946278130483762
+    },
+    {
+      "molecule": "PPE_n3",
+      "atoms": 38,
+      "n_angles_gt_170": 6,
+      "n_within_2deg_of_175": 0,
+      "min_gap_to_175_deg": 2.1423073544019076
+    },
+    {
+      "molecule": "PPE_n4",
+      "atoms": 50,
+      "n_angles_gt_170": 8,
+      "n_within_2deg_of_175": 2,
+      "min_gap_to_175_deg": 0.8504220580985873
+    },
+    {
+      "molecule": "PPE_n5",
+      "atoms": 62,
+      "n_angles_gt_170": 10,
+      "n_within_2deg_of_175": 4,
+      "min_gap_to_175_deg": 0.7817109151303896
+    },
+    {
+      "molecule": "PPE_n6",
+      "atoms": 74,
+      "n_angles_gt_170": 12,
+      "n_within_2deg_of_175": 5,
+      "min_gap_to_175_deg": 0.7278524144867333
+    },
+    {
+      "molecule": "PPE_n7",
+      "atoms": 86,
+      "n_angles_gt_170": 14,
+      "n_within_2deg_of_175": 8,
+      "min_gap_to_175_deg": 1.5012385971165827
+    },
+    {
+      "molecule": "PPE_n8",
+      "atoms": 98,
+      "n_angles_gt_170": 16,
+      "n_within_2deg_of_175": 8,
+      "min_gap_to_175_deg": 1.16908878028255
+    }
+  ]
+}
