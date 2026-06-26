@@ -1,0 +1,7 @@
+{
+  "method": "HF/3-21G via pyscf.geomopt.berny_solver",
+  "note": "clean + two noisy seeds completed before a container restart; the third (sigma=0.05) seed did not finish. All converged to the same minimum (dE within rounding of -0.042 kcal/mol).",
+  "clean":            {"converged": true, "steps": 49, "E": -723.021255},
+  "sigma0.02_seed1":  {"converged": true, "steps": 47, "E": -723.021322, "dE_kcal": -0.042},
+  "sigma0.02_seed2":  {"converged": true, "steps": 40, "E": -723.021322, "dE_kcal": -0.042}
+}
