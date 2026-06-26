@@ -15,6 +15,9 @@ jobs:
         with:
           fetch-depth: 0
           fetch-tags: true
+          # Populate external/oligomer-benchmarks so the molecule gallery can
+          # embed the oligomers set (it is silently omitted when absent).
+          submodules: true
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
